@@ -29,7 +29,7 @@ public class Uzbek implements Language {
         menu.add("Tarjimaga buyurtma berish");
         menu.add("Xizmatlar narxlari");
         menu.add("interfeys tili");
-        menu.add("Mening buyurtmam");
+        menu.add("Mening buyurtmalarim");
         return menu;
     }
 
@@ -39,7 +39,7 @@ public class Uzbek implements Language {
     }
 
     @Override
-    public String orders(Order o) {
+    public String orders(Translation o) {
         String ch = "";
         if (o.getDirection().equals(AmabiliaBot.directions().get(0))) ch = ruseng;
         if (o.getDirection().equals(AmabiliaBot.directions().get(1))) ch = rusuzbek;
@@ -51,17 +51,18 @@ public class Uzbek implements Language {
                 "\n"+o.getDirection()+
                 "\n:page_facing_up:Varaqlar soni: " + o.getPages() +
                 "\n:date:Buyurtma sanasi: "+AmabiliaBot.date.format(o.getOrderTime()) +
-                " :clock3:"+AmabiliaBot.time.format(o.getOrderTime());
+                " :clock3:"+AmabiliaBot.time.format(o.getOrderTime())+
+                "\n:1234:Buyurtma tartib raqami: " + o.getId();
     }
 
     @Override
     public String emptyOrders() {
-        return ":o:  Buyurtma topilmadi  :o:";
+        return ":o:Sizda hali birorta buyurtma yo'q";
     }
 
     @Override
     public String cost() {
-        return ":page_facing_up:1 varaq (250 ta so'z yoki 1800 ta harf)\n" +
+        return ":page_facing_up: <b>1 varaq</b> (250 ta so'z yoki 1800 ta harf)\n" +
                 ":ru::point_right::gb: "+Prices.ruseng+" so'm\n" +
                 ":ru::point_right::uz: "+Prices.rusuzb+" so'm\n" +
                 ":gb::point_right::ru: "+Prices.engrus+" so'm\n" +
@@ -119,11 +120,16 @@ public class Uzbek implements Language {
     }
 
     @Override
-    public String preliminary(Order a) {
+    public String preliminary(Translation a) {
         a.setDuration();
         return "Tarjimaning narxi tahminan "+ a.getTotalCost()+" so'm." +
                 "\nYakuniy narx hujjatdagi so'zlar soni bo'yicha aniqlanadi." +
                 "\nTarjimaga tahminan "+ a.getDuration() + " kun ketadi.\n" ;
+    }
+
+    @Override
+    public String cancel() {
+        return ":negative_squared_cross_mark:Bekor qilmoq";
     }
 
     @Override
@@ -152,7 +158,7 @@ public class Uzbek implements Language {
 
     @Override
     public String orderExists() {
-        return "Sizda amaldagi buyurtma mavjud. Uni bekor qilasizmi?";
+        return "Sizda amaldagi buyurtma mavjud. Yangi buyurma qilmoqchimisiz?";
     }
 
     @Override

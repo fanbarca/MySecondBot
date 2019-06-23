@@ -31,7 +31,7 @@ public class Russian implements Language{
         menu.add("Заказать перевод");
         menu.add("Стоимость услуг");
         menu.add("Язык интерфейса");
-        menu.add("Мой заказ");
+        menu.add("Мои заказы");
         return menu;
     }
 
@@ -41,7 +41,7 @@ public class Russian implements Language{
     }
 
     @Override
-    public String orders(Order o) {
+    public String orders(Translation o) {
         String ch = "";
         if (o.getDirection().equals(AmabiliaBot.directions().get(0))) ch = ruseng  ;
         if (o.getDirection().equals(AmabiliaBot.directions().get(1))) ch = rusuzbek;
@@ -53,17 +53,18 @@ public class Russian implements Language{
                 "\n"+o.getDirection()+
                 "\n:page_facing_up:Количество листов: " + o.getPages()  +
                 "\n:date:Дата заказа: "+AmabiliaBot.date.format(o.getOrderTime()) +
-                " :clock3:"+AmabiliaBot.time.format(o.getOrderTime());
+                " :clock3:"+AmabiliaBot.time.format(o.getOrderTime())+
+                "\n:1234:Номер заказа: " + o.getId();
     }
 
     @Override
     public String emptyOrders() {
-        return ":o:  Заказ не найден  :o:";
+        return ":o:Вы ещё ничего не заказывали";
     }
 
     @Override
     public String cost() {
-        return ":page_facing_up:1 лист (250 слов или 1800 букв)\n" +
+        return ":page_facing_up: <b>1 лист</b> (250 слов или 1800 букв)\n" +
                 ":ru::point_right::gb: "+Prices.ruseng+" сум\n" +
                 ":ru::point_right::uz: "+Prices.rusuzb+" сум\n" +
                 ":gb::point_right::ru: "+Prices.engrus+" сум\n" +
@@ -89,7 +90,7 @@ public class Russian implements Language{
     }
 
     @Override
-    public String preliminary(Order a) {
+    public String preliminary(Translation a) {
         a.setDuration();
         int days = a.getDuration();
         String day;
@@ -99,6 +100,11 @@ public class Russian implements Language{
         return "Примерная стоимость перевода "+ a.getTotalCost()+" сум." +
                 "\nОкончательная стоимость будет рассчитана по количеству слов в документе." +
                 "\nПеревод займет примерно "+ days + day+"\n";
+    }
+
+    @Override
+    public String cancel() {
+        return ":negative_squared_cross_mark:Отменить заказ";
     }
 
     @Override
@@ -151,7 +157,7 @@ public class Russian implements Language{
 
     @Override
     public String orderExists() {
-        return "У Вас уже имеется заказ. Вы хотите его отменить?";
+        return "У Вас уже имеется заказ. Вы хотите сделать новый заказ?";
     }
 
     @Override

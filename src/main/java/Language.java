@@ -6,7 +6,7 @@ interface Language {
 
     List<String> menu();
     String chooseDirection();
-    String orders(Order o);
+    String orders(Translation o);
     String emptyOrders();
     String cost();
     String confirmChoice(String choice);
@@ -25,5 +25,6 @@ interface Language {
     String youSure();
     String doYouConfirm();
     String howManyPages();
-    String preliminary(Order a);
+    String preliminary(Translation a);
+    String cancel();
 }

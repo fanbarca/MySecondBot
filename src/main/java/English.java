@@ -31,7 +31,7 @@ public class English implements Language {
         menu.add("Order translation");
         menu.add("Cost of services");
         menu.add("Interface language");
-        menu.add("My order");
+        menu.add("My orders");
         return menu;
     }
 
@@ -41,7 +41,7 @@ public class English implements Language {
     }
 
     @Override
-    public String orders(Order o) {
+    public String orders(Translation o) {
         String ch = "";
         if (o.getDirection().equals(AmabiliaBot.directions().get(0))) ch = ruseng  ;
         if (o.getDirection().equals(AmabiliaBot.directions().get(1))) ch = rusuzbek;
@@ -53,18 +53,19 @@ public class English implements Language {
                 "\n"+o.getDirection()+
                 "\n:page_facing_up:Number of pages: " + o.getPages()  +
                 "\n:date:Date of order: "+AmabiliaBot.date.format(o.getOrderTime()) +
-                " :clock3:"+AmabiliaBot.time.format(o.getOrderTime());
+                " :clock3:"+AmabiliaBot.time.format(o.getOrderTime())+
+                "\n:1234:Order ID: " + o.getId();
     }
 
     @Override
     public String emptyOrders() {
-        return ":o:  Order not found  :o:";
+        return ":o:You haven't ordered anything yet";
     }
 
     @Override
     public String cost() {
         return
-        ":page_facing_up:1 page (250 words or 1800 characters)\n" +
+        ":page_facing_up: <b>1 page</b> (250 words or 1800 characters)\n" +
                 ":ru::point_right::gb: "+Prices.ruseng+" sum\n" +
                 ":ru::point_right::uz: "+Prices.rusuzb+" sum\n" +
                 ":gb::point_right::ru: "+Prices.engrus+" sum\n" +
@@ -90,7 +91,7 @@ public class English implements Language {
     }
 
     @Override
-    public String preliminary(Order a) {
+    public String preliminary(Translation a) {
         a.setDuration();
         int d = a.getDuration();
         String days;
@@ -99,6 +100,11 @@ public class English implements Language {
         return "Approximate cost of translation is "+ a.getTotalCost()+" sum" +
                 "\nFinal cost will be determined based on the quantity of words in the document."+
                 "\nTranslation may take up to "+ d + days;
+    }
+
+    @Override
+    public String cancel() {
+        return ":negative_squared_cross_mark:Cancel order";
     }
 
     @Override
@@ -152,7 +158,7 @@ public class English implements Language {
 
     @Override
     public String orderExists() {
-        return "You have already submitted an order. Would you like to cancel it?";
+        return "You have already submitted an order. Would you like to place another one?";
     }
 
     @Override
