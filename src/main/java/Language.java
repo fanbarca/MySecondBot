@@ -27,4 +27,14 @@ interface Language {
     String howManyPages();
     String preliminary(Translation a);
     String cancel();
+    String finished();
+    String whatVoice();
+    String whatVideonote();
+    String whatVideo();
+    String whatPhoto();
+    String whatLocation();
+    String whatSticker();
+    String whatAnimation();
+    String whatAudio();
+
 }

@@ -4,17 +4,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Uzbek implements Language {
-    public static final String ruseng      = "<b>rus</b> tilidan <b>ingliz</b> tiliga";
-    public static final String rusuzbek    = "<b>rus</b> tilidan <b>o'zbek</b> tiliga";
-    public static final String engrus      = "<b>ingliz</b> tilidan <b>rus</b> tiliga";
-    public static final String enguzbek = "<b>ingliz</b> tilidan <b>o'zbek</b> tiliga";
-    public static final String uzbekeng = "<b>o'zbek</b> tilidan <b>ingliz</b> tiliga";
-    public static final String uzbekrus    = "<b>o'zbek</b> tilidan <b>rus</b> tiliga";
-    Transliterator toLatinTrans = Transliterator.getInstance(AmabiliaBot.CYRILLIC_TO_LATIN);
+    private static final String ruseng      = "<b>rus</b> tilidan <b>ingliz</b> tiliga";
+    private static final String rusuzbek    = "<b>rus</b> tilidan <b>o'zbek</b> tiliga";
+    private static final String engrus      = "<b>ingliz</b> tilidan <b>rus</b> tiliga";
+    private static final String enguzbek = "<b>ingliz</b> tilidan <b>o'zbek</b> tiliga";
+    private static final String uzbekeng = "<b>o'zbek</b> tilidan <b>ingliz</b> tiliga";
+    private static final String uzbekrus    = "<b>o'zbek</b> tilidan <b>rus</b> tiliga";
+    private Transliterator toLatinTrans = Transliterator.getInstance(AmabiliaBot.CYRILLIC_TO_LATIN);
 
 
 
-    public Uzbek() {
+    Uzbek() {
     }
 
     @Override
@@ -41,6 +41,8 @@ public class Uzbek implements Language {
     @Override
     public String orders(Translation o) {
         String ch = "";
+        String f="";
+        if (o.Isfinished()) f = finished();
         if (o.getDirection().equals(AmabiliaBot.directions().get(0))) ch = ruseng;
         if (o.getDirection().equals(AmabiliaBot.directions().get(1))) ch = rusuzbek;
         if (o.getDirection().equals(AmabiliaBot.directions().get(2))) ch = engrus;
@@ -52,17 +54,19 @@ public class Uzbek implements Language {
                 "\n:page_facing_up:Varaqlar soni: " + o.getPages() +
                 "\n:date:Buyurtma sanasi: "+AmabiliaBot.date.format(o.getOrderTime()) +
                 " :clock3:"+AmabiliaBot.time.format(o.getOrderTime())+
-                "\n:1234:Buyurtma tartib raqami: " + o.getId();
+                "\n:1234:Buyurtma ID raqami: " + o.getId()+
+                "\n"+ f;
     }
 
     @Override
     public String emptyOrders() {
-        return ":o:Sizda hali birorta buyurtma yo'q";
+        return ":o:Buyurtmalar royxati bo'sh";
     }
 
     @Override
     public String cost() {
-        return ":page_facing_up: <b>1 varaq</b> (250 ta so'z yoki 1800 ta harf)\n" +
+        return ":page_facing_up: <b>1 varaq</b>\n" +
+                "(250 ta so'z yoki 1800 ta harf)\n" +
                 ":ru::point_right::gb: "+Prices.ruseng+" so'm\n" +
                 ":ru::point_right::uz: "+Prices.rusuzb+" so'm\n" +
                 ":gb::point_right::ru: "+Prices.engrus+" so'm\n" +
@@ -88,7 +92,8 @@ public class Uzbek implements Language {
 
     @Override
     public String sendMe() {
-        return "Tarjima qilish kerak bo'lgan hujjatni menga jo'nating! :blush:";
+        return "Tarjima qilish kerak bo'lgan hujjatni menga jo'nating!\n" +
+                "(*.txt, *.rtf, *.doc, *.docx, *.pdf, ...)";
     }
     @Override
     public String sendMeContact() {
@@ -130,6 +135,51 @@ public class Uzbek implements Language {
     @Override
     public String cancel() {
         return ":negative_squared_cross_mark:Bekor qilmoq";
+    }
+
+    @Override
+    public String finished() {
+        return ":white_check_mark:Buyurtma bajarilgan";
+    }
+
+    @Override
+    public String whatVoice() {
+        return "Ovozingiz chiroyli ekan :blush:";
+    }
+
+    @Override
+    public String whatVideonote() {
+        return "Qo'limdan kelganida men ham jo'natardim :blush:";
+    }
+
+    @Override
+    public String whatVideo() {
+        return "Bu qanaqa video? :blush:";
+    }
+
+    @Override
+    public String whatPhoto() {
+        return "Nima rasm tashadingiz? :blush:";
+    }
+
+    @Override
+    public String whatLocation() {
+        return "Adashib qoldingizmi? :blush:";
+    }
+
+    @Override
+    public String whatSticker() {
+        return "Stikerga gap yo'q :blush:";
+    }
+
+    @Override
+    public String whatAnimation() {
+        return "Kulgili ekan :blush:";
+    }
+
+    @Override
+    public String whatAudio() {
+        return "Eshitilmayaptiku :blush:";
     }
 
     @Override

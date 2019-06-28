@@ -1,21 +1,19 @@
 import com.ibm.icu.text.Transliterator;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class English implements Language {
-    public static final String ruseng   = "from <b>Russian</b> into <b>English</b>";
-    public static final String rusuzbek = "from <b>Russian</b> into <b>Uzbek</b>";
-    public static final String engrus   = "from <b>English</b> into <b>Russian</b>";
-    public static final String enguzbek = "from <b>English</b> into <b>Uzbek</b>";
-    public static final String uzbekeng = "from <b>Uzbek</b> into <b>English</b>";
-    public static final String uzbekrus = "from <b>Uzbek</b> into <b>Russian</b>";
-    Transliterator toLatinTrans = Transliterator.getInstance(AmabiliaBot.CYRILLIC_TO_LATIN);
+    private static final String ruseng   = "from <b>Russian</b> into <b>English</b>";
+    private static final String rusuzbek = "from <b>Russian</b> into <b>Uzbek</b>";
+    private static final String engrus   = "from <b>English</b> into <b>Russian</b>";
+    private static final String enguzbek = "from <b>English</b> into <b>Uzbek</b>";
+    private static final String uzbekeng = "from <b>Uzbek</b> into <b>English</b>";
+    private static final String uzbekrus = "from <b>Uzbek</b> into <b>Russian</b>";
+    private Transliterator toLatinTrans = Transliterator.getInstance(AmabiliaBot.CYRILLIC_TO_LATIN);
     public static final String yes = "Yes";
     public static final String no = "No";
-    public English() {
+    English() {
 
     }
 
@@ -43,6 +41,8 @@ public class English implements Language {
     @Override
     public String orders(Translation o) {
         String ch = "";
+        String f="";
+        if (o.Isfinished()) f = finished();
         if (o.getDirection().equals(AmabiliaBot.directions().get(0))) ch = ruseng  ;
         if (o.getDirection().equals(AmabiliaBot.directions().get(1))) ch = rusuzbek;
         if (o.getDirection().equals(AmabiliaBot.directions().get(2))) ch = engrus  ;
@@ -54,18 +54,20 @@ public class English implements Language {
                 "\n:page_facing_up:Number of pages: " + o.getPages()  +
                 "\n:date:Date of order: "+AmabiliaBot.date.format(o.getOrderTime()) +
                 " :clock3:"+AmabiliaBot.time.format(o.getOrderTime())+
-                "\n:1234:Order ID: " + o.getId();
+                "\n:1234:Order ID: " + o.getId()+
+                "\n"+ f;
     }
 
     @Override
     public String emptyOrders() {
-        return ":o:You haven't ordered anything yet";
+        return ":o:Orders list is empty";
     }
 
     @Override
     public String cost() {
         return
-        ":page_facing_up: <b>1 page</b> (250 words or 1800 characters)\n" +
+        ":page_facing_up: <b>1 page</b>\n" +
+                "(250 words or 1800 characters)\n" +
                 ":ru::point_right::gb: "+Prices.ruseng+" sum\n" +
                 ":ru::point_right::uz: "+Prices.rusuzb+" sum\n" +
                 ":gb::point_right::ru: "+Prices.engrus+" sum\n" +
@@ -108,8 +110,54 @@ public class English implements Language {
     }
 
     @Override
+    public String finished() {
+        return ":white_check_mark:Order competed";
+    }
+
+    @Override
+    public String whatVoice() {
+        return "You've got a beautiful voice! :blush:";
+    }
+
+    @Override
+    public String whatVideonote() {
+        return "I wish I could send you circle video :blush:";
+    }
+
+    @Override
+    public String whatVideo() {
+        return "What kind of video is that? :blush:";
+    }
+
+    @Override
+    public String whatPhoto() {
+        return "What photo did you just sent? :blush:" ;
+    }
+
+    @Override
+    public String whatLocation() {
+        return "Are you lost? :blush:";
+    }
+
+    @Override
+    public String whatSticker() {
+        return "Nice sticker! :blush:";
+    }
+
+    @Override
+    public String whatAnimation() {
+        return "That's funny :blush:";
+    }
+
+    @Override
+    public String whatAudio() {
+        return "I can't hear anything! :blush:";
+    }
+
+    @Override
     public String sendMe() {
-        return "Send me the document that needs to be translated! :blush:";
+        return "Send me the document that needs to be translated!\n" +
+                "(*.txt, *.rtf, *.doc, *.docx, *.pdf, ...)";
     }
     @Override
     public String sendMeContact() {
@@ -123,7 +171,7 @@ public class English implements Language {
 
     @Override
     public String what() {
-        return "I don't understand :disappointed:";
+        return "I don't think I understand what you mean :disappointed:";
     }
     @Override
     public String received() {

@@ -1,21 +1,19 @@
 import com.ibm.icu.text.Transliterator;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class Russian implements Language{
-    public static final String ruseng   = "с <b>русского</b> на <b>английский</b>";
-    public static final String rusuzbek = "с <b>русского</b> на <b>узбекский</b>";
-    public static final String engrus   = "с <b>английского</b> на <b>русский</b>";
-    public static final String enguzbek = "с <b>английского</b> на <b>узбекский</b>";
-    public static final String uzbekeng = "с <b>узбекского</b> на <b>английский</b>";
-    public static final String uzbekrus = "с <b>узбекского</b> на <b>русский</b>";
-    Transliterator toLatinTrans = Transliterator.getInstance(AmabiliaBot.LATIN_TO_CYRILLIC);
+    private static final String ruseng   = "с <b>русского</b> на <b>английский</b>";
+    private static final String rusuzbek = "с <b>русского</b> на <b>узбекский</b>";
+    private static final String engrus   = "с <b>английского</b> на <b>русский</b>";
+    private static final String enguzbek = "с <b>английского</b> на <b>узбекский</b>";
+    private static final String uzbekeng = "с <b>узбекского</b> на <b>английский</b>";
+    private static final String uzbekrus = "с <b>узбекского</b> на <b>русский</b>";
+    private Transliterator toLatinTrans = Transliterator.getInstance(AmabiliaBot.LATIN_TO_CYRILLIC);
     public static final String yes = "Да";
     public static final String no = "Нет";
-    public Russian() {
+    Russian() {
 
     }
 
@@ -43,6 +41,8 @@ public class Russian implements Language{
     @Override
     public String orders(Translation o) {
         String ch = "";
+        String f="";
+        if (o.Isfinished()) f = finished();
         if (o.getDirection().equals(AmabiliaBot.directions().get(0))) ch = ruseng  ;
         if (o.getDirection().equals(AmabiliaBot.directions().get(1))) ch = rusuzbek;
         if (o.getDirection().equals(AmabiliaBot.directions().get(2))) ch = engrus  ;
@@ -54,17 +54,19 @@ public class Russian implements Language{
                 "\n:page_facing_up:Количество листов: " + o.getPages()  +
                 "\n:date:Дата заказа: "+AmabiliaBot.date.format(o.getOrderTime()) +
                 " :clock3:"+AmabiliaBot.time.format(o.getOrderTime())+
-                "\n:1234:Номер заказа: " + o.getId();
+                "\n:1234:Номер заказа: " + o.getId()+
+                "\n"+ f;
     }
 
     @Override
     public String emptyOrders() {
-        return ":o:Вы ещё ничего не заказывали";
+        return ":o:Список заказов пуст";
     }
 
     @Override
     public String cost() {
-        return ":page_facing_up: <b>1 лист</b> (250 слов или 1800 букв)\n" +
+        return ":page_facing_up: <b>1 лист</b> \n" +
+                "(250 слов или 1800 букв)\n" +
                 ":ru::point_right::gb: "+Prices.ruseng+" сум\n" +
                 ":ru::point_right::uz: "+Prices.rusuzb+" сум\n" +
                 ":gb::point_right::ru: "+Prices.engrus+" сум\n" +
@@ -108,8 +110,54 @@ public class Russian implements Language{
     }
 
     @Override
+    public String finished() {
+        return ":white_check_mark:Заказ выполнен";
+    }
+
+    @Override
+    public String whatVoice() {
+        return "У Вас красивый голос! :blush:";
+    }
+
+    @Override
+    public String whatVideonote() {
+        return "Я бы тоже хотел скинуть круглое видео :blush:";
+    }
+
+    @Override
+    public String whatVideo() {
+        return "Что за видео?";
+    }
+
+    @Override
+    public String whatPhoto() {
+        return "Что за фотку Вы мне скинули?";
+    }
+
+    @Override
+    public String whatLocation() {
+        return "Вы потерялись?";
+    }
+
+    @Override
+    public String whatSticker() {
+        return "Милый стикер! :blush:";
+    }
+
+    @Override
+    public String whatAnimation() {
+        return "Смешно :blush:";
+    }
+
+    @Override
+    public String whatAudio() {
+        return "Хорошая музыка :blush:";
+    }
+
+    @Override
     public String sendMe() {
-        return "Отправьте мне документ который нужно перевести! :blush:";
+        return "Отправьте мне документ который нужно перевести!\n" +
+                "(*.txt, *.rtf, *.doc, *.docx, *.pdf, ...)";
     }
     @Override
     public String sendMeContact() {
@@ -123,7 +171,7 @@ public class Russian implements Language{
 
     @Override
     public String what() {
-        return "Не понял :disappointed:";
+        return "Я не совсем понял о чём вы :disappointed:";
     }
     @Override
     public String received() {

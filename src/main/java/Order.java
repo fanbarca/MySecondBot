@@ -22,9 +22,6 @@ public class Order {
 
     }
 
-    public void addtoOrdersList(Translation item) {
-        this.ordersList.add(item);
-    }
     public List<Translation> getOrdersList() {
         return ordersList;
     }

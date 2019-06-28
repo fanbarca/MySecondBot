@@ -4,6 +4,8 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 
 public class Main {
+    public static final String LOGTAG = "AmabiliaLog";
+
     public static void main(String[] args) {
 
         ApiContextInitializer.init();
@@ -11,6 +13,7 @@ public class Main {
         TelegramBotsApi botsApi = new TelegramBotsApi();
         try {
             botsApi.registerBot(new AmabiliaBot());
+            botsApi.registerBot(new AmabiliaAdmin_bot());
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }

@@ -2,6 +2,7 @@ import org.telegram.telegrambots.meta.api.objects.Document;
 import org.telegram.telegrambots.meta.api.objects.User;
 
 import java.util.Date;
+import java.util.Random;
 
 public class Translation extends Order {
     private String direction;
@@ -13,19 +14,18 @@ public class Translation extends Order {
     private boolean hasOrdered = false;
     private boolean isfinished =false;
     private String deadline;
-    private int id = 0;
+    String id;
     double randomDouble;
 
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
     Translation() {
         super();
-        randomDouble = Math.random();
-        randomDouble = randomDouble * 9999 + 1;
-        this.id = (int) randomDouble;
+        Random rand = new Random();
+        id = String.format("%04d", rand.nextInt(10000));
     }
 
     public int getDuration() {
