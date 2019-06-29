@@ -1,4 +1,5 @@
-import javax.xml.soap.SAAJResult;
+package AmabiliaPackage;
+
 import java.util.List;
 
 interface Language {

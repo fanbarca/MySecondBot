@@ -1,3 +1,5 @@
+package AmabiliaPackage;
+
 public class Prices {
 
     public static int ruseng = 25000;

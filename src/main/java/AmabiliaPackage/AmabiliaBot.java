@@ -1,3 +1,5 @@
+package AmabiliaPackage;
+
 import com.vdurmont.emoji.EmojiParser;
 import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
 import org.telegram.telegrambots.meta.api.methods.ForwardMessage;
