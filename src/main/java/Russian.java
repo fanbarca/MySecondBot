@@ -10,7 +10,7 @@ public class Russian implements Language{
     private static final String enguzbek = "с <b>английского</b> на <b>узбекский</b>";
     private static final String uzbekeng = "с <b>узбекского</b> на <b>английский</b>";
     private static final String uzbekrus = "с <b>узбекского</b> на <b>русский</b>";
-    private Transliterator toLatinTrans = Transliterator.getInstance(AmabiliaBot.LATIN_TO_CYRILLIC);
+    Transliterator toLatinTrans = Transliterator.getInstance(AmabiliaBot.LATIN_TO_CYRILLIC);
     public static final String yes = "Да";
     public static final String no = "Нет";
     Russian() {

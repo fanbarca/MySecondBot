@@ -22,15 +22,15 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class AmabiliaBot extends TelegramLongPollingBot {
-    HashMap<Integer, Order> set = new HashMap<Integer, Order>();
-    public Order a;
-    public Translation t;
-    public static final long myID = 615351734;
-    public static final String CYRILLIC_TO_LATIN = "Russian-Latin/BGN";
-    public static final String LATIN_TO_CYRILLIC = "Latin-Russian/BGN";
-    public static final SimpleDateFormat date=
+    private HashMap<Integer, Order> set = new HashMap<Integer, Order>();
+    private Order a;
+    private Translation t;
+    private static final long myID = 615351734;
+    static final String CYRILLIC_TO_LATIN = "Russian-Latin/BGN";
+    static final String LATIN_TO_CYRILLIC = "Latin-Russian/BGN";
+    static final SimpleDateFormat date=
             new SimpleDateFormat("dd.MM.yyyy");
-    public static final SimpleDateFormat time=
+    static final SimpleDateFormat time=
             new SimpleDateFormat("HH:mm");
 
     @Override
@@ -41,17 +41,20 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                 m = update.getMessage();
                 if (update.getMessage().getFrom().getId()==myID) {
                     if (m.hasText()) {
-                        if (m.getText().equals("/start")) {
+                        if (m.getText().equals("/start")&&set.size()>0) {
                             send("Всего пользователей: "+set.size(), myID, "Finished", "Unfinished", false);
+                        } else if(m.getText().equals("/start")&&set.size()==0){
+                            send("Ещё нет пользователей", myID);
                         }
-                        Collection<Order> values = set.values();
-                        for (Order o: values) {
-                            for (Translation tr: o.getOrdersList()) {
-                                Russian aa= new Russian();
-                                if (m.getText().equals("Unfinished")&&!tr.Isfinished()) {
-                                    myself(o,tr,true);
-                                } else if (m.getText().equals("Finished")&&tr.Isfinished()) {
-                                    myself(o,tr,false);
+                        Collection<Order> values = set != null ? set.values() : null;
+                        if (values!=null) {
+                            for (Order o: values) {
+                                for (Translation tr: o.getOrdersList()) {
+                                    if (m.getText().equals("Unfinished")&&!tr.Isfinished()) {
+                                        myself(o,tr,true);
+                                    } else if (m.getText().equals("Finished")&&tr.Isfinished()) {
+                                        myself(o,tr,false);
+                                    }
                                 }
                             }
                         }
@@ -399,8 +402,8 @@ public class AmabiliaBot extends TelegramLongPollingBot {
             }
         inlineMarkup.setKeyboard(rows);
         replyMarkup.setKeyboard(rows2).setResizeKeyboard(true).setOneTimeKeyboard(false);
-        a.setIM(inlineMarkup);
-        a.setRM(replyMarkup);
+        if (a!=null) a.setIM(inlineMarkup);
+        if (a!=null) a.setRM(replyMarkup);
         if (inline) sendMessage.setReplyMarkup(inlineMarkup);
         else sendMessage.setReplyMarkup(replyMarkup);
         try { execute(sendMessage);}

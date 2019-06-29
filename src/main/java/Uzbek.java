@@ -10,7 +10,7 @@ public class Uzbek implements Language {
     private static final String enguzbek = "<b>ingliz</b> tilidan <b>o'zbek</b> tiliga";
     private static final String uzbekeng = "<b>o'zbek</b> tilidan <b>ingliz</b> tiliga";
     private static final String uzbekrus    = "<b>o'zbek</b> tilidan <b>rus</b> tiliga";
-    private Transliterator toLatinTrans = Transliterator.getInstance(AmabiliaBot.CYRILLIC_TO_LATIN);
+    Transliterator toLatinTrans = Transliterator.getInstance(AmabiliaBot.CYRILLIC_TO_LATIN);
 
 
 
