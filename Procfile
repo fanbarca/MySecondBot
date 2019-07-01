@@ -1,0 +1,1 @@
+web: java -jar out\artifacts\Amabilia_jar/Amabilia.jar
