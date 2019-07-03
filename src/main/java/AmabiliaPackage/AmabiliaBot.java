@@ -102,12 +102,12 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                                     send("№"+tr.getId()+" Заказ отмечен как выполненный", myID);
                                     send("№"+tr.getId()+ " "+o.getLanguage().finished(), o.getUser().getId());
                                 }
-                            } else if (update.getCallbackQuery().getData().contains("Отменить заказ")) {
+                            } else if (update.getCallbackQuery().getData().contains("Отмена заказа")) {
                                 if (update.getCallbackQuery().getData().contains(tr.getId())) {
+                                    set.get(o.getUser().getId()).getOrdersList().remove(tr);
                                     deleteMessage(update.getCallbackQuery().getMessage());
-                                    send("№"+tr.getId()+" отменен Вами", myID);
-                                    send("№"+tr.getId()+" "+o.getLanguage().cancelled(), o.getUser().getId());
-                                    tr=null;
+                                    send("№"+tr.getId()+" Заказ отменен", myID);
+                                    send("№"+tr.getId()+ " "+o.getLanguage().cancelled(), o.getUser().getId());
                                 }
                             }
                         }
@@ -252,10 +252,10 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                     iter.remove();
                 }
             }
-            send(direction + " Заказ №"+ id +" от "+ a.getUser().getFirstName()+
-                    " отменен пользователем", myID);
             edit(update.getCallbackQuery().getMessage(), a.getLanguage().cancelled());
             //deleteMessage(update.getCallbackQuery().getMessage());
+            send(direction + " Заказ №"+ id +" от "+ a.getUser().getFirstName()+
+                    " отменен пользователем", myID);
         } else if (cb.contains(":ok_hand::white_check_mark:")) {
             t.clearOrder();
             edit(update.getCallbackQuery().getMessage(), a.getLanguage().cancelled());
@@ -509,8 +509,8 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                 .setText(EmojiParser.parseToUnicode("Выполнено :thumbsup:"))
                 .setCallbackData("Выполнено :thumbsup:" + tr.getId()));
         row.add(new InlineKeyboardButton()
-        .setText(EmojiParser.parseToUnicode(":negative_squared_cross_mark:Отменить заказ"))
-        .setCallbackData(":negative_squared_cross_mark:Отменить заказ" + tr.getId()));
+        .setText(EmojiParser.parseToUnicode(":negative_squared_cross_mark:Отмена заказа"))
+        .setCallbackData(":negative_squared_cross_mark:Отмена заказа" + tr.getId()));
         rows.add(row);
         inlineMarkup.setKeyboard(rows);
         if(inline)sendMyselfdoc.setReplyMarkup(inlineMarkup);
