@@ -32,10 +32,10 @@ public class AmabiliaBot extends TelegramLongPollingBot {
     static final String LATIN_TO_CYRILLIC = "Latin-Russian/BGN";
     static final SimpleDateFormat date=
             new SimpleDateFormat("dd.MM.yyyy");
-    //date.setTimeZone(TimeZone.getTimeZone("UTC+05:00"));
+    date.setTimeZone(TimeZone.getTimeZone("Asia/Tashkent"));
     static final SimpleDateFormat time=
             new SimpleDateFormat("HH:mm");
-    //time.setTimeZone(TimeZone.getTimeZone("UTC+05:00"));
+    time.setTimeZone(TimeZone.getTimeZone("Asia/Tashkent"));
 
     @Override
     public void onUpdateReceived(Update update) {
