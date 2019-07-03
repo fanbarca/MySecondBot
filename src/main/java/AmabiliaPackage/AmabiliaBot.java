@@ -257,7 +257,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
             send(direction + " Заказ №"+ id +" от "+ a.getUser().getFirstName()+
                     " отменен пользователем", myID);
         } else if (cb.contains(":ok_hand::white_check_mark:")) {
-            t.clearOrder();
+            a.getOrdersList().remove(t);
             edit(update.getCallbackQuery().getMessage(), a.getLanguage().cancelled());
         } else if (cb.contains(":raised_hand::negative_squared_cross_mark:")) {
             edit(update.getCallbackQuery().getMessage(), a.getLanguage().howManyPages()+"\n:page_facing_up: "+ t.getPages(), dial(), false);
