@@ -99,14 +99,15 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                                 if (update.getCallbackQuery().getData().contains(tr.getId())) {
                                     tr.setfinished(true);
                                     deleteMessage(update.getCallbackQuery().getMessage());
+                                    send("№"+tr.getId()+" Заказ отмечен как выполненный", myID);
                                     send("№"+tr.getId()+ " "+o.getLanguage().finished(), o.getUser().getId());
                                 }
                             } else if (update.getCallbackQuery().getData().contains("Отменить заказ")) {
                                 if (update.getCallbackQuery().getData().contains(tr.getId())) {
-                                    tr.setfinished(true);
                                     deleteMessage(update.getCallbackQuery().getMessage());
                                     send("№"+tr.getId()+" отменен Вами", myID);
-                                    send("№"+tr.getId()+" "+a.getLanguage().cancelled(), o.getUser().getId());
+                                    send("№"+tr.getId()+" "+o.getLanguage().cancelled(), o.getUser().getId());
+                                    tr=null;
                                 }
                             }
                         }
@@ -494,12 +495,13 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                 .setCaption(EmojiParser.parseToUnicode(
                         "\n:fast_forward:Направление: "+tr.getDirection()+
                         "\n:page_facing_up:Количество листов: "+ tr.getPages()+
-                        "\n:date:Заказ оформлен: "+date.format(tr.getOrderTime()) + ":clock3:"+time.format(tr.getOrderTime()) +
+                        "\n:date:Заказ оформлен: "+date.format(tr.getOrderTime()) +
+                        "\n:clock3:"+time.format(tr.getOrderTime()) +
                         "\n:moneybag:Стоимость: "+tr.getTotalCost()+ " сум"+
                         "\n:watch:Требуется дней: "+tr.getDuration()+
                         "\n:1234:Номер заказа: " + tr.getId()+
                         "\n:busts_in_silhouette:Заказчик: "+ o.getUser().getFirstName()+" @"+o.getUser().getUserName()+
-                        "\n:u6307:Язык интерфейса: " + o.getLanguage().getClass().getName()));
+                        "\n:u6307:Язык интерфейса: " + o.getLanguage().getClass().getSimpleName()));
         InlineKeyboardMarkup inlineMarkup = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
         List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
