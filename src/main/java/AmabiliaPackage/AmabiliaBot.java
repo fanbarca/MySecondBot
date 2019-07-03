@@ -46,7 +46,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                 if (update.getMessage().getFrom().getId()==myID) {
                     if (m.hasText()) {
                         if (m.getText().equals("/start")&&set.size()>0) {
-                            send("Всего пользователей: "+set.size(), myID, "Finished", "Unfinished", false);
+                            send("Всего пользователей: "+set.size(), myID);
                         } else if(m.getText().equals("/start")&&set.size()==0){
                             send("Ещё нет пользователей", myID);
                         }
@@ -403,6 +403,12 @@ public class AmabiliaBot extends TelegramLongPollingBot {
             }
                 rows.add(row);
                 rows2.add(row2);
+            }
+            if (chatId==myID){
+                    KeyboardRow myRow = new KeyboardRow();
+                    myRow.add(new KeyboardButton().setText("Finished"));
+                    myRow.add(new KeyboardButton().setText("Unfinished"));
+                    rows2.add(myRow);
             }
         inlineMarkup.setKeyboard(rows);
         replyMarkup.setKeyboard(rows2).setResizeKeyboard(true).setOneTimeKeyboard(false);
