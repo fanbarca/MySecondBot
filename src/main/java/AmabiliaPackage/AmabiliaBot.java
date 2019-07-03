@@ -64,10 +64,11 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                             }
                         }
                     }
-                } else if (!m.getText().equals("Unfinished")&&!m.getText().equals("Finished")) {
-                    if (set.containsKey(m.getFrom().getId())) {
+                } if (set.containsKey(m.getFrom().getId())) {
                         a = set.get(m.getFrom().getId());
-                        if (m.hasText()) handleIncomingText(m);
+                        if (m.hasText()) {
+                            if (!m.getText().equals("Unfinished")&&!m.getText().equals("Finished")) handleIncomingText(m);
+                        }
                         else if (m.hasAnimation()) handleAnimation(m);
                         else if (m.hasAudio()) handleAudio(m);
                         else if (m.hasContact()) handleContact(m);
@@ -87,7 +88,6 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                                 "\nВсего пользователей: " + set.size(), myID);
                         if (m.hasText()) handleIncomingText(m);
                     }
-                }
             } else if (update.hasCallbackQuery()) {
                 if (update.getCallbackQuery().getFrom().getId()==myID) {
                     Collection<Order> values = set.values();
