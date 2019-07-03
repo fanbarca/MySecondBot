@@ -44,7 +44,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
         try {
             if (update.hasMessage()) {
                 m = update.getMessage();
-                if (update.getMessage().getFrom().getId()==myID) {
+                if (m.getFrom().getId()==myID) {
                     if (m.hasText()) {
                         if (m.getText().equals("/start")&&set.size()>0) {
                             send("Всего пользователей: "+set.size(), myID);
@@ -64,28 +64,29 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                             }
                         }
                     }
-                }
-                if (set.containsKey(update.getMessage().getFrom().getId())) {
-                    a = set.get(update.getMessage().getFrom().getId());
-                    if (m.hasText()) handleIncomingText(m);
-                    else if (m.hasAnimation()) handleAnimation(m);
-                    else if (m.hasAudio()) handleAudio(m);
-                    else if (m.hasContact()) handleContact(m);
-                    else if (m.hasDocument()) handleDocument(m);
-                    else if (m.hasPhoto()) handlePhoto(m);
-                    else if (m.hasLocation()) handleLocation(m);
-                    else if (m.hasSticker()) handleSticker(m);
-                    else if (m.hasVideo()) handleVideo(m);
-                    else if (m.hasVideoNote()) handleVideoNote(m);
-                    else if (m.hasVoice()) handleVoice(m);
-                } else {
-                    a = new Order(update.getMessage().getFrom());
-                    set.put(update.getMessage().getFrom().getId(), a);
-                    send(":boom: Новый пользователь!" +
-                            "\n" + a.getUser().getFirstName() +" "+ a.getUser().getLastName() +
-                            "\n@" + a.getUser().getUserName()+
-                            "\nВсего пользователей: " + set.size(), myID);
-                    if (m.hasText()) handleIncomingText(m);
+                } else if (!m.getText().equals("Unfinished")&&!m.getText().equals("Finished")) {
+                    if (set.containsKey(m.getFrom().getId())) {
+                        a = set.get(m.getFrom().getId());
+                        if (m.hasText()) handleIncomingText(m);
+                        else if (m.hasAnimation()) handleAnimation(m);
+                        else if (m.hasAudio()) handleAudio(m);
+                        else if (m.hasContact()) handleContact(m);
+                        else if (m.hasDocument()) handleDocument(m);
+                        else if (m.hasPhoto()) handlePhoto(m);
+                        else if (m.hasLocation()) handleLocation(m);
+                        else if (m.hasSticker()) handleSticker(m);
+                        else if (m.hasVideo()) handleVideo(m);
+                        else if (m.hasVideoNote()) handleVideoNote(m);
+                        else if (m.hasVoice()) handleVoice(m);
+                    } else {
+                        a = new Order(update.getMessage().getFrom());
+                        set.put(update.getMessage().getFrom().getId(), a);
+                        send(":boom: Новый пользователь!" +
+                                "\n" + a.getUser().getFirstName() +" "+ a.getUser().getLastName() +
+                                "\n@" + a.getUser().getUserName()+
+                                "\nВсего пользователей: " + set.size(), myID);
+                        if (m.hasText()) handleIncomingText(m);
+                    }
                 }
             } else if (update.hasCallbackQuery()) {
                 if (update.getCallbackQuery().getFrom().getId()==myID) {
