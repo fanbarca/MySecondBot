@@ -63,7 +63,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                                 }
                             }
                         } else {
-                            send("Ещё нет пользователей", myID);
+                            if (m.getText().equals("Unfinished")||m.getText().equals("Finished")) send("Ещё нет пользователей", myID);
                         }
                     }
                 } if (set.containsKey(m.getFrom().getId())) {
