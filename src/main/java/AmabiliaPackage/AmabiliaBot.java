@@ -30,12 +30,13 @@ public class AmabiliaBot extends TelegramLongPollingBot {
     private static final long myID = 615351734;
     static final String CYRILLIC_TO_LATIN = "Russian-Latin/BGN";
     static final String LATIN_TO_CYRILLIC = "Latin-Russian/BGN";
-    static final SimpleDateFormat date=
-            new SimpleDateFormat("dd.MM.yyyy");
-    //date.setTimeZone(TimeZone.getTimeZone("Asia/Tashkent"));
-    static final SimpleDateFormat time=
-            new SimpleDateFormat("HH:mm");
-    //time.setTimeZone(TimeZone.getTimeZone("Asia/Tashkent"));
+    static TimeZone zone = TimeZone.getTimeZone("Asia/Tashkent");
+    static SimpleDateFormat date = new SimpleDateFormat("dd.MM.yyyy");
+    static SimpleDateFormat time = new SimpleDateFormat("HH:mm");
+    {
+    date.setTimeZone(zone);
+    time.setTimeZone(zone);
+    }
 
     @Override
     public void onUpdateReceived(Update update) {
