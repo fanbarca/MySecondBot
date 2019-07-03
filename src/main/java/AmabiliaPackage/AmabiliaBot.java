@@ -99,7 +99,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                         }
                     }
                 }
-                else if (set.containsKey(update.getCallbackQuery().getFrom().getId())) {
+                if (set.containsKey(update.getCallbackQuery().getFrom().getId())) {
                     a = set.get(update.getCallbackQuery().getFrom().getId());
                     handleCallback(update);
                 } else {
