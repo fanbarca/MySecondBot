@@ -95,10 +95,19 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                     Collection<Order> values = set.values();
                     for (Order o: values) {
                         for (Translation tr: o.getOrdersList()) {
-                            if (update.getCallbackQuery().getData().contains(tr.getId())) {
-                                tr.setfinished(true);
-                                deleteMessage(update.getCallbackQuery().getMessage());
-                                send("№"+tr.getId()+ " "+o.getLanguage().finished(), o.getUser().getId());
+                            if (update.getCallbackQuery().getData().contains("Выполнено")) {
+                                if (update.getCallbackQuery().getData().contains(tr.getId())) {
+                                    tr.setfinished(true);
+                                    deleteMessage(update.getCallbackQuery().getMessage());
+                                    send("№"+tr.getId()+ " "+o.getLanguage().finished(), o.getUser().getId());
+                                }
+                            } else if (update.getCallbackQuery().getData().contains("Отменить заказ")) {
+                                if (update.getCallbackQuery().getData().contains(tr.getId())) {
+                                    tr.setfinished(true);
+                                    deleteMessage(update.getCallbackQuery().getMessage());
+                                    send("№"+tr.getId()+" отменен Вами", myID);
+                                    send("№"+tr.getId()+" "+a.getLanguage().cancelled(), o.getUser().getId());
+                                }
                             }
                         }
                     }
@@ -497,6 +506,9 @@ public class AmabiliaBot extends TelegramLongPollingBot {
         row.add(new InlineKeyboardButton()
                 .setText(EmojiParser.parseToUnicode("Выполнено :thumbsup:"))
                 .setCallbackData("Выполнено :thumbsup:" + tr.getId()));
+        row.add(new InlineKeyboardButton()
+        .setText(EmojiParser.parseToUnicode(":negative_squared_cross_mark:Отменить заказ"))
+        .setCallbackData(":negative_squared_cross_mark:Отменить заказ" + tr.getId()));
         rows.add(row);
         inlineMarkup.setKeyboard(rows);
         if(inline)sendMyselfdoc.setReplyMarkup(inlineMarkup);
