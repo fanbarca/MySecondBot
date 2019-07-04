@@ -1,4 +1,4 @@
-package AmabiliaPackage;
+package SecondPackage;
 
 import org.telegram.telegrambots.meta.api.objects.Document;
 

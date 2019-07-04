@@ -1,4 +1,4 @@
-package AmabiliaPackage;
+package SecondPackage;
 
 import com.vdurmont.emoji.EmojiParser;
 import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;

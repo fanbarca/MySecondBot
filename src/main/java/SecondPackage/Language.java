@@ -1,4 +1,4 @@
-package AmabiliaPackage;
+package SecondPackage;
 
 import java.util.List;
 

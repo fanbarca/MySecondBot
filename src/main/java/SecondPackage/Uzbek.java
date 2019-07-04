@@ -1,4 +1,4 @@
-package AmabiliaPackage;
+package SecondPackage;
 
 import com.ibm.icu.text.Transliterator;
 
