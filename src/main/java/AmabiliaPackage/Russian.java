@@ -54,7 +54,7 @@ public class Russian implements Language{
                 "\n"+o.getDirection()+
                 "\n:page_facing_up:Количество листов: " + o.getPages()  +
                 "\n:date:Дата заказа: "+AmabiliaBot.date.format(o.getOrderTime()) +
-                " :clock3:"+AmabiliaBot.time.format(o.getOrderTime())+
+                "\n:clock3:"+AmabiliaBot.time.format(o.getOrderTime())+
                 "\n:1234:Номер заказа: " + o.getId()+
                 "\n"+ f;
     }

@@ -55,7 +55,7 @@ public class English implements Language {
                 "\n"+o.getDirection()+
                 "\n:page_facing_up:Number of pages: " + o.getPages()  +
                 "\n:date:Date of order: "+AmabiliaBot.date.format(o.getOrderTime()) +
-                " :clock3:"+AmabiliaBot.time.format(o.getOrderTime())+
+                "\n:clock3:"+AmabiliaBot.time.format(o.getOrderTime())+
                 "\n:1234:Order ID: " + o.getId()+
                 "\n"+ f;
     }

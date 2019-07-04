@@ -44,7 +44,7 @@ public class Uzbek implements Language {
     public String orders(Translation o) {
         String ch = "";
         String f="";
-        if (o.Isfinished()) f = finished();
+        if (o.Isfinished()) f = ":white_check_mark:Buyurtma bajarilgan";
         if (o.getDirection().equals(AmabiliaBot.directions().get(0))) ch = ruseng;
         if (o.getDirection().equals(AmabiliaBot.directions().get(1))) ch = rusuzbek;
         if (o.getDirection().equals(AmabiliaBot.directions().get(2))) ch = engrus;
@@ -55,7 +55,7 @@ public class Uzbek implements Language {
                 "\n"+o.getDirection()+
                 "\n:page_facing_up:Varaqlar soni: " + o.getPages() +
                 "\n:date:Buyurtma sanasi: "+AmabiliaBot.date.format(o.getOrderTime()) +
-                " :clock3:"+AmabiliaBot.time.format(o.getOrderTime())+
+                "\n:clock3:"+AmabiliaBot.time.format(o.getOrderTime())+
                 "\n:1234:Buyurtma ID raqami: " + o.getId()+
                 "\n"+ f;
     }
@@ -141,7 +141,7 @@ public class Uzbek implements Language {
 
     @Override
     public String finished() {
-        return ":white_check_mark:Buyurtma bajarilgan";
+        return ":white_check_mark:Buyurtma bajarildi";
     }
 
     @Override
