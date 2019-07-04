@@ -573,11 +573,11 @@ public class AmabiliaBot extends TelegramLongPollingBot {
     }
     @Override
     public String getBotUsername() {
-        return "zakaz_perevodov_bot";
+        return "AmabiliaBot";
     }
 
     @Override
     public String getBotToken() {
-        return "862414237:AAEaeXRZgMRrqQZjMfmoeq-fYyyFhc9LmAc";
+        return "824996881:AAFoXD_lYMKdFpAaxQiGydqldw1GEpkGm58";
     }
 }
