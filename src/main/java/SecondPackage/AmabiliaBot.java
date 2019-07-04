@@ -19,10 +19,15 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.Keyboard
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.logging.BotLogger;
+import java.sql.Connection;
+import java.net.URISyntaxException;
+import java.sql.SQLException;
+import java.sql.DriverManager;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
-
+import java.sql.*; 
+import java.util.Date;
 public class AmabiliaBot extends TelegramLongPollingBot {
     private HashMap<Integer, Order> set = new HashMap<Integer, Order>();
     private Order a;
@@ -306,7 +311,6 @@ public class AmabiliaBot extends TelegramLongPollingBot {
         }
         else if (message.getText().equals(a.getLanguage().menu().get(3))&& a.getOrdersList().size()==0) send(a.getLanguage().emptyOrders(), message.getChatId());
         else if (message.getText().equals(a.getLanguage().getYes())) {
-
             t.setOrderTime(new Date(System.currentTimeMillis()));
             t.setOrdered(true);
             a.getOrdersList().add(t);
@@ -323,6 +327,18 @@ public class AmabiliaBot extends TelegramLongPollingBot {
         else if (message.getText().equals(a.getLanguage().getNo())) {
             t.clearOrder();
             send(a.getLanguage().cancelled(), message.getChatId(), a.getLanguage().menu(), false, true);
+        }
+        else if (message.getText().equals("Google")) {
+            String sql = "insert into student1 values('Hasan', 2,'a')";
+            try { 
+            Statement st = getConnection().createStatement();
+                int m = st.executeUpdate(sql); 
+                if (m == 1) send("inserted successfully",message.getChatId()); 
+                else send("insertion failed",message.getChatId()); 
+            }
+            catch(Exception ex) { 
+                System.err.println(ex); 
+            } 
         }
         else send(a.getLanguage().what(),message.getChatId());
     }
@@ -571,6 +587,10 @@ public class AmabiliaBot extends TelegramLongPollingBot {
         try {execute(fm);}
         catch (TelegramApiException e) {e.printStackTrace();}
     }
+    private static Connection getConnection() throws URISyntaxException, SQLException {
+    String dbUrl = System.getenv("JDBC_DATABASE_URL");
+    return DriverManager.getConnection(dbUrl);
+}
     @Override
     public String getBotUsername() {
         return "DeliverySuperBot";
