@@ -28,8 +28,8 @@ public class AmabiliaBot extends TelegramLongPollingBot {
     private Order a;
     private Translation t;
     private static final long myID = 615351734;
-    static final String CYRILLIC_TO_LATIN = "Russian-Latin";
-    static final String LATIN_TO_CYRILLIC = "Latin-Russian";
+    static final String CYRILLIC_TO_LATIN = "Cyrillic-Latin";
+    static final String LATIN_TO_CYRILLIC = "Latin-Cyrillic";
     static TimeZone zone = TimeZone.getTimeZone("Asia/Tashkent");
     static SimpleDateFormat date = new SimpleDateFormat("dd.MM.yyyy");
     static SimpleDateFormat time = new SimpleDateFormat("HH:mm");
