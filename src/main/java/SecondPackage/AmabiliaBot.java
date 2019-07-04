@@ -26,7 +26,7 @@ import java.sql.DriverManager;
 import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.sql.*; 
+import java.sql.*;
 import java.util.Date;
 public class AmabiliaBot extends TelegramLongPollingBot {
     private HashMap<Integer, Order> set = new HashMap<Integer, Order>();
@@ -330,16 +330,16 @@ public class AmabiliaBot extends TelegramLongPollingBot {
         }
 
         else if (message.getText().equals("Google")) {
-            String sql = "insert into student1 values('Hasan', 2,'a')";
-            try { 
+            String sql = "SHOW DATABASES";
+            try {
             Statement st = getConnection().createStatement();
-                int m = st.executeUpdate(sql); 
-                if (m == 1) send("inserted successfully",message.getChatId()); 
-                else send("insertion failed",message.getChatId()); 
+                int m = st.executeUpdate(sql);
+                if (m == 1) send("inserted successfully",message.getChatId());
+                else send("insertion failed",message.getChatId());
             }
-            catch(Exception ex) { 
-                System.err.println(ex); 
-            } 
+            catch(Exception ex) {
+                System.err.println(ex);
+            }
         }
 
         else send(a.getLanguage().what(),message.getChatId());
@@ -596,7 +596,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
         String dbUrl = "jdbc:postgresql://" + dbUri.getHost() + ':' + dbUri.getPort() + dbUri.getPath() + "?sslmode=require";
         return DriverManager.getConnection(dbUrl, username, password);
     }
-    
+
     @Override
     public String getBotUsername() {
         return "DeliverySuperBot";
