@@ -23,7 +23,7 @@ import java.sql.Connection;
 import java.net.URISyntaxException;
 import java.sql.SQLException;
 import java.sql.DriverManager;
-
+import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.sql.*; 
@@ -328,6 +328,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
             t.clearOrder();
             send(a.getLanguage().cancelled(), message.getChatId(), a.getLanguage().menu(), false, true);
         }
+
         else if (message.getText().equals("Google")) {
             String sql = "insert into student1 values('Hasan', 2,'a')";
             try { 
@@ -340,6 +341,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                 System.err.println(ex); 
             } 
         }
+
         else send(a.getLanguage().what(),message.getChatId());
     }
     public static List<String> directions() {
@@ -588,9 +590,13 @@ public class AmabiliaBot extends TelegramLongPollingBot {
         catch (TelegramApiException e) {e.printStackTrace();}
     }
     private static Connection getConnection() throws URISyntaxException, SQLException {
-    String dbUrl = System.getenv("JDBC_DATABASE_URL");
-    return DriverManager.getConnection(dbUrl);
-}
+        URI dbUri = new URI(System.getenv("DATABASE_URL"));
+        String username = dbUri.getUserInfo().split(":")[0];
+        String password = dbUri.getUserInfo().split(":")[1];
+        String dbUrl = "jdbc:postgresql://" + dbUri.getHost() + ':' + dbUri.getPort() + dbUri.getPath() + "?sslmode=require";
+        return DriverManager.getConnection(dbUrl, username, password);
+    }
+    
     @Override
     public String getBotUsername() {
         return "DeliverySuperBot";

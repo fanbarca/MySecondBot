@@ -86,6 +86,10 @@
             <artifactId>icu4j</artifactId>
             <version>64.2</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.2.1</version>
+        </dependency>
     </dependencies>
 </project>
