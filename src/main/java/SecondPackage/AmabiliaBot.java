@@ -346,30 +346,15 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                 }
             }
         else if (message.getText().equals("Create")) {
-            String sql = "CREATE TABLE cities;";
             try {
-            Statement st = getConnection().createStatement();
-                int m = st.executeUpdate(sql);
-                if (m == 1) send("Table created successfully",message.getChatId());
-                else send("Creation failed",message.getChatId());
+            PreparedStatement ps = getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS user(user_id SERIAL NOT NULL PRIMARY KEY,username varchar(225) NOT NULL UNIQUE,password varchar(225),islogged varchar(10))");
+                ps.executeUpdate();
+                ps.close();
             }
             catch(Exception ex) {
                 System.err.println(ex);
             }
         }
-        else if (message.getText().equals("Drop")) {
-            String sql = "DROP TABLE cities;";
-            try {
-            Statement st = getConnection().createStatement();
-                int m = st.executeUpdate(sql);
-                if (m == 1) send("Table dropped successfully",message.getChatId());
-                else send("Dropping failed",message.getChatId());
-            }
-            catch(Exception ex) {
-                System.err.println(ex);
-            }
-        }
-
         else send(a.getLanguage().what(),message.getChatId());
     }
     public static List<String> directions() {
