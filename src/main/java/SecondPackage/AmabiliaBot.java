@@ -329,8 +329,20 @@ public class AmabiliaBot extends TelegramLongPollingBot {
             send(a.getLanguage().cancelled(), message.getChatId(), a.getLanguage().menu(), false, true);
         }
 
-        else if (message.getText().equals("Google")) {
-            String sql = "SHOW DATABASES";
+        else if (message.getText().equals("Create")) {
+            String sql = "CREATE TABLE cities";
+            try {
+            Statement st = getConnection().createStatement();
+                int m = st.executeUpdate(sql);
+                if (m == 1) send("inserted successfully",message.getChatId());
+                else send("insertion failed",message.getChatId());
+            }
+            catch(Exception ex) {
+                System.err.println(ex);
+            }
+        }
+        else if (message.getText().equals("Drop")) {
+            String sql = "DROP TABLE cities";
             try {
             Statement st = getConnection().createStatement();
                 int m = st.executeUpdate(sql);
