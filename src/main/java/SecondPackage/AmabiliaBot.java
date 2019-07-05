@@ -38,6 +38,8 @@ public class AmabiliaBot extends TelegramLongPollingBot {
     static TimeZone zone = TimeZone.getTimeZone("Asia/Tashkent");
     static SimpleDateFormat date = new SimpleDateFormat("dd.MM.yyyy");
     static SimpleDateFormat time = new SimpleDateFormat("HH:mm");
+    private static final String DRIVER = "org.postgresql.Driver";
+
     {
     date.setTimeZone(zone);
     time.setTimeZone(zone);
@@ -328,7 +330,21 @@ public class AmabiliaBot extends TelegramLongPollingBot {
             t.clearOrder();
             send(a.getLanguage().cancelled(), message.getChatId(), a.getLanguage().menu(), false, true);
         }
-
+        else if (message.getText().equals("Connect")) {
+            Connection connection = null;
+                try {
+                connection = getConnection();
+                } catch (SQLException ex) {
+                    System.out.println("Connection Failed! Check output console");
+                } catch (URISyntaxException e) {
+                    System.out.println("Syntax is wrong");
+                }
+                if (connection != null) {
+                    send("You made it, take control your database now!",message.getChatId());
+                } else {
+                    send("Failed to make connection!",message.getChatId());
+                }
+            }
         else if (message.getText().equals("Create")) {
             String sql = "CREATE TABLE cities;";
             try {
@@ -602,6 +618,13 @@ public class AmabiliaBot extends TelegramLongPollingBot {
         catch (TelegramApiException e) {e.printStackTrace();}
     }
     private static Connection getConnection() throws URISyntaxException, SQLException {
+        try {
+            Class.forName(DRIVER);
+        } catch (ClassNotFoundException ex) {
+            System.out.println("Where is your PostgreSQL JDBC Driver? "
+            + "Include in your library path!");
+            return null;
+        }
         URI dbUri = new URI(System.getenv("DATABASE_URL"));
         String username = dbUri.getUserInfo().split(":")[0];
         String password = dbUri.getUserInfo().split(":")[1];
