@@ -330,32 +330,32 @@ public class AmabiliaBot extends TelegramLongPollingBot {
             t.clearOrder();
             send(a.getLanguage().cancelled(), message.getChatId(), a.getLanguage().menu(), false, true);
         }
-        else if (message.getText().equals("Connect")) {
-            try (Connection conn = DriverManager.getConnection()) {
-            if (conn != null) {
-                send("Connected to the database!", message.getChatId());
-            } else {
-                send("Failed to make connection!", message.getChatId());
-            }
 
-        } catch (SQLException e) {
-            System.err.format("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-            }
         else if (message.getText().equals("Create")) {
             try {
-            PreparedStatement ps = getConnection().prepareStatement(
-                "CREATE TABLE IF NOT EXISTS user(user_id SERIAL NOT NULL PRIMARY KEY,username varchar(225) NOT NULL UNIQUE,password varchar(225),islogged varchar(10))");
-                ps.executeUpdate();
-                ps.close();
+                String sql = "CREATE TABLE IF NOT EXISTS user("+
+                "id SERIAL NOT NULL PRIMARY KEY,"+
+                "username varchar(225) NOT NULL UNIQUE,"+
+                "password varchar(225))";
+                String sql2 = "INSERT INTO user"+
+                "VALUES (1, Hasan, zzzz1111*);";
+                Connection conn = getConnection();
+                if (conn != null) send("Connected to the database!", message.getChatId());
+                Statement st = conn.createStatement();
+                ResultSet rs = st.executeQuery(sql);
+                if (rs != null) send("Query executed!", message.getChatId());
+                Statement st2 = conn.createStatement();
+                ResultSet rs2 = st2.executeQuery(sql2);
+                if (rs2 != null) send("Inserted!", message.getChatId());
+                conn.close();
             }
             catch(Exception ex) {
                 System.err.println(ex);
             }
         }
+
+
+
         else send(a.getLanguage().what(),message.getChatId());
     }
     public static List<String> directions() {
