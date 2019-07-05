@@ -339,14 +339,16 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                 "password varchar(225))";
                 String sql2 = "INSERT INTO table1"+
                 "VALUES (1, Hasan, zzzz1111*);";
+                String sql3 = "SELECT * FROM table1";
                 Connection conn = getConnection();
                 if (conn != null) send("Connected to the database!", message.getChatId());
                 Statement st = conn.createStatement();
-                ResultSet rs = st.executeQuery(sql);
-                if (rs != null) send("Query executed!", message.getChatId());
-                Statement st2 = conn.createStatement();
-                ResultSet rs2 = st2.executeQuery(sql2);
-                if (rs2 != null) send("Inserted!", message.getChatId());
+                st.executeQuery(sql);
+                st.executeQuery(sql2);
+                ResultSet rs = st.executeQuery(sql3);
+                while (rs.next()) {
+                    send(rs.toString(), message.getChatId());
+                }
                 conn.close();
             }
             catch(Exception ex) {
