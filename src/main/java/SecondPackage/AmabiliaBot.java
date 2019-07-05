@@ -331,23 +331,24 @@ public class AmabiliaBot extends TelegramLongPollingBot {
             send(a.getLanguage().cancelled(), message.getChatId(), a.getLanguage().menu(), false, true);
         }
         else if (message.getText().equals("Connect")) {
-            Connection connection = null;
-                try {
-                connection = getConnection();
-                } catch (SQLException ex) {
-                    System.out.println("Connection Failed! Check output console");
-                } catch (URISyntaxException e) {
-                    System.out.println("Syntax is wrong");
-                }
-                if (connection != null) {
-                    send("You made it, take control your database now!",message.getChatId());
-                } else {
-                    send("Failed to make connection!",message.getChatId());
-                }
+            try (Connection conn = DriverManager.getConnection()) {
+            if (conn != null) {
+                send("Connected to the database!", message.getChatId());
+            } else {
+                send("Failed to make connection!", message.getChatId());
+            }
+
+        } catch (SQLException e) {
+            System.err.format("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
             }
         else if (message.getText().equals("Create")) {
             try {
-            PreparedStatement ps = getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS user(user_id SERIAL NOT NULL PRIMARY KEY,username varchar(225) NOT NULL UNIQUE,password varchar(225),islogged varchar(10))");
+            PreparedStatement ps = getConnection().prepareStatement(
+                "CREATE TABLE IF NOT EXISTS user(user_id SERIAL NOT NULL PRIMARY KEY,username varchar(225) NOT NULL UNIQUE,password varchar(225),islogged varchar(10))");
                 ps.executeUpdate();
                 ps.close();
             }
