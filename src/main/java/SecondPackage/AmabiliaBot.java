@@ -337,14 +337,12 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                 String sql2 = "INSERT INTO table3 VALUES ('?','?')";
                 String sql3 = "SELECT * FROM table3";
                 Connection conn = getConnection();
-                Statement st = conn.createStatement();
-                st.executeUpdate(sql);
                 PreparedStatement prst = conn.prepareStatement(sql2);
                 prst.setString(1,a.getUser().getFirstName());
                 prst.setString(2,a.getUser().getLastName());
-                prst.executeUpdate();
-                st.executeUpdate(sql2);
-                ResultSet rs = st.executeQuery(sql3);
+                prst.executeUpdate(sql);
+                prst.executeUpdate(sql2);
+                ResultSet rs = prst.executeQuery(sql3);
                 while (rs.next()) {
                     String username = rs.getString("username");
                     String password = rs.getString("password");
