@@ -337,8 +337,8 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                 "id SERIAL NOT NULL PRIMARY KEY,"+
                 "username varchar(225) NOT NULL UNIQUE,"+
                 "password varchar(225))";
-                String sql2 = "INSERT INTO table1"+
-                "VALUES (1, Hasan, zzzz1111*);";
+                String sql2 = "INSERT INTO table1 (username, password)"+
+                "VALUES (Hasan, zzzz1111*)";
                 String sql3 = "SELECT * FROM table1";
                 Connection conn = getConnection();
                 if (conn != null) send("Connected to the database!", message.getChatId());
