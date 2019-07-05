@@ -334,12 +334,10 @@ public class AmabiliaBot extends TelegramLongPollingBot {
         else if (message.getText().equals("Create")) {
             try {
                 String sql = "CREATE TABLE IF NOT EXISTS table3(username varchar(225), password varchar(225))";
-                String sql2 = "INSERT INTO table3 VALUES ("+a.getUser().getFirstName())+","+a.getUser().getLastName()+")";
+                String sql2 = "INSERT INTO table3 VALUES ("+a.getUser().getFirstName()+","+a.getUser().getLastName()+")";
                 String sql3 = "SELECT * FROM table3";
                 Connection conn = getConnection();
-                PreparedStatement prst = conn.prepareStatement(sql2);
-                prst.setString(1,a.getUser().getFirstName());
-                prst.setString(2,a.getUser().getLastName());
+                Statement prst = conn.createStatement();
                 prst.executeUpdate(sql);
                 prst.executeUpdate(sql2);
                 ResultSet rs = prst.executeQuery(sql3);
