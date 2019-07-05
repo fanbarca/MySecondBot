@@ -343,7 +343,9 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                 st.executeUpdate(sql2);
                 ResultSet rs = st.executeQuery(sql3);
                 while (rs.next()) {
-                    send(rs.toString(), message.getChatId());
+                    String username = rs.getString("username");
+                    String password = rs.getString("password");
+                    send(username+" "+password, message.getChatId());
                 }
                 conn.close();
             }
