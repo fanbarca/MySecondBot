@@ -449,12 +449,12 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                 rows.add(row);
                 rows2.add(row2);
             }
-            if (chatId==myID){
-                    KeyboardRow myRow = new KeyboardRow();
-                    myRow.add(new KeyboardButton().setText("Finished"));
-                    myRow.add(new KeyboardButton().setText("Unfinished"));
-                    rows2.add(myRow);
-            }
+//            if (chatId==myID){
+//                    KeyboardRow myRow = new KeyboardRow();
+//                    myRow.add(new KeyboardButton().setText("Finished"));
+//                    myRow.add(new KeyboardButton().setText("Unfinished"));
+//                    rows2.add(myRow);
+//            }
         inlineMarkup.setKeyboard(rows);
         replyMarkup.setKeyboard(rows2).setResizeKeyboard(true).setOneTimeKeyboard(false);
 //        if (a!=null) a.setIM(inlineMarkup);

@@ -10,30 +10,30 @@ class Lan {
 
     public static String welcome(String lan, String name){
         String r="";
-        if (lan.equals("Uzbek")) r = "Assalomu Alaykum "+toLatinTrans.transliterate(name)+"!\n" +
-                "Mendan nima xizmat? :blush:";
-        else if (lan.equals("Russian")) r = "Здравствуйте " +toCyrilTrans.transliterate(name)+"!\n" +
-                "Чем могу помочь? :blush:";
-        else if (lan.equals("English")) r = "Hello " +toLatinTrans.transliterate(name)+"!\n" +
-                "How can I help you? :blush:";
+        if (lan.equals("Uzbek")) r = "Xush kelibsiz, "+toLatinTrans.transliterate(name)+"!\n" +
+                "<b>BIG FOOD</b> tayyor ovqat yetkazib berish xizmati :red_car::pizza::poultry_leg::hamburger:";
+        else if (lan.equals("Russian")) r = "Добро пожаловать, " +toCyrilTrans.transliterate(name)+"!\n" +
+                "Служба доставки готовых блюд <b>BIG FOOD</b> :red_car::pizza::poultry_leg::hamburger:";
+        else if (lan.equals("English")) r = "Welcome, " +toLatinTrans.transliterate(name)+"!\n" +
+                "Ready meal delivery service <b>BIG FOOD</b> :red_car::pizza::poultry_leg::hamburger:";
         return r;
     }
     public static List<String> menu(String lan){
         List<String> menu = new ArrayList<String>();
             if (lan.equals("Uzbek")) {
-                menu.add("Tarjimaga buyurtma berish");
+                menu.add("Menyu");
                 menu.add("Xizmatlar narxlari");
                 menu.add("interfeys tili");
                 menu.add("Mening buyurtmalarim");
             }
             else if (lan.equals("Russian")) {
-                menu.add("Заказать перевод");
+                menu.add("Меню");
                 menu.add("Стоимость услуг");
                 menu.add("Язык интерфейса");
                 menu.add("Мои заказы");
             }
             else if (lan.equals("English")) {
-                menu.add("Order translation");
+                menu.add("Menu");
                 menu.add("Cost of services");
                 menu.add("Interface language");
                 menu.add("My orders");
