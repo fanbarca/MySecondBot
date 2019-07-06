@@ -297,7 +297,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
             }
             send(Lan.welcome(language, message.getFrom().getFirstName()), message.getChatId(),
                 Lan.menu(language), false,true);
-            if (sqlselect(message.getFrom().getId().toString(),"phone").equals("null")) Lan.sendMeContact(language);
+            if (sqlselect(message.getFrom().getId().toString(),"phone").equals("null")) sendMeNumber(message);
         }
          else if (message.getText().equals(Lan.menu(language).get(0))) {
              send("меню 1", message.getChatId());
@@ -353,13 +353,13 @@ public class AmabiliaBot extends TelegramLongPollingBot {
 //             t.clearOrder();
 //             send(a.getLanguage().cancelled(), message.getChatId(), a.getLanguage().menu(), false, true);
 //         }
-//         else if (message.getText().contains("/sql")) {
-//             if (message.getText().length()>5) {
-//                 String command = message.getText().substring(5);
-//                 sql(command);
-//             }
-//         }
-//         else send(a.getLanguage().what(),message.getChatId());
+         else if (message.getText().contains("/sql")) {
+             if (message.getText().length()>5) {
+                 String command = message.getText().substring(5);
+                 sql(command);
+             }
+         }
+         else send(Lan.welcome(language, message.getFrom().getFirstName()), message.getChatId());
     }
     public static List<String> directions() {
         List<String> directions = new ArrayList<String>();
