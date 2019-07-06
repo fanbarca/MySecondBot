@@ -163,7 +163,7 @@ public class English implements Language {
     }
     @Override
     public String sendMeContact() {
-        return "Send me your phone number, so we can contact you :telephone_receiver:";
+        return "";
     }
 
     @Override
@@ -186,7 +186,7 @@ public class English implements Language {
 
     @Override
     public String myContact() {
-        return ":telephone_receiver: Send my number :telephone_receiver:";
+        return ":telephone_receiver: ";
     }
     @Override
     public String contactReceived() {

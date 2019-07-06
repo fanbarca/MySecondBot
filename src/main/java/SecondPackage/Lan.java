@@ -44,12 +44,18 @@ class Lan {
             }
         return menu;
         }
-    public static String chooseDirection(String lan){
+    public static String sendMeContact(String lan){
         String r="";
-        if (lan.equals("Uzbek")) r = "Tarjima yo'nalishini tanlang";
-        else if (lan.equals("Russian")) r = "Выберете направление перевода";
-        else if (lan.equals("English")) r = "Choose direction of translation";
+        if (lan.equals("Uzbek")) r = "Siz bilan aloqaga chiqishimiz uchun, telefon raqamingizni jo'nating :telephone_receiver:";
+        else if (lan.equals("Russian")) r = "Отправьте мне свой номер телефона что-бы мы могли c вами связаться :telephone_receiver:";
+        else if (lan.equals("English")) r = "Send me your phone number, so we can contact you :telephone_receiver:";
         return r;
     }
-
+    public static String myContact(String lan){
+        String r="";
+        if (lan.equals("Uzbek")) r = "Telefon raqamni jo'natish :telephone_receiver:";
+        else if (lan.equals("Russian")) r = "Отправить свой номер :telephone_receiver:";
+        else if (lan.equals("English")) r = "Send my number :telephone_receiver:";
+        return r;
+    }
 }

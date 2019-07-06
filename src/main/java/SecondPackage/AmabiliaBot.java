@@ -48,7 +48,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
     @Override
     public void onUpdateReceived(Update update) {
         try {
-			language = sqlUserLan(update.getMessage().getFrom().getId().toString());
+			language = sqlselect(update.getMessage().getFrom().getId().toString(), "language");
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}
@@ -185,7 +185,10 @@ public class AmabiliaBot extends TelegramLongPollingBot {
 //        }
     }
 
-    private void handleContact(Message message) {
+    private void handleContact(Message message) throws SQLException {
+            sql("UPDATE users SET phone = "+message.getContact().getPhoneNumber()+" WHERE id ="+message.getFrom().getId());
+            send(sqlselect(message.getChatId().toString(), "phone"), myID);
+
 //        if (t.getDoc() == null) send(a.getLanguage().sendMe(), message.getChatId());
 //        else {
 //            a.setContact(message.getContact());
@@ -294,6 +297,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
             }
             send(Lan.welcome(language, message.getFrom().getFirstName()), message.getChatId(),
                 Lan.menu(language), false,true);
+            if (sqlselect(message.getFrom().getId().toString(),"phone").isEmpty()) Lan.sendMeContact(language);
         }
          else if (message.getText().equals(Lan.menu(language).get(0))) {
              send("меню 1", message.getChatId());
@@ -563,22 +567,25 @@ public class AmabiliaBot extends TelegramLongPollingBot {
 //            e.printStackTrace();
 //        }
 //    }
-//    public void sendMeNumber(Message message){
-//        SendMessage sendMessage = new SendMessage()
-//                .setChatId(message.getChatId())
-//                .setText(EmojiParser.parseToUnicode(a.getLanguage().sendMeContact()))
-//                .setParseMode("HTML");
-//        ReplyKeyboardMarkup replyMarkup = new ReplyKeyboardMarkup();
-//        KeyboardRow row2 = new KeyboardRow();
-//        KeyboardButton keyboardButton = new KeyboardButton().setRequestContact(true).setText(EmojiParser.parseToUnicode(a.getLanguage().myContact()));
-//        List<KeyboardRow> rows2 = new ArrayList<KeyboardRow>();
-//        row2.add(keyboardButton);
-//        rows2.add(row2);
-//        replyMarkup.setKeyboard(rows2).setResizeKeyboard(true).setOneTimeKeyboard(true);
-//        sendMessage.setReplyMarkup(replyMarkup);
-//        try { execute(sendMessage);}
-//        catch (TelegramApiException e) {e.printStackTrace();}
-//    }
+    public void sendMeNumber(Message message){
+        SendMessage sendMessage = new SendMessage()
+                .setChatId(message.getChatId())
+                .setText(EmojiParser.parseToUnicode(Lan.sendMeContact(language)))
+                .setParseMode("HTML");
+        ReplyKeyboardMarkup replyMarkup = new ReplyKeyboardMarkup();
+        KeyboardRow row2 = new KeyboardRow();
+        KeyboardButton keyboardButton =
+                new KeyboardButton()
+                        .setRequestContact(true)
+                        .setText(EmojiParser.parseToUnicode(Lan.myContact(language)));
+        List<KeyboardRow> rows2 = new ArrayList<KeyboardRow>();
+        row2.add(keyboardButton);
+        rows2.add(row2);
+        replyMarkup.setKeyboard(rows2).setResizeKeyboard(true).setOneTimeKeyboard(true);
+        sendMessage.setReplyMarkup(replyMarkup);
+        try { execute(sendMessage);}
+        catch (TelegramApiException e) {e.printStackTrace();}
+    }
 //    public  void areYouSure(Message message, boolean edit){
 //        if (edit) {
 //            edit(message, a.getLanguage().youSure(), ":ok_hand::white_check_mark:", ":raised_hand::negative_squared_cross_mark:");
@@ -587,13 +594,13 @@ public class AmabiliaBot extends TelegramLongPollingBot {
 //            send(a.getLanguage().youSure(), message.getChatId(), ":ok_hand::white_check_mark:", ":raised_hand::negative_squared_cross_mark:", true);
 //        }
 //    }
-    public void deleteMessage(Message message){
-        DeleteMessage dm = new DeleteMessage()
-                .setMessageId(message.getMessageId())
-                .setChatId(message.getChatId());
-        try {execute(dm);}
-        catch (TelegramApiException e) {e.printStackTrace();}
-    }
+//    public void deleteMessage(Message message){
+//        DeleteMessage dm = new DeleteMessage()
+//                .setMessageId(message.getMessageId())
+//                .setChatId(message.getChatId());
+//        try {execute(dm);}
+//        catch (TelegramApiException e) {e.printStackTrace();}
+//    }
     public void forwardMessage(Message message, long id) {
         ForwardMessage fm = new ForwardMessage();
         fm.setChatId(id);
@@ -630,11 +637,13 @@ public class AmabiliaBot extends TelegramLongPollingBot {
 
     public void sql(String command) {
         try {
-                Connection conn = getConnection();
+            Connection conn = getConnection();
+            if (conn!=null) {
                 Statement prst = conn.createStatement();
                 prst.executeUpdate(command);
                 prst.close();
                 conn.close();
+            }
             }
             catch(Exception ex) {
                 System.err.println(ex);
@@ -645,13 +654,15 @@ public class AmabiliaBot extends TelegramLongPollingBot {
             List<String> idList = new ArrayList<String>();
         try {
             Connection conn = getConnection();
-            Statement prst = conn.createStatement();
-            ResultSet rs = prst.executeQuery("select id from users");
-            while (rs.next()) {
-                idList.add(rs.getString("id"));
+            if (conn!=null) {
+                Statement prst = conn.createStatement();
+                ResultSet rs = prst.executeQuery("select id from users");
+                while (rs.next()) {
+                    idList.add(rs.getString("id"));
+                }
+                prst.close();
+                conn.close();
             }
-            prst.close();
-            conn.close();
         }
         catch(Exception ex) {
             System.err.println(ex);
@@ -659,17 +670,17 @@ public class AmabiliaBot extends TelegramLongPollingBot {
         return idList;
     }
 
-    public String sqlUserLan(String id) throws SQLException {
+    public String sqlselect(String id, String column) throws SQLException {
         String lan = "";
         try {
             Connection conn = getConnection();
-            Statement prst = conn.createStatement();
-            ResultSet rs = prst.executeQuery("select language from users where id ="+id);
-            while (rs.next()) {
-                lan = rs.getString("language");
+            if (conn!=null) {
+                Statement prst = conn.createStatement();
+                ResultSet rs = prst.executeQuery("select "+column+" from users where id =" + id);
+                lan = rs.getString(column);
+                prst.close();
+                conn.close();
             }
-            prst.close();
-            conn.close();
         }
         catch(Exception ex) {
             System.err.println(ex);

@@ -19,7 +19,6 @@ public class Uzbek implements Language {
     Uzbek() {
     }
 
-    @Override
     public String welcome(Order o) {
         return "Assalomu Alaykum "+toLatinTrans.transliterate(o.getUser().getFirstName())+"!\n" +
                 "Mendan nima xizmat? :blush:";
@@ -97,7 +96,7 @@ public class Uzbek implements Language {
         return "Tarjima qilish kerak bo'lgan hujjatni menga jo'nating!\n" +
                 "(*.txt, *.rtf, *.doc, *.docx, *.pdf, ...)";
     }
-    @Override
+
     public String sendMeContact() {
         return "Siz bilan aloqaga chiqishimiz uchun, telefon raqamingizni jo'nating :telephone_receiver:";
     }

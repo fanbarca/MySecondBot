@@ -4,7 +4,7 @@ import com.ibm.icu.text.Transliterator;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Russian implements Language{
+public class Russian implements Language {
     private static final String ruseng   = "с <b>русского</b> на <b>английский</b>";
     private static final String rusuzbek = "с <b>русского</b> на <b>узбекский</b>";
     private static final String engrus   = "с <b>английского</b> на <b>русский</b>";
@@ -160,9 +160,8 @@ public class Russian implements Language{
         return "Отправьте мне документ который нужно перевести!\n" +
                 "(*.txt, *.rtf, *.doc, *.docx, *.pdf, ...)";
     }
-    @Override
     public String sendMeContact() {
-        return "Отправьте мне свой номер что-бы мы могли c вами связаться :telephone_receiver:";
+        return "";
     }
 
     @Override
@@ -184,7 +183,7 @@ public class Russian implements Language{
     }
     @Override
     public String myContact() {
-        return ":telephone_receiver: Отправить свой номер :telephone_receiver:";
+        return "";
     }
     @Override
     public String contactReceived() {
