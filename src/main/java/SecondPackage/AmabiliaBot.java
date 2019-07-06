@@ -32,6 +32,7 @@ import java.util.Date;
 public class AmabiliaBot extends TelegramLongPollingBot {
     private HashMap<Integer, Order> set = new HashMap<Integer, Order>();
     private Order a;
+    private Language l;
     private Translation t;
     private static final long myID = 615351734;
     static final String CYRILLIC_TO_LATIN = "Cyrillic-Latin";
@@ -40,7 +41,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
     static SimpleDateFormat date = new SimpleDateFormat("dd.MM.yyyy");
     static SimpleDateFormat time = new SimpleDateFormat("HH:mm");
     private static final String DRIVER = "org.postgresql.Driver";
-
+    String language ="";
     {
     date.setTimeZone(zone);
     time.setTimeZone(zone);
@@ -48,7 +49,11 @@ public class AmabiliaBot extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
-
+        try {
+			language = sqlUserLan(update.getMessage().getFrom().getId().toString());
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
         Message m;
         try {
             if (update.hasMessage()) {
@@ -104,40 +109,40 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                         if (m.hasText()) handleIncomingText(m);
                     }
             } else if (update.hasCallbackQuery()) {
-                if (update.getCallbackQuery().getFrom().getId()==myID) {
-                    Collection<Order> values = set.values();
-                    for (Order o: values) {
-                        for (Translation tr: o.getOrdersList()) {
-                            if (update.getCallbackQuery().getData().contains("Выполнено")) {
-                                if (update.getCallbackQuery().getData().contains(tr.getId())) {
-                                    tr.setfinished(true);
-                                    deleteMessage(update.getCallbackQuery().getMessage());
-                                    send("№"+tr.getId()+" Заказ отмечен как выполненный", myID);
-                                    send("№"+tr.getId()+ " "+o.getLanguage().finished(), o.getUser().getId());
-                                }
-                            } else if (update.getCallbackQuery().getData().contains("Отмена заказа")) {
-                                if (update.getCallbackQuery().getData().contains(tr.getId())) {
-                                    set.get(o.getUser().getId()).getOrdersList().remove(tr);
-                                    deleteMessage(update.getCallbackQuery().getMessage());
-                                    send("№"+tr.getId()+" Заказ отменен", myID);
-                                    send("№"+tr.getId()+ " "+o.getLanguage().cancelled(), o.getUser().getId());
-                                }
-                            }
-                        }
-                    }
-                }
-                if (set.containsKey(update.getCallbackQuery().getFrom().getId())) {
-                    a = set.get(update.getCallbackQuery().getFrom().getId());
-                    handleCallback(update);
-                } else {
-                    a = new Order(update.getCallbackQuery().getFrom());
-                    set.put(update.getCallbackQuery().getFrom().getId(), a);
-                    send(":boom: Новый пользователь!" +
-                            "\n" + a.getUser().getFirstName() +" "+ a.getUser().getLastName() +
-                            "\n@" + a.getUser().getUserName()+
-                            "\nВсего пользователей: " + set.size(), myID);
-                    handleCallback(update);
-                }
+                // if (update.getCallbackQuery().getFrom().getId()==myID) {
+                //     Collection<Order> values = set.values();
+                //     for (Order o: values) {
+                //         for (Translation tr: o.getOrdersList()) {
+                //             if (update.getCallbackQuery().getData().contains("Выполнено")) {
+                //                 if (update.getCallbackQuery().getData().contains(tr.getId())) {
+                //                     tr.setfinished(true);
+                //                     deleteMessage(update.getCallbackQuery().getMessage());
+                //                     send("№"+tr.getId()+" Заказ отмечен как выполненный", myID);
+                //                     send("№"+tr.getId()+ " "+o.getLanguage().finished(), o.getUser().getId());
+                //                 }
+                //             } else if (update.getCallbackQuery().getData().contains("Отмена заказа")) {
+                //                 if (update.getCallbackQuery().getData().contains(tr.getId())) {
+                //                     set.get(o.getUser().getId()).getOrdersList().remove(tr);
+                //                     deleteMessage(update.getCallbackQuery().getMessage());
+                //                     send("№"+tr.getId()+" Заказ отменен", myID);
+                //                     send("№"+tr.getId()+ " "+o.getLanguage().cancelled(), o.getUser().getId());
+                //                 }
+                //             }
+                //         }
+                //     }
+                // }
+                // if (set.containsKey(update.getCallbackQuery().getFrom().getId())) {
+                //     a = set.get(update.getCallbackQuery().getFrom().getId());
+                //     handleCallback(update);
+                // } else {
+                //     a = new Order(update.getCallbackQuery().getFrom());
+                //     set.put(update.getCallbackQuery().getFrom().getId(), a);
+                //     send(":boom: Новый пользователь!" +
+                //             "\n" + a.getUser().getFirstName() +" "+ a.getUser().getLastName() +
+                //             "\n@" + a.getUser().getUserName()+
+                //             "\nВсего пользователей: " + set.size(), myID);
+                //     handleCallback(update);
+                // }
             }
         } catch(Exception e){
                 BotLogger.error(Main.LOGTAG, e);
@@ -276,73 +281,83 @@ public class AmabiliaBot extends TelegramLongPollingBot {
             edit(update.getCallbackQuery().getMessage(), a.getLanguage().howManyPages()+"\n:page_facing_up: "+ t.getPages(), dial(), false);
         }
     }
-    private void handleIncomingText(Message message) throws TelegramApiException, InterruptedException {
+    private void handleIncomingText(Message message) throws TelegramApiException, InterruptedException, SQLException {
         if (message.getText().equals("/start")) {
-            if (a.getLanguage()==null) chooseLanguage(message);
-            else send(a.getLanguage().welcome(a), message.getChatId(), a.getLanguage().menu(), false,true);
-        } else if (message.getText().equals("O'zbek")||message.getText().equals("Русский")||message.getText().equals("English")){
-            if      (message.getText().equals("O'zbek")) a.setLanguage(new Uzbek());
-            else if (message.getText().equals("Русский")) a.setLanguage(new Russian());
-            else if (message.getText().equals("English")) a.setLanguage(new English());
-            send(a.getLanguage().welcome(a), message.getChatId(), a.getLanguage().menu(), false, true);
-        } else if (a.getLanguage()==null) chooseLanguage(message);
-        else if (message.getText().equals(a.getLanguage().menu().get(0))) {
-            boolean exists = false;
-            for (Translation tr: a.getOrdersList()) {
-                if (!tr.Isfinished()) exists = true;
-            }
-            if (!exists) {
-                send(a.getLanguage().chooseDirection(),message.getChatId(), directions(), true,false);
-            }
-            else send(a.getLanguage().orderExists(),message.getChatId(), a.getLanguage().getYes(), a.getLanguage().getNo(), true);
-        }
-        else if (message.getText().equals(a.getLanguage().menu().get(1))) send(a.getLanguage().cost(),message.getChatId());
-        else if (message.getText().equals(a.getLanguage().menu().get(2))) chooseLanguage(message);
-        else if (message.getText().equals(a.getLanguage().menu().get(3))&& a.getOrdersList().size()!=0) {
-            for (Translation tr: a.getOrdersList()) {
-                SendMessage sendMessage = new SendMessage()
-                        .setChatId(message.getChatId())
-                        .setText(EmojiParser.parseToUnicode(a.getLanguage().orders(tr)))
-                        .setParseMode("HTML");
-                InlineKeyboardMarkup inlineMarkup = new InlineKeyboardMarkup();
-                List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
-                List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
-                row.add(new InlineKeyboardButton()
-                        .setText(EmojiParser.parseToUnicode(a.getLanguage().cancel()))
-                        .setCallbackData(a.getLanguage().cancel()+tr.getId()));
-                rows.add(row);
-                inlineMarkup.setKeyboard(rows);
-                if (!tr.Isfinished()) sendMessage.setReplyMarkup(inlineMarkup);
-                try { execute(sendMessage);}
-                catch (TelegramApiException e) {e.printStackTrace();}
-            }
-        }
-        else if (message.getText().equals(a.getLanguage().menu().get(3))&& a.getOrdersList().size()==0) send(a.getLanguage().emptyOrders(), message.getChatId());
-        else if (message.getText().equals(a.getLanguage().getYes())) {
-            t.setOrderTime(new Date(System.currentTimeMillis()));
-            t.setOrdered(true);
-            a.getOrdersList().add(t);
-            send(a.getLanguage().confirmOrder(), message.getChatId(), a.getLanguage().menu(), false,true);
-            myself(a,t,false);
-            if (a.getContact()==null) {
-                sendMeNumber(message);
-            }
+            if (language.equals(null)||language.equals("")) chooseLanguage(message);
             else {
-                resendContact();
-                send(a.getLanguage().weWillContact(), message.getChatId(), a.getLanguage().menu(), false,true);
+                send(Lan.welcome(language, message.getFrom().getFirstName()), message.getChatId(),
+                Lan.menu(language), false,true);
             }
-        }
-        else if (message.getText().equals(a.getLanguage().getNo())) {
-            t.clearOrder();
-            send(a.getLanguage().cancelled(), message.getChatId(), a.getLanguage().menu(), false, true);
-        }
-        else if (message.getText().contains("/sql")) {
-            if (message.getText().length()>5) {
-                String command = message.getText().substring(5);
-                sql(command);
+        } else if (message.getText().equals("O'zbek")||message.getText().equals("Русский")||message.getText().equals("English")){
+            if      (message.getText().equals("O'zbek")) {
+                sql("UPDATE users SET language = 'Uzbek' WHERE id ="+message.getFrom().getId());
             }
+            else if (message.getText().equals("Русский")) {
+                sql("UPDATE users SET language = 'Russian' WHERE id ="+message.getFrom().getId());
+            }
+            else if (message.getText().equals("English")) {
+                sql("UPDATE users SET language = 'English' WHERE id ="+message.getFrom().getId());
+                }
+            send(Lan.welcome(language, message.getFrom().getFirstName()), message.getChatId(),
+                Lan.menu(language), false,true);
         }
-        else send(a.getLanguage().what(),message.getChatId());
+        // else if (message.getText().equals(a.getLanguage().menu().get(0))) {
+        //     boolean exists = false;
+        //     for (Translation tr: a.getOrdersList()) {
+        //         if (!tr.Isfinished()) exists = true;
+        //     }
+        //     if (!exists) {
+        //         send(a.getLanguage().chooseDirection(),message.getChatId(), directions(), true,false);
+        //     }
+        //     else send(a.getLanguage().orderExists(),message.getChatId(), a.getLanguage().getYes(), a.getLanguage().getNo(), true);
+        // }
+        // else if (message.getText().equals(a.getLanguage().menu().get(1))) send(a.getLanguage().cost(),message.getChatId());
+        // else if (message.getText().equals(a.getLanguage().menu().get(2))) chooseLanguage(message);
+        // else if (message.getText().equals(a.getLanguage().menu().get(3))&& a.getOrdersList().size()!=0) {
+        //     for (Translation tr: a.getOrdersList()) {
+        //         SendMessage sendMessage = new SendMessage()
+        //                 .setChatId(message.getChatId())
+        //                 .setText(EmojiParser.parseToUnicode(a.getLanguage().orders(tr)))
+        //                 .setParseMode("HTML");
+        //         InlineKeyboardMarkup inlineMarkup = new InlineKeyboardMarkup();
+        //         List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
+        //         List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
+        //         row.add(new InlineKeyboardButton()
+        //                 .setText(EmojiParser.parseToUnicode(a.getLanguage().cancel()))
+        //                 .setCallbackData(a.getLanguage().cancel()+tr.getId()));
+        //         rows.add(row);
+        //         inlineMarkup.setKeyboard(rows);
+        //         if (!tr.Isfinished()) sendMessage.setReplyMarkup(inlineMarkup);
+        //         try { execute(sendMessage);}
+        //         catch (TelegramApiException e) {e.printStackTrace();}
+        //     }
+        // }
+        // else if (message.getText().equals(a.getLanguage().menu().get(3))&& a.getOrdersList().size()==0) send(a.getLanguage().emptyOrders(), message.getChatId());
+        // else if (message.getText().equals(a.getLanguage().getYes())) {
+        //     t.setOrderTime(new Date(System.currentTimeMillis()));
+        //     t.setOrdered(true);
+        //     a.getOrdersList().add(t);
+        //     send(a.getLanguage().confirmOrder(), message.getChatId(), a.getLanguage().menu(), false,true);
+        //     myself(a,t,false);
+        //     if (a.getContact()==null) {
+        //         sendMeNumber(message);
+        //     }
+        //     else {
+        //         resendContact();
+        //         send(a.getLanguage().weWillContact(), message.getChatId(), a.getLanguage().menu(), false,true);
+        //     }
+        // }
+        // else if (message.getText().equals(a.getLanguage().getNo())) {
+        //     t.clearOrder();
+        //     send(a.getLanguage().cancelled(), message.getChatId(), a.getLanguage().menu(), false, true);
+        // }
+        // else if (message.getText().contains("/sql")) {
+        //     if (message.getText().length()>5) {
+        //         String command = message.getText().substring(5);
+        //         sql(command);
+        //     }
+        // }
+        // else send(a.getLanguage().what(),message.getChatId());
     }
     public static List<String> directions() {
         List<String> directions = new ArrayList<String>();
@@ -644,5 +659,23 @@ public class AmabiliaBot extends TelegramLongPollingBot {
             System.err.println(ex);
         }
         return idList;
+    }
+
+    public String sqlUserLan(String id) throws SQLException {
+        String lan = "";
+        try {
+            Connection conn = getConnection();
+            Statement prst = conn.createStatement();
+            ResultSet rs = prst.executeQuery("select language from users where id ="+id);
+            while (rs.next()) {
+                lan = rs.getString("language");
+            }
+            prst.close();
+            conn.close();
+        }
+        catch(Exception ex) {
+            System.err.println(ex);
+        }
+    return lan;
     }
 }
