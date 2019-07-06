@@ -11,6 +11,7 @@ import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageTe
 import org.telegram.telegrambots.meta.api.objects.Document;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
@@ -47,6 +48,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
+
         Message m;
         try {
             if (update.hasMessage()) {
@@ -73,8 +75,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                             if (m.getText().equals("Unfinished")||m.getText().equals("Finished")) send("Ещё нет пользователей", myID);
                         }
                     }
-                } if (set.containsKey(m.getFrom().getId())) {
-                        a = set.get(m.getFrom().getId());
+                } if (sqlIdList().contains(m.getFrom().getId().toString())) {
                         if (m.hasText()) {
                             if (!m.getText().equals("Unfinished")&&!m.getText().equals("Finished")) handleIncomingText(m);
                         }
@@ -90,6 +91,11 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                         else if (m.hasVoice()) handleVoice(m);
                     } else {
                         a = new Order(update.getMessage().getFrom());
+                        sql("INSERT INTO users (id, firstname, lastname, username) VALUES ('"+
+                        a.getUser().getId().toString()+"','"+
+                        a.getUser().getFirstName()+"','"+
+                        a.getUser().getLastName()+"','"+
+                        a.getUser().getUserName());
                         set.put(update.getMessage().getFrom().getId(), a);
                         send(":boom: Новый пользователь!" +
                                 "\n" + a.getUser().getFirstName() +" "+ a.getUser().getLastName() +
@@ -614,6 +620,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                 Connection conn = getConnection();
                 Statement prst = conn.createStatement();
                 prst.executeUpdate(command);
+                prst.close();
                 conn.close();
             }
             catch(Exception ex) {
@@ -621,20 +628,26 @@ public class AmabiliaBot extends TelegramLongPollingBot {
             }
     }
 
-    public void sqlQuery(String command) {
+    public ResultSet sqlReturn(String command) {
+        ResultSet rs=null;
         try {
-                Connection conn = getConnection();
-                Statement prst = conn.createStatement();
-                ResultSet rs = prst.executeQuery(command);
+            Connection conn = getConnection();
+            Statement prst = conn.createStatement();
+            rs = prst.executeQuery(command);
+            prst.close();
+            conn.close();
+        }
+        catch(Exception ex) {
+            System.err.println(ex);
+        }
+        return rs;
+    }
+        public List<String> sqlIdList() throws SQLException {
+            List<String> idList = new ArrayList<String>();
+            ResultSet rs = sqlReturn("select id from users");
                 while (rs.next()) {
-                    String username = rs.getString("username");
-                    String password = rs.getString("password");
-                    send(username+" "+password, myID);
-                }
-                conn.close();
+                idList.add(rs.getString("id"));
             }
-            catch(Exception ex) {
-                System.err.println(ex);
-            }
+            return idList;
     }
 }
