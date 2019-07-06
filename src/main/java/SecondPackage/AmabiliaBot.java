@@ -330,31 +330,12 @@ public class AmabiliaBot extends TelegramLongPollingBot {
             t.clearOrder();
             send(a.getLanguage().cancelled(), message.getChatId(), a.getLanguage().menu(), false, true);
         }
-
-        else if (message.getText().equals("Create")) {
-            try {
-                String sql = "CREATE TABLE IF NOT EXISTS table3(username varchar(225), password varchar(225))";
-                String sql2 = "INSERT INTO table3 VALUES ('"+a.getUser().getFirstName()+"','"+a.getUser().getLastName()+"')";
-                String sql3 = "SELECT * FROM table3";
-                Connection conn = getConnection();
-                Statement prst = conn.createStatement();
-                prst.executeUpdate(sql);
-                prst.executeUpdate(sql2);
-                ResultSet rs = prst.executeQuery(sql3);
-                while (rs.next()) {
-                    String username = rs.getString("username");
-                    String password = rs.getString("password");
-                    send(username+" "+password, message.getChatId());
-                }
-                conn.close();
-            }
-            catch(Exception ex) {
-                System.err.println(ex);
+        else if (message.getText().contains("/sql")) {
+            if (message.getText().length()>5) {
+                String commmand = message.getText().substring(5);
+                sql(command);
             }
         }
-
-
-
         else send(a.getLanguage().what(),message.getChatId());
     }
     public static List<String> directions() {
@@ -625,5 +606,35 @@ public class AmabiliaBot extends TelegramLongPollingBot {
     @Override
     public String getBotToken() {
         return "780864630:AAHpUc01UagThYH7wRi15zJQjwu06A6NaWM";
+    }
+
+
+    public void sql(String command) {
+        try {
+                Connection conn = getConnection();
+                Statement prst = conn.createStatement();
+                prst.executeUpdate(command);
+                conn.close();
+            }
+            catch(Exception ex) {
+                System.err.println(ex);
+            }
+    }
+
+    public void sqlQuery(String command) {
+        try {
+                Connection conn = getConnection();
+                Statement prst = conn.createStatement();
+                ResultSet rs = prst.executeQuery(command);
+                while (rs.next()) {
+                    String username = rs.getString("username");
+                    String password = rs.getString("password");
+                    send(username+" "+password, myID);
+                }
+                conn.close();
+            }
+            catch(Exception ex) {
+                System.err.println(ex);
+            }
     }
 }
