@@ -10,12 +10,16 @@ class Lan {
 
     public static String welcome(String lan, String name){
         String r="";
-        if (lan.equals("Uzbek")) r = "Xush kelibsiz, "+toLatinTrans.transliterate(name)+"!\n" +
-                "<b>BIG FOOD</b> tayyor ovqat yetkazib berish xizmati :red_car::pizza::poultry_leg::hamburger:";
-        else if (lan.equals("Russian")) r = "Добро пожаловать, " +toCyrilTrans.transliterate(name)+"!\n" +
-                "Служба доставки готовых блюд <b>BIG FOOD</b> :red_car::pizza::poultry_leg::hamburger:";
-        else if (lan.equals("English")) r = "Welcome, " +toLatinTrans.transliterate(name)+"!\n" +
-                "Ready meal delivery service <b>BIG FOOD</b> :red_car::pizza::poultry_leg::hamburger:";
+        String emoji = "\n:red_car::pizza::poultry_leg::hamburger:";
+        if (lan.equals("Uzbek")) r = toLatinTrans.transliterate(name)+", \n" +
+                "<b>BIG FOOD</b> tayyor ovqat yetkazib berish xizmatiga xush kelibsiz!" +
+                emoji;
+        else if (lan.equals("Russian")) r = toCyrilTrans.transliterate(name)+", \n" +
+                "Добро пожаловать в службу доставки готовых блюд <b>BIG FOOD</b>!" +
+                emoji;
+        else if (lan.equals("English")) r = toLatinTrans.transliterate(name)+", \n" +
+                "Welcome to ready meal delivery service <b>BIG FOOD</b>!"+
+                emoji;
         return r;
     }
     public static List<String> menu(String lan){
