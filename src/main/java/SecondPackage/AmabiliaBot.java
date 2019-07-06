@@ -308,7 +308,11 @@ public class AmabiliaBot extends TelegramLongPollingBot {
          else if (message.getText().equals(Lan.mainMenu("Uzbek").get(0))||
                   message.getText().equals(Lan.mainMenu("Russian").get(0))||
                   message.getText().equals(Lan.mainMenu("English").get(0))) {
-             send(Lan.chooseDish(language), message.getChatId());
+             if (language==null) {
+                 chooseLanguage(message);
+             } else {
+                 send(Lan.chooseDish(language), message.getChatId());
+             }
 //             boolean exists = false;
 //             for (Translation tr: a.getOrdersList()) {
 //                 if (!tr.Isfinished()) exists = true;
@@ -321,7 +325,9 @@ public class AmabiliaBot extends TelegramLongPollingBot {
          else if (message.getText().equals(Lan.mainMenu("Uzbek").get(1))||
                 message.getText().equals(Lan.mainMenu("Russian").get(1))||
                 message.getText().equals(Lan.mainMenu("English").get(1))) {
-            send("меню 2", message.getChatId());
+            if (language==null) {
+                chooseLanguage(message);
+            } else send("меню 2", message.getChatId());
             //send(a.getLanguage().cost(),message.getChatId());
         }
          else if (message.getText().equals(Lan.mainMenu("Uzbek").get(2))||
@@ -332,7 +338,9 @@ public class AmabiliaBot extends TelegramLongPollingBot {
          else if (message.getText().equals(Lan.mainMenu("Uzbek").get(3))||
                 message.getText().equals(Lan.mainMenu("Russian").get(3))||
                 message.getText().equals(Lan.mainMenu("English").get(3))) {
-            send("меню 4", message.getChatId());
+            if (language==null) {
+                chooseLanguage(message);
+            } else send("меню 4", message.getChatId());
 //             for (Translation tr: a.getOrdersList()) {
 //                 SendMessage sendMessage = new SendMessage()
 //                         .setChatId(message.getChatId())
