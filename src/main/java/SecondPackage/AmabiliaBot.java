@@ -293,14 +293,11 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                 sql("UPDATE users SET language = 'English' WHERE id ="+message.getFrom().getId());
                 language = "English";
             }
-            send(Lan.welcome(language, message.getFrom().getFirstName())+
-                            "\n"+sqlselect(message.getFrom().getId().toString(),"phone"), message.getChatId(),
+            send(Lan.welcome(language, message.getFrom().getFirstName()), message.getChatId(),
                 Lan.menu(language), false,true);
-//            if () {
-//                sendMeNumber(message);
-//            } else {
-//
-//            }
+            if (sqlselect(message.getFrom().getId().toString(),"phone").equals("null")) {
+                sendMeNumber(message);
+            }
         }
          else if (message.getText().equals(Lan.menu(language).get(0))) {
              send("меню 1", message.getChatId());
