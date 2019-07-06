@@ -6,12 +6,13 @@ import com.ibm.icu.text.Transliterator;
 
 class Lan {
     public static Transliterator toLatinTrans = Transliterator.getInstance(AmabiliaBot.CYRILLIC_TO_LATIN);
+    public static Transliterator toCyrilTrans = Transliterator.getInstance(AmabiliaBot.LATIN_TO_CYRILLIC);
 
     public static String welcome(String lan, String name){
         String r="";
         if (lan.equals("Uzbek")) r = "Assalomu Alaykum "+toLatinTrans.transliterate(name)+"!\n" +
                 "Mendan nima xizmat? :blush:";
-        else if (lan.equals("Russian")) r = "Здравствуйте " +toLatinTrans.transliterate(name)+"!\n" +
+        else if (lan.equals("Russian")) r = "Здравствуйте " +toCyrilTrans.transliterate(name)+"!\n" +
                 "Чем могу помочь? :blush:";
         else if (lan.equals("English")) r = "Hello " +toLatinTrans.transliterate(name)+"!\n" +
                 "How can I help you? :blush:";

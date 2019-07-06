@@ -280,15 +280,18 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                 Lan.menu(language), false,true);
             }
         } else if (message.getText().equals("O'zbek")||message.getText().equals("Русский")||message.getText().equals("English")){
-            if      (message.getText().equals("O'zbek")) {
+            if (message.getText().equals("O'zbek")) {
                 sql("UPDATE users SET language = 'Uzbek' WHERE id ="+message.getFrom().getId());
+                language = "Uzbek";
             }
             else if (message.getText().equals("Русский")) {
                 sql("UPDATE users SET language = 'Russian' WHERE id ="+message.getFrom().getId());
+                language = "Russian";
             }
             else if (message.getText().equals("English")) {
                 sql("UPDATE users SET language = 'English' WHERE id ="+message.getFrom().getId());
-                }
+                language = "English";
+            }
             send(Lan.welcome(language, message.getFrom().getFirstName()), message.getChatId(),
                 Lan.menu(language), false,true);
         }
