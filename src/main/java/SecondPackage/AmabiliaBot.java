@@ -186,8 +186,11 @@ public class AmabiliaBot extends TelegramLongPollingBot {
     }
 
     private void handleContact(Message message) throws SQLException {
-            sql("UPDATE users SET phone = "+message.getContact().getPhoneNumber()+" WHERE id ="+message.getFrom().getId());
-            send(sqlselect(message.getChatId().toString(), "phone"), myID);
+            sql("UPDATE users SET phone = "+
+                    message.getContact().getPhoneNumber()+
+                    " WHERE id ="+message.getFrom().getId());
+            send(Lan.welcome(language, message.getFrom().getFirstName()),
+                    message.getChatId(), Lan.mainMenu(language), false, true);
 
 //        if (t.getDoc() == null) send(a.getLanguage().sendMe(), message.getChatId());
 //        else {
@@ -280,7 +283,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
             }
             else {
                 send(Lan.welcome(language, message.getFrom().getFirstName()), message.getChatId(),
-                Lan.menu(language), false,true);
+                Lan.mainMenu(language), false,true);
             }
         } else if (message.getText().equals("O'zbek")||message.getText().equals("Русский")||message.getText().equals("English")){
             if (message.getText().equals("O'zbek")) {
@@ -296,13 +299,15 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                 language = "English";
             }
             send(Lan.welcome(language, message.getFrom().getFirstName()), message.getChatId(),
-                Lan.menu(language), false,true);
+                Lan.mainMenu(language), false,true);
             if ("".equals(number)||number==null) {
                 sendMeNumber(message);
             }
         }
-         else if (message.getText().equals(Lan.menu(language).get(0))) {
-             send("меню 1", message.getChatId());
+         else if (message.getText().equals(Lan.mainMenu("Uzbek").get(0))||
+                  message.getText().equals(Lan.mainMenu("Russian").get(0))||
+                  message.getText().equals(Lan.mainMenu("English").get(0))) {
+             send(" ", message.getChatId());
 //             boolean exists = false;
 //             for (Translation tr: a.getOrdersList()) {
 //                 if (!tr.Isfinished()) exists = true;
@@ -312,11 +317,11 @@ public class AmabiliaBot extends TelegramLongPollingBot {
 //             }
 //             else send(a.getLanguage().orderExists(),message.getChatId(), a.getLanguage().getYes(), a.getLanguage().getNo(), true);
          }
-         else if (message.getText().equals(Lan.menu(language).get(1))) {
+         else if (message.getText().equals(Lan.mainMenu(language).get(1))) {
             send("меню 2", message.getChatId());
             //send(a.getLanguage().cost(),message.getChatId());
         }
-         else if (message.getText().equals(Lan.menu(language).get(2))) chooseLanguage(message);
+         else if (message.getText().equals(Lan.mainMenu(language).get(2))) chooseLanguage(message);
          //else if (message.getText().equals(Lan.menu(language).get(3))) {
 //             for (Translation tr: a.getOrdersList()) {
 //                 SendMessage sendMessage = new SendMessage()

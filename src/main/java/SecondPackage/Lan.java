@@ -22,7 +22,7 @@ class Lan {
                 emoji;
         return r;
     }
-    public static List<String> menu(String lan){
+    public static List<String> mainMenu(String lan){
         List<String> menu = new ArrayList<String>();
             if (lan.equals("Uzbek")) {
                 menu.add("Menyu");
@@ -58,4 +58,5 @@ class Lan {
         else if (lan.equals("English")) r = "Send my number :telephone_receiver:";
         return r;
     }
+
 }
