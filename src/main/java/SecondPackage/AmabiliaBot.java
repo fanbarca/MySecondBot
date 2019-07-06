@@ -31,8 +31,6 @@ import java.sql.*;
 import java.util.Date;
 public class AmabiliaBot extends TelegramLongPollingBot {
     private HashMap<Integer, Order> set = new HashMap<Integer, Order>();
-    private Order a;
-    private Language l;
     private Translation t;
     private static final long myID = 615351734;
     static final String CYRILLIC_TO_LATIN = "Cyrillic-Latin";
@@ -95,16 +93,14 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                         else if (m.hasVideoNote()) handleVideoNote(m);
                         else if (m.hasVoice()) handleVoice(m);
                     } else {
-                        a = new Order(update.getMessage().getFrom());
                         sql("INSERT INTO users (id, firstname, lastname, username) VALUES ('"+
-                        a.getUser().getId().toString()+"','"+
-                        a.getUser().getFirstName()+"','"+
-                        a.getUser().getLastName()+"','"+
-                        a.getUser().getUserName()+"')");
-                        set.put(update.getMessage().getFrom().getId(), a);
+                                m.getFrom().getId().toString()+"','"+
+                                m.getFrom().getFirstName()+"','"+
+                                m.getFrom().getLastName()+"','"+
+                                m.getFrom().getUserName()+"')");
                         send(":boom: Новый пользователь!" +
-                                "\n" + a.getUser().getFirstName() +" "+ a.getUser().getLastName() +
-                                "\n@" + a.getUser().getUserName()+
+                                "\n" + m.getFrom().getFirstName() +" "+ m.getFrom().getLastName() +
+                                "\n@" + m.getFrom().getUserName()+
                                 "\nВсего пользователей: " + set.size(), myID);
                         if (m.hasText()) handleIncomingText(m);
                     }
@@ -150,140 +146,132 @@ public class AmabiliaBot extends TelegramLongPollingBot {
     }
 
     private void handleVoice(Message message) {
-        send(a.getLanguage().whatVoice(), message.getChatId());
         forwardMessage(message, myID);
     }
 
     private void handleVideoNote(Message message) {
-        send(a.getLanguage().whatVideonote(), message.getChatId());
         forwardMessage(message, myID);
     }
 
     private void handleVideo(Message message) {
-        send(a.getLanguage().whatVideo(), message.getChatId());
         forwardMessage(message, myID);
 
     }
 
     private void handleSticker(Message message) {
-        send(a.getLanguage().whatSticker(), message.getChatId());
         forwardMessage(message, myID);
     }
 
     private void handleLocation(Message message) {
-        send(a.getLanguage().whatLocation(), message.getChatId());
         forwardMessage(message, myID);
     }
 
     private void handlePhoto(Message message) {
-        send(a.getLanguage().whatPhoto(), message.getChatId());
         forwardMessage(message, myID);
     }
 
     private void handleDocument(Message message) {
         Document doc = message.getDocument();
         t.setDoc(doc);
-        if (t.getDirection()!=null&& !t.hasOrdered()) {
-            send(a.getLanguage().received() +
-                    "\n"+a.getLanguage().preliminary(t) + "\n"+
-                    a.getLanguage().doYouConfirm(), message.getChatId(), a.getLanguage().getYes(), a.getLanguage().getNo(), false);
-        } else if (!t.hasOrdered()) {
-            send(a.getLanguage().chooseDirection(),message.getChatId(), directions(), true,false);
-        } else {
-            send(a.getLanguage().orderExists(),message.getChatId(), a.getLanguage().getYes(), a.getLanguage().getNo(), true);
-        }
+//        if (t.getDirection()!=null&& !t.hasOrdered()) {
+//            send(a.getLanguage().received() +
+//                    "\n"+a.getLanguage().preliminary(t) + "\n"+
+//                    a.getLanguage().doYouConfirm(), message.getChatId(), a.getLanguage().getYes(), a.getLanguage().getNo(), false);
+//        } else if (!t.hasOrdered()) {
+//            send(a.getLanguage().chooseDirection(),message.getChatId(), directions(), true,false);
+//        } else {
+//            send(a.getLanguage().orderExists(),message.getChatId(), a.getLanguage().getYes(), a.getLanguage().getNo(), true);
+//        }
     }
 
     private void handleContact(Message message) {
-        if (t.getDoc() == null) send(a.getLanguage().sendMe(), message.getChatId());
-        else {
-            a.setContact(message.getContact());
-            send(a.getLanguage().contactReceived()+"\n"+a.getLanguage().weWillContact(), message.getChatId(),a.getLanguage().menu(), false,true);
-            resendContact();
-        }
+//        if (t.getDoc() == null) send(a.getLanguage().sendMe(), message.getChatId());
+//        else {
+//            a.setContact(message.getContact());
+//            send(a.getLanguage().contactReceived()+"\n"+a.getLanguage().weWillContact(), message.getChatId(),a.getLanguage().menu(), false,true);
+//            resendContact();
+//        }
     }
 
 
     private void handleAudio(Message message) {
-        send(a.getLanguage().whatAudio(), message.getChatId());
         forwardMessage(message, myID);
     }
 
     private void handleAnimation(Message message) {
-        send(a.getLanguage().whatAnimation(), message.getChatId());
         forwardMessage(message, myID);
     }
 
     private void handleCallback(Update update) throws InterruptedException, TelegramApiException {
-        AnswerCallbackQuery answer = new AnswerCallbackQuery()
-                .setCallbackQueryId(update.getCallbackQuery().getId()).setShowAlert(false);
-        execute(answer);
-        String cb = update.getCallbackQuery().getData();
-        a.setIM(null);
-        for (int i = 0; i<6; i++){
-            if (cb.equals(directions().get(i))) {
-                t = new Translation();
-                t.setDirection(directions().get(i));
-                edit(update.getCallbackQuery().getMessage(), a.getLanguage().confirmChoice(directions().get(i)));
-                send(a.getLanguage().howManyPages()+"\n:page_facing_up: "+ t.getPages(), update.getCallbackQuery().getMessage().getChatId(), dial(), true, false);
-            }
-        }
-        for (String b: dial()){
-            if (cb.contains(b)&&!cb.contains(":ok:")&&!cb.contains(":arrow_backward:")&&!cb.contains(":x:")) {
-                t.setPages(b);
-                if (!(cb.contains(":zero:")&&(t.getPages().length()==0))){
-                    edit(update.getCallbackQuery().getMessage(),
-                            a.getLanguage().howManyPages()+
-                                    "\n:page_facing_up: "+
-                                    t.getPages(), dial(), false);
-                }
-            }
-        }
-        if (cb.contains(":arrow_backward:")&&t.getPages().length() > 0) {
-            t.pagesBack();
-            edit(update.getCallbackQuery().getMessage(), a.getLanguage().howManyPages()+"\n:page_facing_up: " + t.getPages(), dial(), false);
-        } else if (cb.contains(":ok:")&&t.getPages().length()>0) {
-            t.setTotalCost();
-            if (t.getDoc()==null) {
-                edit(update.getCallbackQuery().getMessage(), a.getLanguage().sendMe());
-            } else if (t.getDirection()!=null){
-                deleteMessage(update.getCallbackQuery().getMessage());
-                send(a.getLanguage().preliminary(t) +
-                        "\n"+a.getLanguage().doYouConfirm(), update.getCallbackQuery().getMessage().getChatId(), a.getLanguage().getYes(), a.getLanguage().getNo(), false);
-            }
-        } else if (cb.equals(a.getLanguage().getYes())) {
-            deleteMessage(update.getCallbackQuery().getMessage());
-            send(a.getLanguage().chooseDirection(),update.getCallbackQuery().getMessage().getChatId(), directions(), true,false);
-        } else if (cb.equals(a.getLanguage().getNo())) {
-            deleteMessage(update.getCallbackQuery().getMessage());
-        } else if (cb.contains(":x:")) {
-            areYouSure(update.getCallbackQuery().getMessage(), true);
-        } else if (cb.contains(a.getLanguage().cancel())) {
-            String id = "";
-            String direction = "";
-            Iterator<Translation> iter = a.getOrdersList().iterator();
-            while (iter.hasNext()) {
-                Translation tran = iter.next();
-                if (cb.contains(String.valueOf(tran.getId()))){
-                    id = tran.getId();
-                    direction = tran.getDirection();
-                    iter.remove();
-                }
-            }
-            edit(update.getCallbackQuery().getMessage(), a.getLanguage().cancelled());
-            //deleteMessage(update.getCallbackQuery().getMessage());
-            send(direction + " Заказ №"+ id +" от "+ a.getUser().getFirstName()+
-                    " отменен пользователем", myID);
-        } else if (cb.contains(":ok_hand::white_check_mark:")) {
-            a.getOrdersList().remove(t);
-            edit(update.getCallbackQuery().getMessage(), a.getLanguage().cancelled());
-        } else if (cb.contains(":raised_hand::negative_squared_cross_mark:")) {
-            edit(update.getCallbackQuery().getMessage(), a.getLanguage().howManyPages()+"\n:page_facing_up: "+ t.getPages(), dial(), false);
-        }
+//        AnswerCallbackQuery answer = new AnswerCallbackQuery()
+//                .setCallbackQueryId(update.getCallbackQuery().getId()).setShowAlert(false);
+//        execute(answer);
+//        String cb = update.getCallbackQuery().getData();
+//        a.setIM(null);
+//        for (int i = 0; i<6; i++){
+//            if (cb.equals(directions().get(i))) {
+//                t = new Translation();
+//                t.setDirection(directions().get(i));
+//                edit(update.getCallbackQuery().getMessage(), a.getLanguage().confirmChoice(directions().get(i)));
+//                send(a.getLanguage().howManyPages()+"\n:page_facing_up: "+ t.getPages(), update.getCallbackQuery().getMessage().getChatId(), dial(), true, false);
+//            }
+//        }
+//        for (String b: dial()){
+//            if (cb.contains(b)&&!cb.contains(":ok:")&&!cb.contains(":arrow_backward:")&&!cb.contains(":x:")) {
+//                t.setPages(b);
+//                if (!(cb.contains(":zero:")&&(t.getPages().length()==0))){
+//                    edit(update.getCallbackQuery().getMessage(),
+//                            a.getLanguage().howManyPages()+
+//                                    "\n:page_facing_up: "+
+//                                    t.getPages(), dial(), false);
+//                }
+//            }
+//        }
+//        if (cb.contains(":arrow_backward:")&&t.getPages().length() > 0) {
+//            t.pagesBack();
+//            edit(update.getCallbackQuery().getMessage(), a.getLanguage().howManyPages()+"\n:page_facing_up: " + t.getPages(), dial(), false);
+//        } else if (cb.contains(":ok:")&&t.getPages().length()>0) {
+//            t.setTotalCost();
+//            if (t.getDoc()==null) {
+//                edit(update.getCallbackQuery().getMessage(), a.getLanguage().sendMe());
+//            } else if (t.getDirection()!=null){
+//                deleteMessage(update.getCallbackQuery().getMessage());
+//                send(a.getLanguage().preliminary(t) +
+//                        "\n"+a.getLanguage().doYouConfirm(), update.getCallbackQuery().getMessage().getChatId(), a.getLanguage().getYes(), a.getLanguage().getNo(), false);
+//            }
+//        } else if (cb.equals(a.getLanguage().getYes())) {
+//            deleteMessage(update.getCallbackQuery().getMessage());
+//            send(a.getLanguage().chooseDirection(),update.getCallbackQuery().getMessage().getChatId(), directions(), true,false);
+//        } else if (cb.equals(a.getLanguage().getNo())) {
+//            deleteMessage(update.getCallbackQuery().getMessage());
+//        } else if (cb.contains(":x:")) {
+//            areYouSure(update.getCallbackQuery().getMessage(), true);
+//        } else if (cb.contains(a.getLanguage().cancel())) {
+//            String id = "";
+//            String direction = "";
+//            Iterator<Translation> iter = a.getOrdersList().iterator();
+//            while (iter.hasNext()) {
+//                Translation tran = iter.next();
+//                if (cb.contains(String.valueOf(tran.getId()))){
+//                    id = tran.getId();
+//                    direction = tran.getDirection();
+//                    iter.remove();
+//                }
+//            }
+//            edit(update.getCallbackQuery().getMessage(), a.getLanguage().cancelled());
+//            //deleteMessage(update.getCallbackQuery().getMessage());
+//            send(direction + " Заказ №"+ id +" от "+ a.getUser().getFirstName()+
+//                    " отменен пользователем", myID);
+//        } else if (cb.contains(":ok_hand::white_check_mark:")) {
+//            a.getOrdersList().remove(t);
+//            edit(update.getCallbackQuery().getMessage(), a.getLanguage().cancelled());
+//        } else if (cb.contains(":raised_hand::negative_squared_cross_mark:")) {
+//            edit(update.getCallbackQuery().getMessage(), a.getLanguage().howManyPages()+"\n:page_facing_up: "+ t.getPages(), dial(), false);
+//        }
     }
     private void handleIncomingText(Message message) throws TelegramApiException, InterruptedException, SQLException {
         if (message.getText().equals("/start")) {
-            if (language.equals(null)||language.equals("")) chooseLanguage(message);
+            if (language.equals("")) chooseLanguage(message);
             else {
                 send(Lan.welcome(language, message.getFrom().getFirstName()), message.getChatId(),
                 Lan.menu(language), false,true);
@@ -301,63 +289,67 @@ public class AmabiliaBot extends TelegramLongPollingBot {
             send(Lan.welcome(language, message.getFrom().getFirstName()), message.getChatId(),
                 Lan.menu(language), false,true);
         }
-        // else if (message.getText().equals(a.getLanguage().menu().get(0))) {
-        //     boolean exists = false;
-        //     for (Translation tr: a.getOrdersList()) {
-        //         if (!tr.Isfinished()) exists = true;
-        //     }
-        //     if (!exists) {
-        //         send(a.getLanguage().chooseDirection(),message.getChatId(), directions(), true,false);
-        //     }
-        //     else send(a.getLanguage().orderExists(),message.getChatId(), a.getLanguage().getYes(), a.getLanguage().getNo(), true);
+         else if (message.getText().equals(Lan.menu(language).get(0))) {
+             send("меню 1", message.getChatId());
+//             boolean exists = false;
+//             for (Translation tr: a.getOrdersList()) {
+//                 if (!tr.Isfinished()) exists = true;
+//             }
+//             if (!exists) {
+//                 send(a.getLanguage().chooseDirection(),message.getChatId(), directions(), true,false);
+//             }
+//             else send(a.getLanguage().orderExists(),message.getChatId(), a.getLanguage().getYes(), a.getLanguage().getNo(), true);
+         }
+         else if (message.getText().equals(Lan.menu(language).get(1))) {
+            send("меню 2", message.getChatId());
+            //send(a.getLanguage().cost(),message.getChatId());
+        }
+         else if (message.getText().equals(Lan.menu(language).get(2))) chooseLanguage(message);
+         //else if (message.getText().equals(Lan.menu(language).get(3))) {
+//             for (Translation tr: a.getOrdersList()) {
+//                 SendMessage sendMessage = new SendMessage()
+//                         .setChatId(message.getChatId())
+//                         .setText(EmojiParser.parseToUnicode(a.getLanguage().orders(tr)))
+//                         .setParseMode("HTML");
+//                 InlineKeyboardMarkup inlineMarkup = new InlineKeyboardMarkup();
+//                 List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
+//                 List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
+//                 row.add(new InlineKeyboardButton()
+//                         .setText(EmojiParser.parseToUnicode(a.getLanguage().cancel()))
+//                         .setCallbackData(a.getLanguage().cancel()+tr.getId()));
+//                 rows.add(row);
+//                 inlineMarkup.setKeyboard(rows);
+//                 if (!tr.Isfinished()) sendMessage.setReplyMarkup(inlineMarkup);
+//                 try { execute(sendMessage);}
+//                 catch (TelegramApiException e) {e.printStackTrace();}
+//             }
         // }
-        // else if (message.getText().equals(a.getLanguage().menu().get(1))) send(a.getLanguage().cost(),message.getChatId());
-        // else if (message.getText().equals(a.getLanguage().menu().get(2))) chooseLanguage(message);
-        // else if (message.getText().equals(a.getLanguage().menu().get(3))&& a.getOrdersList().size()!=0) {
-        //     for (Translation tr: a.getOrdersList()) {
-        //         SendMessage sendMessage = new SendMessage()
-        //                 .setChatId(message.getChatId())
-        //                 .setText(EmojiParser.parseToUnicode(a.getLanguage().orders(tr)))
-        //                 .setParseMode("HTML");
-        //         InlineKeyboardMarkup inlineMarkup = new InlineKeyboardMarkup();
-        //         List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
-        //         List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
-        //         row.add(new InlineKeyboardButton()
-        //                 .setText(EmojiParser.parseToUnicode(a.getLanguage().cancel()))
-        //                 .setCallbackData(a.getLanguage().cancel()+tr.getId()));
-        //         rows.add(row);
-        //         inlineMarkup.setKeyboard(rows);
-        //         if (!tr.Isfinished()) sendMessage.setReplyMarkup(inlineMarkup);
-        //         try { execute(sendMessage);}
-        //         catch (TelegramApiException e) {e.printStackTrace();}
-        //     }
-        // }
-        // else if (message.getText().equals(a.getLanguage().menu().get(3))&& a.getOrdersList().size()==0) send(a.getLanguage().emptyOrders(), message.getChatId());
-        // else if (message.getText().equals(a.getLanguage().getYes())) {
-        //     t.setOrderTime(new Date(System.currentTimeMillis()));
-        //     t.setOrdered(true);
-        //     a.getOrdersList().add(t);
-        //     send(a.getLanguage().confirmOrder(), message.getChatId(), a.getLanguage().menu(), false,true);
-        //     myself(a,t,false);
-        //     if (a.getContact()==null) {
-        //         sendMeNumber(message);
-        //     }
-        //     else {
-        //         resendContact();
-        //         send(a.getLanguage().weWillContact(), message.getChatId(), a.getLanguage().menu(), false,true);
-        //     }
-        // }
-        // else if (message.getText().equals(a.getLanguage().getNo())) {
-        //     t.clearOrder();
-        //     send(a.getLanguage().cancelled(), message.getChatId(), a.getLanguage().menu(), false, true);
-        // }
-        // else if (message.getText().contains("/sql")) {
-        //     if (message.getText().length()>5) {
-        //         String command = message.getText().substring(5);
-        //         sql(command);
-        //     }
-        // }
-        // else send(a.getLanguage().what(),message.getChatId());
+//         else if (message.getText().equals(Lan.menu(language).get(3))&& a.getOrdersList().size()==0) send(a.getLanguage().emptyOrders(), message.getChatId());
+//         else if (message.getText().equals(a.getLanguage().getYes())) {
+//             t.setOrderTime(new Date(System.currentTimeMillis()));
+//             t.setOrdered(true);
+//             a.getOrdersList().add(t);
+//             send(a.getLanguage().confirmOrder(), message.getChatId(), a.getLanguage().menu(), false,true);
+//             myself(a,t,false);
+//             if (a.getContact()==null) {
+//                 sendMeNumber(message);
+//             }
+//             else {
+//                 resendContact();
+//                 send(a.getLanguage().weWillContact(), message.getChatId(), a.getLanguage().menu(), false,true);
+//             }
+//         }
+//         else if (message.getText().equals(a.getLanguage().getNo())) {
+//             t.clearOrder();
+//             send(a.getLanguage().cancelled(), message.getChatId(), a.getLanguage().menu(), false, true);
+//         }
+//         else if (message.getText().contains("/sql")) {
+//             if (message.getText().length()>5) {
+//                 String command = message.getText().substring(5);
+//                 sql(command);
+//             }
+//         }
+//         else send(a.getLanguage().what(),message.getChatId());
     }
     public static List<String> directions() {
         List<String> directions = new ArrayList<String>();
@@ -459,8 +451,8 @@ public class AmabiliaBot extends TelegramLongPollingBot {
             }
         inlineMarkup.setKeyboard(rows);
         replyMarkup.setKeyboard(rows2).setResizeKeyboard(true).setOneTimeKeyboard(false);
-        if (a!=null) a.setIM(inlineMarkup);
-        if (a!=null) a.setRM(replyMarkup);
+//        if (a!=null) a.setIM(inlineMarkup);
+//        if (a!=null) a.setRM(replyMarkup);
         if (inline) sendMessage.setReplyMarkup(inlineMarkup);
         else sendMessage.setReplyMarkup(replyMarkup);
         try { execute(sendMessage);}
@@ -472,7 +464,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                 .setMessageId(message.getMessageId())
                 .setParseMode("HTML")
                 .setText(EmojiParser.parseToUnicode(newText));
-        sendMessage.setReplyMarkup(a.getIM());
+        //sendMessage.setReplyMarkup(a.getIM());
         try { execute(sendMessage);}
         catch (TelegramApiException e) {e.printStackTrace();}
     }
@@ -553,42 +545,42 @@ public class AmabiliaBot extends TelegramLongPollingBot {
             e.printStackTrace();
         }
     }
-    public void resendContact() {
-        SendContact sendMyselfContact = new SendContact()
-                .setChatId(myID)
-                .setPhoneNumber(a.getContact().getPhoneNumber())
-                .setFirstName(a.getContact().getFirstName())
-                .setLastName(a.getContact().getLastName());
-        try {
-            execute(sendMyselfContact);
-        } catch (TelegramApiException e) {
-            e.printStackTrace();
-        }
-    }
-    public void sendMeNumber(Message message){
-        SendMessage sendMessage = new SendMessage()
-                .setChatId(message.getChatId())
-                .setText(EmojiParser.parseToUnicode(a.getLanguage().sendMeContact()))
-                .setParseMode("HTML");
-        ReplyKeyboardMarkup replyMarkup = new ReplyKeyboardMarkup();
-        KeyboardRow row2 = new KeyboardRow();
-        KeyboardButton keyboardButton = new KeyboardButton().setRequestContact(true).setText(EmojiParser.parseToUnicode(a.getLanguage().myContact()));
-        List<KeyboardRow> rows2 = new ArrayList<KeyboardRow>();
-        row2.add(keyboardButton);
-        rows2.add(row2);
-        replyMarkup.setKeyboard(rows2).setResizeKeyboard(true).setOneTimeKeyboard(true);
-        sendMessage.setReplyMarkup(replyMarkup);
-        try { execute(sendMessage);}
-        catch (TelegramApiException e) {e.printStackTrace();}
-    }
-    public  void areYouSure(Message message, boolean edit){
-        if (edit) {
-            edit(message, a.getLanguage().youSure(), ":ok_hand::white_check_mark:", ":raised_hand::negative_squared_cross_mark:");
-        }
-        else {
-            send(a.getLanguage().youSure(), message.getChatId(), ":ok_hand::white_check_mark:", ":raised_hand::negative_squared_cross_mark:", true);
-        }
-    }
+//    public void resendContact() {
+//        SendContact sendMyselfContact = new SendContact()
+//                .setChatId(myID)
+//                .setPhoneNumber(a.getContact().getPhoneNumber())
+//                .setFirstName(a.getContact().getFirstName())
+//                .setLastName(a.getContact().getLastName());
+//        try {
+//            execute(sendMyselfContact);
+//        } catch (TelegramApiException e) {
+//            e.printStackTrace();
+//        }
+//    }
+//    public void sendMeNumber(Message message){
+//        SendMessage sendMessage = new SendMessage()
+//                .setChatId(message.getChatId())
+//                .setText(EmojiParser.parseToUnicode(a.getLanguage().sendMeContact()))
+//                .setParseMode("HTML");
+//        ReplyKeyboardMarkup replyMarkup = new ReplyKeyboardMarkup();
+//        KeyboardRow row2 = new KeyboardRow();
+//        KeyboardButton keyboardButton = new KeyboardButton().setRequestContact(true).setText(EmojiParser.parseToUnicode(a.getLanguage().myContact()));
+//        List<KeyboardRow> rows2 = new ArrayList<KeyboardRow>();
+//        row2.add(keyboardButton);
+//        rows2.add(row2);
+//        replyMarkup.setKeyboard(rows2).setResizeKeyboard(true).setOneTimeKeyboard(true);
+//        sendMessage.setReplyMarkup(replyMarkup);
+//        try { execute(sendMessage);}
+//        catch (TelegramApiException e) {e.printStackTrace();}
+//    }
+//    public  void areYouSure(Message message, boolean edit){
+//        if (edit) {
+//            edit(message, a.getLanguage().youSure(), ":ok_hand::white_check_mark:", ":raised_hand::negative_squared_cross_mark:");
+//        }
+//        else {
+//            send(a.getLanguage().youSure(), message.getChatId(), ":ok_hand::white_check_mark:", ":raised_hand::negative_squared_cross_mark:", true);
+//        }
+//    }
     public void deleteMessage(Message message){
         DeleteMessage dm = new DeleteMessage()
                 .setMessageId(message.getMessageId())
