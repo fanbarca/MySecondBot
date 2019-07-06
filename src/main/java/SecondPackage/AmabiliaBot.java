@@ -332,7 +332,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
         }
         else if (message.getText().contains("/sql")) {
             if (message.getText().length()>5) {
-                String commmand = message.getText().substring(5);
+                String command = message.getText().substring(5);
                 sql(command);
             }
         }
