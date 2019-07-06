@@ -58,5 +58,11 @@ class Lan {
         else if (lan.equals("English")) r = "Send my number :telephone_receiver:";
         return r;
     }
-
+    public static String chooseDish(String lan){
+        String r="";
+        if (lan.equals("Uzbek")) r = "Nima buyurtma berishni istaysiz? ";
+        else if (lan.equals("Russian")) r = "Что желаете заказать?";
+        else if (lan.equals("English")) r = "What would you like to order?";
+        return r;
+    }
 }
