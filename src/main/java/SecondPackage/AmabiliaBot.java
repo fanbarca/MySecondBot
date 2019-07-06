@@ -95,7 +95,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                         a.getUser().getId().toString()+"','"+
                         a.getUser().getFirstName()+"','"+
                         a.getUser().getLastName()+"','"+
-                        a.getUser().getUserName());
+                        a.getUser().getUserName()+"'");
                         set.put(update.getMessage().getFrom().getId(), a);
                         send(":boom: Новый пользователь!" +
                                 "\n" + a.getUser().getFirstName() +" "+ a.getUser().getLastName() +
