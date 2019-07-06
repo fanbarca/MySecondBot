@@ -628,26 +628,21 @@ public class AmabiliaBot extends TelegramLongPollingBot {
             }
     }
 
-    public ResultSet sqlReturn(String command) {
-        ResultSet rs=null;
+        public List<String> sqlIdList() throws SQLException {
+            List<String> idList = new ArrayList<String>();
         try {
             Connection conn = getConnection();
             Statement prst = conn.createStatement();
-            rs = prst.executeQuery(command);
+            ResultSet rs = prst.executeQuery("select id from users");
+            while (rs.next()) {
+                idList.add(rs.getString("id"));
+            }
             prst.close();
             conn.close();
         }
         catch(Exception ex) {
             System.err.println(ex);
         }
-        return rs;
-    }
-        public List<String> sqlIdList() throws SQLException {
-            List<String> idList = new ArrayList<String>();
-            ResultSet rs = sqlReturn("select id from users");
-                while (rs.next()) {
-                idList.add(rs.getString("id"));
-            }
-            return idList;
+        return idList;
     }
 }
