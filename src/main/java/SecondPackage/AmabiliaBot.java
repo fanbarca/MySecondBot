@@ -677,7 +677,9 @@ public class AmabiliaBot extends TelegramLongPollingBot {
             if (conn!=null) {
                 Statement prst = conn.createStatement();
                 ResultSet rs = prst.executeQuery("select "+column+" from users where id =" + id);
-                lan = rs.getString(column);
+                while (rs.next()){
+                    lan= rs.getString(column);
+                }
                 prst.close();
                 conn.close();
             }
