@@ -39,7 +39,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
     static SimpleDateFormat date = new SimpleDateFormat("dd.MM.yyyy");
     static SimpleDateFormat time = new SimpleDateFormat("HH:mm");
     private static final String DRIVER = "org.postgresql.Driver";
-    String language ="";
+    private String language ="";
     {
     date.setTimeZone(zone);
     time.setTimeZone(zone);
@@ -56,29 +56,30 @@ public class AmabiliaBot extends TelegramLongPollingBot {
         try {
             if (update.hasMessage()) {
                 m = update.getMessage();
-                if (m.getFrom().getId()==myID) {
-                    if (m.hasText()) {
-                        if (m.getText().equals("/start")&&set.size()>0) {
-                            send("Всего пользователей: "+set.size(), myID);
-                        } else if(m.getText().equals("/start")&&set.size()==0){
-                            send("Ещё нет пользователей", myID);
-                        }
-                        Collection<Order> values = set != null ? set.values() : null;
-                        if (values!=null) {
-                            for (Order o: values) {
-                                for (Translation tr: o.getOrdersList()) {
-                                    if (m.getText().equals("Unfinished")&&!tr.Isfinished()) {
-                                        myself(o,tr,true);
-                                    } else if (m.getText().equals("Finished")&&tr.Isfinished()) {
-                                        myself(o,tr,false);
-                                    }
-                                }
-                            }
-                        } else {
-                            if (m.getText().equals("Unfinished")||m.getText().equals("Finished")) send("Ещё нет пользователей", myID);
-                        }
-                    }
-                } if (sqlIdList().contains(m.getFrom().getId().toString())) {
+//                if (m.getFrom().getId()==myID) {
+//                    if (m.hasText()) {
+//                        if (m.getText().equals("/start")&&set.size()>0) {
+//                            send("Всего пользователей: "+set.size(), myID);
+//                        } else if(m.getText().equals("/start")&&set.size()==0){
+//                            send("Ещё нет пользователей", myID);
+//                        }
+//                        Collection<Order> values = set != null ? set.values() : null;
+//                        if (values!=null) {
+//                            for (Order o: values) {
+//                                for (Translation tr: o.getOrdersList()) {
+//                                    if (m.getText().equals("Unfinished")&&!tr.Isfinished()) {
+//                                        myself(o,tr,true);
+//                                    } else if (m.getText().equals("Finished")&&tr.Isfinished()) {
+//                                        myself(o,tr,false);
+//                                    }
+//                                }
+//                            }
+//                        } else {
+//                            if (m.getText().equals("Unfinished")||m.getText().equals("Finished")) send("Ещё нет пользователей", myID);
+//                        }
+//                    }
+//                }
+                if (sqlIdList().contains(m.getFrom().getId().toString())) {
                         if (m.hasText()) {
                             if (!m.getText().equals("Unfinished")&&!m.getText().equals("Finished")) handleIncomingText(m);
                         }
@@ -271,7 +272,9 @@ public class AmabiliaBot extends TelegramLongPollingBot {
     }
     private void handleIncomingText(Message message) throws TelegramApiException, InterruptedException, SQLException {
         if (message.getText().equals("/start")) {
-            if (language.equals("")) chooseLanguage(message);
+            if (!language.equals("Uzbek")&&!language.equals("Russian")&&!language.equals("English")) {
+                chooseLanguage(message);
+            }
             else {
                 send(Lan.welcome(language, message.getFrom().getFirstName()), message.getChatId(),
                 Lan.menu(language), false,true);
