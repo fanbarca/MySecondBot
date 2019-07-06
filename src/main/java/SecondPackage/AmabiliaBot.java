@@ -297,7 +297,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
             }
             send(Lan.welcome(language, message.getFrom().getFirstName()), message.getChatId(),
                 Lan.menu(language), false,true);
-            if (number.equals("")) {
+            if ("".equals(number)||number==null) {
                 sendMeNumber(message);
             }
         }
