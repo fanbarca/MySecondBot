@@ -80,9 +80,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
 //                    }
 //                }
                 if (sqlIdList().contains(m.getFrom().getId().toString())) {
-                        if (m.hasText()) {
-                            if (!m.getText().equals("Unfinished")&&!m.getText().equals("Finished")) handleIncomingText(m);
-                        }
+                        if (m.hasText()) handleIncomingText(m);
                         else if (m.hasAnimation()) handleAnimation(m);
                         else if (m.hasAudio()) handleAudio(m);
                         else if (m.hasContact()) handleContact(m);
@@ -295,9 +293,14 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                 sql("UPDATE users SET language = 'English' WHERE id ="+message.getFrom().getId());
                 language = "English";
             }
-            send(Lan.welcome(language, message.getFrom().getFirstName()), message.getChatId(),
+            send(Lan.welcome(language, message.getFrom().getFirstName())+
+                            "\n"+sqlselect(message.getFrom().getId().toString(),"phone"), message.getChatId(),
                 Lan.menu(language), false,true);
-            if (sqlselect(message.getFrom().getId().toString(),"phone").equals("null")) sendMeNumber(message);
+//            if () {
+//                sendMeNumber(message);
+//            } else {
+//
+//            }
         }
          else if (message.getText().equals(Lan.menu(language).get(0))) {
              send("меню 1", message.getChatId());
