@@ -40,6 +40,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
     static SimpleDateFormat time = new SimpleDateFormat("HH:mm");
     private static final String DRIVER = "org.postgresql.Driver";
     private String language ="";
+    private String number = "";
     {
     date.setTimeZone(zone);
     time.setTimeZone(zone);
@@ -49,7 +50,8 @@ public class AmabiliaBot extends TelegramLongPollingBot {
     public void onUpdateReceived(Update update) {
         try {
 			language = sqlselect(update.getMessage().getFrom().getId().toString(), "language");
-		} catch (SQLException e1) {
+		    number = sqlselect(update.getMessage().getFrom().getId().toString(),"phone");
+        } catch (SQLException e1) {
 			e1.printStackTrace();
 		}
         Message m;
@@ -295,7 +297,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
             }
             send(Lan.welcome(language, message.getFrom().getFirstName()), message.getChatId(),
                 Lan.menu(language), false,true);
-            if (sqlselect(message.getFrom().getId().toString(),"phone").equals(null)) {
+            if (number.equals("")) {
                 sendMeNumber(message);
             }
         }
