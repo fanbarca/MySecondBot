@@ -222,7 +222,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
         if (cb.equals(Lan.listTypes("Uzbek").get(0))||
                  cb.equals(Lan.listTypes("Russian").get(0))||
                  cb.equals(Lan.listTypes("English").get(0))) {
-            send(Lan.listTypes(language).get(0), update.getCallbackQuery().getMessage().getChatId(), showSalads(), true, 1);
+            edit(update.getCallbackQuery().getMessage(), Lan.listTypes(language).get(0),  showSalads(), true);
         }
 //        for (int i = 0; i<Lan.listTypes(language).size(); i++){
 //            if (cb.equals(Lan.listTypes(language).get(i))) {
@@ -770,9 +770,9 @@ public class AmabiliaBot extends TelegramLongPollingBot {
             Connection conn = getConnection();
             if (conn!=null) {
                 Statement prst = conn.createStatement();
-                ResultSet rs = prst.executeQuery("select name, cost from salads where instock = true");
+                ResultSet rs = prst.executeQuery("select name from salads where instock = true");
                 while (rs.next()){
-                    lan.add(rs.getString("name"+" "+"cost"));
+                    lan.add(rs.getString("name"));
                 }
                 prst.close();
                 conn.close();

@@ -6,7 +6,9 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7fdc6f42-80e3-436b-99c6-634d7f7f8939" name="Default Changelist" comment="" />
+    <list default="true" id="7fdc6f42-80e3-436b-99c6-634d7f7f8939" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -23,8 +25,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/SecondPackage/AmabiliaBot.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="253">
-              <caret line="45" column="49" selection-start-line="45" selection-start-column="49" selection-end-line="45" selection-end-column="49" />
+            <state relative-caret-position="235">
+              <caret line="230" column="11" lean-forward="true" selection-start-line="230" selection-start-column="11" selection-end-line="230" selection-end-column="11" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#8279#8280#0" expanded="true" />
@@ -50,9 +52,9 @@
                 <element signature="e#24494#24741#0" />
                 <element signature="e#24746#26201#0" />
                 <element signature="e#30516#31234#0" />
-                <element signature="e#33715#33716#0" expanded="true" />
-                <element signature="e#33834#33835#0" expanded="true" />
-                <marker date="1562517490738" expanded="true" signature="11213:11362" ph="..." />
+                <element signature="e#33760#33761#0" expanded="true" />
+                <element signature="e#33879#33880#0" expanded="true" />
+                <marker date="1562517700821" expanded="true" signature="11258:11407" ph="..." />
               </folding>
             </state>
           </provider>
@@ -566,7 +568,14 @@
       <option name="project" value="LOCAL" />
       <updated>1562517517839</updated>
     </task>
-    <option name="localTasksCounter" value="41" />
+    <task id="LOCAL-00041" summary="new">
+      <created>1562517722843</created>
+      <option name="number" value="00041" />
+      <option name="presentableId" value="LOCAL-00041" />
+      <option name="project" value="LOCAL" />
+      <updated>1562517722843</updated>
+    </task>
+    <option name="localTasksCounter" value="42" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -835,8 +844,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/SecondPackage/AmabiliaBot.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="253">
-          <caret line="45" column="49" selection-start-line="45" selection-start-column="49" selection-end-line="45" selection-end-column="49" />
+        <state relative-caret-position="235">
+          <caret line="230" column="11" lean-forward="true" selection-start-line="230" selection-start-column="11" selection-end-line="230" selection-end-column="11" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#8279#8280#0" expanded="true" />
@@ -862,9 +871,9 @@
             <element signature="e#24494#24741#0" />
             <element signature="e#24746#26201#0" />
             <element signature="e#30516#31234#0" />
-            <element signature="e#33715#33716#0" expanded="true" />
-            <element signature="e#33834#33835#0" expanded="true" />
-            <marker date="1562517490738" expanded="true" signature="11213:11362" ph="..." />
+            <element signature="e#33760#33761#0" expanded="true" />
+            <element signature="e#33879#33880#0" expanded="true" />
+            <marker date="1562517700821" expanded="true" signature="11258:11407" ph="..." />
           </folding>
         </state>
       </provider>
