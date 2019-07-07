@@ -316,7 +316,6 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                  chooseLanguage(message);
              } else {
                  if (menuMassage!=null) deleteMessage(menuMassage);
-                 menuMassage = message;
                  send(Lan.chooseDish(language), message.getChatId(), Lan.listTypes(language),true,2);
              }
 //             boolean exists = false;
@@ -504,7 +503,10 @@ public class AmabiliaBot extends TelegramLongPollingBot {
 //        if (a!=null) a.setRM(replyMarkup);
         if (inline) sendMessage.setReplyMarkup(inlineMarkup);
         else sendMessage.setReplyMarkup(replyMarkup);
-        try { execute(sendMessage);}
+        try {
+            execute(sendMessage);
+            menuMassage = execute(sendMessage);
+        }
         catch (TelegramApiException e) {e.printStackTrace();}
     }
     public void edit (Message message, String newText){
