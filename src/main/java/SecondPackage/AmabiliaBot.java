@@ -187,10 +187,10 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                     message.getContact().getPhoneNumber()+
                     " WHERE id ="+message.getFrom().getId());
             send(Lan.welcome(language, message.getFrom().getFirstName()),
-                    message.getChatId(), Lan.mainMenu(language), false, true);
+                    message.getChatId(), Lan.mainMenu(language), false, 2);
         } else {
             send(Lan.welcome(language, message.getFrom().getFirstName()),
-                    message.getChatId(), Lan.mainMenu(language), false, true);
+                    message.getChatId(), Lan.mainMenu(language), false, 2);
         }
 
 
@@ -285,7 +285,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
             }
             else {
                 send(Lan.welcome(language, message.getFrom().getFirstName()), message.getChatId(),
-                Lan.mainMenu(language), false,true);
+                Lan.mainMenu(language), false,2);
             }
         } else if (message.getText().equals("O'zbek")||message.getText().equals("Русский")||message.getText().equals("English")){
             if (message.getText().equals("O'zbek")) {
@@ -304,7 +304,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                 sendMeNumber(message);
             } else {
                 send(Lan.welcome(language, message.getFrom().getFirstName()), message.getChatId(),
-                        Lan.mainMenu(language), false,true);
+                        Lan.mainMenu(language), false,2);
             }
         }
          else if (message.getText().equals(Lan.mainMenu("Uzbek").get(0))||
@@ -313,7 +313,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
              if ((language == null) || (language.equals(""))) {
                  chooseLanguage(message);
              } else {
-                 send(Lan.chooseDish(language), message.getChatId());
+                 send(Lan.chooseDish(language), message.getChatId(), listProducts("name"),true,1);
              }
 //             boolean exists = false;
 //             for (Translation tr: a.getOrdersList()) {
@@ -346,7 +346,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                 if (listMyOrders(message.getChatId().toString(),"orderid").size()==0){
                     send(Lan.emptyOrders(language), message.getChatId());
                 }else {
-                    send(Lan.myOrders(language), message.getChatId(),listMyOrders(message.getChatId().toString(),"orderid"), true, true );
+                    send(Lan.myOrders(language), message.getChatId(),listMyOrders(message.getChatId().toString(),"orderid"), true, 1);
                 }
             }
 //             for (Translation tr: a.getOrdersList()) {
@@ -431,27 +431,27 @@ public class AmabiliaBot extends TelegramLongPollingBot {
 
     public void send (String text, long chatId){
         List<String> list = new ArrayList<String>();
-        send(text, chatId, list, true, true);
+        send(text, chatId, list, true, 1);
     }
     public void send (String text, long chatId, String a, boolean inline){
         List<String> list = new ArrayList<String>();
         list.add(a);
-        send(text, chatId, list, inline, true);
+        send(text, chatId, list, inline, 1);
     }
     public void send (String text, long chatId, String a, String b, boolean inline){
         List<String> list = new ArrayList<String>();
         list.add(a);
         list.add(b);
-        send(text, chatId, list, inline, true);
+        send(text, chatId, list, inline, 2);
     }
     public void send (String message, long chatId, String a, String b, String c, boolean inline){
         List<String> list = new ArrayList<String>();
         list.add(a);
         list.add(b);
         list.add(c);
-        send(message, chatId, list, inline, false);
+        send(message, chatId, list, inline, 3);
     }
-    public void send (String text, long chatId, List<String> list, boolean inline, boolean flag) {
+    public void send (String text, long chatId, List<String> list, boolean inline, int flag) {
         SendMessage sendMessage = new SendMessage()
                 .setChatId(chatId)
                 .setText(EmojiParser.parseToUnicode(text))
@@ -461,7 +461,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
         List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
         List<KeyboardRow> rows2 = new ArrayList<KeyboardRow>();
 
-        for (int i = 0; i < list.size(); i += flag?2:3) {
+        for (int i = 0; i < list.size(); i += flag) {
                 List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
                 KeyboardRow row2 = new KeyboardRow();
 
@@ -469,13 +469,15 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                         .setText(EmojiParser.parseToUnicode(list.get(i)))
                         .setCallbackData(list.get(i)));
                 row2.add(new KeyboardButton().setText(EmojiParser.parseToUnicode(list.get(i))));
+            if ((flag==2)||(flag==3)) {
                 if ((i + 1) < list.size()) {
                     row.add(new InlineKeyboardButton()
-                        .setText(EmojiParser.parseToUnicode(list.get(i + 1)))
-                        .setCallbackData(list.get(i + 1)));
-                    row2.add(new KeyboardButton().setText(EmojiParser.parseToUnicode(list.get(i+1))));
+                            .setText(EmojiParser.parseToUnicode(list.get(i + 1)))
+                            .setCallbackData(list.get(i + 1)));
+                    row2.add(new KeyboardButton().setText(EmojiParser.parseToUnicode(list.get(i + 1))));
                 }
-            if (!flag){
+            }
+            if (flag==3){
                 if ((i + 2) < list.size()) {
                     row.add(new InlineKeyboardButton()
                             .setText(EmojiParser.parseToUnicode(list.get(i + 2)))
@@ -743,6 +745,25 @@ public class AmabiliaBot extends TelegramLongPollingBot {
             if (conn!=null) {
                 Statement prst = conn.createStatement();
                 ResultSet rs = prst.executeQuery("select "+column+" from orders where userid =" + id);
+                while (rs.next()){
+                    lan.add(rs.getString(column));
+                }
+                prst.close();
+                conn.close();
+            }
+        }
+        catch(Exception ex) {
+            System.err.println(ex);
+        }
+        return lan;
+    }
+    public List<String> listProducts(String column){
+        List<String> lan = new ArrayList<>();
+        try {
+            Connection conn = getConnection();
+            if (conn!=null) {
+                Statement prst = conn.createStatement();
+                ResultSet rs = prst.executeQuery("select "+column+" from products where instock = true");
                 while (rs.next()){
                     lan.add(rs.getString(column));
                 }
