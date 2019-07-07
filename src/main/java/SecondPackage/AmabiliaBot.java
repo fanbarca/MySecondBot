@@ -222,7 +222,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
         if (cb.equals(Lan.listTypes("Uzbek").get(0))||
                  cb.equals(Lan.listTypes("Russian").get(0))||
                  cb.equals(Lan.listTypes("English").get(0))) {
-            send("99", update.getMessage().getChatId(), showSalads(), true, 1);
+            send(Lan.listTypes(language).get(0), update.getCallbackQuery().getMessage().getChatId(), showSalads(), true, 1);
         }
 //        for (int i = 0; i<Lan.listTypes(language).size(); i++){
 //            if (cb.equals(Lan.listTypes(language).get(i))) {

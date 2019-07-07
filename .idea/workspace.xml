@@ -6,10 +6,7 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7fdc6f42-80e3-436b-99c6-634d7f7f8939" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/SecondPackage/AmabiliaBot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/SecondPackage/AmabiliaBot.java" afterDir="false" />
-    </list>
+    <list default="true" id="7fdc6f42-80e3-436b-99c6-634d7f7f8939" name="Default Changelist" comment="" />
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -27,7 +24,7 @@
         <entry file="file://$PROJECT_DIR$/src/main/java/SecondPackage/AmabiliaBot.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="253">
-              <caret line="225" column="20" selection-start-line="225" selection-start-column="20" selection-end-line="225" selection-end-column="20" />
+              <caret line="45" column="49" selection-start-line="45" selection-start-column="49" selection-end-line="45" selection-end-column="49" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#8279#8280#0" expanded="true" />
@@ -53,9 +50,9 @@
                 <element signature="e#24494#24741#0" />
                 <element signature="e#24746#26201#0" />
                 <element signature="e#30516#31234#0" />
-                <element signature="e#33668#33669#0" expanded="true" />
-                <element signature="e#33787#33788#0" expanded="true" />
-                <marker date="1562517260671" expanded="true" signature="11166:11315" ph="..." />
+                <element signature="e#33715#33716#0" expanded="true" />
+                <element signature="e#33834#33835#0" expanded="true" />
+                <marker date="1562517490738" expanded="true" signature="11213:11362" ph="..." />
               </folding>
             </state>
           </provider>
@@ -555,7 +552,21 @@
       <option name="project" value="LOCAL" />
       <updated>1562517096238</updated>
     </task>
-    <option name="localTasksCounter" value="39" />
+    <task id="LOCAL-00039" summary="new">
+      <created>1562517303156</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1562517303156</updated>
+    </task>
+    <task id="LOCAL-00040" summary="new">
+      <created>1562517517839</created>
+      <option name="number" value="00040" />
+      <option name="presentableId" value="LOCAL-00040" />
+      <option name="project" value="LOCAL" />
+      <updated>1562517517839</updated>
+    </task>
+    <option name="localTasksCounter" value="41" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -825,7 +836,7 @@
     <entry file="file://$PROJECT_DIR$/src/main/java/SecondPackage/AmabiliaBot.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="253">
-          <caret line="225" column="20" selection-start-line="225" selection-start-column="20" selection-end-line="225" selection-end-column="20" />
+          <caret line="45" column="49" selection-start-line="45" selection-start-column="49" selection-end-line="45" selection-end-column="49" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#8279#8280#0" expanded="true" />
@@ -851,9 +862,9 @@
             <element signature="e#24494#24741#0" />
             <element signature="e#24746#26201#0" />
             <element signature="e#30516#31234#0" />
-            <element signature="e#33668#33669#0" expanded="true" />
-            <element signature="e#33787#33788#0" expanded="true" />
-            <marker date="1562517260671" expanded="true" signature="11166:11315" ph="..." />
+            <element signature="e#33715#33716#0" expanded="true" />
+            <element signature="e#33834#33835#0" expanded="true" />
+            <marker date="1562517490738" expanded="true" signature="11213:11362" ph="..." />
           </folding>
         </state>
       </provider>
