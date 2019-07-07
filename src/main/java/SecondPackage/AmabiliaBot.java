@@ -1,6 +1,7 @@
 package SecondPackage;
 
 import com.vdurmont.emoji.EmojiParser;
+import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
 import org.telegram.telegrambots.meta.api.methods.ForwardMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
@@ -101,40 +102,41 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                         if (m.hasText()) handleIncomingText(m);
                     }
             } else if (update.hasCallbackQuery()) {
-                // if (update.getCallbackQuery().getFrom().getId()==myID) {
-                //     Collection<Order> values = set.values();
-                //     for (Order o: values) {
-                //         for (Translation tr: o.getOrdersList()) {
-                //             if (update.getCallbackQuery().getData().contains("Выполнено")) {
-                //                 if (update.getCallbackQuery().getData().contains(tr.getId())) {
-                //                     tr.setfinished(true);
-                //                     deleteMessage(update.getCallbackQuery().getMessage());
-                //                     send("№"+tr.getId()+" Заказ отмечен как выполненный", myID);
-                //                     send("№"+tr.getId()+ " "+o.getLanguage().finished(), o.getUser().getId());
-                //                 }
-                //             } else if (update.getCallbackQuery().getData().contains("Отмена заказа")) {
-                //                 if (update.getCallbackQuery().getData().contains(tr.getId())) {
-                //                     set.get(o.getUser().getId()).getOrdersList().remove(tr);
-                //                     deleteMessage(update.getCallbackQuery().getMessage());
-                //                     send("№"+tr.getId()+" Заказ отменен", myID);
-                //                     send("№"+tr.getId()+ " "+o.getLanguage().cancelled(), o.getUser().getId());
-                //                 }
-                //             }
-                //         }
-                //     }
-                // }
-                // if (set.containsKey(update.getCallbackQuery().getFrom().getId())) {
-                //     a = set.get(update.getCallbackQuery().getFrom().getId());
-                //     handleCallback(update);
-                // } else {
-                //     a = new Order(update.getCallbackQuery().getFrom());
-                //     set.put(update.getCallbackQuery().getFrom().getId(), a);
-                //     send(":boom: Новый пользователь!" +
-                //             "\n" + a.getUser().getFirstName() +" "+ a.getUser().getLastName() +
-                //             "\n@" + a.getUser().getUserName()+
-                //             "\nВсего пользователей: " + set.size(), myID);
-                //     handleCallback(update);
-                // }
+//                 if (update.getCallbackQuery().getFrom().getId()==myID) {
+//                     Collection<Order> values = set.values();
+//                     for (Order o: values) {
+//                         for (Translation tr: o.getOrdersList()) {
+//                             if (update.getCallbackQuery().getData().contains("Выполнено")) {
+//                                 if (update.getCallbackQuery().getData().contains(tr.getId())) {
+//                                     tr.setfinished(true);
+//                                     deleteMessage(update.getCallbackQuery().getMessage());
+//                                     send("№"+tr.getId()+" Заказ отмечен как выполненный", myID);
+//                                     send("№"+tr.getId()+ " "+o.getLanguage().finished(), o.getUser().getId());
+//                                 }
+//                             } else if (update.getCallbackQuery().getData().contains("Отмена заказа")) {
+//                                 if (update.getCallbackQuery().getData().contains(tr.getId())) {
+//                                     set.get(o.getUser().getId()).getOrdersList().remove(tr);
+//                                     deleteMessage(update.getCallbackQuery().getMessage());
+//                                     send("№"+tr.getId()+" Заказ отменен", myID);
+//                                     send("№"+tr.getId()+ " "+o.getLanguage().cancelled(), o.getUser().getId());
+//                                 }
+//                             }
+//                         }
+//                     }
+//                 }
+//
+//                 if (set.containsKey(update.getCallbackQuery().getFrom().getId())) {
+//                     a = set.get(update.getCallbackQuery().getFrom().getId());
+//                     handleCallback(update);
+//                 } else {
+//                     a = new Order(update.getCallbackQuery().getFrom());
+//                     set.put(update.getCallbackQuery().getFrom().getId(), a);
+//                     send(":boom: Новый пользователь!" +
+//                             "\n" + a.getUser().getFirstName() +" "+ a.getUser().getLastName() +
+//                             "\n@" + a.getUser().getUserName()+
+//                             "\nВсего пользователей: " + set.size(), myID);
+//                 }
+                 handleCallback(update);
             }
         } catch(Exception e){
                 BotLogger.error(Main.LOGTAG, e);
@@ -213,17 +215,18 @@ public class AmabiliaBot extends TelegramLongPollingBot {
     }
 
     private void handleCallback(Update update) throws InterruptedException, TelegramApiException {
-//        AnswerCallbackQuery answer = new AnswerCallbackQuery()
-//                .setCallbackQueryId(update.getCallbackQuery().getId()).setShowAlert(false);
-//        execute(answer);
-//        String cb = update.getCallbackQuery().getData();
-//        a.setIM(null);
-//        for (int i = 0; i<6; i++){
-//            if (cb.equals(directions().get(i))) {
-//                t = new Translation();
-//                t.setDirection(directions().get(i));
-//                edit(update.getCallbackQuery().getMessage(), a.getLanguage().confirmChoice(directions().get(i)));
-//                send(a.getLanguage().howManyPages()+"\n:page_facing_up: "+ t.getPages(), update.getCallbackQuery().getMessage().getChatId(), dial(), true, false);
+        AnswerCallbackQuery answer = new AnswerCallbackQuery()
+                .setCallbackQueryId(update.getCallbackQuery().getId()).setShowAlert(false);
+        execute(answer);
+        String cb = update.getCallbackQuery().getData();
+        if (cb.equals(Lan.listTypes("Uzbek").get(0))||
+                 cb.equals(Lan.listTypes("Russian").get(0))||
+                 cb.equals(Lan.listTypes("English").get(0))) {
+            send(Lan.listTypes(language).get(0), update.getMessage().getChatId(), showSalads(), true, 1);
+        }
+//        for (int i = 0; i<Lan.listTypes(language).size(); i++){
+//            if (cb.equals(Lan.listTypes(language).get(i))) {
+//
 //            }
 //        }
 //        for (String b: dial()){
@@ -368,6 +371,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
 //                 catch (TelegramApiException e) {e.printStackTrace();}
 //             }
         }
+
 //         else if (message.getText().equals(Lan.menu(language).get(3))&& a.getOrdersList().size()==0) send(a.getLanguage().emptyOrders(), message.getChatId());
 //         else if (message.getText().equals(a.getLanguage().getYes())) {
 //             t.setOrderTime(new Date(System.currentTimeMillis()));
@@ -760,15 +764,15 @@ public class AmabiliaBot extends TelegramLongPollingBot {
         }
         return lan;
     }
-    public List<String> listProducts(String column){
+    public List<String> showSalads(){
         List<String> lan = new ArrayList<>();
         try {
             Connection conn = getConnection();
             if (conn!=null) {
                 Statement prst = conn.createStatement();
-                ResultSet rs = prst.executeQuery("select "+column+" from products where instock = true");
+                ResultSet rs = prst.executeQuery("select name, cost from products where instock = true");
                 while (rs.next()){
-                    lan.add(rs.getString(column));
+                    lan.add(rs.getString("name"+" "+"cost"));
                 }
                 prst.close();
                 conn.close();

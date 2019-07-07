@@ -7,7 +7,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7fdc6f42-80e3-436b-99c6-634d7f7f8939" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/SecondPackage/AmabiliaBot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/SecondPackage/AmabiliaBot.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/SecondPackage/Lan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/SecondPackage/Lan.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -25,10 +27,11 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/SecondPackage/AmabiliaBot.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="666">
-              <caret line="507" column="24" selection-start-line="507" selection-start-column="24" selection-end-line="507" selection-end-column="24" />
+            <state relative-caret-position="155">
+              <caret line="228" column="16" lean-forward="true" selection-start-line="228" selection-start-column="16" selection-end-line="228" selection-end-column="16" />
               <folding>
                 <element signature="imports" expanded="true" />
+                <element signature="e#5487#5562#0" />
                 <element signature="e#8279#8280#0" expanded="true" />
                 <element signature="e#8324#8325#0" expanded="true" />
                 <element signature="e#8377#8378#0" expanded="true" />
@@ -43,7 +46,6 @@
                 <element signature="e#10034#10035#0" expanded="true" />
                 <element signature="e#10087#10088#0" expanded="true" />
                 <element signature="e#10132#10133#0" expanded="true" />
-                <element signature="e#10234#10298#0" />
                 <element signature="e#16595#16633#0" />
                 <element signature="e#17612#17668#0" />
                 <element signature="e#18754#18914#0" />
@@ -53,8 +55,8 @@
                 <element signature="e#24494#24741#0" />
                 <element signature="e#24746#26201#0" />
                 <element signature="e#30516#31234#0" />
-                <element signature="e#33814#33815#0" expanded="true" />
-                <element signature="e#33933#33934#0" expanded="true" />
+                <element signature="e#33634#33635#0" expanded="true" />
+                <element signature="e#33753#33754#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -72,8 +74,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/SecondPackage/Lan.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="579">
-              <caret line="104" column="44" selection-start-line="104" selection-start-column="44" selection-end-line="104" selection-end-column="44" />
+            <state relative-caret-position="163">
+              <caret line="81" column="40" selection-start-line="81" selection-start-column="31" selection-end-line="81" selection-end-column="40" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -183,10 +185,10 @@
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-560" />
-    <option name="y" value="-1088" />
-    <option name="width" value="1936" />
-    <option name="height" value="1066" />
+    <option name="x" value="-8" />
+    <option name="y" value="-8" />
+    <option name="width" value="1382" />
+    <option name="height" value="754" />
   </component>
   <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="2" id="Add" />
@@ -512,14 +514,35 @@
       <option name="project" value="LOCAL" />
       <updated>1562513179099</updated>
     </task>
-    <option name="localTasksCounter" value="33" />
+    <task id="LOCAL-00033" summary="new">
+      <created>1562513710444</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL-00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1562513710444</updated>
+    </task>
+    <task id="LOCAL-00034" summary="new">
+      <created>1562513870621</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1562513870621</updated>
+    </task>
+    <task id="LOCAL-00035" summary="new">
+      <created>1562514228537</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1562514228537</updated>
+    </task>
+    <option name="localTasksCounter" value="36" />
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-560" y="-1088" width="1936" height="1066" extended-state="6" />
+    <frame x="-8" y="-8" width="1382" height="754" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.117803834" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.16717096" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -771,8 +794,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/SecondPackage/Lan.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="579">
-          <caret line="104" column="44" selection-start-line="104" selection-start-column="44" selection-end-line="104" selection-end-column="44" />
+        <state relative-caret-position="163">
+          <caret line="81" column="40" selection-start-line="81" selection-start-column="31" selection-end-line="81" selection-end-column="40" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -781,10 +804,11 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/SecondPackage/AmabiliaBot.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="666">
-          <caret line="507" column="24" selection-start-line="507" selection-start-column="24" selection-end-line="507" selection-end-column="24" />
+        <state relative-caret-position="155">
+          <caret line="228" column="16" lean-forward="true" selection-start-line="228" selection-start-column="16" selection-end-line="228" selection-end-column="16" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#5487#5562#0" />
             <element signature="e#8279#8280#0" expanded="true" />
             <element signature="e#8324#8325#0" expanded="true" />
             <element signature="e#8377#8378#0" expanded="true" />
@@ -799,7 +823,6 @@
             <element signature="e#10034#10035#0" expanded="true" />
             <element signature="e#10087#10088#0" expanded="true" />
             <element signature="e#10132#10133#0" expanded="true" />
-            <element signature="e#10234#10298#0" />
             <element signature="e#16595#16633#0" />
             <element signature="e#17612#17668#0" />
             <element signature="e#18754#18914#0" />
@@ -809,8 +832,8 @@
             <element signature="e#24494#24741#0" />
             <element signature="e#24746#26201#0" />
             <element signature="e#30516#31234#0" />
-            <element signature="e#33814#33815#0" expanded="true" />
-            <element signature="e#33933#33934#0" expanded="true" />
+            <element signature="e#33634#33635#0" expanded="true" />
+            <element signature="e#33753#33754#0" expanded="true" />
           </folding>
         </state>
       </provider>

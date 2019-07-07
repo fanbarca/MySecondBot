@@ -88,7 +88,7 @@ class Lan {
             list.add(":coffee:Ichimliklar:wine_glass:");
             list.add(":cake:Shirinliklar:shaved_ice:");
             list.add(":hamburger:Fastfud:fries:");
-            list.add(":pizza:Pitsa");
+            list.add(":pizza:Pitsa:pizza:");
             list.add(":poultry_leg:Shashlik:meat_on_bone:");
         }
         else if (lan.equals("Russian")) {
