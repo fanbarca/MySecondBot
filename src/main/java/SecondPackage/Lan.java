@@ -113,4 +113,11 @@ class Lan {
         }
         return list;
     }
+    public static String goBack(String lan) {
+        String r="";
+        if (lan.equals("Uzbek")) r = ":arrow_left:Orqaga";
+        else if (lan.equals("Russian")) r = ":arrow_left:Назад";
+        else if (lan.equals("English")) r = ":arrow_left:Back";
+        return r;    }
+
 }

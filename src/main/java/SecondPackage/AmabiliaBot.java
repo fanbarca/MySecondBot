@@ -223,6 +223,8 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                  cb.equals(Lan.listTypes("Russian").get(0))||
                  cb.equals(Lan.listTypes("English").get(0))) {
             edit(update.getCallbackQuery().getMessage(), Lan.listTypes(language).get(0),  showSalads(), true);
+        } else if (cb.equals(Lan.goBack(language))) {
+            edit(update.getCallbackQuery().getMessage(), Lan.chooseDish(language), Lan.mainMenu(language), true);
         }
 //        for (int i = 0; i<Lan.listTypes(language).size(); i++){
 //            if (cb.equals(Lan.listTypes(language).get(i))) {
@@ -774,6 +776,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                 while (rs.next()){
                     lan.add(rs.getString("name"));
                 }
+                lan.add(Lan.goBack(language));
                 prst.close();
                 conn.close();
             }
