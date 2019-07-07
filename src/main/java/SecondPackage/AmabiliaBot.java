@@ -44,15 +44,16 @@ public class AmabiliaBot extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
-        try {
-			language = sqlselect(update.getMessage().getFrom().getId().toString(), "language");
-		    number = sqlselect(update.getMessage().getFrom().getId().toString(),"phone");
-        } catch (SQLException e1) {
-			e1.printStackTrace();
-		}
+
         Message m;
         try {
             if (update.hasMessage()) {
+                try {
+                    language = sqlselect(update.getMessage().getFrom().getId().toString(), "language");
+                    number = sqlselect(update.getMessage().getFrom().getId().toString(),"phone");
+                } catch (SQLException e1) {
+                    e1.printStackTrace();
+                }
                 m = update.getMessage();
 //                if (m.getFrom().getId()==myID) {
 //                    if (m.hasText()) {
