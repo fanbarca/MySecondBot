@@ -44,16 +44,16 @@ public class AmabiliaBot extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
-
+        try {
+            language = sqlselect(update.getMessage().getFrom().getId().toString(), "language");
+            number = sqlselect(update.getMessage().getFrom().getId().toString(),"phone");
+        } catch (SQLException e1) {
+            e1.printStackTrace();
+        }
         Message m;
         try {
             if (update.hasMessage()) {
-                try {
-                    language = sqlselect(update.getMessage().getFrom().getId().toString(), "language");
-                    number = sqlselect(update.getMessage().getFrom().getId().toString(),"phone");
-                } catch (SQLException e1) {
-                    e1.printStackTrace();
-                }
+
                 m = update.getMessage();
 //                if (m.getFrom().getId()==myID) {
 //                    if (m.hasText()) {
@@ -223,7 +223,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
         if (cb.equals(Lan.listTypes("Uzbek").get(0))||
                  cb.equals(Lan.listTypes("Russian").get(0))||
                  cb.equals(Lan.listTypes("English").get(0))) {
-            send(Lan.listTypes(language).get(0), update.getMessage().getChatId(), showSalads(), true, 1);
+            send("99", update.getMessage().getChatId(), showSalads(), true, 1);
         }
 //        for (int i = 0; i<Lan.listTypes(language).size(); i++){
 //            if (cb.equals(Lan.listTypes(language).get(i))) {
