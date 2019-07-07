@@ -3,6 +3,7 @@ package SecondPackage;
 import com.vdurmont.emoji.EmojiParser;
 import org.telegram.telegrambots.meta.api.methods.ForwardMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -35,6 +36,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
     private static final String DRIVER = "org.postgresql.Driver";
     private String language ="";
     private String number = "";
+    private Message menuMassage;
     {
     date.setTimeZone(zone);
     time.setTimeZone(zone);
@@ -313,6 +315,8 @@ public class AmabiliaBot extends TelegramLongPollingBot {
              if ((language == null) || (language.equals(""))) {
                  chooseLanguage(message);
              } else {
+                 if (menuMassage!=null) deleteMessage(menuMassage);
+                 menuMassage = message;
                  send(Lan.chooseDish(language), message.getChatId(), Lan.listTypes(language),true,2);
              }
 //             boolean exists = false;
@@ -629,13 +633,13 @@ public class AmabiliaBot extends TelegramLongPollingBot {
 //            send(a.getLanguage().youSure(), message.getChatId(), ":ok_hand::white_check_mark:", ":raised_hand::negative_squared_cross_mark:", true);
 //        }
 //    }
-//    public void deleteMessage(Message message){
-//        DeleteMessage dm = new DeleteMessage()
-//                .setMessageId(message.getMessageId())
-//                .setChatId(message.getChatId());
-//        try {execute(dm);}
-//        catch (TelegramApiException e) {e.printStackTrace();}
-//    }
+    public void deleteMessage(Message message){
+        DeleteMessage dm = new DeleteMessage()
+                .setMessageId(message.getMessageId())
+                .setChatId(message.getChatId());
+        try {execute(dm);}
+        catch (TelegramApiException e) {e.printStackTrace();}
+    }
     public void forwardMessage(Message message, long id) {
         ForwardMessage fm = new ForwardMessage();
         fm.setChatId(id);
