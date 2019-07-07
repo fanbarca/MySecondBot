@@ -1,5 +1,6 @@
 package SecondPackage;
 
+import com.ibm.icu.text.Transliterator;
 import com.vdurmont.emoji.EmojiParser;
 import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
 import org.telegram.telegrambots.meta.api.methods.ForwardMessage;
@@ -222,7 +223,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
         if (cb.equals(Lan.listTypes("Uzbek").get(0))||
                  cb.equals(Lan.listTypes("Russian").get(0))||
                  cb.equals(Lan.listTypes("English").get(0))) {
-            edit(update.getCallbackQuery().getMessage(), Lan.listTypes(language).get(0),  showSalads(), true);
+            edit(update.getCallbackQuery().getMessage(), Lan.listTypes(language).get(0),  showSalads(language), true);
         } else if (cb.equals(Lan.goBack(language))) {
             edit(update.getCallbackQuery().getMessage(), Lan.chooseDish(language), Lan.listTypes(language), true);
         }
@@ -766,7 +767,9 @@ public class AmabiliaBot extends TelegramLongPollingBot {
         }
         return lan;
     }
-    public List<String> showSalads(){
+    public List<String> showSalads(String language){
+        Transliterator toLatinTrans = Transliterator.getInstance(AmabiliaBot.CYRILLIC_TO_LATIN);
+        Transliterator toCyrilTrans = Transliterator.getInstance(AmabiliaBot.LATIN_TO_CYRILLIC);
         List<String> lan = new ArrayList<>();
         try {
             Connection conn = getConnection();
@@ -774,7 +777,8 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                 Statement prst = conn.createStatement();
                 ResultSet rs = prst.executeQuery("select name from salads where instock = true");
                 while (rs.next()){
-                    lan.add(rs.getString("name"));
+                    if (language.equals("Uzbek")||language.equals("English")) lan.add(toLatinTrans.transliterate(rs.getString("name")));
+                    else if (language.equals("Russian")) lan.add(toCyrilTrans.transliterate(rs.getString("name")));
                 }
                 lan.add(Lan.goBack(language));
                 prst.close();
