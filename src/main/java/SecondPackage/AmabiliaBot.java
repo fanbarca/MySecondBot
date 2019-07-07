@@ -504,7 +504,6 @@ public class AmabiliaBot extends TelegramLongPollingBot {
         if (inline) sendMessage.setReplyMarkup(inlineMarkup);
         else sendMessage.setReplyMarkup(replyMarkup);
         try {
-            execute(sendMessage);
             menuMassage = execute(sendMessage);
         }
         catch (TelegramApiException e) {e.printStackTrace();}

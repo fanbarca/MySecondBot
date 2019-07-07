@@ -7,7 +7,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7fdc6f42-80e3-436b-99c6-634d7f7f8939" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/SecondPackage/AmabiliaBot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/SecondPackage/AmabiliaBot.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
@@ -26,8 +25,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/SecondPackage/AmabiliaBot.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="594">
-              <caret line="319" column="39" lean-forward="true" selection-start-line="319" selection-start-column="39" selection-end-line="319" selection-end-column="39" />
+            <state relative-caret-position="666">
+              <caret line="507" column="24" selection-start-line="507" selection-start-column="24" selection-end-line="507" selection-end-column="24" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#8279#8280#0" expanded="true" />
@@ -54,8 +53,8 @@
                 <element signature="e#24494#24741#0" />
                 <element signature="e#24746#26201#0" />
                 <element signature="e#30516#31234#0" />
-                <element signature="e#33785#33786#0" expanded="true" />
-                <element signature="e#33904#33905#0" expanded="true" />
+                <element signature="e#33814#33815#0" expanded="true" />
+                <element signature="e#33933#33934#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -506,7 +505,14 @@
       <option name="project" value="LOCAL" />
       <updated>1562512024107</updated>
     </task>
-    <option name="localTasksCounter" value="32" />
+    <task id="LOCAL-00032" summary="new">
+      <created>1562513179099</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1562513179099</updated>
+    </task>
+    <option name="localTasksCounter" value="33" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -775,8 +781,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/SecondPackage/AmabiliaBot.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="594">
-          <caret line="319" column="39" lean-forward="true" selection-start-line="319" selection-start-column="39" selection-end-line="319" selection-end-column="39" />
+        <state relative-caret-position="666">
+          <caret line="507" column="24" selection-start-line="507" selection-start-column="24" selection-end-line="507" selection-end-column="24" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#8279#8280#0" expanded="true" />
@@ -803,8 +809,8 @@
             <element signature="e#24494#24741#0" />
             <element signature="e#24746#26201#0" />
             <element signature="e#30516#31234#0" />
-            <element signature="e#33785#33786#0" expanded="true" />
-            <element signature="e#33904#33905#0" expanded="true" />
+            <element signature="e#33814#33815#0" expanded="true" />
+            <element signature="e#33933#33934#0" expanded="true" />
           </folding>
         </state>
       </provider>
