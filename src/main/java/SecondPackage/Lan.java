@@ -79,4 +79,38 @@ class Lan {
         else if (lan.equals("English")) r = "Orders list";
         return r;
     }
+    public static List<String> listTypes(String lan){
+        List<String> list = new ArrayList<>();
+        if (lan.equals("Uzbek")) {
+            list.add("Salatlar");
+            list.add("Suyuq ovqatlar");
+            list.add("Asosiy taomlar");
+            list.add("Ichimliklar");
+            list.add("Shirinliklar");
+            list.add("Fastfud");
+            list.add("Pitsa");
+            list.add("Shashlik");
+        }
+        else if (lan.equals("Russian")) {
+            list.add("Салаты");
+            list.add("Первые блюда");
+            list.add("Вторые блюда");
+            list.add("Напитки");
+            list.add("Десерт");
+            list.add("Фастфуд");
+            list.add("Пицца");
+            list.add("Шашлык");
+        }
+        else if (lan.equals("English")) {
+            list.add("Salads");
+            list.add("Entrees");
+            list.add("Main courses");
+            list.add("Beverages");
+            list.add("Dessert");
+            list.add("Fast food");
+            list.add("Pizza");
+            list.add("Barbecue");
+        }
+        return list;
+    }
 }
