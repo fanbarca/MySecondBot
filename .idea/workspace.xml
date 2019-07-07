@@ -8,6 +8,9 @@
   <component name="ChangeListManager">
     <list default="true" id="7fdc6f42-80e3-436b-99c6-634d7f7f8939" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/SecondPackage/AmabiliaBot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/SecondPackage/AmabiliaBot.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/SecondPackage/Lan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/SecondPackage/Lan.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/SecondPackage/Translation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/SecondPackage/Translation.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -22,12 +25,13 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/SecondPackage/AmabiliaBot.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="388">
-              <caret line="313" column="21" lean-forward="true" selection-start-line="313" selection-start-column="21" selection-end-line="313" selection-end-column="21" />
+            <state relative-caret-position="372">
+              <caret line="348" column="135" selection-start-line="348" selection-start-column="135" selection-end-line="348" selection-end-column="135" />
               <folding>
+                <element signature="imports" expanded="true" />
                 <element signature="e#8279#8280#0" expanded="true" />
                 <element signature="e#8324#8325#0" expanded="true" />
                 <element signature="e#8377#8378#0" expanded="true" />
@@ -47,20 +51,28 @@
                 <element signature="e#24273#24489#0" />
                 <element signature="e#24494#24741#0" />
                 <element signature="e#24746#26201#0" />
-                <element signature="e#26207#28130#0" />
                 <element signature="e#30516#31234#0" />
-                <element signature="e#33218#33219#0" expanded="true" />
-                <element signature="e#33337#33338#0" expanded="true" />
+                <element signature="e#33515#33516#0" expanded="true" />
+                <element signature="e#33634#33635#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/SecondPackage/Translation.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="360">
+              <caret line="25" column="16" lean-forward="true" selection-start-line="25" selection-end-line="26" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/SecondPackage/Lan.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="451">
-              <caret line="67" column="1" lean-forward="true" selection-start-line="67" selection-start-column="1" selection-end-line="67" selection-end-column="1" />
+            <state relative-caret-position="465">
+              <caret line="79" column="17" lean-forward="true" selection-start-line="79" selection-start-column="17" selection-end-line="79" selection-end-column="17" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -71,8 +83,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/SecondPackage/English.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="271">
-              <caret line="188" column="37" selection-start-line="188" selection-start-column="37" selection-end-line="188" selection-end-column="37" />
+            <state relative-caret-position="-468">
+              <caret line="64" column="40" lean-forward="true" selection-start-line="64" selection-start-column="15" selection-end-line="64" selection-end-column="40" />
             </state>
           </provider>
         </entry>
@@ -80,8 +92,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/SecondPackage/Uzbek.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="198">
-              <caret line="99" column="4" selection-start-line="99" selection-start-column="4" selection-end-line="99" selection-end-column="4" />
+            <state relative-caret-position="216">
+              <caret line="62" column="22" lean-forward="true" selection-start-line="62" selection-end-line="65" />
             </state>
           </provider>
         </entry>
@@ -98,8 +110,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/SecondPackage/Russian.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="288">
-              <caret line="162" column="4" selection-start-line="162" selection-start-column="4" selection-end-line="162" selection-end-column="4" />
+            <state relative-caret-position="289">
+              <caret line="63" column="39" lean-forward="true" selection-start-line="63" selection-start-column="15" selection-end-line="63" selection-end-column="39" />
               <folding>
                 <element signature="e#5694#5695#0" expanded="true" />
                 <element signature="e#5719#5720#0" expanded="true" />
@@ -154,6 +166,7 @@
         <option value="$PROJECT_DIR$/src/main/java/SecondPackage/Uzbek.java" />
         <option value="$PROJECT_DIR$/src/main/java/SecondPackage/Russian.java" />
         <option value="$PROJECT_DIR$/src/main/java/SecondPackage/English.java" />
+        <option value="$PROJECT_DIR$/src/main/java/SecondPackage/Translation.java" />
         <option value="$PROJECT_DIR$/src/main/java/SecondPackage/Lan.java" />
         <option value="$PROJECT_DIR$/src/main/java/SecondPackage/AmabiliaBot.java" />
       </list>
@@ -451,7 +464,14 @@
       <option name="project" value="LOCAL" />
       <updated>1562423404659</updated>
     </task>
-    <option name="localTasksCounter" value="27" />
+    <task id="LOCAL-00027" summary="new">
+      <created>1562425888035</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1562425888035</updated>
+    </task>
+    <option name="localTasksCounter" value="28" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -653,17 +673,24 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/SecondPackage/Translation.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="360">
+          <caret line="25" column="16" lean-forward="true" selection-start-line="25" selection-end-line="26" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/SecondPackage/Uzbek.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="198">
-          <caret line="99" column="4" selection-start-line="99" selection-start-column="4" selection-end-line="99" selection-end-column="4" />
+        <state relative-caret-position="216">
+          <caret line="62" column="22" lean-forward="true" selection-start-line="62" selection-end-line="65" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/SecondPackage/Russian.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="288">
-          <caret line="162" column="4" selection-start-line="162" selection-start-column="4" selection-end-line="162" selection-end-column="4" />
+        <state relative-caret-position="289">
+          <caret line="63" column="39" lean-forward="true" selection-start-line="63" selection-start-column="15" selection-end-line="63" selection-end-column="39" />
           <folding>
             <element signature="e#5694#5695#0" expanded="true" />
             <element signature="e#5719#5720#0" expanded="true" />
@@ -675,16 +702,27 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/SecondPackage/English.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="271">
-          <caret line="188" column="37" selection-start-line="188" selection-start-column="37" selection-end-line="188" selection-end-column="37" />
+        <state relative-caret-position="-468">
+          <caret line="64" column="40" lean-forward="true" selection-start-line="64" selection-start-column="15" selection-end-line="64" selection-end-column="40" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/SecondPackage/Lan.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="465">
+          <caret line="79" column="17" lean-forward="true" selection-start-line="79" selection-start-column="17" selection-end-line="79" selection-end-column="17" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/SecondPackage/AmabiliaBot.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="388">
-          <caret line="313" column="21" lean-forward="true" selection-start-line="313" selection-start-column="21" selection-end-line="313" selection-end-column="21" />
+        <state relative-caret-position="372">
+          <caret line="348" column="135" selection-start-line="348" selection-start-column="135" selection-end-line="348" selection-end-column="135" />
           <folding>
+            <element signature="imports" expanded="true" />
             <element signature="e#8279#8280#0" expanded="true" />
             <element signature="e#8324#8325#0" expanded="true" />
             <element signature="e#8377#8378#0" expanded="true" />
@@ -704,20 +742,9 @@
             <element signature="e#24273#24489#0" />
             <element signature="e#24494#24741#0" />
             <element signature="e#24746#26201#0" />
-            <element signature="e#26207#28130#0" />
             <element signature="e#30516#31234#0" />
-            <element signature="e#33218#33219#0" expanded="true" />
-            <element signature="e#33337#33338#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/SecondPackage/Lan.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="451">
-          <caret line="67" column="1" lean-forward="true" selection-start-line="67" selection-start-column="1" selection-end-line="67" selection-end-column="1" />
-          <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="e#33515#33516#0" expanded="true" />
+            <element signature="e#33634#33635#0" expanded="true" />
           </folding>
         </state>
       </provider>

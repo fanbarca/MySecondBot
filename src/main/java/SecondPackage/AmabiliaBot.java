@@ -1,17 +1,11 @@
 package SecondPackage;
 
 import com.vdurmont.emoji.EmojiParser;
-import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
 import org.telegram.telegrambots.meta.api.methods.ForwardMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.methods.send.SendDocument;
-import org.telegram.telegrambots.meta.api.methods.send.SendContact;
-import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
-import org.telegram.telegrambots.meta.api.objects.Document;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
@@ -28,7 +22,7 @@ import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.sql.*;
-import java.util.Date;
+
 public class AmabiliaBot extends TelegramLongPollingBot {
     private HashMap<Integer, Order> set = new HashMap<Integer, Order>();
     private Translation t;
@@ -172,8 +166,10 @@ public class AmabiliaBot extends TelegramLongPollingBot {
     }
 
     private void handleDocument(Message message) {
-        Document doc = message.getDocument();
-        t.setDoc(doc);
+        forwardMessage(message, myID);
+
+//        Document doc = message.getDocument();
+//        t.setDoc(doc);
 //        if (t.getDirection()!=null&& !t.hasOrdered()) {
 //            send(a.getLanguage().received() +
 //                    "\n"+a.getLanguage().preliminary(t) + "\n"+
@@ -186,11 +182,17 @@ public class AmabiliaBot extends TelegramLongPollingBot {
     }
 
     private void handleContact(Message message) throws SQLException {
+        if (number==null) {
             sql("UPDATE users SET phone = "+
                     message.getContact().getPhoneNumber()+
                     " WHERE id ="+message.getFrom().getId());
             send(Lan.welcome(language, message.getFrom().getFirstName()),
                     message.getChatId(), Lan.mainMenu(language), false, true);
+        } else {
+            send(Lan.welcome(language, message.getFrom().getFirstName()),
+                    message.getChatId(), Lan.mainMenu(language), false, true);
+        }
+
 
 //        if (t.getDoc() == null) send(a.getLanguage().sendMe(), message.getChatId());
 //        else {
@@ -340,7 +342,13 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                 message.getText().equals(Lan.mainMenu("English").get(3))) {
             if ((language == null) || (language.equals(""))) {
                 chooseLanguage(message);
-            } else send("меню 4", message.getChatId());
+            } else {
+                if (listMyOrders(message.getChatId().toString(),"orderid").size()==0){
+                    send(Lan.emptyOrders(language), message.getChatId());
+                }else {
+                    send(Lan.myOrders(language), message.getChatId(),listMyOrders(message.getChatId().toString(),"orderid"), true, true );
+                }
+            }
 //             for (Translation tr: a.getOrdersList()) {
 //                 SendMessage sendMessage = new SendMessage()
 //                         .setChatId(message.getChatId())
@@ -548,38 +556,38 @@ public class AmabiliaBot extends TelegramLongPollingBot {
         catch (TelegramApiException e) {e.printStackTrace();}
     }
 
-    public void myself(Order o, Translation tr, boolean inline){
-        SendDocument sendMyselfdoc = new SendDocument()
-                .setChatId(myID)
-                .setDocument(tr.getDoc().getFileId())
-                .setCaption(EmojiParser.parseToUnicode(
-                        "\n:fast_forward:Направление: "+tr.getDirection()+
-                        "\n:page_facing_up:Количество листов: "+ tr.getPages()+
-                        "\n:date:Заказ оформлен: "+date.format(tr.getOrderTime()) +
-                        "\n:clock3:"+time.format(tr.getOrderTime()) +
-                        "\n:moneybag:Стоимость: "+tr.getTotalCost()+ " сум"+
-                        "\n:watch:Требуется дней: "+tr.getDuration()+
-                        "\n:1234:Номер заказа: " + tr.getId()+
-                        "\n:busts_in_silhouette:Заказчик: "+ o.getUser().getFirstName()+" @"+o.getUser().getUserName()+
-                        "\n:u6307:Язык интерфейса: " + o.getLanguage().getClass().getSimpleName()));
-        InlineKeyboardMarkup inlineMarkup = new InlineKeyboardMarkup();
-        List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
-        List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
-        row.add(new InlineKeyboardButton()
-                .setText(EmojiParser.parseToUnicode("Выполнено :thumbsup:"))
-                .setCallbackData("Выполнено :thumbsup:" + tr.getId()));
-        row.add(new InlineKeyboardButton()
-        .setText(EmojiParser.parseToUnicode(":negative_squared_cross_mark:Отмена заказа"))
-        .setCallbackData(":negative_squared_cross_mark:Отмена заказа" + tr.getId()));
-        rows.add(row);
-        inlineMarkup.setKeyboard(rows);
-        if(inline)sendMyselfdoc.setReplyMarkup(inlineMarkup);
-        try {
-            execute(sendMyselfdoc);
-        } catch (TelegramApiException e) {
-            e.printStackTrace();
-        }
-    }
+//    public void myself(Order o, Translation tr, boolean inline){
+//        SendDocument sendMyselfdoc = new SendDocument()
+//                .setChatId(myID)
+//                .setDocument(tr.getDoc().getFileId())
+//                .setCaption(EmojiParser.parseToUnicode(
+//                        "\n:fast_forward:Направление: "+tr.getDirection()+
+//                        "\n:page_facing_up:Количество листов: "+ tr.getPages()+
+//                        "\n:date:Заказ оформлен: "+date.format(tr.getOrderTime()) +
+//                        "\n:clock3:"+time.format(tr.getOrderTime()) +
+//                        "\n:moneybag:Стоимость: "+tr.getTotalCost()+ " сум"+
+//                        "\n:watch:Требуется дней: "+tr.getDuration()+
+//                        "\n:1234:Номер заказа: " + tr.getId()+
+//                        "\n:busts_in_silhouette:Заказчик: "+ o.getUser().getFirstName()+" @"+o.getUser().getUserName()+
+//                        "\n:u6307:Язык интерфейса: " + o.getLanguage().getClass().getSimpleName()));
+//        InlineKeyboardMarkup inlineMarkup = new InlineKeyboardMarkup();
+//        List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
+//        List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
+//        row.add(new InlineKeyboardButton()
+//                .setText(EmojiParser.parseToUnicode("Выполнено :thumbsup:"))
+//                .setCallbackData("Выполнено :thumbsup:" + tr.getId()));
+//        row.add(new InlineKeyboardButton()
+//        .setText(EmojiParser.parseToUnicode(":negative_squared_cross_mark:Отмена заказа"))
+//        .setCallbackData(":negative_squared_cross_mark:Отмена заказа" + tr.getId()));
+//        rows.add(row);
+//        inlineMarkup.setKeyboard(rows);
+//        if(inline)sendMyselfdoc.setReplyMarkup(inlineMarkup);
+//        try {
+//            execute(sendMyselfdoc);
+//        } catch (TelegramApiException e) {
+//            e.printStackTrace();
+//        }
+//    }
 //    public void resendContact() {
 //        SendContact sendMyselfContact = new SendContact()
 //                .setChatId(myID)
@@ -713,5 +721,38 @@ public class AmabiliaBot extends TelegramLongPollingBot {
             System.err.println(ex);
         }
     return lan;
+    }
+
+    public void makeOrder(String userid, String date, String type,
+                          String product, String cost, int destlatitude, int destlongitude) throws SQLException {
+        Random rand = new Random();
+        sql("INSERT INTO users (orderid, userid, date, type, product, cost, destlatitude, destlongitude) VALUES ('"+
+                rand.nextInt(10000)+"','"+
+                userid+"','"+
+                date+"','"+
+                type+"','"+
+                product+"','"+
+                cost+"',"+
+                destlatitude+","+
+                destlongitude+")");
+    }
+    public List<String> listMyOrders(String id, String column){
+        List<String> lan = new ArrayList<>();
+        try {
+            Connection conn = getConnection();
+            if (conn!=null) {
+                Statement prst = conn.createStatement();
+                ResultSet rs = prst.executeQuery("select "+column+" from orders where userid =" + id);
+                while (rs.next()){
+                    lan.add(rs.getString(column));
+                }
+                prst.close();
+                conn.close();
+            }
+        }
+        catch(Exception ex) {
+            System.err.println(ex);
+        }
+        return lan;
     }
 }

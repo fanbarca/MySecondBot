@@ -7,7 +7,6 @@ import java.util.Random;
 
 public class Translation extends Order {
     private String direction;
-    private Document doc;
     private Date orderTime;
     private int totalCost = 0;
     private int duration = 0;
@@ -16,7 +15,6 @@ public class Translation extends Order {
     private boolean isfinished =false;
     private String deadline;
     String id;
-    double randomDouble;
 
 
     public String getId() {
@@ -44,12 +42,6 @@ public class Translation extends Order {
         this.orderTime = orderTime;
     }
 
-    public Document getDoc() {
-        return doc;
-    }
-    public void setDoc(Document doc) {
-        this.doc = doc;
-    }
 
     public String getDirection(){
         return direction;
@@ -87,7 +79,6 @@ public class Translation extends Order {
         } else return false;
     }
     public void  clearOrder(){
-        setDoc(null);
         setOrdered(false);
         setDirection(null);
         this.pages = "";

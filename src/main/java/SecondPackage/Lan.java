@@ -65,4 +65,18 @@ class Lan {
         else if (lan.equals("English")) r = "What would you like to order?";
         return r;
     }
+    public static String emptyOrders(String lan) {
+        String r="";
+        if (lan.equals("Uzbek")) r = ":o:Buyurtmalar royxati bo'sh";
+        else if (lan.equals("Russian")) r = ":o:Список заказов пуст";
+        else if (lan.equals("English")) r = ":o:Orders list is empty";
+        return r;
+    }
+    public static String myOrders(String lan) {
+        String r="";
+        if (lan.equals("Uzbek")) r = "Buyurtmalar royxati";
+        else if (lan.equals("Russian")) r = "Список заказов";
+        else if (lan.equals("English")) r = "Orders list";
+        return r;
+    }
 }
