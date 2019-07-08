@@ -35,8 +35,9 @@ public class Adminbot extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
-            if(update.getMessage().hasText()){
-                if (update.getMessage().getChatId().equals(myID)) {
+        if (update.hasMessage()) {
+            if(update.getMessage().getChatId().equals(myID)){
+                if (update.getMessage().hasText()) {
                     if(update.getMessage().getText().equals("/start")){
                         List<String> a = new ArrayList<>();
                         a.add("Меню");
@@ -48,7 +49,8 @@ public class Adminbot extends TelegramLongPollingBot {
                         send("Заказы", myID, listOrders("orderid"), true, 2);
                     }
                 }
-            } else if (update.hasCallbackQuery()) {
+            }
+        } else if (update.hasCallbackQuery()) {
                 if (update.getCallbackQuery().getMessage().getChatId().equals(myID)) {
                 for (String t:Lan.listTypes("Russian")) {
                     if(update.getCallbackQuery().getData().equals(t)){
