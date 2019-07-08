@@ -550,7 +550,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
         list.add(c);
         edit(message, newText, list, 3);
     }
-    public static void edit (Message message, String newText, List<String> list, int flag) {
+    public void edit (Message message, String newText, List<String> list, int flag) {
         EditMessageText sendMessage = new EditMessageText()
                 .setChatId(message.getChatId())
                 .setMessageId(message.getMessageId())
