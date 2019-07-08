@@ -361,7 +361,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
             } else {
                 if (listMyOrders(message.getChatId().toString(),"orderid").size()==0){
                     send(Lan.emptyOrders(language), message.getChatId());
-                }else {
+                } else {
                     send(Lan.myOrders(language), message.getChatId(),listMyOrders(message.getChatId().toString(),"orderid"), true, 1);
                 }
             }
@@ -663,7 +663,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
         try {execute(fm);}
         catch (TelegramApiException e) {e.printStackTrace();}
     }
-    private static Connection getConnection() throws URISyntaxException, SQLException {
+    public static Connection getConnection() throws URISyntaxException, SQLException {
         try {
             Class.forName(DRIVER);
         } catch (ClassNotFoundException ex) {
