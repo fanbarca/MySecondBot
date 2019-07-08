@@ -56,6 +56,11 @@ public class Adminbot extends TelegramLongPollingBot {
                     if(update.getCallbackQuery().getData().equals(t)){
                         edit(update.getCallbackQuery().getMessage(), t,
                         showProducts("name", "table"+Lan.listTypes("Russian").indexOf(t)), 1);
+                    } else if(update.getCallbackQuery().getData().equals("Назад")){
+                        edit(update.getCallbackQuery().getMessage(), "Меню",
+                        Lan.listTypes("Russian"), 3);
+                    } else if(update.getCallbackQuery().getData().equals("Добавть продукт")){
+
                     }
                 }
             }
