@@ -90,6 +90,7 @@ class Lan {
             list.add(":hamburger:Fastfud:fries:");
             list.add(":pizza:Pitsa:pizza:");
             list.add(":poultry_leg:Shashlik:meat_on_bone:");
+            list.add(":bread:Boshqa:cookie:");
         }
         else if (lan.equals("Russian")) {
             list.add(":custard:Салаты:sushi:");
@@ -100,6 +101,7 @@ class Lan {
             list.add(":hamburger:Фастфуд:fries:");
             list.add(":pizza:Пицца:pizza:");
             list.add(":poultry_leg:Шашлык:meat_on_bone:");
+            list.add(":bread:Другое:cookie:");
         }
         else if (lan.equals("English")) {
             list.add(":custard:Salads:sushi:");
@@ -110,6 +112,7 @@ class Lan {
             list.add(":hamburger:Fast food:fries:");
             list.add(":pizza:Pizza:pizza:");
             list.add(":poultry_leg:Barbecue:meat_on_bone:");
+            list.add(":bread:Other:cookie:");
         }
         return list;
     }

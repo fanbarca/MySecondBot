@@ -329,7 +329,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
              if ((language == null) || (language.equals(""))) {
                  chooseLanguage(message);
              } else {
-                 send(Lan.chooseDish(language), message.getChatId(), Lan.listTypes(language),true,2);
+                 send(Lan.chooseDish(language), message.getChatId(), Lan.listTypes(language),true,3);
              }
 //             boolean exists = false;
 //             for (Translation tr: a.getOrdersList()) {
