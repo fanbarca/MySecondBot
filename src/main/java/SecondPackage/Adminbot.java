@@ -50,8 +50,8 @@ public class Adminbot extends TelegramLongPollingBot {
             } else if (update.hasCallbackQuery()) {
                 for (String t:Lan.listTypes("Russian")) {
                     if(update.getCallbackQuery().getData().equals(t)){
-                        AmabiliaBot.edit(update.getCallbackQuery().getMessage(), t,
-                        AmabiliaBot.showProducts("Russian", "name", "table"+Lan.listTypes("Russian").indexOf(t)), 1);
+                        edit(update.getCallbackQuery().getMessage(), t,
+                        showProducts("name", "table"+Lan.listTypes("Russian").indexOf(t)), 1);
                     }
                 }
             }
@@ -116,6 +116,32 @@ public void send (String text, long chatId, List<String> list, boolean inline, i
         }
         catch (TelegramApiException e) {e.printStackTrace();}
     }
+public void edit (Message message, String newText, List<String> list, int flag) {
+        EditMessageText sendMessage = new EditMessageText()
+                .setChatId(message.getChatId())
+                .setMessageId(message.getMessageId())
+                .setParseMode("HTML")
+                .setText(EmojiParser.parseToUnicode(newText));
+        InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
+        List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
+        for (int i = 0; i < list.size(); i += flag) {
+            List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
+            row.add(new InlineKeyboardButton()
+                    .setText(EmojiParser.parseToUnicode(list.get(i)))
+                    .setCallbackData(list.get(i)));
+            if ((flag==2)||(flag==3)) row.add(new InlineKeyboardButton()
+                    .setText(EmojiParser.parseToUnicode(list.get(i + 1)))
+                    .setCallbackData(list.get(i + 1)));
+            if (flag==3) row.add(new InlineKeyboardButton()
+                    .setText(EmojiParser.parseToUnicode(list.get(i + 2)))
+                    .setCallbackData(list.get(i + 2)));
+            rows.add(row);
+        }
+        markup.setKeyboard(rows);
+        sendMessage.setReplyMarkup(markup);
+        try { execute(sendMessage);}
+        catch (TelegramApiException e) {e.printStackTrace();}
+    }
 
 public List<String> listOrders(String column){
         List<String> lan = new ArrayList<>();
@@ -127,6 +153,26 @@ public List<String> listOrders(String column){
                 while (rs.next()){
                     lan.add(rs.getString(column));
                 }
+                prst.close();
+                conn.close();
+            }
+        }
+        catch(Exception ex) {
+            System.err.println(ex);
+        }
+        return lan;
+    }
+    public List<String> showProducts(String column, String table){
+        List<String> lan = new ArrayList<>();
+        try {
+            Connection conn = AmabiliaBot.getConnection();
+            if (conn!=null) {
+                Statement prst = conn.createStatement();
+                ResultSet rs = prst.executeQuery("select "+column+" from "+table+" where instock = true");
+                while (rs.next()){
+                    lan.add(rs.getString(column));
+                }
+                lan.add("Назад");
                 prst.close();
                 conn.close();
             }
