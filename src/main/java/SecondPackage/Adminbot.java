@@ -35,7 +35,7 @@ public class Adminbot extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
-        if (update.getMessage().getChatId().equals(myID)){
+        if (update.getMessage().getChatId().equals(myID)||update.getCallbackQuery().getMessage().getChatId().equals(myID)){
             if(update.getMessage().hasText()){
                 if(update.getMessage().getText().equals("/start")){
                     List<String> a = new ArrayList<>();
