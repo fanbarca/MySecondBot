@@ -229,9 +229,9 @@ public class AmabiliaBot extends TelegramLongPollingBot {
         String cb = update.getCallbackQuery().getData();
         for (String t: Lan.listTypes(language)) {
             if (cb.equals(t)) {
-                edit(update.getCallbackQuery().getMessage(), t,  
-                showProducts(language, "name", String.valueOf(Lan.listTypes(language).indexOf(t))), true);
-            } 
+                edit(update.getCallbackQuery().getMessage(), t,
+                showProducts(language, "name", "table"+Lan.listTypes(language).indexOf(t)), true);
+            }
         }
         if (cb.equals(Lan.goBack(language))) {
             edit(update.getCallbackQuery().getMessage(), Lan.chooseDish(language), Lan.listTypes(language), true);
@@ -783,7 +783,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
         for (String t: Lan.listTypes(language)) {
             if (type.equals(t)) {
                 table = "";
-            } 
+            }
         }
         List<String> lan = new ArrayList<>();
         try {
@@ -805,5 +805,5 @@ public class AmabiliaBot extends TelegramLongPollingBot {
         }
         return lan;
     }
-    
+
 }
