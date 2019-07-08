@@ -776,15 +776,9 @@ public class AmabiliaBot extends TelegramLongPollingBot {
         }
         return lan;
     }
-    public List<String> showProducts(String language, String column, String type){
+    public List<String> showProducts(String language, String column, String table){
         Transliterator toLatinTrans = Transliterator.getInstance(AmabiliaBot.CYRILLIC_TO_LATIN);
         Transliterator toCyrilTrans = Transliterator.getInstance(AmabiliaBot.LATIN_TO_CYRILLIC);
-        String table = "";
-        for (String t: Lan.listTypes(language)) {
-            if (type.equals(t)) {
-                table = "";
-            }
-        }
         List<String> lan = new ArrayList<>();
         try {
             Connection conn = getConnection();
