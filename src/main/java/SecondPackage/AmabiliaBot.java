@@ -8,6 +8,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.Message;
+import org.telegram.telegrambots.meta.api.objects.PhotoSize;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
@@ -137,7 +138,13 @@ public class AmabiliaBot extends TelegramLongPollingBot {
 //                             "\n@" + a.getUser().getUserName()+
 //                             "\nВсего пользователей: " + set.size(), myID);
 //                 }
-                 handleCallback(update);
+                try {
+                    language = sqlselect(update.getCallbackQuery().getFrom().getId().toString(), "language");
+                    number = sqlselect(update.getCallbackQuery().getFrom().getId().toString(),"phone");
+                } catch (SQLException e1) {
+                    e1.printStackTrace();
+                }
+                handleCallback(update);
             }
         } catch(Exception e){
                 BotLogger.error(Main.LOGTAG, e);
@@ -220,11 +227,13 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                 .setCallbackQueryId(update.getCallbackQuery().getId()).setShowAlert(false);
         execute(answer);
         String cb = update.getCallbackQuery().getData();
-        if (cb.equals(Lan.listTypes("Uzbek").get(0))||
-                 cb.equals(Lan.listTypes("Russian").get(0))||
-                 cb.equals(Lan.listTypes("English").get(0))) {
-            edit(update.getCallbackQuery().getMessage(), Lan.listTypes(language).get(0),  showSalads(language), true);
-        } else if (cb.equals(Lan.goBack(language))) {
+        for (String t: Lan.listTypes(language)) {
+            if (cb.equals(t)) {
+                edit(update.getCallbackQuery().getMessage(), t,  
+                showProducts(language, "name", String.valueOf(Lan.listTypes(language).indexOf(t))), true);
+            } 
+        }
+        if (cb.equals(Lan.goBack(language))) {
             edit(update.getCallbackQuery().getMessage(), Lan.chooseDish(language), Lan.listTypes(language), true);
         }
 //        for (int i = 0; i<Lan.listTypes(language).size(); i++){
@@ -767,18 +776,24 @@ public class AmabiliaBot extends TelegramLongPollingBot {
         }
         return lan;
     }
-    public List<String> showSalads(String language){
+    public List<String> showProducts(String language, String column, String type){
         Transliterator toLatinTrans = Transliterator.getInstance(AmabiliaBot.CYRILLIC_TO_LATIN);
         Transliterator toCyrilTrans = Transliterator.getInstance(AmabiliaBot.LATIN_TO_CYRILLIC);
+        String table = "";
+        for (String t: Lan.listTypes(language)) {
+            if (type.equals(t)) {
+                table = "";
+            } 
+        }
         List<String> lan = new ArrayList<>();
         try {
             Connection conn = getConnection();
             if (conn!=null) {
                 Statement prst = conn.createStatement();
-                ResultSet rs = prst.executeQuery("select name from salads where instock = true");
+                ResultSet rs = prst.executeQuery("select "+column+" from "+table+" where instock = true");
                 while (rs.next()){
-                    if (language.equals("Uzbek")||language.equals("English")) lan.add(toLatinTrans.transliterate(rs.getString("name")));
-                    else if (language.equals("Russian")) lan.add(toCyrilTrans.transliterate(rs.getString("name")));
+                    if (language.equals("Uzbek")||language.equals("English")) lan.add(toLatinTrans.transliterate(rs.getString(column)));
+                    else if (language.equals("Russian")) lan.add(toCyrilTrans.transliterate(rs.getString(column)));
                 }
                 lan.add(Lan.goBack(language));
                 prst.close();
@@ -790,6 +805,5 @@ public class AmabiliaBot extends TelegramLongPollingBot {
         }
         return lan;
     }
-
-
+    
 }
