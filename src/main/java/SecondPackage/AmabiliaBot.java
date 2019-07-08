@@ -550,7 +550,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
         list.add(c);
         edit(message, newText, list, 3);
     }
-    public void edit (Message message, String newText, List<String> list, int flag) {
+    public static void edit (Message message, String newText, List<String> list, int flag) {
         EditMessageText sendMessage = new EditMessageText()
                 .setChatId(message.getChatId())
                 .setMessageId(message.getMessageId())
@@ -776,7 +776,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
         }
         return lan;
     }
-    public List<String> showProducts(String language, String column, String table){
+    public static List<String> showProducts(String language, String column, String table){
         Transliterator toLatinTrans = Transliterator.getInstance(AmabiliaBot.CYRILLIC_TO_LATIN);
         Transliterator toCyrilTrans = Transliterator.getInstance(AmabiliaBot.LATIN_TO_CYRILLIC);
         List<String> lan = new ArrayList<>();

@@ -43,17 +43,17 @@ public class Adminbot extends TelegramLongPollingBot {
                     a.add("Заказы");
                     send("Выберите действие", myID, a,false, 2);
                 } else if(update.getMessage().getText().equals("Меню")){
-                    send("Меню", myID, Lan.listTypes("Russian"), false, 3);
+                    send("Меню", myID, Lan.listTypes("Russian"), true, 3);
                 } else if(update.getMessage().getText().equals("Заказы")){
-                    send("Заказы", myID, listOrders("name"), false, 2);
-                }
-                for (String t:Lan.listTypes("Russian")) {
-                    if(update.getMessage().getText().equals(t)){
-                        
-                    }
+                    send("Заказы", myID, listOrders("orderid"), true, 2);
                 }
             } else if (update.hasCallbackQuery()) {
-
+                for (String t:Lan.listTypes("Russian")) {
+                    if(update.getCallbackQuery().getData().equals(t)){
+                        AmabiliaBot.edit(update.getCallbackQuery().getMessage(), t,
+                        AmabiliaBot.showProducts("Russian", "name", "table"+Lan.listTypes("Russian").indexOf(t)), 1);
+                    }
+                }
             }
         }
     }
