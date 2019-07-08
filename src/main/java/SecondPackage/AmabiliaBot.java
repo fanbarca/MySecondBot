@@ -230,11 +230,11 @@ public class AmabiliaBot extends TelegramLongPollingBot {
         for (String t: Lan.listTypes(language)) {
             if (cb.equals(t)) {
                 edit(update.getCallbackQuery().getMessage(), t,
-                showProducts(language, "name", "table"+Lan.listTypes(language).indexOf(t)), true);
+                showProducts(language, "name", "table"+Lan.listTypes(language).indexOf(t)), 1);
             }
         }
         if (cb.equals(Lan.goBack(language))) {
-            edit(update.getCallbackQuery().getMessage(), Lan.chooseDish(language), Lan.listTypes(language), true);
+            edit(update.getCallbackQuery().getMessage(), Lan.chooseDish(language), Lan.listTypes(language), 3);
         }
 //        for (int i = 0; i<Lan.listTypes(language).size(); i++){
 //            if (cb.equals(Lan.listTypes(language).get(i))) {
@@ -535,22 +535,22 @@ public class AmabiliaBot extends TelegramLongPollingBot {
     public void edit (Message message, String newText, String a){
         List<String> list = new ArrayList<String>();
         list.add(a);
-        edit(message, newText, list,true);
+        edit(message, newText, list,1);
     }
     public void edit (Message message, String newText, String a, String b){
         List<String> list = new ArrayList<String>();
         list.add(a);
         list.add(b);
-        edit(message, newText, list, true);
+        edit(message, newText, list, 2);
     }
     public void edit (Message message, String newText, String a, String b,String c){
         List<String> list = new ArrayList<String>();
         list.add(a);
         list.add(b);
         list.add(c);
-        edit(message, newText, list, false);
+        edit(message, newText, list, 3);
     }
-    public void edit (Message message, String newText, List<String> list, boolean flag) {
+    public void edit (Message message, String newText, List<String> list, int flag) {
         EditMessageText sendMessage = new EditMessageText()
                 .setChatId(message.getChatId())
                 .setMessageId(message.getMessageId())
@@ -558,15 +558,15 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                 .setText(EmojiParser.parseToUnicode(newText));
         InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
-        for (int i = 0; i < list.size(); i += flag?2:3) {
+        for (int i = 0; i < list.size(); i += flag) {
             List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
             row.add(new InlineKeyboardButton()
                     .setText(EmojiParser.parseToUnicode(list.get(i)))
                     .setCallbackData(list.get(i)));
-            if ((i + 1) < list.size()) row.add(new InlineKeyboardButton()
+            if ((flag==2)||(flag==3)) row.add(new InlineKeyboardButton()
                     .setText(EmojiParser.parseToUnicode(list.get(i + 1)))
                     .setCallbackData(list.get(i + 1)));
-            if ((i + 2) < list.size() && !flag) row.add(new InlineKeyboardButton()
+            if (flag==3) row.add(new InlineKeyboardButton()
                     .setText(EmojiParser.parseToUnicode(list.get(i + 2)))
                     .setCallbackData(list.get(i + 2)));
             rows.add(row);
