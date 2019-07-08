@@ -26,19 +26,19 @@ class Lan {
         List<String> menu = new ArrayList<String>();
             if (lan.equals("Uzbek")) {
                 menu.add("Menyu");
-                menu.add("Xizmatlar narxlari");
+                menu.add("Yetkazib berish narxi");
                 menu.add("interfeys tili");
                 menu.add("Mening buyurtmalarim");
             }
             else if (lan.equals("Russian")) {
                 menu.add("Меню");
-                menu.add("Стоимость услуг");
+                menu.add("Стоимость доставки");
                 menu.add("Язык интерфейса");
                 menu.add("Мои заказы");
             }
             else if (lan.equals("English")) {
                 menu.add("Menu");
-                menu.add("Cost of services");
+                menu.add("Delivery cost");
                 menu.add("Interface language");
                 menu.add("My orders");
             }
