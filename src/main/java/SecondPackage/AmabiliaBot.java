@@ -284,7 +284,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                 chooseLanguage(update.getCallbackQuery().getMessage(), true);
             } else {
                 if (listMyOrders(update.getCallbackQuery().getMessage().getChatId().toString(),"orderid").size()==0){
-                    edit(update.getCallbackQuery().getMessage(), Lan.emptyOrders(language));
+                    edit(update.getCallbackQuery().getMessage(), Lan.emptyOrders(language), Lan.backToMenu(language));
                 } else {
                     edit(update.getCallbackQuery().getMessage(), Lan.myOrders(language), listMyOrders(update.getCallbackQuery().getMessage().getChatId().toString(),"orderid"), 2);
                 }
@@ -700,6 +700,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                 while (rs.next()){
                     lan.add(rs.getString(column));
                 }
+                lan.add(Lan.backToMenu(language));
                 prst.close();
                 conn.close();
             }
