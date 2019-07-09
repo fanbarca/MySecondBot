@@ -217,7 +217,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
         forwardMessage(message, myID);
     }
 
-    private void handleCallback(Update update) throws InterruptedException, TelegramApiException {
+    private void handleCallback(Update update) throws InterruptedException, TelegramApiException, SQLException {
         AnswerCallbackQuery answer = new AnswerCallbackQuery()
                 .setCallbackQueryId(update.getCallbackQuery().getId()).setShowAlert(false);
         execute(answer);
@@ -252,7 +252,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
             if ("".equals(number)||number==null) {
                 sendMeNumber(update.getCallbackQuery().getMessage());
             } else {
-                edit(update.getCallbackQuery().getMessage(), Lan.welcome(language, update.getCallbackQuery().getMessage().getFrom().getFirstName()),
+                edit(update.getCallbackQuery().getMessage(), Lan.welcome(language, sqlselect(String.valueOf(update.getCallbackQuery().getMessage().getChatId()), "firstname")),
                         Lan.mainMenu(language),2);
             }
         }
@@ -295,7 +295,6 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                     edit(update.getCallbackQuery().getMessage(), Lan.welcome(language, update.getCallbackQuery().getMessage().getFrom().getFirstName()),
                         Lan.mainMenu(language),2);
                 }
-
     }
 
 
@@ -546,12 +545,13 @@ public class AmabiliaBot extends TelegramLongPollingBot {
             row.add(new InlineKeyboardButton()
                     .setText(EmojiParser.parseToUnicode(list.get(i)))
                     .setCallbackData(list.get(i)));
-            if ((flag==2)||(flag==3)) row.add(new InlineKeyboardButton()
+            if ((flag==2)||(flag==3)) { if ((i + 1) < list.size()) row.add(new InlineKeyboardButton()
                     .setText(EmojiParser.parseToUnicode(list.get(i + 1)))
-                    .setCallbackData(list.get(i + 1)));
-            if (flag==3) row.add(new InlineKeyboardButton()
+                    .setCallbackData(list.get(i + 1)));}
+            if (flag==3) {if ((i + 2) < list.size()) row.add(new InlineKeyboardButton()
                     .setText(EmojiParser.parseToUnicode(list.get(i + 2)))
                     .setCallbackData(list.get(i + 2)));
+                    }
             rows.add(row);
         }
         markup.setKeyboard(rows);
@@ -560,50 +560,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
         catch (TelegramApiException e) {e.printStackTrace();}
     }
 
-//    public void myself(Order o, Translation tr, boolean inline){
-//        SendDocument sendMyselfdoc = new SendDocument()
-//                .setChatId(myID)
-//                .setDocument(tr.getDoc().getFileId())
-//                .setCaption(EmojiParser.parseToUnicode(
-//                        "\n:fast_forward:Направление: "+tr.getDirection()+
-//                        "\n:page_facing_up:Количество листов: "+ tr.getPages()+
-//                        "\n:date:Заказ оформлен: "+date.format(tr.getOrderTime()) +
-//                        "\n:clock3:"+time.format(tr.getOrderTime()) +
-//                        "\n:moneybag:Стоимость: "+tr.getTotalCost()+ " сум"+
-//                        "\n:watch:Требуется дней: "+tr.getDuration()+
-//                        "\n:1234:Номер заказа: " + tr.getId()+
-//                        "\n:busts_in_silhouette:Заказчик: "+ o.getUser().getFirstName()+" @"+o.getUser().getUserName()+
-//                        "\n:u6307:Язык интерфейса: " + o.getLanguage().getClass().getSimpleName()));
-//        InlineKeyboardMarkup inlineMarkup = new InlineKeyboardMarkup();
-//        List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
-//        List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
-//        row.add(new InlineKeyboardButton()
-//                .setText(EmojiParser.parseToUnicode("Выполнено :thumbsup:"))
-//                .setCallbackData("Выполнено :thumbsup:" + tr.getId()));
-//        row.add(new InlineKeyboardButton()
-//        .setText(EmojiParser.parseToUnicode(":negative_squared_cross_mark:Отмена заказа"))
-//        .setCallbackData(":negative_squared_cross_mark:Отмена заказа" + tr.getId()));
-//        rows.add(row);
-//        inlineMarkup.setKeyboard(rows);
-//        if(inline)sendMyselfdoc.setReplyMarkup(inlineMarkup);
-//        try {
-//            execute(sendMyselfdoc);
-//        } catch (TelegramApiException e) {
-//            e.printStackTrace();
-//        }
-//    }
-//    public void resendContact() {
-//        SendContact sendMyselfContact = new SendContact()
-//                .setChatId(myID)
-//                .setPhoneNumber(a.getContact().getPhoneNumber())
-//                .setFirstName(a.getContact().getFirstName())
-//                .setLastName(a.getContact().getLastName());
-//        try {
-//            execute(sendMyselfContact);
-//        } catch (TelegramApiException e) {
-//            e.printStackTrace();
-//        }
-//    }
+
     public void sendMeNumber(Message message){
         SendMessage sendMessage = new SendMessage()
                 .setChatId(message.getChatId())
@@ -623,14 +580,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
         try { execute(sendMessage);}
         catch (TelegramApiException e) {e.printStackTrace();}
     }
-//    public  void areYouSure(Message message, boolean edit){
-//        if (edit) {
-//            edit(message, a.getLanguage().youSure(), ":ok_hand::white_check_mark:", ":raised_hand::negative_squared_cross_mark:");
-//        }
-//        else {
-//            send(a.getLanguage().youSure(), message.getChatId(), ":ok_hand::white_check_mark:", ":raised_hand::negative_squared_cross_mark:", true);
-//        }
-//    }
+
     public void deleteMessage(Message message){
         DeleteMessage dm = new DeleteMessage()
                 .setMessageId(message.getMessageId())
