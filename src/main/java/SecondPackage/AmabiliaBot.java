@@ -203,16 +203,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
             send(Lan.welcome(language, message.getFrom().getFirstName()),
                     message.getChatId(), Lan.mainMenu(language), false, 2);
         }
-
-
-//        if (t.getDoc() == null) send(a.getLanguage().sendMe(), message.getChatId());
-//        else {
-//            a.setContact(message.getContact());
-//            send(a.getLanguage().contactReceived()+"\n"+a.getLanguage().weWillContact(), message.getChatId(),a.getLanguage().menu(), false,true);
-//            resendContact();
-//        }
     }
-
 
     private void handleAudio(Message message) {
         forwardMessage(message, myID);
@@ -345,8 +336,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                 message.getText().equals(Lan.mainMenu("English").get(1))) {
             if ((language == null) || (language.equals(""))) {
                 chooseLanguage(message);
-            } else send("меню 2", message.getChatId());
-            //send(a.getLanguage().cost(),message.getChatId());
+            } else send(Lan.deliveryCost(language), message.getChatId());
         }
          else if (message.getText().equals(Lan.mainMenu("Uzbek").get(2))||
                 message.getText().equals(Lan.mainMenu("Russian").get(2))||
@@ -689,7 +679,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
     }
 
 
-    public void sql(String command) {
+    public static void sql(String command) {
         try {
             Connection conn = getConnection();
             if (conn!=null) {

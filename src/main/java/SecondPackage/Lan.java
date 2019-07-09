@@ -67,14 +67,14 @@ class Lan {
     }
     public static String emptyOrders(String lan) {
         String r="";
-        if (lan.equals("Uzbek")) r = ":o:Buyurtmalar royxati bo'sh";
+        if (lan.equals("Uzbek")) r = ":o:Buyurtmalar ro'yxati bo'sh";
         else if (lan.equals("Russian")) r = ":o:Список заказов пуст";
         else if (lan.equals("English")) r = ":o:Orders list is empty";
         return r;
     }
     public static String myOrders(String lan) {
         String r="";
-        if (lan.equals("Uzbek")) r = "Buyurtmalar royxati";
+        if (lan.equals("Uzbek")) r = "Buyurtmalar ro'yxati";
         else if (lan.equals("Russian")) r = "Список заказов";
         else if (lan.equals("English")) r = "Orders list";
         return r;
@@ -121,6 +121,13 @@ class Lan {
         if (lan.equals("Uzbek")) r = ":arrow_left:Orqaga";
         else if (lan.equals("Russian")) r = ":arrow_left:Назад";
         else if (lan.equals("English")) r = ":arrow_left:Back";
-        return r;    }
-
+        return r;    
+        }
+    public static String deliveryCost(String lan) {
+        String r="";
+        if (lan.equals("Uzbek")) r = "Yetkazib berish:\n3km gacha - 8000 so'm\nundan keyin - 1000 so'm/km ";
+        else if (lan.equals("Russian")) r = "Доставка:\nдо 3 км - 8000 сум\nдалее - 1000 сум/км";
+        else if (lan.equals("English")) r = "Delivery:\nup to 3 km - 8000 sum\nfarther - 1000 sum per km";
+        return r;    
+    }
 }

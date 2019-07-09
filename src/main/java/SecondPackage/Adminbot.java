@@ -22,6 +22,7 @@ import java.util.*;
 
 public class Adminbot extends TelegramLongPollingBot {
     private static final long myID = 615351734;
+    private String category = "";
     static final String CYRILLIC_TO_LATIN = "Cyrillic-Latin";
     static final String LATIN_TO_CYRILLIC = "Latin-Cyrillic";
     static TimeZone zone = TimeZone.getTimeZone("Asia/Tashkent");
@@ -40,13 +41,29 @@ public class Adminbot extends TelegramLongPollingBot {
                 if (update.getMessage().hasText()) {
                     if(update.getMessage().getText().equals("/start")){
                         List<String> a = new ArrayList<>();
-                        a.add("Меню");
+                        a.add("Изменить Меню");
                         a.add("Заказы");
+                        a.add("Добавть продукт");
                         send("Выберите действие", myID, a,false, 2);
-                    } else if(update.getMessage().getText().equals("Меню")){
-                        send("Меню", myID, Lan.listTypes("Russian"), true, 3);
+                    } else if(update.getMessage().getText().equals("Изменить Меню")){
+                        send("Изменить Меню", myID, Lan.listTypes("Russian"), true, 3);
                     } else if(update.getMessage().getText().equals("Заказы")){
                         send("Заказы", myID, listOrders("orderid"), true, 2);
+                    } else if(update.getMessage().getText().equals("Добавть продукт")){
+                        send("В какой раздел?", myID, Lan.listTypes("Russian"), false, 3);
+                    }
+                    for (String s: Lan.listTypes("Russian")) {
+                        if (update.getMessage().getText().equals(s)) {
+                            category = "table"+Lan.listTypes("Russian").indexOf(s);
+                            send("Введите данные продукта в формате: #Название/Цена", myID, null, false, 3);
+                        }
+                    }
+                    if (update.getMessage().getText().contains("#")) {
+                        Random rand = new Random();
+                        String name = update.getMessage().getText().substring(1, update.getMessage().getText().indexOf("/"));
+                        String cost = update.getMessage().getText().substring(update.getMessage().getText().indexOf("/"));
+                        AmabiliaBot.sql("insert into "+category+" values ("+String.format("%04d", rand.nextInt(10000))+", '"+name+"', "+cost+", true)");
+                        send("Готово", myID, null, false, 3);
                     }
                 }
             }
@@ -57,16 +74,13 @@ public class Adminbot extends TelegramLongPollingBot {
                         edit(update.getCallbackQuery().getMessage(), t,
                         showProducts("name", "table"+Lan.listTypes("Russian").indexOf(t)), 1);
                     } else if(update.getCallbackQuery().getData().equals("Назад")){
-                        edit(update.getCallbackQuery().getMessage(), "Меню",
+                        edit(update.getCallbackQuery().getMessage(), "Изменить Меню",
                         Lan.listTypes("Russian"), 3);
-                    } else if(update.getCallbackQuery().getData().equals("Добавть продукт")){
-
                     }
                 }
             }
         }
     }
-
 
     @Override
     public String getBotUsername() {
