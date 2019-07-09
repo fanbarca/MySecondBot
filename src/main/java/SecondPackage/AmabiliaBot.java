@@ -108,43 +108,9 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                         if (m.hasText()) handleIncomingText(m);
                     }
             } else if (update.hasCallbackQuery()) {
-//                 if (update.getCallbackQuery().getFrom().getId()==myID) {
-//                     Collection<Order> values = set.values();
-//                     for (Order o: values) {
-//                         for (Translation tr: o.getOrdersList()) {
-//                             if (update.getCallbackQuery().getData().contains("Выполнено")) {
-//                                 if (update.getCallbackQuery().getData().contains(tr.getId())) {
-//                                     tr.setfinished(true);
-//                                     deleteMessage(update.getCallbackQuery().getMessage());
-//                                     send("№"+tr.getId()+" Заказ отмечен как выполненный", myID);
-//                                     send("№"+tr.getId()+ " "+o.getLanguage().finished(), o.getUser().getId());
-//                                 }
-//                             } else if (update.getCallbackQuery().getData().contains("Отмена заказа")) {
-//                                 if (update.getCallbackQuery().getData().contains(tr.getId())) {
-//                                     set.get(o.getUser().getId()).getOrdersList().remove(tr);
-//                                     deleteMessage(update.getCallbackQuery().getMessage());
-//                                     send("№"+tr.getId()+" Заказ отменен", myID);
-//                                     send("№"+tr.getId()+ " "+o.getLanguage().cancelled(), o.getUser().getId());
-//                                 }
-//                             }
-//                         }
-//                     }
-//                 }
-//
-//                 if (set.containsKey(update.getCallbackQuery().getFrom().getId())) {
-//                     a = set.get(update.getCallbackQuery().getFrom().getId());
-//                     handleCallback(update);
-//                 } else {
-//                     a = new Order(update.getCallbackQuery().getFrom());
-//                     set.put(update.getCallbackQuery().getFrom().getId(), a);
-//                     send(":boom: Новый пользователь!" +
-//                             "\n" + a.getUser().getFirstName() +" "+ a.getUser().getLastName() +
-//                             "\n@" + a.getUser().getUserName()+
-//                             "\nВсего пользователей: " + set.size(), myID);
-//                 }
                 try {
-                    language = sqlselect(update.getCallbackQuery().getFrom().getId().toString(), "language");
-                    number = sqlselect(update.getCallbackQuery().getFrom().getId().toString(),"phone");
+                    language = sqlselect(update.getCallbackQuery().getMessage().getChatId().toString(), "language");
+                    number = sqlselect(update.getCallbackQuery().getMessage().getChatId().toString(),"phone");
                 } catch (SQLException e1) {
                     e1.printStackTrace();
                 }
