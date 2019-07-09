@@ -221,13 +221,14 @@ public class AmabiliaBot extends TelegramLongPollingBot {
         for (String t: Lan.listTypes(language)) {
             if (cb.equals(t)) {
                 deleteMessage(update.getCallbackQuery().getMessage());
-                for (String s: showProducts(language, "name", "table"+Lan.listTypes(language).indexOf(t))){
-                    send(s, update.getCallbackQuery().getMessage().getChatId(), ":heavy_plus_sign:", ":x:", true);
-                }
-                // edit(update.getCallbackQuery().getMessage(), t,
-                // showProducts(language, "name", "table"+Lan.listTypes(language).indexOf(t)), 2);
+                // for (String s: showProducts(language, "name", "table"+Lan.listTypes(language).indexOf(t))){
+                //     send(s, update.getCallbackQuery().getMessage().getChatId(), ":heavy_plus_sign:", ":x:", true);
+                // }
+                edit(update.getCallbackQuery().getMessage(), t,
+                showProducts(language, "name", Lan.listTypes(language).indexOf(t)), 2);
             }
         }
+
         if (cb.equals(Lan.goBack(language))) {
             edit(update.getCallbackQuery().getMessage(), Lan.chooseDish(language), Lan.listTypes(language), 3);
         }
@@ -770,7 +771,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
         }
         return lan;
     }
-    public List<String> showProducts(String language, String column, String table){
+    public List<String> showProducts(String language, String column, String type){
         Transliterator toLatinTrans = Transliterator.getInstance(AmabiliaBot.CYRILLIC_TO_LATIN);
         Transliterator toCyrilTrans = Transliterator.getInstance(AmabiliaBot.LATIN_TO_CYRILLIC);
         List<String> lan = new ArrayList<>();
@@ -778,7 +779,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
             Connection conn = getConnection();
             if (conn!=null) {
                 Statement prst = conn.createStatement();
-                ResultSet rs = prst.executeQuery("select "+column+" from "+table+" where instock = true");
+                ResultSet rs = prst.executeQuery("select "+column+" from table0 where type ="+type);
                 while (rs.next()){
                     if (language.equals("Uzbek")||language.equals("English")) lan.add(toLatinTrans.transliterate(rs.getString(column)));
                     else if (language.equals("Russian")) lan.add(toCyrilTrans.transliterate(rs.getString(column)));
