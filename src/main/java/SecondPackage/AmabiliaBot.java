@@ -50,6 +50,8 @@ public class AmabiliaBot extends TelegramLongPollingBot {
         Message m;
         try {
             if (update.hasMessage()) {
+                if (sentMessage!=null) deleteMessage(sentMessage);
+                if (receivedMes!=null) deleteMessage(receivedMes);
                 receivedMes = update.getMessage();
                 try {
                     language = sqlselect(update.getMessage().getFrom().getId().toString(), "language");
@@ -105,8 +107,6 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                                 "\nВсего пользователей: " + set.size(), myID);
                         if (m.hasText()) handleIncomingText(m);
                     }
-                    if (sentMessage!=null) deleteMessage(sentMessage);
-                    if (receivedMes!=null) deleteMessage(receivedMes);
             } else if (update.hasCallbackQuery()) {
 //                 if (update.getCallbackQuery().getFrom().getId()==myID) {
 //                     Collection<Order> values = set.values();
