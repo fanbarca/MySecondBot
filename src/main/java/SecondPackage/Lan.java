@@ -126,6 +126,13 @@ class Lan {
         else if (lan.equals("English")) r = ":arrow_left:Back";
         return r;    
         }
+        public static String backToMenu(String lan) {
+        String r="";
+        if (lan.equals("Uzbek")) r = "Orqaga";
+        else if (lan.equals("Russian")) r = "Назад";
+        else if (lan.equals("English")) r = "Back";
+        return r;    
+        }
     public static String deliveryCost(String lan) {
         String r="";
         if (lan.equals("Uzbek")) r = "Yetkazib berish:\n3km gacha - 8000 so'm\nundan keyin - 1000 so'm/km ";
