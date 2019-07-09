@@ -39,6 +39,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
     private static final String DRIVER = "org.postgresql.Driver";
     private String language ="";
     private String number = "";
+    private Message sentMessage = null;
     {
     date.setTimeZone(zone);
     time.setTimeZone(zone);
@@ -325,6 +326,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
              if ((language == null) || (language.equals(""))) {
                  chooseLanguage(message);
              } else {
+                 deleteMessage(sentMessage);
                  send(Lan.chooseDish(language), message.getChatId(), Lan.listTypes(language),true,3);
              }
 //             boolean exists = false;
@@ -513,7 +515,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
         if (inline) sendMessage.setReplyMarkup(inlineMarkup);
         else sendMessage.setReplyMarkup(replyMarkup);
         try {
-            execute(sendMessage);
+            sentMessage = execute(sendMessage);
         }
         catch (TelegramApiException e) {e.printStackTrace();}
     }
