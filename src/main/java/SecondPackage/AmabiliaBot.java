@@ -105,7 +105,8 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                                 "\nВсего пользователей: " + set.size(), myID);
                         if (m.hasText()) handleIncomingText(m);
                     }
-                    deleteMessage(receivedMes);
+                    if (sentMessage!=null) deleteMessage(sentMessage);
+                    if (receivedMes!=null) deleteMessage(receivedMes);
             } else if (update.hasCallbackQuery()) {
 //                 if (update.getCallbackQuery().getFrom().getId()==myID) {
 //                     Collection<Order> values = set.values();
@@ -328,7 +329,6 @@ public class AmabiliaBot extends TelegramLongPollingBot {
              if ((language == null) || (language.equals(""))) {
                  chooseLanguage(message);
              } else {
-                 deleteMessage(sentMessage);
                  send(Lan.chooseDish(language), message.getChatId(), Lan.listTypes(language),Lan.mainMenu(language),3);
              }
 //             boolean exists = false;
@@ -478,7 +478,8 @@ public class AmabiliaBot extends TelegramLongPollingBot {
         ReplyKeyboardMarkup replyMarkup = new ReplyKeyboardMarkup();
         List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
         List<KeyboardRow> rows2 = new ArrayList<KeyboardRow>();
-        for (int i = 0; i < inline.size(); i += flag) {
+        if (inline!=null) {
+            for (int i = 0; i < inline.size(); i += flag) {
                 List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
                 row.add(new InlineKeyboardButton()
                         .setText(EmojiParser.parseToUnicode(inline.get(i)))
@@ -495,11 +496,14 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                     row.add(new InlineKeyboardButton()
                             .setText(EmojiParser.parseToUnicode(inline.get(i + 2)))
                             .setCallbackData(inline.get(i + 2)));
+                    }
                 }
-            }
                 rows.add(row);
+            }
+            inlineMarkup.setKeyboard(rows);
+            sendMessage.setReplyMarkup(inlineMarkup);
         }
-        for (int i = 0; i < reply.size(); i += flag) {
+        if (reply!=null) {for (int i = 0; i < reply.size(); i += flag) {
                 KeyboardRow row2 = new KeyboardRow();
                 row2.add(new KeyboardButton().setText(EmojiParser.parseToUnicode(reply.get(i))));
             if ((flag==2)||(flag==3)) {
@@ -513,19 +517,18 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                 }
             }
                 rows2.add(row2);
-            }
+                replyMarkup.setKeyboard(rows2).setResizeKeyboard(true).setOneTimeKeyboard(false);
+                sendMessage.setReplyMarkup(replyMarkup);
+        }
+    }
 //            if (chatId==myID){
 //                    KeyboardRow myRow = new KeyboardRow();
 //                    myRow.add(new KeyboardButton().setText("Finished"));
 //                    myRow.add(new KeyboardButton().setText("Unfinished"));
 //                    rows2.add(myRow);
 //            }
-        inlineMarkup.setKeyboard(rows);
-        replyMarkup.setKeyboard(rows2).setResizeKeyboard(true).setOneTimeKeyboard(false);
 //        if (a!=null) a.setIM(inlineMarkup);
 //        if (a!=null) a.setRM(replyMarkup);
-        sendMessage.setReplyMarkup(inlineMarkup);
-        sendMessage.setReplyMarkup(replyMarkup);
         try {
             sentMessage = execute(sendMessage);
         }
