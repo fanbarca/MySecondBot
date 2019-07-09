@@ -262,7 +262,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
              if ((language == null) || (language.equals(""))) {
                  chooseLanguage(update.getCallbackQuery().getMessage(), true);
              } else {
-                 send(Lan.chooseDish(language), update.getCallbackQuery().getMessage().getChatId(), Lan.listTypes(language),null,3);
+                 edit(update.getCallbackQuery().getMessage(),Lan.chooseDish(language), Lan.listTypes(language),3);
              }
          }
          else if (cb.equals(Lan.mainMenu("Uzbek").get(1))||
@@ -270,7 +270,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                 cb.equals(Lan.mainMenu("English").get(1))) {
             if ((language == null) || (language.equals(""))) {
                 chooseLanguage(update.getCallbackQuery().getMessage(), true);
-            } else send(Lan.deliveryCost(language), message.getChatId());
+            } else edit(update.getCallbackQuery().getMessage(), Lan.deliveryCost(language));
         }
          else if (cb.equals(Lan.mainMenu("Uzbek").get(2))||
                 cb.equals(Lan.mainMenu("Russian").get(2))||
@@ -286,10 +286,15 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                 if (listMyOrders(update.getCallbackQuery().getMessage().getChatId().toString(),"orderid").size()==0){
                     edit(update.getCallbackQuery().getMessage(), Lan.emptyOrders(language));
                 } else {
-                    edit(update.getCallbackQuery().getMessage(), Lan.myOrders(language), listMyOrders(update.getCallbackQuery().getMessage().getChatId().toString(),"orderid"), true);
+                    edit(update.getCallbackQuery().getMessage(), Lan.myOrders(language), listMyOrders(update.getCallbackQuery().getMessage().getChatId().toString(),"orderid"), 2);
                 }
             }
-        }
+        } else if (cb.equals("Назад")||
+                cb.equals("Orqaga")||
+                cb.equals("Back")) {
+                    edit(update.getCallbackQuery().getMessage(), Lan.welcome(language, update.getCallbackQuery().getMessage().getFrom().getFirstName()),
+                        Lan.mainMenu(language),2);
+                }
 
     }
 
@@ -401,9 +406,13 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                 message.getChatId(),
                 "O'zbek","Русский","English", true);
         } else {
+        List<String> list = new ArrayList<String>();
+        list.add("O'zbek");
+        list.add("Русский");
+        list.add("English");
             edit(message, ":uz: Tilni tanlang\n" +
                         ":ru: Выберите язык\n" +
-                        ":gb: Choose language", "O'zbek", "Русский", "English");
+                        ":gb: Choose language", list, 3);
         }
     }
 
