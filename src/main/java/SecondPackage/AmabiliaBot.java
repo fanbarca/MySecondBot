@@ -220,8 +220,12 @@ public class AmabiliaBot extends TelegramLongPollingBot {
         String cb = update.getCallbackQuery().getData();
         for (String t: Lan.listTypes(language)) {
             if (cb.equals(t)) {
-                edit(update.getCallbackQuery().getMessage(), t,
-                showProducts(language, "name", "table"+Lan.listTypes(language).indexOf(t)), 2);
+                deleteMessage(update.getCallbackQuery().getMessage());
+                for (String s: showProducts(language, "name", "table"+Lan.listTypes(language).indexOf(t))){
+                    send(s, update.getCallbackQuery().getMessage().getChatId(), ":heavy_plus_sign:", ":x:", true);
+                }
+                // edit(update.getCallbackQuery().getMessage(), t,
+                // showProducts(language, "name", "table"+Lan.listTypes(language).indexOf(t)), 2);
             }
         }
         if (cb.equals(Lan.goBack(language))) {
