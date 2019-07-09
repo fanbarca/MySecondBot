@@ -29,7 +29,6 @@ import java.sql.*;
 
 public class AmabiliaBot extends TelegramLongPollingBot {
     private HashMap<Integer, Order> set = new HashMap<Integer, Order>();
-    private Translation t;
     private static final long myID = 615351734;
     static final String CYRILLIC_TO_LATIN = "Cyrillic-Latin";
     static final String LATIN_TO_CYRILLIC = "Latin-Cyrillic";
@@ -40,6 +39,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
     private String language ="";
     private String number = "";
     private Message sentMessage = null;
+    private Message receivedMes = null;
     {
     date.setTimeZone(zone);
     time.setTimeZone(zone);
@@ -50,6 +50,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
         Message m;
         try {
             if (update.hasMessage()) {
+                receivedMes = update.getMessage();
                 try {
                     language = sqlselect(update.getMessage().getFrom().getId().toString(), "language");
                     number = sqlselect(update.getMessage().getFrom().getId().toString(),"phone");
@@ -104,6 +105,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                                 "\nВсего пользователей: " + set.size(), myID);
                         if (m.hasText()) handleIncomingText(m);
                     }
+                    deleteMessage(receivedMes);
             } else if (update.hasCallbackQuery()) {
 //                 if (update.getCallbackQuery().getFrom().getId()==myID) {
 //                     Collection<Order> values = set.values();
@@ -199,10 +201,10 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                     message.getContact().getPhoneNumber()+
                     " WHERE id ="+message.getFrom().getId());
             send(Lan.welcome(language, message.getFrom().getFirstName()),
-                    message.getChatId(), Lan.mainMenu(language), false, 2);
+                    message.getChatId(), null, Lan.mainMenu(language), 2);
         } else {
             send(Lan.welcome(language, message.getFrom().getFirstName()),
-                    message.getChatId(), Lan.mainMenu(language), false, 2);
+                    message.getChatId(), null, Lan.mainMenu(language), 2);
         }
     }
 
@@ -297,8 +299,8 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                 chooseLanguage(message);
             }
             else {
-                send(Lan.welcome(language, message.getFrom().getFirstName()), message.getChatId(),
-                Lan.mainMenu(language), false,2);
+                send(Lan.welcome(language, message.getFrom().getFirstName()), message.getChatId(), null,
+                Lan.mainMenu(language),2);
             }
         } else if (message.getText().equals("O'zbek")||message.getText().equals("Русский")||message.getText().equals("English")){
             if (message.getText().equals("O'zbek")) {
@@ -316,8 +318,8 @@ public class AmabiliaBot extends TelegramLongPollingBot {
             if ("".equals(number)||number==null) {
                 sendMeNumber(message);
             } else {
-                send(Lan.welcome(language, message.getFrom().getFirstName()), message.getChatId(),
-                        Lan.mainMenu(language), false,2);
+                send(Lan.welcome(language, message.getFrom().getFirstName()), message.getChatId(), null,
+                        Lan.mainMenu(language),2);
             }
         }
          else if (message.getText().equals(Lan.mainMenu("Uzbek").get(0))||
@@ -327,7 +329,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                  chooseLanguage(message);
              } else {
                  deleteMessage(sentMessage);
-                 send(Lan.chooseDish(language), message.getChatId(), Lan.listTypes(language),true,3);
+                 send(Lan.chooseDish(language), message.getChatId(), Lan.listTypes(language),Lan.mainMenu(language),3);
              }
 //             boolean exists = false;
 //             for (Translation tr: a.getOrdersList()) {
@@ -359,7 +361,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                 if (listMyOrders(message.getChatId().toString(),"orderid").size()==0){
                     send(Lan.emptyOrders(language), message.getChatId());
                 } else {
-                    send(Lan.myOrders(language), message.getChatId(),listMyOrders(message.getChatId().toString(),"orderid"), true, 1);
+                    send(Lan.myOrders(language), message.getChatId(),listMyOrders(message.getChatId().toString(),"orderid"), null, 1);
                 }
             }
 //             for (Translation tr: a.getOrdersList()) {
@@ -444,28 +446,30 @@ public class AmabiliaBot extends TelegramLongPollingBot {
     }
 
     public void send (String text, long chatId){
-        List<String> list = new ArrayList<String>();
-        send(text, chatId, list, true, 1);
+        send(text, chatId, null, null, 1);
     }
     public void send (String text, long chatId, String a, boolean inline){
         List<String> list = new ArrayList<String>();
         list.add(a);
-        send(text, chatId, list, inline, 1);
+        if (inline) send(text, chatId, list, null, 1);
+        else send(text, chatId, null, list, 1);
     }
     public void send (String text, long chatId, String a, String b, boolean inline){
         List<String> list = new ArrayList<String>();
         list.add(a);
         list.add(b);
-        send(text, chatId, list, inline, 2);
+        if (inline) send(text, chatId, list, null, 2);
+        else send(text, chatId, null, list, 2);
     }
-    public void send (String message, long chatId, String a, String b, String c, boolean inline){
+    public void send (String text, long chatId, String a, String b, String c, boolean inline){
         List<String> list = new ArrayList<String>();
         list.add(a);
         list.add(b);
         list.add(c);
-        send(message, chatId, list, inline, 3);
+        if (inline) send(text, chatId, list, null, 3);
+        else send(text, chatId, null, list, 3);
     }
-    public void send (String text, long chatId, List<String> list, boolean inline, int flag) {
+    public void send (String text, long chatId, List<String> inline,List<String> reply, int flag) {
         SendMessage sendMessage = new SendMessage()
                 .setChatId(chatId)
                 .setText(EmojiParser.parseToUnicode(text))
@@ -474,32 +478,40 @@ public class AmabiliaBot extends TelegramLongPollingBot {
         ReplyKeyboardMarkup replyMarkup = new ReplyKeyboardMarkup();
         List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
         List<KeyboardRow> rows2 = new ArrayList<KeyboardRow>();
-
-        for (int i = 0; i < list.size(); i += flag) {
+        for (int i = 0; i < inline.size(); i += flag) {
                 List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
-                KeyboardRow row2 = new KeyboardRow();
-
                 row.add(new InlineKeyboardButton()
-                        .setText(EmojiParser.parseToUnicode(list.get(i)))
-                        .setCallbackData(list.get(i)));
-                row2.add(new KeyboardButton().setText(EmojiParser.parseToUnicode(list.get(i))));
+                        .setText(EmojiParser.parseToUnicode(inline.get(i)))
+                        .setCallbackData(inline.get(i)));
             if ((flag==2)||(flag==3)) {
-                if ((i + 1) < list.size()) {
+                if ((i + 1) < inline.size()) {
                     row.add(new InlineKeyboardButton()
-                            .setText(EmojiParser.parseToUnicode(list.get(i + 1)))
-                            .setCallbackData(list.get(i + 1)));
-                    row2.add(new KeyboardButton().setText(EmojiParser.parseToUnicode(list.get(i + 1))));
+                            .setText(EmojiParser.parseToUnicode(inline.get(i + 1)))
+                            .setCallbackData(inline.get(i + 1)));
                 }
             }
             if (flag==3){
-                if ((i + 2) < list.size()) {
+                if ((i + 2) < inline.size()) {
                     row.add(new InlineKeyboardButton()
-                            .setText(EmojiParser.parseToUnicode(list.get(i + 2)))
-                            .setCallbackData(list.get(i + 2)));
-                    row2.add(new KeyboardButton().setText(EmojiParser.parseToUnicode(list.get(i + 2))));
+                            .setText(EmojiParser.parseToUnicode(inline.get(i + 2)))
+                            .setCallbackData(inline.get(i + 2)));
                 }
             }
                 rows.add(row);
+        }
+        for (int i = 0; i < reply.size(); i += flag) {
+                KeyboardRow row2 = new KeyboardRow();
+                row2.add(new KeyboardButton().setText(EmojiParser.parseToUnicode(reply.get(i))));
+            if ((flag==2)||(flag==3)) {
+                if ((i + 1) < reply.size()) {
+                    row2.add(new KeyboardButton().setText(EmojiParser.parseToUnicode(reply.get(i + 1))));
+                }
+            }
+            if (flag==3){
+                if ((i + 2) < reply.size()) {
+                    row2.add(new KeyboardButton().setText(EmojiParser.parseToUnicode(reply.get(i + 2))));
+                }
+            }
                 rows2.add(row2);
             }
 //            if (chatId==myID){
@@ -512,8 +524,8 @@ public class AmabiliaBot extends TelegramLongPollingBot {
         replyMarkup.setKeyboard(rows2).setResizeKeyboard(true).setOneTimeKeyboard(false);
 //        if (a!=null) a.setIM(inlineMarkup);
 //        if (a!=null) a.setRM(replyMarkup);
-        if (inline) sendMessage.setReplyMarkup(inlineMarkup);
-        else sendMessage.setReplyMarkup(replyMarkup);
+        sendMessage.setReplyMarkup(inlineMarkup);
+        sendMessage.setReplyMarkup(replyMarkup);
         try {
             sentMessage = execute(sendMessage);
         }
