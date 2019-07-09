@@ -64,7 +64,8 @@ public class Adminbot extends TelegramLongPollingBot {
                         Random rand = new Random();
                         String name = update.getMessage().getText().substring(1, update.getMessage().getText().indexOf("/"));
                         String cost = update.getMessage().getText().substring(update.getMessage().getText().indexOf("/"));
-                        AmabiliaBot.sql("insert into "+category+" values (000, '"+name+"',"+cost+", true , null)");
+                        AmabiliaBot.sql("insert into "+category+" values ('"+
+                        String.format("%04d", rand.nextInt(10000))+"', '"+name+"','"+cost+"', true , null)");
                         send("Готово", myID, list, false, 3);
                     }
                 }
