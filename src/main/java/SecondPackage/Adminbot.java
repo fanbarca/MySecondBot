@@ -29,6 +29,8 @@ public class Adminbot extends TelegramLongPollingBot {
     static SimpleDateFormat date = new SimpleDateFormat("dd.MM.yyyy");
     static SimpleDateFormat time = new SimpleDateFormat("HH:mm");
     private static final String DRIVER = "org.postgresql.Driver";
+    List<String> list = new ArrayList<String>();
+
     {
     date.setTimeZone(zone);
     time.setTimeZone(zone);
@@ -55,15 +57,16 @@ public class Adminbot extends TelegramLongPollingBot {
                     for (String s: Lan.listTypes("Russian")) {
                         if (update.getMessage().getText().equals(s)) {
                             category = "table"+Lan.listTypes("Russian").indexOf(s);
-                            send("Введите данные продукта в формате: #Название/Цена", myID, null, false, 3);
+                            send("Введите данные продукта в формате: #Название/Цена", myID, list, false, 1);
                         }
                     }
                     if (update.getMessage().getText().contains("#")) {
                         Random rand = new Random();
                         String name = update.getMessage().getText().substring(1, update.getMessage().getText().indexOf("/"));
                         String cost = update.getMessage().getText().substring(update.getMessage().getText().indexOf("/"));
-                        AmabiliaBot.sql("insert into "+category+" values ("+String.format("%04d", rand.nextInt(10000))+", '"+name+"', "+cost+", true)");
-                        send("Готово", myID, null, false, 3);
+                        AmabiliaBot.sql("insert into "+category+
+                        " values ("+String.format("%04d", rand.nextInt(10000))+", '"+name+"', '"+cost+"', true)");
+                        send("Готово", myID, list, false, 3);
                     }
                 }
             }
