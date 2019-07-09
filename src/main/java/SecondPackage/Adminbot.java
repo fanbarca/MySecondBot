@@ -55,7 +55,7 @@ public class Adminbot extends TelegramLongPollingBot {
                         send("В какой раздел?", myID, Lan.listTypes("Russian"), true, 3);
                     }
 
-                    if (update.getMessage().getText().contains("#")) {
+                    if (update.getMessage().getText().contains("$")) {
                         Random rand = new Random();
                         String name = update.getMessage().getText().substring(1, update.getMessage().getText().indexOf("/"));
                         String cost = update.getMessage().getText().substring(update.getMessage().getText().indexOf("/")+1);
