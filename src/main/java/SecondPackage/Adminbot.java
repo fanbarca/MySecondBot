@@ -48,24 +48,19 @@ public class Adminbot extends TelegramLongPollingBot {
                         a.add("Добавть продукт");
                         send("Выберите действие", myID, a,false, 2);
                     } else if(update.getMessage().getText().equals("Изменить Меню")){
-                        send("Изменить Меню", myID, Lan.listTypes("Russian"), true, 3);
+                        //send("Изменить Меню", myID, Lan.listTypes("Russian"), true, 3);
                     } else if(update.getMessage().getText().equals("Заказы")){
                         send("Заказы", myID, listOrders("orderid"), true, 2);
                     } else if(update.getMessage().getText().equals("Добавть продукт")){
-                        send("В какой раздел?", myID, Lan.listTypes("Russian"), false, 3);
+                        send("В какой раздел?", myID, Lan.listTypes("Russian"), true, 3);
                     }
-                    for (String s: Lan.listTypes("Russian")) {
-                        if (update.getMessage().getText().equals(s)) {
-                            category = "table"+Lan.listTypes("Russian").indexOf(s);
-                            send("Введите данные продукта в формате: #Название/Цена", myID, list, false, 1);
-                        }
-                    }
+
                     if (update.getMessage().getText().contains("#")) {
                         Random rand = new Random();
                         String name = update.getMessage().getText().substring(1, update.getMessage().getText().indexOf("/"));
                         String cost = update.getMessage().getText().substring(update.getMessage().getText().indexOf("/"));
-                        AmabiliaBot.sql("insert into "+category+" values ('"+
-                        String.format("%04d", rand.nextInt(10000))+"', '"+name+"','"+cost+"', true , null)");
+                        AmabiliaBot.sql("insert into "+category+" values ("+
+                        String.format("%04d", rand.nextInt(10000))+", '"+name+"',"+cost+", true , null)");
                         send("Готово", myID, list, false, 3);
                     }
                 }
@@ -73,13 +68,19 @@ public class Adminbot extends TelegramLongPollingBot {
         } else if (update.hasCallbackQuery()) {
                 if (update.getCallbackQuery().getMessage().getChatId().equals(myID)) {
                 for (String t:Lan.listTypes("Russian")) {
-                    if(update.getCallbackQuery().getData().equals(t)){
-                        edit(update.getCallbackQuery().getMessage(), t,
-                        showProducts("name", "table"+Lan.listTypes("Russian").indexOf(t)), 1);
-                    } else if(update.getCallbackQuery().getData().equals("Назад")){
+                    if (update.getCallbackQuery().getData().equals(t)) {
+                        category = "table"+Lan.listTypes("Russian").indexOf(t);
+                        send("Введите данные продукта в формате: #Название/Цена", myID, list, false, 1);
+                    } else if(update.getCallbackQuery().getData().equals("Назад")) {
                         edit(update.getCallbackQuery().getMessage(), "Изменить Меню",
                         Lan.listTypes("Russian"), 3);
                     }
+                    // for (String s: Lan.listTypes("Russian")) {
+                    //     if (update.getCallbackQuery().getData().equals(s)) {
+                    //         edit(update.getCallbackQuery().getMessage(), t,
+                    //         showProducts("name", "table"+Lan.listTypes("Russian").indexOf(t)), 1);
+                    //     }
+                    // }
                 }
             }
         }
