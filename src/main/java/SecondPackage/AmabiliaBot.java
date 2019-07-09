@@ -779,7 +779,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
             Connection conn = getConnection();
             if (conn!=null) {
                 Statement prst = conn.createStatement();
-                ResultSet rs = prst.executeQuery("select "+column+" from table0 where type ="+type);
+                ResultSet rs = prst.executeQuery("select "+column+" from table0 where type = '"+type+"'");
                 while (rs.next()){
                     if (language.equals("Uzbek")||language.equals("English")) lan.add(toLatinTrans.transliterate(rs.getString(column)));
                     else if (language.equals("Russian")) lan.add(toCyrilTrans.transliterate(rs.getString(column)));
