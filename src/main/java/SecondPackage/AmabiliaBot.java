@@ -186,7 +186,8 @@ public class AmabiliaBot extends TelegramLongPollingBot {
         }
         if (cb.equals(Lan.mainMenu("Uzbek").get(0))||
             cb.equals(Lan.mainMenu("Russian").get(0))||
-            cb.equals(Lan.mainMenu("English").get(0))) {
+            cb.equals(Lan.mainMenu("English").get(0))||
+            cb.equals(Lan.goBack(language))) {
              if ((language == null) || (language.equals(""))) {
                  chooseLanguage(update.getCallbackQuery().getMessage(), true);
              } else {
@@ -228,9 +229,6 @@ public class AmabiliaBot extends TelegramLongPollingBot {
             if (cb.equals(t)) {
                 edit(update.getCallbackQuery().getMessage(), t, Lan.listTypes(language).get(Integer.parseInt(sqlQuery("SELECT type from table0 where name = '"+t+"'", "type"))));
             }
-        }
-        if (cb.equals(Lan.goBack(language))) {
-            edit(update.getCallbackQuery().getMessage(), Lan.chooseDish(language), Lan.listTypes(language), 3);
         }
     }
 
@@ -523,7 +521,6 @@ public class AmabiliaBot extends TelegramLongPollingBot {
         sendMessage.setReplyMarkup(replyMarkup);
         try { sentMessage = execute(sendMessage);}
         catch (TelegramApiException e) {e.printStackTrace();}
-
     }
 
     public void deleteMessage(Message message){
