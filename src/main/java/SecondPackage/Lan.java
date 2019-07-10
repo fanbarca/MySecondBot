@@ -124,20 +124,20 @@ class Lan {
         if (lan.equals("Uzbek")) r = ":arrow_left:Orqaga";
         else if (lan.equals("Russian")) r = ":arrow_left:Назад";
         else if (lan.equals("English")) r = ":arrow_left:Back";
-        return r;    
+        return r;
         }
         public static String backToMenu(String lan) {
         String r="";
-        if (lan.equals("Uzbek")) r = "Orqaga";
-        else if (lan.equals("Russian")) r = "Назад";
-        else if (lan.equals("English")) r = "Back";
-        return r;    
+        if (lan.equals("Uzbek")) r = "Asosiy menu";
+        else if (lan.equals("Russian")) r = "Главное меню";
+        else if (lan.equals("English")) r = "Main menu";
+        return r;
         }
     public static String deliveryCost(String lan) {
         String r="";
         if (lan.equals("Uzbek")) r = "Yetkazib berish:\n3km gacha - 8000 so'm\nundan keyin - 1000 so'm/km ";
         else if (lan.equals("Russian")) r = "Доставка:\nдо 3 км - 8000 сум\nдалее - 1000 сум/км";
         else if (lan.equals("English")) r = "Delivery:\nup to 3 km - 8000 sum\nfarther - 1000 sum per km";
-        return r;    
+        return r;
     }
 }
