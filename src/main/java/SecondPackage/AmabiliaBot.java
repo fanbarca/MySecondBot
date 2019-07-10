@@ -231,10 +231,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                     edit(update.getCallbackQuery().getMessage(), Lan.myOrders(language), listMyOrders(update.getCallbackQuery().getMessage().getChatId().toString(),"orderid"), 2);
                 }
             }
-        } else if (cb.equals(Lan.backToMenu(language))) {
-                    edit(update.getCallbackQuery().getMessage(), Lan.welcome(language, update.getCallbackQuery().getMessage().getFrom().getFirstName()),
-                        Lan.mainMenu(language),2);
-                }
+        }
                 for (String t: Lan.listTypes(language)) {
                     if (cb.equals(t)) {
                         List<String> a = showProducts(language, "name", String.valueOf(Lan.listTypes(language).indexOf(t)));
@@ -243,6 +240,9 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                 }
         if (cb.equals(Lan.goBack(language))) {
             edit(update.getCallbackQuery().getMessage(), Lan.chooseDish(language), Lan.listTypes(language), 3);
+        } else if (cb.equals(Lan.backToMenu(language))) {
+            edit(update.getCallbackQuery().getMessage(), Lan.welcome(language, update.getCallbackQuery().getMessage().getFrom().getFirstName()),
+            Lan.mainMenu(language),2);
         }
     }
 
