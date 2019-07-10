@@ -50,7 +50,9 @@ public class AmabiliaBot extends TelegramLongPollingBot {
         Message m;
         try {
             if (update.hasMessage()) {
-                if (sentMessage!=null) deleteMessage(sentMessage);
+                if (sentMessage!=null) {
+                    deleteMessage(sentMessage); sentMessage=null;
+                    }
                 if (receivedMes!=null) deleteMessage(receivedMes);
                 receivedMes = update.getMessage();
                 try {
@@ -129,7 +131,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
     }
 
     private void handleContact(Message message) throws SQLException {
-        if (sentMessage!=null) deleteMessage(sentMessage);
+        if (sentMessage!=null) {deleteMessage(sentMessage);sentMessage=null;}
         if (receivedMes!=null) deleteMessage(receivedMes);
         if (number==null) {
             sql("UPDATE users SET phone = "+
