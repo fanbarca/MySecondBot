@@ -28,19 +28,19 @@ class Lan {
                 menu.add("Menyu");
                 menu.add("Yetkazib berish narxi");
                 menu.add("interfeys tili");
-                menu.add("Mening buyurtmalarim");
+                menu.add("Savatcha");
             }
             else if (lan.equals("Russian")) {
                 menu.add("Меню");
                 menu.add("Стоимость доставки");
                 menu.add("Язык интерфейса");
-                menu.add("Мои заказы");
+                menu.add("Корзина");
             }
             else if (lan.equals("English")) {
                 menu.add("Menu");
                 menu.add("Delivery cost");
                 menu.add("Interface language");
-                menu.add("My orders");
+                menu.add("Shopping cart");
             }
         return menu;
         }

@@ -176,9 +176,9 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                 deleteMessage(update.getCallbackQuery().getMessage());
                 sendMeNumber(update.getCallbackQuery().getMessage().getChatId());
             } else {
-                edit(update.getCallbackQuery().getMessage(), Lan.welcome(language, "Olala2"),
+                edit(update.getCallbackQuery().getMessage(), Lan.welcome(language, sqlselect(String.valueOf(update.getCallbackQuery().getMessage().getChatId()), "firstname")),
                         Lan.mainMenu(language),2);
-            }//sqlselect(String.valueOf(update.getCallbackQuery().getMessage().getChatId()), "firstname")
+            }
         }
         if (cb.equals(Lan.mainMenu("Uzbek").get(0))||
             cb.equals(Lan.mainMenu("Russian").get(0))||
@@ -210,7 +210,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                 if (listMyOrders(update.getCallbackQuery().getMessage().getChatId().toString(),"orderid").size()==0){
                     edit(update.getCallbackQuery().getMessage(), Lan.emptyOrders(language), Lan.backToMenu(language));
                 } else {
-                    edit(update.getCallbackQuery().getMessage(), Lan.myOrders(language), listMyOrders(update.getCallbackQuery().getMessage().getChatId().toString(),"orderid"), 2);
+                    edit(update.getCallbackQuery().getMessage(), Lan.myOrders(language), listMyOrders(update.getCallbackQuery().getMessage().getChatId().toString(),"orderid"), 1);
                 }
             }
         }
@@ -224,11 +224,11 @@ public class AmabiliaBot extends TelegramLongPollingBot {
             edit(update.getCallbackQuery().getMessage(), Lan.chooseDish(language), Lan.listTypes(language), 3);
         }
         else if (cb.equals(Lan.backToMenu(language))) {
-            edit(update.getCallbackQuery().getMessage(), Lan.welcome(language, "Olala"),
+            edit(update.getCallbackQuery().getMessage(), Lan.welcome(language, sqlselect(String.valueOf(update.getCallbackQuery().getMessage().getChatId()), "firstname")),
             Lan.mainMenu(language), 2);
         }
     }
-//sqlselect(String.valueOf(update.getCallbackQuery().getMessage().getChatId(), "firstname")
+
 
 
     private void handleIncomingText(Message message) throws TelegramApiException, InterruptedException, SQLException {
