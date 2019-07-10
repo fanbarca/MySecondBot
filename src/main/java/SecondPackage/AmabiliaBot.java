@@ -341,11 +341,14 @@ public class AmabiliaBot extends TelegramLongPollingBot {
     }
     private void chooseLanguage(Message message, boolean edit) {
         if (!edit){
+            List<String> list = new ArrayList<String>();
+            list.add("O'zbek");
+            list.add("Русский");
+            list.add("English");
             send(":uz: Tilni tanlang\n" +
-                        ":ru: Выберите язык\n" +
-                        ":gb: Choose language" ,
-                message.getChatId(),
-                "O'zbek","Русский","English", true);
+                ":ru: Выберите язык\n" +
+                ":gb: Choose language" ,
+                message.getChatId(), list, null, 3);
         } else {
         List<String> list = new ArrayList<String>();
         list.add("O'zbek");
