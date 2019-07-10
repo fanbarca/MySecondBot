@@ -91,7 +91,7 @@ class Lan {
             list.add(":pizza:Pitsa:pizza:");
             list.add(":poultry_leg:Shashlik:meat_on_bone:");
             list.add(":bread:Boshqa:cookie:");
-            list.add("Orqaga");
+            list.add("Asosiy menu");
         }
         else if (lan.equals("Russian")) {
             list.add(":custard:Салаты:sushi:");
@@ -103,7 +103,7 @@ class Lan {
             list.add(":pizza:Пицца:pizza:");
             list.add(":poultry_leg:Шашлык:meat_on_bone:");
             list.add(":bread:Другое:cookie:");
-            list.add("Назад");
+            list.add("Главное меню");
         }
         else if (lan.equals("English")) {
             list.add(":custard:Salads:sushi:");
@@ -115,7 +115,7 @@ class Lan {
             list.add(":pizza:Pizza:pizza:");
             list.add(":poultry_leg:Barbecue:meat_on_bone:");
             list.add(":bread:Other:cookie:");
-            list.add("Back");
+            list.add("Main menu");
         }
         return list;
     }
