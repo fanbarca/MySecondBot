@@ -221,7 +221,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
         }
         for (String t: Lan.listTypes(language)) {
             if (cb.equals(t)&&!cb.equals(Lan.backToMenu(language))) {
-                List<String> a = showProducts(language, "name", String.valueOf(Lan.listTypes(language).indexOf(t)));
+                List<String> a = showProducts(language, language, String.valueOf(Lan.listTypes(language).indexOf(t)));
                 edit(update.getCallbackQuery().getMessage(), t, a, a.size()>1?2:1);
             }
         }
@@ -653,8 +653,6 @@ public class AmabiliaBot extends TelegramLongPollingBot {
         return lan;
     }
     public List<String> showProducts(String language, String column, String type){
-        Transliterator toLatinTrans = Transliterator.getInstance(AmabiliaBot.CYRILLIC_TO_LATIN);
-        Transliterator toCyrilTrans = Transliterator.getInstance(AmabiliaBot.LATIN_TO_CYRILLIC);
         List<String> lan = new ArrayList<>();
         try {
             Connection conn = getConnection();
@@ -662,8 +660,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                 Statement prst = conn.createStatement();
                 ResultSet rs = prst.executeQuery("select "+column+" from table0 where type = '"+type+"'");
                 while (rs.next()){
-                    if (language.equals("Uzbek")||language.equals("English")) lan.add(toLatinTrans.transliterate(rs.getString(column)));
-                    else if (language.equals("Russian")) lan.add(toCyrilTrans.transliterate(rs.getString(column)));
+                    lan.add(rs.getString(column));
                 }
                 lan.add(Lan.goBack(language));
                 prst.close();
