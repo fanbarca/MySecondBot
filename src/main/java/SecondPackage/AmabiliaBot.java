@@ -294,15 +294,16 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                     send(Lan.myOrders(language), message.getChatId(),listMyOrders(message.getChatId().toString(),"orderid"), null, 1);
                 }
             }
-        }
-
-         else if (message.getText().contains("/sql")) {
+        } else if (message.getText().contains("/sql")) {
              if (message.getText().length()>5) {
                  String command = message.getText().substring(5);
                  sql(command);
              }
-         }
-         else send(Lan.welcome(language, message.getFrom().getFirstName()), message.getChatId());
+        } else {
+            if (sentMessage!=null) {deleteMessage(sentMessage);sentMessage=null;}
+            if (receivedMes!=null) {deleteMessage(receivedMes);receivedMes=null;}
+            send(Lan.welcome(language, message.getFrom().getFirstName()), message.getChatId());
+        }
     }
     public static List<String> directions() {
         List<String> directions = new ArrayList<String>();
