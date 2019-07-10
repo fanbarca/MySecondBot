@@ -60,29 +60,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                     e1.printStackTrace();
                 }
                 m = update.getMessage();
-//                if (m.getFrom().getId()==myID) {
-//                    if (m.hasText()) {
-//                        if (m.getText().equals("/start")&&set.size()>0) {
-//                            send("Всего пользователей: "+set.size(), myID);
-//                        } else if(m.getText().equals("/start")&&set.size()==0){
-//                            send("Ещё нет пользователей", myID);
-//                        }
-//                        Collection<Order> values = set != null ? set.values() : null;
-//                        if (values!=null) {
-//                            for (Order o: values) {
-//                                for (Translation tr: o.getOrdersList()) {
-//                                    if (m.getText().equals("Unfinished")&&!tr.Isfinished()) {
-//                                        myself(o,tr,true);
-//                                    } else if (m.getText().equals("Finished")&&tr.Isfinished()) {
-//                                        myself(o,tr,false);
-//                                    }
-//                                }
-//                            }
-//                        } else {
-//                            if (m.getText().equals("Unfinished")||m.getText().equals("Finished")) send("Ещё нет пользователей", myID);
-//                        }
-//                    }
-//                }
+
                 if (sqlIdList().contains(m.getFrom().getId().toString())) {
                         if (m.hasText()) handleIncomingText(m);
                         else if (m.hasAnimation()) handleAnimation(m);
@@ -103,8 +81,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                                 m.getFrom().getUserName()+"')");
                         send(":boom: Новый пользователь!" +
                                 "\n" + m.getFrom().getFirstName() +" "+ m.getFrom().getLastName() +
-                                "\n@" + m.getFrom().getUserName()+
-                                "\nВсего пользователей: " + set.size(), myID);
+                                "\n@" + m.getFrom().getUserName(), myID);
                         if (m.hasText()) handleIncomingText(m);
                     }
             } else if (update.hasCallbackQuery()) {
@@ -152,6 +129,8 @@ public class AmabiliaBot extends TelegramLongPollingBot {
     }
 
     private void handleContact(Message message) throws SQLException {
+        if (sentMessage!=null) deleteMessage(sentMessage);
+        if (receivedMes!=null) deleteMessage(receivedMes);
         if (number==null) {
             sql("UPDATE users SET phone = "+
                     message.getContact().getPhoneNumber()+
@@ -192,6 +171,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                 language = "English";
             }
             if ("".equals(number)||number==null) {
+                deleteMessage(update.getCallbackQuery().getMessage());
                 sendMeNumber(update.getCallbackQuery().getMessage().getChatId());
             } else {
                 edit(update.getCallbackQuery().getMessage(), Lan.welcome(language, sqlselect(String.valueOf(update.getCallbackQuery().getMessage().getChatId()), "firstname")),
@@ -521,6 +501,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
         sendMessage.setReplyMarkup(replyMarkup);
         try { execute(sendMessage);}
         catch (TelegramApiException e) {e.printStackTrace();}
+
     }
 
     public void deleteMessage(Message message){
