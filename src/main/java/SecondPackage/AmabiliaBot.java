@@ -242,7 +242,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
             edit(update.getCallbackQuery().getMessage(), Lan.chooseDish(language), Lan.listTypes(language), 3);
         }
         else if (cb.equals(Lan.backToMenu(language))) {
-            edit(update.getCallbackQuery().getMessage(), Lan.welcome(language, update.getCallbackQuery().getMessage().getFrom().getFirstName()),
+            edit(update.getCallbackQuery().getMessage(), Lan.welcome(language, sqlselect(String.valueOf(update.getCallbackQuery().getMessage().getChatId()), "firstname")),
             Lan.mainMenu(language), 2);
         }
     }
