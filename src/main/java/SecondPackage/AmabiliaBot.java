@@ -300,9 +300,16 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                  sql(command);
              }
         } else {
+            if ((language == null) || (language.equals(""))) {
+                if (sentMessage!=null) {deleteMessage(sentMessage);sentMessage=null;}
+                if (receivedMes!=null) {deleteMessage(receivedMes);receivedMes=null;}
+                chooseLanguage(message, false);
+            }
+            else {
             if (sentMessage!=null) {deleteMessage(sentMessage);sentMessage=null;}
             if (receivedMes!=null) {deleteMessage(receivedMes);receivedMes=null;}
-            send(Lan.welcome(language, message.getFrom().getFirstName()), message.getChatId());
+            send(Lan.welcome(language, message.getFrom().getFirstName()), message.getChatId(), Lan.mainMenu(language),null, 2);
+            }
         }
     }
     public static List<String> directions() {
