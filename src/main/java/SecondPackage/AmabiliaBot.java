@@ -218,12 +218,17 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                 }
             }
         }
-                for (String t: Lan.listTypes(language)) {
-                    if (cb.equals(t)&&!cb.equals(Lan.backToMenu(language))) {
-                        List<String> a = showProducts(language, "name", String.valueOf(Lan.listTypes(language).indexOf(t)));
-                        edit(update.getCallbackQuery().getMessage(), t, a, a.size()>1?2:1);
-                    }
-                }
+        for (String t: Lan.listTypes(language)) {
+            if (cb.equals(t)&&!cb.equals(Lan.backToMenu(language))) {
+                List<String> a = showProducts(language, "name", String.valueOf(Lan.listTypes(language).indexOf(t)));
+                edit(update.getCallbackQuery().getMessage(), t, a, a.size()>1?2:1);
+            }
+        }
+        for (String t: showAllProducts(language,"name")) {
+            if (cb.equals(t)) {
+                edit(update.getCallbackQuery().getMessage(), t, Lan.listTypes(language).get(Integer.parseInt(sqlQuery("SELECT type from table0 where name = '"+t+"'", "type"))));
+            }
+        }
         if (cb.equals(Lan.goBack(language))) {
             edit(update.getCallbackQuery().getMessage(), Lan.chooseDish(language), Lan.listTypes(language), 3);
         }
@@ -673,5 +678,45 @@ public class AmabiliaBot extends TelegramLongPollingBot {
         }
         return lan;
     }
-
+    public List<String> showAllProducts(String language, String column){
+        Transliterator toLatinTrans = Transliterator.getInstance(AmabiliaBot.CYRILLIC_TO_LATIN);
+        Transliterator toCyrilTrans = Transliterator.getInstance(AmabiliaBot.LATIN_TO_CYRILLIC);
+        List<String> lan = new ArrayList<>();
+        try {
+            Connection conn = getConnection();
+            if (conn!=null) {
+                Statement prst = conn.createStatement();
+                ResultSet rs = prst.executeQuery("select "+column+" from table0");
+                while (rs.next()){
+                    if (language.equals("Uzbek")||language.equals("English")) lan.add(toLatinTrans.transliterate(rs.getString(column)));
+                    else if (language.equals("Russian")) lan.add(toCyrilTrans.transliterate(rs.getString(column)));
+                }
+                prst.close();
+                conn.close();
+            }
+        }
+        catch(Exception ex) {
+            System.err.println(ex);
+        }
+        return lan;
+    }
+    public String sqlQuery(String command, String field) throws SQLException {
+            String lan = "";
+            try {
+                Connection conn = getConnection();
+                if (conn!=null) {
+                    Statement prst = conn.createStatement();
+                    ResultSet rs = prst.executeQuery(command);
+                    while (rs.next()){
+                        lan= rs.getString(field);
+                    }
+                    prst.close();
+                    conn.close();
+                }
+            }
+            catch(Exception ex) {
+                System.err.println(ex);
+            }
+        return lan;
+    }
 }
