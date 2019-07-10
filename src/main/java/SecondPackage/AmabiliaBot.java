@@ -177,16 +177,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                 .setCallbackQueryId(update.getCallbackQuery().getId()).setShowAlert(false);
         execute(answer);
         String cb = update.getCallbackQuery().getData();
-        for (String t: Lan.listTypes(language)) {
-            if (cb.equals(t)) {
-                //deleteMessage(update.getCallbackQuery().getMessage());
-                // for (String s: showProducts(language, "name", "table"+Lan.listTypes(language).indexOf(t))){
-                //     send(s, update.getCallbackQuery().getMessage().getChatId(), ":heavy_plus_sign:", ":x:", true);
-                // }
-                List<String> a = showProducts(language, "name", String.valueOf(Lan.listTypes(language).indexOf(t)));
-                edit(update.getCallbackQuery().getMessage(), t, a, a.size()>1?2:1);
-            }
-        }
+
 
         if (cb.equals(Lan.goBack(language))) {
             edit(update.getCallbackQuery().getMessage(), Lan.chooseDish(language), Lan.listTypes(language), 3);
@@ -205,7 +196,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                 language = "English";
             }
             if ("".equals(number)||number==null) {
-                sendMeNumber(update.getCallbackQuery().getMessage());
+                sendMeNumber(update.getCallbackQuery().getMessage().getChatId());
             } else {
                 edit(update.getCallbackQuery().getMessage(), Lan.welcome(language, sqlselect(String.valueOf(update.getCallbackQuery().getMessage().getChatId()), "firstname")),
                         Lan.mainMenu(language),2);
@@ -250,6 +241,12 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                     edit(update.getCallbackQuery().getMessage(), Lan.welcome(language, update.getCallbackQuery().getMessage().getFrom().getFirstName()),
                         Lan.mainMenu(language),2);
                 }
+                for (String t: Lan.listTypes(language)) {
+            if (cb.equals(t)) {
+                List<String> a = showProducts(language, "name", String.valueOf(Lan.listTypes(language).indexOf(t)));
+                edit(update.getCallbackQuery().getMessage(), t, a, a.size()>1?2:1);
+            }
+        }
     }
 
 
@@ -276,7 +273,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                 language = "English";
             }
             if ("".equals(number)||number==null) {
-                sendMeNumber(message);
+                sendMeNumber(message.getChatId());
             } else {
                 send(Lan.welcome(language, message.getFrom().getFirstName()), message.getChatId(), null,
                         Lan.mainMenu(language),2);
@@ -508,9 +505,9 @@ public class AmabiliaBot extends TelegramLongPollingBot {
     }
 
 
-    public void sendMeNumber(Message message){
+    public void sendMeNumber(long ChatId){
         SendMessage sendMessage = new SendMessage()
-                .setChatId(message.getChatId())
+                .setChatId(ChatId)
                 .setText(EmojiParser.parseToUnicode(Lan.sendMeContact(language)))
                 .setParseMode("HTML");
         ReplyKeyboardMarkup replyMarkup = new ReplyKeyboardMarkup();
