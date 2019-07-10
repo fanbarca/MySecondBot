@@ -178,10 +178,6 @@ public class AmabiliaBot extends TelegramLongPollingBot {
         execute(answer);
         String cb = update.getCallbackQuery().getData();
 
-
-        if (cb.equals(Lan.goBack(language))) {
-            edit(update.getCallbackQuery().getMessage(), Lan.chooseDish(language), Lan.listTypes(language), 3);
-        }
         if (cb.equals("O'zbek")||cb.equals("Русский")||cb.equals("English")){
             if (cb.equals("O'zbek")) {
                 sql("UPDATE users SET language = 'Uzbek' WHERE id ="+update.getCallbackQuery().getMessage().getChatId());
@@ -246,6 +242,9 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                 List<String> a = showProducts(language, "name", String.valueOf(Lan.listTypes(language).indexOf(t)));
                 edit(update.getCallbackQuery().getMessage(), t, a, a.size()>1?2:1);
             }
+        }
+        if (cb.equals(Lan.goBack(language))) {
+            edit(update.getCallbackQuery().getMessage(), Lan.chooseDish(language), Lan.listTypes(language), 3);
         }
     }
 
