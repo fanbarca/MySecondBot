@@ -237,6 +237,8 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                 chooseLanguage(message, false);
             }
             else {
+                if (sentMessage!=null) {deleteMessage(sentMessage);sentMessage=null;}
+                if (receivedMes!=null) {deleteMessage(receivedMes);receivedMes=null;}
                 send(Lan.welcome(language, message.getFrom().getFirstName()), message.getChatId(),Lan.mainMenu(language), null, 2);
             }
         } else if (message.getText().equals("O'zbek")||message.getText().equals("Русский")||message.getText().equals("English")){
