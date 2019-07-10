@@ -66,6 +66,11 @@ public class Adminbot extends TelegramLongPollingBot {
                         } else {
                             send("В какой раздел?", myID, Lan.listTypes("Russian"), true, 3);
                         }
+                    } else if (update.getMessage().getText().contains("/sql")) {
+                        if (update.getMessage().getText().length()>5) {
+                            String command = update.getMessage().getText().substring(5);
+                            AmabiliaBot.sql(command);
+                        }
                     }
                 }
             }
