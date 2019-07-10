@@ -233,7 +233,9 @@ public class AmabiliaBot extends TelegramLongPollingBot {
 
     private void handleIncomingText(Message message) throws TelegramApiException, InterruptedException, SQLException {
         if (message.getText().equals("/start")) {
-            if (!language.equals("Uzbek")&&!language.equals("Russian")&&!language.equals("English")) {
+            if ((language == null) || (language.equals(""))) {
+                if (sentMessage!=null) {deleteMessage(sentMessage);sentMessage=null;}
+                if (receivedMes!=null) {deleteMessage(receivedMes);receivedMes=null;}
                 chooseLanguage(message, false);
             }
             else {
