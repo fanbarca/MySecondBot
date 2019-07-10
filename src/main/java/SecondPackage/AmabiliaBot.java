@@ -219,7 +219,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
             }
         }
                 for (String t: Lan.listTypes(language)) {
-                    if (cb.equals(t)) {
+                    if (cb.equals(t)&&!cb.equals(Lan.backToMenu(language))) {
                         List<String> a = showProducts(language, "name", String.valueOf(Lan.listTypes(language).indexOf(t)));
                         edit(update.getCallbackQuery().getMessage(), t, a, a.size()>1?2:1);
                     }
