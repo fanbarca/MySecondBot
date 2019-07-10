@@ -79,9 +79,9 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                                 m.getFrom().getFirstName()+"','"+
                                 m.getFrom().getLastName()+"','"+
                                 m.getFrom().getUserName()+"')");
-                        send(":boom: Новый пользователь!" +
-                                "\n" + m.getFrom().getFirstName() +" "+ m.getFrom().getLastName() +
-                                "\n@" + m.getFrom().getUserName(), myID);
+                        // send(":boom: Новый пользователь!" +
+                        //         "\n" + m.getFrom().getFirstName() +" "+ m.getFrom().getLastName() +
+                        //         "\n@" + m.getFrom().getUserName(), myID);
                         if (m.hasText()) handleIncomingText(m);
                     }
             } else if (update.hasCallbackQuery()) {
@@ -499,7 +499,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
         rows2.add(row2);
         replyMarkup.setKeyboard(rows2).setResizeKeyboard(true).setOneTimeKeyboard(true);
         sendMessage.setReplyMarkup(replyMarkup);
-        try { execute(sendMessage);}
+        try { sentMessage = execute(sendMessage);}
         catch (TelegramApiException e) {e.printStackTrace();}
 
     }
