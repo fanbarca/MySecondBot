@@ -30,7 +30,7 @@ public class Adminbot extends TelegramLongPollingBot {
     static SimpleDateFormat time = new SimpleDateFormat("HH:mm");
     private static final String DRIVER = "org.postgresql.Driver";
     List<String> list = new ArrayList<String>();
-
+    String russian = "";
     {
     date.setTimeZone(zone);
     time.setTimeZone(zone);
@@ -54,19 +54,28 @@ public class Adminbot extends TelegramLongPollingBot {
                     } else if(update.getMessage().getText().equals("Добавть продукт")){
                         send("В какой раздел?", myID, Lan.listTypes("Russian"), true, 3);
                     }
-                    if (update.getMessage().getText().contains("@")) {
-                        if (!category.equals("")){
-                        Random rand = new Random();
-                        String name = update.getMessage().getText().substring(0, update.getMessage().getText().indexOf("@"));
-                        String cost = update.getMessage().getText().substring(update.getMessage().getText().indexOf("@")+1);
-                        AmabiliaBot.sql("insert into table0 values ("+
-                        String.format("%04d", rand.nextInt(10000))+", '"+name+"',"+cost+", true , null, '"+category+"')");
-                        send("Готово", myID, list, false, 3);
-                        category = "";
-                        } else {
-                            send("В какой раздел?", myID, Lan.listTypes("Russian"), true, 3);
+                    if (!category.equals("")){
+                        if (update.getMessage().getText().contains("/rus")) {
+
+                            Random rand = new Random();
+                            russian = update.getMessage().getText().substring(5);
+                            AmabiliaBot.sql("insert into table0 (id, russian, type) values ("+
+                            String.format("%04d", rand.nextInt(10000))+", '"+russian+"', '"+category+"')");
+                            send("Введите название продукта на узбекском", myID, list, false, 3);
+                        } else if (update.getMessage().getText().contains("/uzb")) {
+                            String Name = update.getMessage().getText().substring(5);
+                            AmabiliaBot.sql("UPDATE table0 SET uzbek = '"+Name+"' where russian = "+russian);
+                            send("Введите название продукта на английском", myID, list, false, 3);
+
+                        } else if (update.getMessage().getText().contains("/eng")) {
+                            String Name = update.getMessage().getText().substring(5);
+                            AmabiliaBot.sql("UPDATE table0 SET english = "+Name+"' where russian = "+russian);
+                            send("Введите стоимость продукта", myID, list, false, 3);
                         }
-                    } else if (update.getMessage().getText().contains("/sql")) {
+                    } else {
+                        send("В какой раздел?", myID, Lan.listTypes("Russian"), true, 3);
+                    }
+                    if (update.getMessage().getText().contains("/sql")) {
                         if (update.getMessage().getText().length()>5) {
                             String command = update.getMessage().getText().substring(5);
                             AmabiliaBot.sql(command);
@@ -79,7 +88,9 @@ public class Adminbot extends TelegramLongPollingBot {
                 for (String t:Lan.listTypes("Russian")) {
                     if (update.getCallbackQuery().getData().equals(t)) {
                         category = Lan.listTypes("Russian").indexOf(t)+"";
-                        send("Введите данные продукта в формате: \nНазвание@Цена", myID, list, false, 1);
+                        send("Выбрана категория "+t+
+                        "\nВведите название продукта на русском",  //На узбекском На английском
+                        myID, list, false, 1);
                     } else if(update.getCallbackQuery().getData().equals("Назад")) {
                         edit(update.getCallbackQuery().getMessage(), "Изменить Меню",
                         Lan.listTypes("Russian"), 3);
