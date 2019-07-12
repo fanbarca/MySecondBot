@@ -140,4 +140,18 @@ class Lan {
         else if (lan.equals("English")) r = "Delivery:\nup to 3 km - 8000 sum\nfarther - 1000 sum per km";
         return r;
     }
+    public static String cost(String lan) {
+        String r="";
+        if (lan.equals("Uzbek")) r = "Narxi: ";
+        else if (lan.equals("Russian")) r = "Стоимость: ";
+        else if (lan.equals("English")) r = "Cost: ";
+        return r;
+    }
+    public static String currency(String lan) {
+        String r="";
+        if (lan.equals("Uzbek")) r = "so'm";
+        else if (lan.equals("Russian")) r = "сум";
+        else if (lan.equals("English")) r = "sum";
+        return r;
+    }
 }

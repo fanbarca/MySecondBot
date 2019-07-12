@@ -243,7 +243,9 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                 aa.setChatId(update.getCallbackQuery().getMessage().getChatId());
                 aa.setPhoto(sqlQuery("SELECT imageid from table0 where "+language+" = '"+t+"'", "imageid"));
                 image = execute(aa);
-                send(t, update.getCallbackQuery().getMessage().getChatId(), Lan.listTypes(language).get(Integer.parseInt(sqlQuery("SELECT type from table0 where "+language+" = '"+t+"'", "type"))), Lan.goBack(language), Lan.backToMenu(language), true);
+                send(t + "\n"+
+                Lan.cost(language) + sqlQuery("SELECT cost from table0 where "+language+" = '"+t+"'", "cost") + " "+ Lan.currency(language),
+                update.getCallbackQuery().getMessage().getChatId(), Lan.listTypes(language).get(Integer.parseInt(sqlQuery("SELECT type from table0 where "+language+" = '"+t+"'", "type"))), Lan.goBack(language), Lan.backToMenu(language), true);
             }
         }
     }
