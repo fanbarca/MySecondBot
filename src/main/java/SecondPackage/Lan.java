@@ -95,12 +95,12 @@ class Lan {
         }
         else if (lan.equals("Russian")) {
             list.add(":custard: Салаты");
-            list.add(":stew: Первые блюда");
-            list.add(":spaghetti: Вторые блюда");
+            list.add(":stew: Первое");
+            list.add(":spaghetti: Второе");
             list.add(":coffee: Напитки");
             list.add(":cake: Десерт");
             list.add(":hamburger: Фастфуд");
-            list.add(":pizza: Пицца:");
+            list.add(":pizza: Пицца");
             list.add(":meat_on_bone: Шашлык");
             list.add(":bread: Другое");
             list.add(backToMenu(lan));
