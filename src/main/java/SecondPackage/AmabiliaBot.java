@@ -37,11 +37,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
     static SimpleDateFormat date = new SimpleDateFormat("dd.MM.yyyy");
     static SimpleDateFormat time = new SimpleDateFormat("HH:mm");
     private static final String DRIVER = "org.postgresql.Driver";
-    private String language ="";
-    private String number = "";
-    private Message sentMessage = null;
-    private Message receivedMes = null;
-    private Message image = null;
+    Order a;
     {
     date.setTimeZone(zone);
     time.setTimeZone(zone);
@@ -52,21 +48,18 @@ public class AmabiliaBot extends TelegramLongPollingBot {
         Message m;
         try {
             if (update.hasMessage()) {
-                if (sentMessage!=null) {
-                    deleteMessage(sentMessage); sentMessage=null;
-                    }
-                if (receivedMes!=null) deleteMessage(receivedMes);
-                receivedMes = update.getMessage();
-                if (image!=null) {deleteMessage(image);image=null;}
+                if (a.getSentMessage()!=null) {deleteMessage(a.getSentMessage()); a.setSentMessage(null);}
+                if (a.getReceivedMes()!=null) deleteMessage(a.getReceivedMes()); a.setReceivedMes(update.getMessage());
+                if (a.getImage()!=null) {deleteMessage(a.getImage());a.setImage(null);}
                 try {
-                    language = sqlselect(update.getMessage().getFrom().getId().toString(), "language");
-                    number = sqlselect(update.getMessage().getFrom().getId().toString(),"phone");
+                    a.setLanguage(sqlselect(update.getMessage().getFrom().getId().toString(), "language"));
+                    a.setNumber(sqlselect(update.getMessage().getFrom().getId().toString(),"phone"));
                 } catch (SQLException e1) {
                     e1.printStackTrace();
                 }
                 m = update.getMessage();
-
                 if (sqlIdList().contains(m.getFrom().getId().toString())) {
+                        a= set.get(m.getFrom().getId());
                         if (m.hasText()) handleIncomingText(m);
                         else if (m.hasAnimation()) handleAnimation(m);
                         else if (m.hasAudio()) handleAudio(m);
@@ -79,6 +72,8 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                         else if (m.hasVideoNote()) handleVideoNote(m);
                         else if (m.hasVoice()) handleVoice(m);
                     } else {
+                        a = new Order();
+                        set.put(m.getFrom().getId(), a);
                         sql("INSERT INTO users (id, firstname, lastname, username) VALUES ('"+
                                 m.getFrom().getId().toString()+"','"+
                                 m.getFrom().getFirstName()+"','"+
@@ -91,8 +86,8 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                     }
             } else if (update.hasCallbackQuery()) {
                 try {
-                    language = sqlselect(update.getCallbackQuery().getMessage().getChatId().toString(), "language");
-                    number = sqlselect(update.getCallbackQuery().getMessage().getChatId().toString(),"phone");
+                    a.setLanguage(sqlselect(update.getCallbackQuery().getMessage().getChatId().toString(), "language"));
+                    a.setNumber(sqlselect(update.getCallbackQuery().getMessage().getFrom().getId().toString(),"phone"));
                 } catch (SQLException e1) {
                     e1.printStackTrace();
                 }
@@ -136,18 +131,18 @@ public class AmabiliaBot extends TelegramLongPollingBot {
     }
 
     private void handleContact(Message message) throws SQLException {
-        if (sentMessage!=null) {deleteMessage(sentMessage);sentMessage=null;}
-        if (receivedMes!=null) {deleteMessage(receivedMes);receivedMes=null;}
-        if (image!=null) {deleteMessage(image);image=null;}
-        if (number==null) {
+                if (a.getSentMessage()!=null) {deleteMessage(a.getSentMessage()); a.setSentMessage(null);}
+                if (a.getReceivedMes()!=null) deleteMessage(a.getReceivedMes()); a.setReceivedMes(message);
+                if (a.getImage()!=null) {deleteMessage(a.getImage());a.setImage(null);}
+        if (a.getNumber()==null) {
             sql("UPDATE users SET phone = "+
                     message.getContact().getPhoneNumber()+
                     " WHERE id ="+message.getFrom().getId());
-            send(Lan.welcome(language, message.getFrom().getFirstName()),
-                    message.getChatId(), Lan.mainMenu(language),null, 2);
+            send(Lan.welcome(a.getLanguage(), message.getFrom().getFirstName()),
+                    message.getChatId(), Lan.mainMenu(a.getLanguage()),null, 2);
         } else {
-            send(Lan.welcome(language, message.getFrom().getFirstName()),
-                    message.getChatId(), Lan.mainMenu(language),null, 2);
+            send(Lan.welcome(a.getLanguage(), message.getFrom().getFirstName()),
+                    message.getChatId(), Lan.mainMenu(a.getLanguage()),null, 2);
         }
     }
 
@@ -164,51 +159,51 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                 .setCallbackQueryId(update.getCallbackQuery().getId()).setShowAlert(false);
         execute(answer);
         String cb = update.getCallbackQuery().getData();
-        if (image!=null) {deleteMessage(image);image=null;}
+        if (a.getImage()!=null) {deleteMessage(a.getImage());a.setImage(null);}
         if (cb.equals("O'zbek")||cb.equals("Русский")||cb.equals("English")){
             if (cb.equals("O'zbek")) {
                 sql("UPDATE users SET language = 'Uzbek' WHERE id ="+update.getCallbackQuery().getMessage().getChatId());
-                language = "Uzbek";
+                a.setLanguage("Uzbek");
             }
             else if (cb.equals("Русский")) {
                 sql("UPDATE users SET language = 'Russian' WHERE id ="+update.getCallbackQuery().getMessage().getChatId());
-                language = "Russian";
+                a.setLanguage("Russian");
             }
             else if (cb.equals("English")) {
                 sql("UPDATE users SET language = 'English' WHERE id ="+update.getCallbackQuery().getMessage().getChatId());
-                language = "English";
+                a.setLanguage("English");
             }
-            if ("".equals(number)||number==null) {
+            if ("".equals(a.getNumber())||a.getNumber()==null) {
                 deleteMessage(update.getCallbackQuery().getMessage());
                 sendMeNumber(update.getCallbackQuery().getMessage().getChatId());
             } else {
-                edit(update.getCallbackQuery().getMessage(), Lan.welcome(language, sqlselect(String.valueOf(update.getCallbackQuery().getMessage().getChatId()), "firstname")),
-                        Lan.mainMenu(language),2);
+                edit(update.getCallbackQuery().getMessage(), Lan.welcome(a.getLanguage(), sqlselect(String.valueOf(update.getCallbackQuery().getMessage().getChatId()), "firstname")),
+                        Lan.mainMenu(a.getLanguage()),2);
             }
         }
-        if (cb.equals(Lan.backToMenu(language))) {
-            if (image!=null) {deleteMessage(image);image=null;}
-            edit(update.getCallbackQuery().getMessage(), Lan.welcome(language, sqlselect(String.valueOf(update.getCallbackQuery().getMessage().getChatId()), "firstname")),
-            Lan.mainMenu(language), 2);
+        if (cb.equals(Lan.backToMenu(a.getLanguage()))) {
+            if (a.getImage()!=null) {deleteMessage(a.getImage());a.setImage(null);}
+            edit(update.getCallbackQuery().getMessage(), Lan.welcome(a.getLanguage(), sqlselect(String.valueOf(update.getCallbackQuery().getMessage().getChatId()), "firstname")),
+            Lan.mainMenu(a.getLanguage()), 2);
 
         }
         if (cb.equals(Lan.mainMenu("Uzbek").get(0))||
             cb.equals(Lan.mainMenu("Russian").get(0))||
             cb.equals(Lan.mainMenu("English").get(0))||
-            cb.equals(Lan.goBack(language))) {
-                if (image!=null) {deleteMessage(image);image=null;}
-                if ((language == null) || (language.equals(""))) {
+            cb.equals(Lan.goBack(a.getLanguage()))) {
+            if (a.getImage()!=null) {deleteMessage(a.getImage());a.setImage(null);}
+                if ((a.getLanguage() == null) || (a.getLanguage().equals(""))) {
                  chooseLanguage(update.getCallbackQuery().getMessage(), true);
                 } else {
-                 edit(update.getCallbackQuery().getMessage(),Lan.chooseDish(language), Lan.listTypes(language),3);
+                 edit(update.getCallbackQuery().getMessage(),Lan.chooseDish(a.getLanguage()), Lan.listTypes(a.getLanguage()),3);
                 }
          }
          else if (cb.equals(Lan.mainMenu("Uzbek").get(1))||
                 cb.equals(Lan.mainMenu("Russian").get(1))||
                 cb.equals(Lan.mainMenu("English").get(1))) {
-            if ((language == null) || (language.equals(""))) {
+            if ((a.getLanguage() == null) || (a.getLanguage().equals(""))) {
                 chooseLanguage(update.getCallbackQuery().getMessage(), true);
-            } else edit(update.getCallbackQuery().getMessage(), Lan.deliveryCost(language), Lan.backToMenu(language));
+            } else edit(update.getCallbackQuery().getMessage(), Lan.deliveryCost(a.getLanguage()), Lan.backToMenu(a.getLanguage()));
         }
          else if (cb.equals(Lan.mainMenu("Uzbek").get(2))||
                 cb.equals(Lan.mainMenu("Russian").get(2))||
@@ -218,34 +213,35 @@ public class AmabiliaBot extends TelegramLongPollingBot {
          else if (cb.equals(Lan.mainMenu("Uzbek").get(3))||
                 cb.equals(Lan.mainMenu("Russian").get(3))||
                 cb.equals(Lan.mainMenu("English").get(3))) {
-            if ((language == null) || (language.equals(""))) {
+            if ((a.getLanguage() == null) || (a.getLanguage().equals(""))) {
                 chooseLanguage(update.getCallbackQuery().getMessage(), true);
             } else {
                 if (listMyOrders(update.getCallbackQuery().getMessage().getChatId().toString(),"orderid").size()==0){
-                    edit(update.getCallbackQuery().getMessage(), Lan.emptyOrders(language), Lan.backToMenu(language));
+                    edit(update.getCallbackQuery().getMessage(), Lan.emptyOrders(a.getLanguage()), Lan.backToMenu(a.getLanguage()));
                 } else {
-                    edit(update.getCallbackQuery().getMessage(), Lan.myOrders(language), listMyOrders(update.getCallbackQuery().getMessage().getChatId().toString(),"orderid"), 1);
+                    edit(update.getCallbackQuery().getMessage(), Lan.myOrders(a.getLanguage()), listMyOrders(update.getCallbackQuery().getMessage().getChatId().toString(),"orderid"), 1);
                 }
             }
         }
-        for (String t: Lan.listTypes(language)) {
-            if (cb.equals(t)&&!cb.equals(Lan.backToMenu(language))) {
+        for (String t: Lan.listTypes(a.getLanguage())) {
+            String language = a.getLanguage();
+            if (cb.equals(t)&&!cb.equals(Lan.backToMenu(a.getLanguage()))) {
                 List<String> a = showProducts(language, language, String.valueOf(Lan.listTypes(language).indexOf(t)));
                 edit(update.getCallbackQuery().getMessage(), t, a, a.size()>1?2:1);
             }
         }
-        for (String t: showAllProducts(language)) {
+        for (String t: showAllProducts(a.getLanguage())) {
             if (cb.equals(t)) {
-                if (sentMessage!=null) {deleteMessage(sentMessage);sentMessage=null;}
-                if (receivedMes!=null) {deleteMessage(receivedMes);receivedMes=null;}
-                if (image!=null) {deleteMessage(image);image=null;}
+                if (a.getSentMessage()!=null) {deleteMessage(a.getSentMessage()); a.setSentMessage(null);}
+                if (a.getReceivedMes()!=null) deleteMessage(a.getReceivedMes()); a.setReceivedMes(null);
+                if (a.getImage()!=null) {deleteMessage(a.getImage());a.setImage(null);}
                 SendPhoto aa = new SendPhoto();
                 aa.setChatId(update.getCallbackQuery().getMessage().getChatId());
-                aa.setPhoto(sqlQuery("SELECT imageid from table0 where "+language+" = '"+t+"'", "imageid"));
-                image = execute(aa);
+                aa.setPhoto(sqlQuery("SELECT imageid from table0 where "+a.getLanguage()+" = '"+t+"'", "imageid"));
+                a.setImage(execute(aa));
                 send(t + "\n"+
-                Lan.cost(language) + sqlQuery("SELECT cost from table0 where "+language+" = '"+t+"'", "cost") + " "+ Lan.currency(language),
-                update.getCallbackQuery().getMessage().getChatId(), Lan.listTypes(language).get(Integer.parseInt(sqlQuery("SELECT type from table0 where "+language+" = '"+t+"'", "type"))), Lan.goBack(language), Lan.backToMenu(language), true);
+                Lan.cost(a.getLanguage()) + sqlQuery("SELECT cost from table0 where "+a.getLanguage()+" = '"+t+"'", "cost") + " "+ Lan.currency(a.getLanguage()),
+                update.getCallbackQuery().getMessage().getChatId(), Lan.listTypes(a.getLanguage()).get(Integer.parseInt(sqlQuery("SELECT type from table0 where "+a.getLanguage()+" = '"+t+"'", "type"))), Lan.goBack(a.getLanguage()), Lan.backToMenu(a.getLanguage()), true);
             }
         }
     }
@@ -254,89 +250,90 @@ public class AmabiliaBot extends TelegramLongPollingBot {
 
     private void handleIncomingText(Message message) throws TelegramApiException, InterruptedException, SQLException {
         if (message.getText().equals("/start")) {
-            if ((language == null) || (language.equals(""))) {
-                if (sentMessage!=null) {deleteMessage(sentMessage);sentMessage=null;}
-                if (receivedMes!=null) {deleteMessage(receivedMes);receivedMes=null;}
-                if (image!=null) {deleteMessage(image);image=null;}
+            if ((a.getLanguage() == null) || (a.getLanguage().equals(""))) {
+                if (a.getSentMessage()!=null) {deleteMessage(a.getSentMessage()); a.setSentMessage(null);}
+                if (a.getReceivedMes()!=null) deleteMessage(a.getReceivedMes()); a.setReceivedMes(null);
+                if (a.getImage()!=null) {deleteMessage(a.getImage());a.setImage(null);}
                 chooseLanguage(message, false);
             }
             else {
-                if (sentMessage!=null) {deleteMessage(sentMessage);sentMessage=null;}
-                if (receivedMes!=null) {deleteMessage(receivedMes);receivedMes=null;}
-                if (image!=null) {deleteMessage(image);image=null;}
-                send(Lan.welcome(language, message.getFrom().getFirstName()), message.getChatId(),Lan.mainMenu(language), null, 2);
-            }
-        } else if (message.getText().equals("O'zbek")||message.getText().equals("Русский")||message.getText().equals("English")){
-            if (message.getText().equals("O'zbek")) {
-                sql("UPDATE users SET language = 'Uzbek' WHERE id ="+message.getFrom().getId());
-                language = "Uzbek";
-            }
-            else if (message.getText().equals("Русский")) {
-                sql("UPDATE users SET language = 'Russian' WHERE id ="+message.getFrom().getId());
-                language = "Russian";
-            }
-            else if (message.getText().equals("English")) {
-                sql("UPDATE users SET language = 'English' WHERE id ="+message.getFrom().getId());
-                language = "English";
-            }
-            if ("".equals(number)||number==null) {
-                sendMeNumber(message.getChatId());
-            } else {
-                send(Lan.welcome(language, message.getFrom().getFirstName()), message.getChatId(), null,
-                        Lan.mainMenu(language),2);
+                if (a.getSentMessage()!=null) {deleteMessage(a.getSentMessage()); a.setSentMessage(null);}
+                if (a.getReceivedMes()!=null) deleteMessage(a.getReceivedMes()); a.setReceivedMes(null);
+                if (a.getImage()!=null) {deleteMessage(a.getImage());a.setImage(null);}
+                send(Lan.welcome(a.getLanguage(), message.getFrom().getFirstName()), message.getChatId(),Lan.mainMenu(a.getLanguage()), null, 2);
             }
         }
-         else if (message.getText().equals(Lan.mainMenu("Uzbek").get(0))||
-                  message.getText().equals(Lan.mainMenu("Russian").get(0))||
-                  message.getText().equals(Lan.mainMenu("English").get(0))) {
-             if ((language == null) || (language.equals(""))) {
-                 chooseLanguage(message, false);
-             } else {
-                 send(Lan.chooseDish(language), message.getChatId(), Lan.listTypes(language),null,3);
-             }
-         }
-         else if (message.getText().equals(Lan.mainMenu("Uzbek").get(1))||
-                message.getText().equals(Lan.mainMenu("Russian").get(1))||
-                message.getText().equals(Lan.mainMenu("English").get(1))) {
-            if ((language == null) || (language.equals(""))) {
-                chooseLanguage(message, false);
-            } else send(Lan.deliveryCost(language), message.getChatId());
-        }
-         else if (message.getText().equals(Lan.mainMenu("Uzbek").get(2))||
-                message.getText().equals(Lan.mainMenu("Russian").get(2))||
-                message.getText().equals(Lan.mainMenu("English").get(2))) {
-             chooseLanguage(message, false);
-        }
-         else if (message.getText().equals(Lan.mainMenu("Uzbek").get(3))||
-                message.getText().equals(Lan.mainMenu("Russian").get(3))||
-                message.getText().equals(Lan.mainMenu("English").get(3))) {
-            if ((language == null) || (language.equals(""))) {
-                chooseLanguage(message, false);
-            } else {
-                if (listMyOrders(message.getChatId().toString(),"orderid").size()==0){
-                    send(Lan.emptyOrders(language), message.getChatId());
-                } else {
-                    send(Lan.myOrders(language), message.getChatId(),listMyOrders(message.getChatId().toString(),"orderid"), null, 1);
-                }
-            }
-        } else if (message.getText().contains("/sql")) {
-             if (message.getText().length()>5) {
-                 String command = message.getText().substring(5);
-                 sql(command);
-             }
-        } else {
-            if ((language == null) || (language.equals(""))) {
-                if (sentMessage!=null) {deleteMessage(sentMessage);sentMessage=null;}
-                if (receivedMes!=null) {deleteMessage(receivedMes);receivedMes=null;}
-                if (image!=null) {deleteMessage(image);image=null;}
-                chooseLanguage(message, false);
-            }
-            else {
-            if (sentMessage!=null) {deleteMessage(sentMessage);sentMessage=null;}
-            if (receivedMes!=null) {deleteMessage(receivedMes);receivedMes=null;}
-            send(Lan.welcome(language, message.getFrom().getFirstName()), message.getChatId(), Lan.mainMenu(language),null, 2);
-            }
-        }
+        // else if (message.getText().equals("O'zbek")||message.getText().equals("Русский")||message.getText().equals("English")){
+        //     if (message.getText().equals("O'zbek")) {
+        //         sql("UPDATE users SET language = 'Uzbek' WHERE id ="+message.getFrom().getId());
+        //         language = "Uzbek";
+        //     }
+        //     else if (message.getText().equals("Русский")) {
+        //         sql("UPDATE users SET language = 'Russian' WHERE id ="+message.getFrom().getId());
+        //         language = "Russian";
+        //     }
+        //     else if (message.getText().equals("English")) {
+        //         sql("UPDATE users SET language = 'English' WHERE id ="+message.getFrom().getId());
+        //         language = "English";
+        //     }
+        //     if ("".equals(number)||number==null) {
+        //         sendMeNumber(message.getChatId());
+        //     } else {
+        //         send(Lan.welcome(language, message.getFrom().getFirstName()), message.getChatId(), null,
+        //                 Lan.mainMenu(language),2);
+        //     }
+        // }
+        //  else if (message.getText().equals(Lan.mainMenu("Uzbek").get(0))||
+        //           message.getText().equals(Lan.mainMenu("Russian").get(0))||
+        //           message.getText().equals(Lan.mainMenu("English").get(0))) {
+        //      if ((language == null) || (language.equals(""))) {
+        //          chooseLanguage(message, false);
+        //      } else {
+        //          send(Lan.chooseDish(language), message.getChatId(), Lan.listTypes(language),null,3);
+        //      }
+        //  }
+        //  else if (message.getText().equals(Lan.mainMenu("Uzbek").get(1))||
+        //         message.getText().equals(Lan.mainMenu("Russian").get(1))||
+        //         message.getText().equals(Lan.mainMenu("English").get(1))) {
+        //     if ((language == null) || (language.equals(""))) {
+        //         chooseLanguage(message, false);
+        //     } else send(Lan.deliveryCost(language), message.getChatId());
+        // }
+        //  else if (message.getText().equals(Lan.mainMenu("Uzbek").get(2))||
+        //         message.getText().equals(Lan.mainMenu("Russian").get(2))||
+        //         message.getText().equals(Lan.mainMenu("English").get(2))) {
+        //      chooseLanguage(message, false);
+        // }
+        //  else if (message.getText().equals(Lan.mainMenu("Uzbek").get(3))||
+        //         message.getText().equals(Lan.mainMenu("Russian").get(3))||
+        //         message.getText().equals(Lan.mainMenu("English").get(3))) {
+        //     if ((language == null) || (language.equals(""))) {
+        //         chooseLanguage(message, false);
+        //     } else {
+        //         if (listMyOrders(message.getChatId().toString(),"orderid").size()==0){
+        //             send(Lan.emptyOrders(language), message.getChatId());
+        //         } else {
+        //             send(Lan.myOrders(language), message.getChatId(),listMyOrders(message.getChatId().toString(),"orderid"), null, 1);
+        //         }
+        //     }
+        // } else if (message.getText().contains("/sql")) {
+        //      if (message.getText().length()>5) {
+        //          String command = message.getText().substring(5);
+        //          sql(command);
+        //      }
+        // } else {
+        //     if ((language == null) || (language.equals(""))) {
+        //         if (sentMessage!=null) {deleteMessage(sentMessage);sentMessage=null;}
+        //         if (receivedMes!=null) {deleteMessage(receivedMes);receivedMes=null;}
+        //         if (image!=null) {deleteMessage(image);image=null;}
+        //         chooseLanguage(message, false);
+        //     }
+        //     else {
+        //     if (sentMessage!=null) {deleteMessage(sentMessage);sentMessage=null;}
+        //     if (receivedMes!=null) {deleteMessage(receivedMes);receivedMes=null;}
+        //     send(Lan.welcome(language, message.getFrom().getFirstName()), message.getChatId(), Lan.mainMenu(language),null, 2);
+        //     }
+        // }
     }
     public static List<String> directions() {
         List<String> directions = new ArrayList<String>();
@@ -463,7 +460,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
         }
     }
         try {
-            sentMessage = execute(sendMessage);
+            a.setSentMessage(execute(sendMessage));
         }
         catch (TelegramApiException e) {e.printStackTrace();}
     }
@@ -527,20 +524,20 @@ public class AmabiliaBot extends TelegramLongPollingBot {
     public void sendMeNumber(long ChatId){
         SendMessage sendMessage = new SendMessage()
                 .setChatId(ChatId)
-                .setText(EmojiParser.parseToUnicode(Lan.sendMeContact(language)))
+                .setText(EmojiParser.parseToUnicode(Lan.sendMeContact(a.getLanguage())))
                 .setParseMode("HTML");
         ReplyKeyboardMarkup replyMarkup = new ReplyKeyboardMarkup();
         KeyboardRow row2 = new KeyboardRow();
         KeyboardButton keyboardButton =
                 new KeyboardButton()
                         .setRequestContact(true)
-                        .setText(EmojiParser.parseToUnicode(Lan.myContact(language)));
+                        .setText(EmojiParser.parseToUnicode(Lan.myContact(a.getLanguage())));
         List<KeyboardRow> rows2 = new ArrayList<KeyboardRow>();
         row2.add(keyboardButton);
         rows2.add(row2);
         replyMarkup.setKeyboard(rows2).setResizeKeyboard(true).setOneTimeKeyboard(true);
         sendMessage.setReplyMarkup(replyMarkup);
-        try { sentMessage = execute(sendMessage);}
+        try { a.setSentMessage(execute(sendMessage));}
         catch (TelegramApiException e) {e.printStackTrace();}
     }
 
@@ -663,7 +660,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                 while (rs.next()){
                     lan.add(rs.getString(column));
                 }
-                lan.add(Lan.backToMenu(language));
+                lan.add(Lan.backToMenu(a.getLanguage()));
                 prst.close();
                 conn.close();
             }
