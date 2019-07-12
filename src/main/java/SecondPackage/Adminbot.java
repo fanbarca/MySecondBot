@@ -58,7 +58,6 @@ public class Adminbot extends TelegramLongPollingBot {
                     }
                     if (!category.equals("")){
                         if (update.getMessage().getText().contains("/rus")) {
-
                             Random rand = new Random();
                             russian = update.getMessage().getText().substring(5);
                             AmabiliaBot.sql("insert into table0 (id, russian, type, instock) values ("+
@@ -66,18 +65,18 @@ public class Adminbot extends TelegramLongPollingBot {
                             send("Введите название продукта на узбекском", myID, list, false, 3);
                         } else if (update.getMessage().getText().contains("/uzb")) {
                             String Name = update.getMessage().getText().substring(5);
-                            AmabiliaBot.sql("UPDATE table0 SET uzbek = '"+Name+"' where russian = "+russian);
+                            AmabiliaBot.sql("UPDATE table0 SET uzbek = '"+Name+"' where russian = '"+russian+"'");
                             send("Введите название продукта на английском", myID, list, false, 3);
 
                         } else if (update.getMessage().getText().contains("/eng")) {
                             String Name = update.getMessage().getText().substring(5);
-                            AmabiliaBot.sql("UPDATE table0 SET english = '"+Name+"' where russian = "+russian);
+                            AmabiliaBot.sql("UPDATE table0 SET english = '"+Name+"' where russian = '"+russian+"'");
                             send("Введите стоимость продукта", myID, list, false, 3);
                         } else if (update.getMessage().getText().contains("/cost")) {
                             String cost = update.getMessage().getText().substring(5);
-                            AmabiliaBot.sql("UPDATE table0 SET cost = "+cost+" where russian = "+russian);
+                            AmabiliaBot.sql("UPDATE table0 SET cost = "+cost+" where russian = '"+russian+"'");
                             send("Отправьте изображение", myID, list, false, 3);
-                        } 
+                        }
                     } else {
                         send("В какой раздел?", myID, Lan.listTypes("Russian"), true, 3);
                     }
@@ -90,7 +89,7 @@ public class Adminbot extends TelegramLongPollingBot {
                 } else if (update.getMessage().hasPhoto()) {
                     if (update.getMessage().getCaption().contains("/img")) {
                         String photoId = update.getMessage().getPhoto().get(0).getFileId();
-                        AmabiliaBot.sql("UPDATE table0 SET imageid = "+photoId+" where russian = "+russian);
+                        AmabiliaBot.sql("UPDATE table0 SET imageid = "+photoId+" where russian = '"+russian+"'");
                     }
                 }
             }
