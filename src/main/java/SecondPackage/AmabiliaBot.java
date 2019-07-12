@@ -164,7 +164,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                 .setCallbackQueryId(update.getCallbackQuery().getId()).setShowAlert(false);
         execute(answer);
         String cb = update.getCallbackQuery().getData();
-
+        if (image!=null) {deleteMessage(image);image=null;}
         if (cb.equals("O'zbek")||cb.equals("Русский")||cb.equals("English")){
             if (cb.equals("O'zbek")) {
                 sql("UPDATE users SET language = 'Uzbek' WHERE id ="+update.getCallbackQuery().getMessage().getChatId());
