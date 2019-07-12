@@ -25,22 +25,22 @@ class Lan {
     public static List<String> mainMenu(String lan){
         List<String> menu = new ArrayList<String>();
             if (lan.equals("Uzbek")) {
-                menu.add("Menyu");
-                menu.add("Yetkazib berish narxi");
-                menu.add("interfeys tili");
-                menu.add("Savatcha");
+                menu.add(":notebook_with_decorative_cover: Menyu");
+                menu.add(":truck: Yetkazib berish narxi");
+                menu.add(":uz: interfeys tili");
+                menu.add("🛒 Savatcha");
             }
             else if (lan.equals("Russian")) {
-                menu.add("Меню");
-                menu.add("Стоимость доставки");
-                menu.add("Язык интерфейса");
-                menu.add("Корзина");
+                menu.add(":notebook_with_decorative_cover: Меню");
+                menu.add(":truck: Стоимость доставки");
+                menu.add(":ru: Язык интерфейса");
+                menu.add("🛒 Корзина");
             }
             else if (lan.equals("English")) {
-                menu.add("Menu");
-                menu.add("Delivery cost");
-                menu.add("Interface language");
-                menu.add("Shopping cart");
+                menu.add(":notebook_with_decorative_cover: Menu");
+                menu.add(":truck: Delivery cost");
+                menu.add(":gb: Interface language");
+                menu.add("🛒 Shopping cart");
             }
         return menu;
         }
@@ -82,39 +82,39 @@ class Lan {
     public static List<String> listTypes(String lan){
         List<String> list = new ArrayList<>();
         if (lan.equals("Uzbek")) {
-            list.add(":custard:Salatlar:sushi:");
-            list.add(":stew:Suyuq ovqatlar:ramen:");
-            list.add(":spaghetti:Asosiy taomlar:curry:");
-            list.add(":coffee:Ichimliklar:wine_glass:");
-            list.add(":cake:Shirinliklar:shaved_ice:");
-            list.add(":hamburger:Fastfud:fries:");
-            list.add(":pizza:Pitsa:pizza:");
-            list.add(":poultry_leg:Shashlik:meat_on_bone:");
-            list.add(":bread:Boshqa:cookie:");
+            list.add(":custard:Salatlar");
+            list.add(":stew:Suyuq ovqatlar");
+            list.add(":spaghetti:Asosiy taomlar");
+            list.add(":coffee:Ichimliklar");
+            list.add(":cake:Shirinliklar");
+            list.add(":hamburger:Fastfud");
+            list.add(":pizza:Pitsa");
+            list.add(":meat_on_bone:Shashlik");
+            list.add(":bread:Boshqa");
             list.add(backToMenu(lan));
         }
         else if (lan.equals("Russian")) {
-            list.add(":custard:Салаты:sushi:");
-            list.add(":stew:Первые блюда:ramen:");
-            list.add(":spaghetti:Вторые блюда:curry:");
-            list.add(":coffee:Напитки:wine_glass:");
-            list.add(":cake:Десерт:shaved_ice:");
-            list.add(":hamburger:Фастфуд:fries:");
-            list.add(":pizza:Пицца:pizza:");
-            list.add(":poultry_leg:Шашлык:meat_on_bone:");
-            list.add(":bread:Другое:cookie:");
+            list.add(":custard:Салаты");
+            list.add(":stew:Первые блюда");
+            list.add(":spaghetti:Вторые блюда");
+            list.add(":coffee:Напитки");
+            list.add(":cake:Десерт");
+            list.add(":hamburger:Фастфуд");
+            list.add(":pizza:Пицца:");
+            list.add(":meat_on_bone:Шашлык");
+            list.add(":bread:Другое");
             list.add(backToMenu(lan));
         }
         else if (lan.equals("English")) {
-            list.add(":custard:Salads:sushi:");
-            list.add(":stew:Entrees:ramen:");
-            list.add(":spaghetti:Main courses:curry:");
-            list.add(":coffee:Beverages:wine_glass:");
-            list.add(":cake:Dessert:shaved_ice:");
-            list.add(":hamburger:Fast food:fries:");
-            list.add(":pizza:Pizza:pizza:");
-            list.add(":poultry_leg:Barbecue:meat_on_bone:");
-            list.add(":bread:Other:cookie:");
+            list.add(":custard:Salads");
+            list.add(":stew:Entrees");
+            list.add(":spaghetti:Main courses");
+            list.add(":coffee:Beverages");
+            list.add(":cake:Dessert");
+            list.add(":hamburger:Fast food");
+            list.add(":pizza:Pizza");
+            list.add(":meat_on_bone:Barbecue");
+            list.add(":bread:Other");
             list.add(backToMenu(lan));
         }
         return list;
