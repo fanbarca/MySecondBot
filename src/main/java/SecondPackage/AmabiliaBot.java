@@ -236,11 +236,14 @@ public class AmabiliaBot extends TelegramLongPollingBot {
         }
         for (String t: showAllProducts(language)) {
             if (cb.equals(t)) {
+                if (sentMessage!=null) {deleteMessage(sentMessage);sentMessage=null;}
+                if (receivedMes!=null) {deleteMessage(receivedMes);receivedMes=null;}
+                if (image!=null) {deleteMessage(image);image=null;}
                 SendPhoto aa = new SendPhoto();
                 aa.setChatId(update.getCallbackQuery().getMessage().getChatId());
                 aa.setPhoto(sqlQuery("SELECT imageid from table0 where "+language+" = '"+t+"'", "imageid"));
-                edit(t, update.getCallbackQuery().getMessage(), Lan.listTypes(language).get(Integer.parseInt(sqlQuery("SELECT type from table0 where "+language+" = '"+t+"'", "type"))), Lan.goBack(language), Lan.backToMenu(language));
                 image = execute(aa);
+                send(t, update.getCallbackQuery().getMessage().getChatId(), Lan.listTypes(language).get(Integer.parseInt(sqlQuery("SELECT type from table0 where "+language+" = '"+t+"'", "type"))), Lan.goBack(language), Lan.backToMenu(language), true);
             }
         }
     }
