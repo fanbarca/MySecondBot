@@ -38,7 +38,7 @@ class Lan {
             }
             else if (lan.equals("English")) {
                 menu.add(":notebook_with_decorative_cover: Menu");
-                menu.add(":truck: delivery");
+                menu.add(":truck: Delivery");
                 menu.add(":gb: Language");
                 menu.add("🛒 Shopping cart");
             }
