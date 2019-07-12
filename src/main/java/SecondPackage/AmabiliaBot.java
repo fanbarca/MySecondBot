@@ -123,7 +123,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
     }
 
     private void handlePhoto(Message message) {
-            String photoId = message.getPhoto().get(3).getFileId();
+            String photoId = message.getPhoto().get(message.getPhoto().size()-1).getFileId();
             String caption = message.getCaption();
             AmabiliaBot.sql("UPDATE table0 SET imageid = '"+photoId+"' where russian = '"+caption+"'");
     }

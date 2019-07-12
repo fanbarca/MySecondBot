@@ -76,7 +76,7 @@ public class Adminbot extends TelegramLongPollingBot {
                         } else if (update.getMessage().getText().contains("/cost")) {
                             String cost = update.getMessage().getText().substring(5);
                             AmabiliaBot.sql("UPDATE table0 SET cost = "+cost+" where russian = '"+russian+"'");
-                            send("Отправьте изображение", myID, list, false, 3);
+                            send("Готово", myID, list, false, 3);
                         }
                     } else {
                         send("В какой раздел?", myID, Lan.listTypes("Russian"), true, 3);
