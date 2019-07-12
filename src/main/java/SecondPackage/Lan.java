@@ -121,16 +121,16 @@ class Lan {
     }
     public static String goBack(String lan) {
         String r="";
-        if (lan.equals("Uzbek")) r = ":arrow_left:Yana kategoriyalarga";
-        else if (lan.equals("Russian")) r = ":arrow_left:Назад к категориям";
-        else if (lan.equals("English")) r = ":arrow_left:Back to categories";
+        if (lan.equals("Uzbek")) r = ":book: Menyu";
+        else if (lan.equals("Russian")) r = ":book: Меню";
+        else if (lan.equals("English")) r = ":book: Menu";
         return r;
         }
         public static String backToMenu(String lan) {
         String r="";
-        if (lan.equals("Uzbek")) r = "Asosiy menu";
-        else if (lan.equals("Russian")) r = "Главное меню";
-        else if (lan.equals("English")) r = "Main menu";
+        if (lan.equals("Uzbek")) r = ":iphone: Bosh sahifa";
+        else if (lan.equals("Russian")) r = ":iphone: Главная";
+        else if (lan.equals("English")) r = ":iphone: Home";
         return r;
         }
     public static String deliveryCost(String lan) {
