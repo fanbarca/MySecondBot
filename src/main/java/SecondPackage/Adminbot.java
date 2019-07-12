@@ -8,6 +8,7 @@ import org.telegram.telegrambots.meta.api.methods.ForwardMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.Message;
+import org.telegram.telegrambots.meta.api.objects.PhotoSize;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
@@ -88,7 +89,7 @@ public class Adminbot extends TelegramLongPollingBot {
                     }
                 } else if (update.getMessage().hasPhoto()) {
                     if (update.getMessage().getCaption().contains("/img")) {
-                        String photoId = update.getMessage().getPhoto().get(0).getFileId();
+                        String photoId = update.getMessage().getPhoto().get(3).getFileId();
                         AmabiliaBot.sql("UPDATE table0 SET imageid = "+photoId+" where russian = '"+russian+"'");
                     }
                 }
