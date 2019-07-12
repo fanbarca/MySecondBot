@@ -26,20 +26,20 @@ class Lan {
         List<String> menu = new ArrayList<String>();
             if (lan.equals("Uzbek")) {
                 menu.add(":notebook_with_decorative_cover: Menyu");
-                menu.add(":truck: Yetkazib berish narxi");
-                menu.add(":uz: interfeys tili");
+                menu.add(":truck: Yetkazish");
+                menu.add(":uz: Til");
                 menu.add("🛒 Savatcha");
             }
             else if (lan.equals("Russian")) {
                 menu.add(":notebook_with_decorative_cover: Меню");
-                menu.add(":truck: Стоимость доставки");
-                menu.add(":ru: Язык интерфейса");
+                menu.add(":truck: Доставка");
+                menu.add(":ru: Язык");
                 menu.add("🛒 Корзина");
             }
             else if (lan.equals("English")) {
                 menu.add(":notebook_with_decorative_cover: Menu");
-                menu.add(":truck: Delivery cost");
-                menu.add(":gb: Interface language");
+                menu.add(":truck: delivery");
+                menu.add(":gb: Language");
                 menu.add("🛒 Shopping cart");
             }
         return menu;
@@ -82,39 +82,39 @@ class Lan {
     public static List<String> listTypes(String lan){
         List<String> list = new ArrayList<>();
         if (lan.equals("Uzbek")) {
-            list.add(":custard:Salatlar");
-            list.add(":stew:Suyuq ovqatlar");
-            list.add(":spaghetti:Asosiy taomlar");
-            list.add(":coffee:Ichimliklar");
-            list.add(":cake:Shirinliklar");
-            list.add(":hamburger:Fastfud");
-            list.add(":pizza:Pitsa");
-            list.add(":meat_on_bone:Shashlik");
-            list.add(":bread:Boshqa");
+            list.add(":custard: Salatlar");
+            list.add(":stew: Suyuq ovqatlar");
+            list.add(":spaghetti: Asosiy taomlar");
+            list.add(":coffee: Ichimliklar");
+            list.add(":cake: Shirinliklar");
+            list.add(":hamburger: Fastfud");
+            list.add(":pizza: Pitsa");
+            list.add(":meat_on_bone: Shashlik");
+            list.add(":bread: Boshqa");
             list.add(backToMenu(lan));
         }
         else if (lan.equals("Russian")) {
-            list.add(":custard:Салаты");
-            list.add(":stew:Первые блюда");
-            list.add(":spaghetti:Вторые блюда");
-            list.add(":coffee:Напитки");
-            list.add(":cake:Десерт");
-            list.add(":hamburger:Фастфуд");
-            list.add(":pizza:Пицца:");
-            list.add(":meat_on_bone:Шашлык");
-            list.add(":bread:Другое");
+            list.add(":custard: Салаты");
+            list.add(":stew: Первые блюда");
+            list.add(":spaghetti: Вторые блюда");
+            list.add(":coffee: Напитки");
+            list.add(":cake: Десерт");
+            list.add(":hamburger: Фастфуд");
+            list.add(":pizza: Пицца:");
+            list.add(":meat_on_bone: Шашлык");
+            list.add(":bread: Другое");
             list.add(backToMenu(lan));
         }
         else if (lan.equals("English")) {
-            list.add(":custard:Salads");
-            list.add(":stew:Entrees");
-            list.add(":spaghetti:Main courses");
-            list.add(":coffee:Beverages");
-            list.add(":cake:Dessert");
-            list.add(":hamburger:Fast food");
-            list.add(":pizza:Pizza");
-            list.add(":meat_on_bone:Barbecue");
-            list.add(":bread:Other");
+            list.add(":custard: Salads");
+            list.add(":stew: Entrees");
+            list.add(":spaghetti: Main courses");
+            list.add(":coffee: Beverages");
+            list.add(":cake: Dessert");
+            list.add(":hamburger: Fast food");
+            list.add(":pizza: Pizza");
+            list.add(":meat_on_bone: Barbecue");
+            list.add(":bread: Other");
             list.add(backToMenu(lan));
         }
         return list;
