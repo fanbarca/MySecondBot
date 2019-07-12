@@ -187,18 +187,21 @@ public class AmabiliaBot extends TelegramLongPollingBot {
             }
         }
         if (cb.equals(Lan.backToMenu(language))) {
+            if (image!=null) {deleteMessage(image);image=null;}
             edit(update.getCallbackQuery().getMessage(), Lan.welcome(language, sqlselect(String.valueOf(update.getCallbackQuery().getMessage().getChatId()), "firstname")),
             Lan.mainMenu(language), 2);
+
         }
         if (cb.equals(Lan.mainMenu("Uzbek").get(0))||
             cb.equals(Lan.mainMenu("Russian").get(0))||
             cb.equals(Lan.mainMenu("English").get(0))||
             cb.equals(Lan.goBack(language))) {
-             if ((language == null) || (language.equals(""))) {
+                if (image!=null) {deleteMessage(image);image=null;}
+                if ((language == null) || (language.equals(""))) {
                  chooseLanguage(update.getCallbackQuery().getMessage(), true);
-             } else {
+                } else {
                  edit(update.getCallbackQuery().getMessage(),Lan.chooseDish(language), Lan.listTypes(language),3);
-             }
+                }
          }
          else if (cb.equals(Lan.mainMenu("Uzbek").get(1))||
                 cb.equals(Lan.mainMenu("Russian").get(1))||
@@ -236,9 +239,8 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                 SendPhoto aa = new SendPhoto();
                 aa.setChatId(update.getCallbackQuery().getMessage().getChatId());
                 aa.setPhoto(sqlQuery("SELECT imageid from table0 where "+language+" = '"+t+"'", "imageid"));
+                edit(t, update.getCallbackQuery().getMessage(), Lan.listTypes(language).get(Integer.parseInt(sqlQuery("SELECT type from table0 where "+language+" = '"+t+"'", "type"))), Lan.goBack(language), Lan.backToMenu(language));
                 image = execute(aa);
-                edit(t, update.getCallbackQuery().getMessage(),
-                Lan.listTypes(language).get(Integer.parseInt(sqlQuery("SELECT type from table0 where "+language+" = '"+t+"'", "type"))), Lan.goBack(language), Lan.backToMenu(language));
             }
         }
     }
