@@ -5,6 +5,7 @@ import com.vdurmont.emoji.EmojiParser;
 import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
 import org.telegram.telegrambots.meta.api.methods.ForwardMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.Message;
@@ -227,7 +228,12 @@ public class AmabiliaBot extends TelegramLongPollingBot {
         }
         for (String t: showAllProducts(language)) {
             if (cb.equals(t)) {
-                edit(t, update.getCallbackQuery().getMessage(), 
+                SendPhoto aa = new SendPhoto();
+                aa.setChatId(update.getCallbackQuery().getMessage().getChatId());
+                aa.setCaption(t);
+                aa.setPhoto(sqlQuery("SELECT imageid from table0 where "+language+" = '"+t+"'", "imageid"));
+                execute(aa);
+                edit(t, update.getCallbackQuery().getMessage(),
                 Lan.listTypes(language).get(Integer.parseInt(sqlQuery("SELECT type from table0 where "+language+" = '"+t+"'", "type"))), Lan.goBack(language), Lan.backToMenu(language));
             }
         }
