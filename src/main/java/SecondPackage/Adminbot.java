@@ -88,10 +88,7 @@ public class Adminbot extends TelegramLongPollingBot {
                         }
                     }
                 } else if (update.getMessage().hasPhoto()) {
-                    if (update.getMessage().getCaption().contains("/img")) {
-                        String photoId = update.getMessage().getPhoto().get(3).getFileId();
-                        AmabiliaBot.sql("UPDATE table0 SET imageid = '"+photoId+"' where russian = '"+russian+"'");
-                    }
+                    
                 }
             }
         } else if (update.hasCallbackQuery()) {
