@@ -227,7 +227,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
         }
         for (String t: showAllProducts(language)) {
             if (cb.equals(t)) {
-                edit(update.getCallbackQuery().getMessage(), t, Lan.listTypes(language).get(Integer.parseInt(sqlQuery("SELECT type from table0 where "+language+" = '"+t+"'", "type"))));
+                edit(update.getCallbackQuery().getMessage(), t, Lan.listTypes(language).get(Integer.parseInt(sqlQuery("SELECT type from table0 where "+language+" = '"+t+"'", "type"))), Lan.goBack(language), Lan.backToMenu(language));
             }
         }
     }
@@ -663,6 +663,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                     lan.add(rs.getString(column));
                 }
                 lan.add(Lan.goBack(language));
+                lan.add(Lan.backToMenu(language));
                 prst.close();
                 conn.close();
             }

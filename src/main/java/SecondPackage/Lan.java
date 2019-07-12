@@ -121,9 +121,9 @@ class Lan {
     }
     public static String goBack(String lan) {
         String r="";
-        if (lan.equals("Uzbek")) r = ":arrow_left:Orqaga";
-        else if (lan.equals("Russian")) r = ":arrow_left:Назад";
-        else if (lan.equals("English")) r = ":arrow_left:Back";
+        if (lan.equals("Uzbek")) r = ":arrow_left:Yana kategoriyalarga";
+        else if (lan.equals("Russian")) r = ":arrow_left:Назад к категориям";
+        else if (lan.equals("English")) r = ":arrow_left:Back to categories";
         return r;
         }
         public static String backToMenu(String lan) {
