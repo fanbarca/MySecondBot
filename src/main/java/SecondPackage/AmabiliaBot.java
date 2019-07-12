@@ -48,18 +48,16 @@ public class AmabiliaBot extends TelegramLongPollingBot {
         Message m;
         try {
             if (update.hasMessage()) {
-                if (a.getSentMessage()!=null) {deleteMessage(a.getSentMessage()); a.setSentMessage(null);}
-                if (a.getReceivedMes()!=null) deleteMessage(a.getReceivedMes()); a.setReceivedMes(update.getMessage());
-                if (a.getImage()!=null) {deleteMessage(a.getImage());a.setImage(null);}
-                try {
-                    a.setLanguage(sqlselect(update.getMessage().getFrom().getId().toString(), "language"));
-                    a.setNumber(sqlselect(update.getMessage().getFrom().getId().toString(),"phone"));
-                } catch (SQLException e1) {
-                    e1.printStackTrace();
-                }
+                a = new Order();
                 m = update.getMessage();
-                if (sqlIdList().contains(m.getFrom().getId().toString())) {
-                        a= set.get(m.getFrom().getId());
+                        if (sqlIdList().contains(m.getFrom().getId().toString())) {
+                        try {
+                            a.setLanguage(sqlselect(update.getMessage().getFrom().getId().toString(), "language"));
+                            a.setNumber(sqlselect(update.getMessage().getFrom().getId().toString(),"phone"));
+                        } catch (SQLException e1) {e1.printStackTrace();}
+                        if (a.getSentMessage()!=null) {deleteMessage(a.getSentMessage()); a.setSentMessage(null);}
+                        if (a.getReceivedMes()!=null) deleteMessage(a.getReceivedMes()); a.setReceivedMes(update.getMessage());
+                        if (a.getImage()!=null) {deleteMessage(a.getImage());a.setImage(null);}
                         if (m.hasText()) handleIncomingText(m);
                         else if (m.hasAnimation()) handleAnimation(m);
                         else if (m.hasAudio()) handleAudio(m);
@@ -72,8 +70,6 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                         else if (m.hasVideoNote()) handleVideoNote(m);
                         else if (m.hasVoice()) handleVoice(m);
                     } else {
-                        a = new Order();
-                        set.put(m.getFrom().getId(), a);
                         sql("INSERT INTO users (id, firstname, lastname, username) VALUES ('"+
                                 m.getFrom().getId().toString()+"','"+
                                 m.getFrom().getFirstName()+"','"+
@@ -85,6 +81,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                         if (m.hasText()) handleIncomingText(m);
                     }
             } else if (update.hasCallbackQuery()) {
+                a = new Order();
                 try {
                     a.setLanguage(sqlselect(update.getCallbackQuery().getMessage().getChatId().toString(), "language"));
                     a.setNumber(sqlselect(update.getCallbackQuery().getMessage().getFrom().getId().toString(),"phone"));
