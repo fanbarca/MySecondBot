@@ -54,9 +54,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                                 sqlGetUserData(m.getFrom().getId().toString()).get(0),
                                 sqlGetUserData(m.getFrom().getId().toString()).get(1),
                                 sqlGetUserData(m.getFrom().getId().toString()).get(2),
-                                sqlGetUserData(m.getFrom().getId().toString()).get(3),
-                                sqlGetUserData(m.getFrom().getId().toString()).get(4),
-                                sqlGetUserData(m.getFrom().getId().toString()).get(5)
+                                sqlGetUserData(m.getFrom().getId().toString()).get(3)
                                 );
                         if (m.hasText()) handleIncomingText(m);
                         else if (m.hasAnimation()) handleAnimation(m);
@@ -119,7 +117,8 @@ public class AmabiliaBot extends TelegramLongPollingBot {
     private void handlePhoto(Message message) {
             String photoId = message.getPhoto().get(message.getPhoto().size()-1).getFileId();
             String caption = message.getCaption();
-            AmabiliaBot.sql("UPDATE table0 SET imageid = '"+photoId+"' where russian = '"+caption+"'");
+            sql("UPDATE table0 SET imageid = '"+photoId+"' where russian = '"+caption+"'");
+            sql("UPDATE users SET image = '"+message.getMessageId()+"' where id = '"+message.getChatId()+"'");
     }
 
     private void handleDocument(Message message) {
@@ -437,7 +436,9 @@ public class AmabiliaBot extends TelegramLongPollingBot {
         }
     }
         try {
-            execute(sendMessage);
+            int smid = execute(sendMessage).getMessageId();
+            sql("update users set smid ="+smid+" where id = "+chatId);
+
         }
         catch (TelegramApiException e) {e.printStackTrace();}
     }
