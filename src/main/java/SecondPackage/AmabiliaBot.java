@@ -132,10 +132,11 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                     message.getContact().getPhoneNumber()+
                     " WHERE id ="+message.getFrom().getId());
             a.setNumber(sqlGetUserData(message.getChatId().toString()).get(1));
+        deleteMessage(sqlQuery("SELECT smid from users where id="+message.getChatId(), "smid"), message.getChatId().toString());
+        deleteMessage(message);
         send(Lan.welcome(a.getLanguage(), message.getFrom().getFirstName()),
                     message.getChatId(), Lan.mainMenu(a.getLanguage()),null, 2);
-        deleteMessage(message);
-        deleteMessage(sqlQuery("SELECT smid from users where id="+message.getChatId(), "smid"), message.getChatId().toString());
+
     }
 
     private void handleAudio(Message message) {
