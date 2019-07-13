@@ -134,6 +134,8 @@ public class AmabiliaBot extends TelegramLongPollingBot {
             a.setNumber(sqlGetUserData(message.getChatId().toString()).get(1));
         send(Lan.welcome(a.getLanguage(), message.getFrom().getFirstName()),
                     message.getChatId(), Lan.mainMenu(a.getLanguage()),null, 2);
+        deleteMessage(message);
+        deleteMessage(sqlQuery("SELECT smid from users where id="+message.getChatId(), "smid"), message.getChatId().toString());
     }
 
     private void handleAudio(Message message) {
@@ -454,7 +456,6 @@ public class AmabiliaBot extends TelegramLongPollingBot {
         try {
             int smid = execute(sendMessage).getMessageId();
             sql("update users set smid ="+smid+" where id = "+chatId);
-
         }
         catch (TelegramApiException e) {e.printStackTrace();}
     }
@@ -531,7 +532,10 @@ public class AmabiliaBot extends TelegramLongPollingBot {
         rows2.add(row2);
         replyMarkup.setKeyboard(rows2).setResizeKeyboard(true).setOneTimeKeyboard(true);
         sendMessage.setReplyMarkup(replyMarkup);
-        try { execute(sendMessage);}
+        try {
+            int smid = execute(sendMessage).getMessageId();
+            sql("update users set smid ="+smid+" where id = "+ChatId);
+            }
         catch (TelegramApiException e) {e.printStackTrace();}
     }
 
