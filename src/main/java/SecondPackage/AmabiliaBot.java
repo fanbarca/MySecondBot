@@ -242,6 +242,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
 
     private void handleIncomingText(Message message) throws TelegramApiException, InterruptedException, SQLException {
         if (message.getText().equals("/start")) {
+            deleteMessage(sqlQuery("SELECT smid from users where id="+message.getChatId(), "smid"), message.getChatId().toString());
             deleteMessage(message);
             if ((a.getLanguage() == null) || (a.getLanguage().equals(""))) {
                 chooseLanguage(message, false);

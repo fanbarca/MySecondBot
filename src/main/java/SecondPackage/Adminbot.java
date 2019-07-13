@@ -58,23 +58,24 @@ public class Adminbot extends TelegramLongPollingBot {
                         send("В какой раздел?", myID, Lan.listTypes("Russian"), true, 3);
                     }
                     if (!category.equals("")){
-                        if (update.getMessage().getText().contains("/rus")) {
+                        if (update.getMessage().getText().contains("/Р")) {
                             Random rand = new Random();
-                            russian = update.getMessage().getText().substring(5);
+                            russian = update.getMessage().getText().substring(3);
                             AmabiliaBot.sql("insert into table0 (id, russian, type, instock) values ("+
                             String.format("%04d", rand.nextInt(10000))+", '"+russian+"', '"+category+"', true)");
+                            
                             send("Введите название продукта на узбекском", myID, list, false, 3);
-                        } else if (update.getMessage().getText().contains("/uzb")) {
-                            String Name = update.getMessage().getText().substring(5);
+                        } else if (update.getMessage().getText().contains("/U")) {
+                            String Name = update.getMessage().getText().substring(3);
                             AmabiliaBot.sql("UPDATE table0 SET uzbek = '"+Name+"' where russian = '"+russian+"'");
                             send("Введите название продукта на английском", myID, list, false, 3);
 
-                        } else if (update.getMessage().getText().contains("/eng")) {
-                            String Name = update.getMessage().getText().substring(5);
+                        } else if (update.getMessage().getText().contains("/E")) {
+                            String Name = update.getMessage().getText().substring(3);
                             AmabiliaBot.sql("UPDATE table0 SET english = '"+Name+"' where russian = '"+russian+"'");
                             send("Введите стоимость продукта", myID, list, false, 3);
-                        } else if (update.getMessage().getText().contains("/cost")) {
-                            String cost = update.getMessage().getText().substring(5);
+                        } else if (update.getMessage().getText().contains("/C")) {
+                            String cost = update.getMessage().getText().substring(3);
                             AmabiliaBot.sql("UPDATE table0 SET cost = "+cost+" where russian = '"+russian+"'");
                             send("Готово", myID, list, false, 3);
                         }
