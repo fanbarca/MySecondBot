@@ -35,7 +35,14 @@ public class Order {
 		this.sentMessage = null;
 		this.image = null;
 	}
-
+	public Order() {
+		this.firstName = null;
+		this.number = null;
+		this.language = null;
+		this.receivedMes = null;
+		this.sentMessage = null;
+		this.image = null;
+	}
 
 	public String getNumber() {
 		return number;
