@@ -1,6 +1,5 @@
 package SecondPackage;
 
-import org.telegram.telegrambots.meta.api.objects.Message;
 
 public class Order {
 
@@ -24,6 +23,17 @@ public class Order {
 		this.image = Integer.parseInt(image);
 		this.receivedMes = Integer.parseInt(receivedMes);
 		this.sentMessage = Integer.parseInt(sentMessage);
+	}
+	public Order(String firstName,
+				 String number,
+				 String language,
+				 String receivedMes) {
+		this.firstName = firstName;
+		this.number = number;
+		this.language = language;
+		this.receivedMes = Integer.parseInt(receivedMes);
+		this.sentMessage = null;
+		this.image = null;
 	}
 
 

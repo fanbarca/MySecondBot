@@ -80,9 +80,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                                     sqlGetUserData(m.getFrom().getId().toString()).get(0),
                                     sqlGetUserData(m.getFrom().getId().toString()).get(1),
                                     sqlGetUserData(m.getFrom().getId().toString()).get(2),
-                                    sqlGetUserData(m.getFrom().getId().toString()).get(3),
-                                    sqlGetUserData(m.getFrom().getId().toString()).get(4),
-                                    sqlGetUserData(m.getFrom().getId().toString()).get(5)
+                                    sqlGetUserData(m.getFrom().getId().toString()).get(3)
                             );
                         // send(":boom: Новый пользователь!" +
                         //         "\n" + m.getFrom().getFirstName() +" "+ m.getFrom().getLastName() +
