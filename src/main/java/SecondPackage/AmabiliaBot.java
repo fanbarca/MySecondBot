@@ -243,7 +243,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                 if (listMyOrders(update.getCallbackQuery().getMessage().getChatId().toString(),"orderid").size()==0){
                     edit(update.getCallbackQuery().getMessage(), Lan.emptyOrders(a.getLanguage()), Lan.backToMenu(a.getLanguage()));
                 } else {
-                    edit(update.getCallbackQuery().getMessage(), Lan.myOrders(a.getLanguage()), listMyOrders(update.getCallbackQuery().getMessage().getChatId().toString(),"orderid"), 1);
+                    edit(update.getCallbackQuery().getMessage(), Lan.myOrders(a.getLanguage())+"\n"+listMyOrders(update.getCallbackQuery().getMessage().getChatId().toString(),"orderid"), Lan.backToMenu(a.getLanguage()));
                 }
             }
         }
@@ -269,10 +269,10 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                 sql("update users set image ="+image+" where id ="+update.getCallbackQuery().getMessage().getChatId());
                 List<String> keyb = new ArrayList<>();
                 if (i>0) keyb.add(":point_left: "+showAllProducts(a.getLanguage()).get(i-1));
-                else keyb.add(" ");
+                else keyb.add("-");
                 keyb.add("🛒:heavy_plus_sign:"+t);
                 if (i<showAllProducts(a.getLanguage()).size()-1) keyb.add(showAllProducts(a.getLanguage()).get(i+1)+" :point_right:");
-                else keyb.add(" ");
+                else keyb.add("-");
                 keyb.add(Lan.listTypes(a.getLanguage()).get(Integer.parseInt(sqlQuery("SELECT type from table0 where "+a.getLanguage()+" = '"+t+"'", "type"))));
                 keyb.add(Lan.mainMenu(a.getLanguage()).get(3));
                 keyb.add(Lan.goBack(a.getLanguage()));
