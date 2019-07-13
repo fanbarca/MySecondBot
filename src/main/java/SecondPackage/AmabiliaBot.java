@@ -116,20 +116,20 @@ public class AmabiliaBot extends TelegramLongPollingBot {
     }
 
     private void handleVoice(Message message) {
-        forwardMessage(message, myID);
+        deleteMessage(message);
     }
 
     private void handleVideoNote(Message message) {
-        forwardMessage(message, myID);
+        deleteMessage(message);
     }
 
     private void handleVideo(Message message) {
-        forwardMessage(message, myID);
+        deleteMessage(message);
 
     }
 
     private void handleSticker(Message message) {
-        forwardMessage(message, myID);
+        deleteMessage(message);
     }
 
     private void handleLocation(Message message) {
@@ -142,11 +142,11 @@ public class AmabiliaBot extends TelegramLongPollingBot {
             sql("UPDATE table0 SET imageid = '"+photoId+"' where russian = '"+caption+"'");
             sql("UPDATE users SET image = '"+message.getMessageId()+"' where id = '"+message.getChatId()+"'");
             a.setImage(sqlGetUserData(message.getChatId().toString()).get(5));
+            deleteMessage(message);
     }
 
     private void handleDocument(Message message) {
-        forwardMessage(message, myID);
-
+        deleteMessage(message);
     }
 
     private void handleContact(Message message) throws SQLException {
@@ -264,9 +264,16 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                 String image = execute(aa).getMessageId().toString();
                 sql("update users set image ="+image+" where id ="+update.getCallbackQuery().getMessage().getChatId());
                 a.setImage(image);
+                List<String> keyb = new ArrayList<>();
+                keyb.add(":point_left::arrow_left:");
+                keyb.add(Lan.toCart(a.getLanguage()));
+                keyb.add(":arrow_right::point_right:");
+                keyb.add(Lan.listTypes(a.getLanguage()).get(Integer.parseInt(sqlQuery("SELECT type from table0 where "+a.getLanguage()+" = '"+t+"'", "type"))));
+                keyb.add(Lan.goBack(a.getLanguage()));
+                keyb.add(Lan.backToMenu(a.getLanguage()));
                 send(t + "\n"+
                 Lan.cost(a.getLanguage()) + sqlQuery("SELECT cost from table0 where "+a.getLanguage()+" = '"+t+"'", "cost") + " "+ Lan.currency(a.getLanguage()),
-                update.getCallbackQuery().getMessage().getChatId(), Lan.listTypes(a.getLanguage()).get(Integer.parseInt(sqlQuery("SELECT type from table0 where "+a.getLanguage()+" = '"+t+"'", "type"))), Lan.goBack(a.getLanguage()), Lan.backToMenu(a.getLanguage()), true);
+                update.getCallbackQuery().getMessage().getChatId(), keyb, null, 3);
                 deleteMessage(update.getCallbackQuery().getMessage());
             }
         }
