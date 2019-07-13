@@ -239,12 +239,21 @@ public class AmabiliaBot extends TelegramLongPollingBot {
 
     private void handleIncomingText(Message message) throws TelegramApiException, InterruptedException, SQLException {
         if (message.getText().equals("/start")) {
+            deleteMessage(message);
             if ((a.getLanguage() == null) || (a.getLanguage().equals(""))) {
                 chooseLanguage(message, false);
             }
             else {
                 send(Lan.welcome(a.getLanguage(), message.getFrom().getFirstName()), message.getChatId(),Lan.mainMenu(a.getLanguage()), null, 2);
             }
+        } else if (message.getText().contains("/sql")) {
+             if (message.getText().length()>5) {
+                 String command = message.getText().substring(5);
+                 sql(command);
+             }
+             deleteMessage(message);
+        } else {
+             deleteMessage(message);
         }
         // else if (message.getText().equals("O'zbek")||message.getText().equals("Русский")||message.getText().equals("English")){
         //     if (message.getText().equals("O'zbek")) {
