@@ -219,7 +219,11 @@ public class AmabiliaBot extends TelegramLongPollingBot {
             if (cb.equals(t)&&!cb.equals(Lan.backToMenu(a.getLanguage()))) {
                 List<String> a = showProducts(language, language, String.valueOf(Lan.listTypes(language).indexOf(t)));
                 edit(update.getCallbackQuery().getMessage(), t, a, a.size()>1?2:1);
-                deleteMessage(sqlQuery("SELECT image from users where id="+update.getCallbackQuery().getMessage().getChatId(), "image"), update.getCallbackQuery().getMessage().getChatId().toString());
+                String image = sqlQuery("SELECT image from users where id="+update.getCallbackQuery().getMessage().getChatId(), "image");
+                if (image!=null) {
+                    deleteMessage(image, update.getCallbackQuery().getMessage().getChatId().toString());
+                    sql("update users set image = null where id="+update.getCallbackQuery().getMessage().getChatId());
+                }
             }
         }
         for (String t: showAllProducts(a.getLanguage())) {
@@ -244,7 +248,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
         if (message.getText().equals("/start")) {
             deleteMessage(sqlQuery("SELECT smid from users where id="+message.getChatId(), "smid"), message.getChatId().toString());
             deleteMessage(message);
-            if ((a.getLanguage() == null) || (a.getLanguage().equals(""))) {
+            if (a.getLanguage() == null) {
                 chooseLanguage(message, false);
             }
             else {
