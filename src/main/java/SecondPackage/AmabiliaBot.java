@@ -162,7 +162,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                 sql("UPDATE users SET language = 'English' WHERE id ="+update.getCallbackQuery().getMessage().getChatId());
                 a.setLanguage("English");
             }
-            if (a.getNumber().equals("")||a.getNumber()==null) {
+            if (a.getNumber()==null) {
                 deleteMessage(update.getCallbackQuery().getMessage());
                 sendMeNumber(update.getCallbackQuery().getMessage().getChatId());
             } else {
