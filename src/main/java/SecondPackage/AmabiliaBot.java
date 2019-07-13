@@ -7,10 +7,13 @@ import org.telegram.telegrambots.meta.api.methods.ForwardMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageMedia;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.PhotoSize;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.media.InputMedia;
+import org.telegram.telegrambots.meta.api.objects.media.InputMediaPhoto;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
@@ -257,8 +260,8 @@ public class AmabiliaBot extends TelegramLongPollingBot {
             }
         }
         for (int i = 0; i<showAllProducts(a.getLanguage()).size(); i++) {
+            String t = showAllProducts(a.getLanguage()).get(i);
             if (cb.equals(showAllProducts(a.getLanguage()).get(i))) {
-                String t = showAllProducts(a.getLanguage()).get(i);
                 SendPhoto aa = new SendPhoto();
                 aa.setChatId(update.getCallbackQuery().getMessage().getChatId());
                 aa.setPhoto(sqlQuery("SELECT imageid from table0 where "+a.getLanguage()+" = '"+t+"'", "imageid"));
@@ -266,9 +269,9 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                 sql("update users set image ="+image+" where id ="+update.getCallbackQuery().getMessage().getChatId());
                 a.setImage(image);
                 List<String> keyb = new ArrayList<>();
-                if (i>0) keyb.add(":arrow_left:"+showAllProducts(a.getLanguage()).get(i-1));
+                if (i>0) keyb.add(":point_left: "+showAllProducts(a.getLanguage()).get(i-1));
                 keyb.add("🛒:heavy_plus_sign:"+t);
-                if (i<showAllProducts(a.getLanguage()).size()-1) keyb.add(showAllProducts(a.getLanguage()).get(i+1)+":arrow_right:");
+                if (i<showAllProducts(a.getLanguage()).size()-1) keyb.add(showAllProducts(a.getLanguage()).get(i+1)+" :point_right:");
                 keyb.add(Lan.listTypes(a.getLanguage()).get(Integer.parseInt(sqlQuery("SELECT type from table0 where "+a.getLanguage()+" = '"+t+"'", "type"))));
                 keyb.add(Lan.mainMenu(a.getLanguage()).get(3));
                 keyb.add(Lan.goBack(a.getLanguage()));
@@ -277,10 +280,28 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                 Lan.cost(a.getLanguage()) + sqlQuery("SELECT cost from table0 where "+a.getLanguage()+" = '"+t+"'", "cost") + " "+ Lan.currency(a.getLanguage()),
                 update.getCallbackQuery().getMessage().getChatId(), keyb, null, 3);
                 deleteMessage(update.getCallbackQuery().getMessage());
-            }
-        }
-        if (cb.equals(":arrow_left:")) {
+            } else if (cb.contains(showAllProducts(a.getLanguage()).get(i))&&(cb.contains(":point_left:")||cb.contains(":point_right:"))) {
+                InputMediaPhoto imp = new InputMediaPhoto();
+                imp.setMedia(sqlQuery("SELECT imageid from table0 where "+a.getLanguage()+" = '"+t+"'", "imageid"));
+                EditMessageMedia em = new EditMessageMedia();
+                em.setChatId(update.getCallbackQuery().getMessage().getChatId());
+                em.setMessageId(Integer.parseInt(a.getImage()));
+                em.setMedia(imp);
+                execute(em);
+                List<String> keyb = new ArrayList<>();
+                if (i>0) keyb.add(":point_left: "+showAllProducts(a.getLanguage()).get(i-1));
+                keyb.add("🛒:heavy_plus_sign:"+t);
+                if (i<showAllProducts(a.getLanguage()).size()-1) keyb.add(showAllProducts(a.getLanguage()).get(i+1)+" :point_right:");
+                keyb.add(Lan.listTypes(a.getLanguage()).get(Integer.parseInt(sqlQuery("SELECT type from table0 where "+a.getLanguage()+" = '"+t+"'", "type"))));
+                keyb.add(Lan.mainMenu(a.getLanguage()).get(3));
+                keyb.add(Lan.goBack(a.getLanguage()));
+                keyb.add(Lan.backToMenu(a.getLanguage()));
+                edit(update.getCallbackQuery().getMessage(), t + "\n"+
+                Lan.cost(a.getLanguage()) + sqlQuery("SELECT cost from table0 where "+a.getLanguage()+" = '"+t+"'", "cost") + " "+ Lan.currency(a.getLanguage()),
+                keyb, 3);
+            } else if (cb.equals("🛒:heavy_plus_sign:"+showAllProducts(a.getLanguage()).get(i))) {
 
+            }
         }
     }
 
