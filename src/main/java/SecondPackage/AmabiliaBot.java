@@ -215,6 +215,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
             if (cb.equals(t)&&!cb.equals(Lan.backToMenu(a.getLanguage()))) {
                 List<String> a = showProducts(language, language, String.valueOf(Lan.listTypes(language).indexOf(t)));
                 edit(update.getCallbackQuery().getMessage(), t, a, a.size()>1?2:1);
+                deleteMessage(sqlQuery("SELECT image from users where id="+update.getCallbackQuery().getMessage().getChatId(), "image"), update.getCallbackQuery().getMessage().getChatId().toString());
             }
         }
         for (String t: showAllProducts(a.getLanguage())) {
@@ -222,11 +223,13 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                 SendPhoto aa = new SendPhoto();
                 aa.setChatId(update.getCallbackQuery().getMessage().getChatId());
                 aa.setPhoto(sqlQuery("SELECT imageid from table0 where "+a.getLanguage()+" = '"+t+"'", "imageid"));
-                execute(aa);
+                String image = execute(aa).getMessageId().toString();
+                sql("update users set image ="+image+" where id ="+update.getCallbackQuery().getMessage().getChatId());
+                a.setImage(image);
                 send(t + "\n"+
                 Lan.cost(a.getLanguage()) + sqlQuery("SELECT cost from table0 where "+a.getLanguage()+" = '"+t+"'", "cost") + " "+ Lan.currency(a.getLanguage()),
                 update.getCallbackQuery().getMessage().getChatId(), Lan.listTypes(a.getLanguage()).get(Integer.parseInt(sqlQuery("SELECT type from table0 where "+a.getLanguage()+" = '"+t+"'", "type"))), Lan.goBack(a.getLanguage()), Lan.backToMenu(a.getLanguage()), true);
-                deleteMessage(sqlQuery("SELECT image from users where id="+update.getCallbackQuery().getMessage().getChatId(), "image"), update.getCallbackQuery().getMessage().getChatId().toString());
+                deleteMessage(sqlQuery("SELECT smid from users where id="+update.getCallbackQuery().getMessage().getChatId(), "smid"), update.getCallbackQuery().getMessage().getChatId().toString());
             }
         }
     }
