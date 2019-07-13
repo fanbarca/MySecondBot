@@ -232,4 +232,14 @@ public List<String> listOrders(String column){
         }
         return lan;
     }
+    public void sendMe(String text) {
+        SendMessage sendMessage = new SendMessage()
+                .setChatId(myID)
+                .setText(EmojiParser.parseToUnicode(text))
+                .setParseMode("HTML");
+        try {
+            execute(sendMessage);
+        }
+        catch (TelegramApiException e) {e.printStackTrace();}
+    }
 }

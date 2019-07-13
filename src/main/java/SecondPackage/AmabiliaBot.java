@@ -83,9 +83,10 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                                     null,
                                     sqlGetUserData(m.getFrom().getId().toString()).get(3)
                             );
-                        // send(":boom: Новый пользователь!" +
-                        //         "\n" + m.getFrom().getFirstName() +" "+ m.getFrom().getLastName() +
-                        //         "\n@" + m.getFrom().getUserName(), myID);
+                        Adminbot ab = new Adminbot();
+                        ab.sendMe(":boom: Новый пользователь!" +
+                                "\n" + m.getFrom().getFirstName() +" "+ m.getFrom().getLastName() +
+                                "\n@" + m.getFrom().getUserName());
                         if (m.hasText()) handleIncomingText(m);
                     }
             } else if (update.hasCallbackQuery()) {
