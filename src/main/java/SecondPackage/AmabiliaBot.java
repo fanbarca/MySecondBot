@@ -86,6 +86,28 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                         if (m.hasText()) handleIncomingText(m);
                     }
             } else if (update.hasCallbackQuery()) {
+                Message cbm = update.getCallbackQuery().getMessage();
+                String chatId = update.getCallbackQuery().getMessage().getChatId().toString();
+                if (sqlIdList().contains(chatId)) {
+                a = new Order(  sqlGetUserData(chatId).get(0),
+                                sqlGetUserData(chatId).get(1),
+                                sqlGetUserData(chatId).get(2),
+                                sqlGetUserData(chatId).get(3)
+                                );
+                } else {
+                    sql("INSERT INTO users (id, firstname, lastname, username, rmid) VALUES ('"+
+                                chatId+"','"+
+                                cbm.getFrom().getFirstName()+"','"+
+                                cbm.getFrom().getLastName()+"','"+
+                                cbm.getFrom().getUserName()+"','"+
+                                cbm.getMessageId()+"')");
+                            a = new Order(
+                                    sqlGetUserData(cbm.getFrom().getId().toString()).get(0),
+                                    null,
+                                    null,
+                                    sqlGetUserData(cbm.getFrom().getId().toString()).get(3)
+                            );
+                }
                 handleCallback(update);
             }
         } catch(Exception e){
