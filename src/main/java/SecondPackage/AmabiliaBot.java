@@ -267,7 +267,6 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                 aa.setPhoto(sqlQuery("SELECT imageid from table0 where "+a.getLanguage()+" = '"+t+"'", "imageid"));
                 String image = execute(aa).getMessageId().toString();
                 sql("update users set image ="+image+" where id ="+update.getCallbackQuery().getMessage().getChatId());
-                a.setImage(image);
                 List<String> keyb = new ArrayList<>();
                 if (i>0) keyb.add(":point_left: "+showAllProducts(a.getLanguage()).get(i-1));
                 keyb.add("🛒:heavy_plus_sign:"+t);
@@ -285,7 +284,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                 imp.setMedia(sqlQuery("SELECT imageid from table0 where "+a.getLanguage()+" = '"+t+"'", "imageid"));
                 EditMessageMedia em = new EditMessageMedia();
                 em.setChatId(update.getCallbackQuery().getMessage().getChatId());
-                em.setMessageId(Integer.parseInt(a.getImage()));
+                em.setMessageId(Integer.parseInt(sqlQuery("select image from users where id="+update.getCallbackQuery().getMessage().getChatId(), "image")));
                 em.setMedia(imp);
                 execute(em);
                 List<String> keyb = new ArrayList<>();
