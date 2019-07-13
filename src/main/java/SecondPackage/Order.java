@@ -5,16 +5,26 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 public class Order {
 
 
-    private Message sentMessage = null;
-    private Message receivedMes = null;
-    private Message image = null;
-    private String language ="";
-    private String number = "";
-    
+    private Integer sentMessage;
+    private Integer receivedMes;
+    private Integer image;
+    private String language;
+    private String number;
+    private String firstName;
 
-    public Order() {
-
-    }
+    public Order(String firstName,
+				 String number,
+				 String language,
+				 String receivedMes,
+				 String sentMessage,
+				 String image) {
+		this.firstName = firstName;
+		this.number = number;
+		this.language = language;
+		this.image = Integer.parseInt(image);
+		this.receivedMes = Integer.parseInt(receivedMes);
+		this.sentMessage = Integer.parseInt(sentMessage);
+	}
 
 
 	public String getNumber() {
@@ -37,34 +47,41 @@ public class Order {
 	}
 
 
-	public Message getImage() {
+	public Integer getImage() {
 		return image;
 	}
 
 
-	public void setImage(Message image) {
+	public void setImage(Integer image) {
 		this.image = image;
 	}
 
 
-	public Message getReceivedMes() {
+	public Integer getReceivedMes() {
 		return receivedMes;
 	}
 
 
-	public void setReceivedMes(Message receivedMes) {
+	public void setReceivedMes(Integer receivedMes) {
 		this.receivedMes = receivedMes;
 	}
 
 
-	public Message getSentMessage() {
+	public Integer getSentMessage() {
 		return sentMessage;
 	}
 
 
-	public void setSentMessage(Message sentMessage) {
+	public void setSentMessage(Integer sentMessage) {
 		this.sentMessage = sentMessage;
 	}
 
 
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
 }

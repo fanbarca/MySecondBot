@@ -48,16 +48,16 @@ public class AmabiliaBot extends TelegramLongPollingBot {
         Message m;
         try {
             if (update.hasMessage()) {
-                a = new Order();
                 m = update.getMessage();
-                        if (sqlIdList().contains(m.getFrom().getId().toString())) {
-                        try {
-                            a.setLanguage(sqlselect(update.getMessage().getFrom().getId().toString(), "language"));
-                            a.setNumber(sqlselect(update.getMessage().getFrom().getId().toString(),"phone"));
-                        } catch (SQLException e1) {e1.printStackTrace();}
-                        if (a.getSentMessage()!=null) {deleteMessage(a.getSentMessage()); a.setSentMessage(null);}
-                        if (a.getReceivedMes()!=null) deleteMessage(a.getReceivedMes()); a.setReceivedMes(update.getMessage());
-                        if (a.getImage()!=null) {deleteMessage(a.getImage());a.setImage(null);}
+                if (sqlIdList().contains(m.getFrom().getId().toString())) {
+                        a = new Order(
+                                sqlGetUserData(m.getFrom().getId().toString()).get(0),
+                                sqlGetUserData(m.getFrom().getId().toString()).get(1),
+                                sqlGetUserData(m.getFrom().getId().toString()).get(2),
+                                sqlGetUserData(m.getFrom().getId().toString()).get(3),
+                                sqlGetUserData(m.getFrom().getId().toString()).get(4),
+                                sqlGetUserData(m.getFrom().getId().toString()).get(5)
+                                );
                         if (m.hasText()) handleIncomingText(m);
                         else if (m.hasAnimation()) handleAnimation(m);
                         else if (m.hasAudio()) handleAudio(m);
@@ -70,24 +70,26 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                         else if (m.hasVideoNote()) handleVideoNote(m);
                         else if (m.hasVoice()) handleVoice(m);
                     } else {
-                        sql("INSERT INTO users (id, firstname, lastname, username) VALUES ('"+
+                        sql("INSERT INTO users (id, firstname, lastname, username, rmid) VALUES ('"+
                                 m.getFrom().getId().toString()+"','"+
                                 m.getFrom().getFirstName()+"','"+
                                 m.getFrom().getLastName()+"','"+
-                                m.getFrom().getUserName()+"')");
+                                m.getFrom().getUserName()+"','"+
+                                m.getMessageId()+"')");
+                            a = new Order(
+                                    sqlGetUserData(m.getFrom().getId().toString()).get(0),
+                                    sqlGetUserData(m.getFrom().getId().toString()).get(1),
+                                    sqlGetUserData(m.getFrom().getId().toString()).get(2),
+                                    sqlGetUserData(m.getFrom().getId().toString()).get(3),
+                                    sqlGetUserData(m.getFrom().getId().toString()).get(4),
+                                    sqlGetUserData(m.getFrom().getId().toString()).get(5)
+                            );
                         // send(":boom: Новый пользователь!" +
                         //         "\n" + m.getFrom().getFirstName() +" "+ m.getFrom().getLastName() +
                         //         "\n@" + m.getFrom().getUserName(), myID);
                         if (m.hasText()) handleIncomingText(m);
                     }
             } else if (update.hasCallbackQuery()) {
-                a = new Order();
-                try {
-                    a.setLanguage(sqlselect(update.getCallbackQuery().getMessage().getChatId().toString(), "language"));
-                    a.setNumber(sqlselect(update.getCallbackQuery().getMessage().getFrom().getId().toString(),"phone"));
-                } catch (SQLException e1) {
-                    e1.printStackTrace();
-                }
                 handleCallback(update);
             }
         } catch(Exception e){
@@ -128,19 +130,11 @@ public class AmabiliaBot extends TelegramLongPollingBot {
     }
 
     private void handleContact(Message message) throws SQLException {
-                if (a.getSentMessage()!=null) {deleteMessage(a.getSentMessage()); a.setSentMessage(null);}
-                if (a.getReceivedMes()!=null) deleteMessage(a.getReceivedMes()); a.setReceivedMes(message);
-                if (a.getImage()!=null) {deleteMessage(a.getImage());a.setImage(null);}
-        if (a.getNumber()==null) {
             sql("UPDATE users SET phone = "+
                     message.getContact().getPhoneNumber()+
                     " WHERE id ="+message.getFrom().getId());
             send(Lan.welcome(a.getLanguage(), message.getFrom().getFirstName()),
                     message.getChatId(), Lan.mainMenu(a.getLanguage()),null, 2);
-        } else {
-            send(Lan.welcome(a.getLanguage(), message.getFrom().getFirstName()),
-                    message.getChatId(), Lan.mainMenu(a.getLanguage()),null, 2);
-        }
     }
 
     private void handleAudio(Message message) {
@@ -156,7 +150,6 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                 .setCallbackQueryId(update.getCallbackQuery().getId()).setShowAlert(false);
         execute(answer);
         String cb = update.getCallbackQuery().getData();
-        if (a.getImage()!=null) {deleteMessage(a.getImage());a.setImage(null);}
         if (cb.equals("O'zbek")||cb.equals("Русский")||cb.equals("English")){
             if (cb.equals("O'zbek")) {
                 sql("UPDATE users SET language = 'Uzbek' WHERE id ="+update.getCallbackQuery().getMessage().getChatId());
@@ -166,11 +159,11 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                 sql("UPDATE users SET language = 'Russian' WHERE id ="+update.getCallbackQuery().getMessage().getChatId());
                 a.setLanguage("Russian");
             }
-            else if (cb.equals("English")) {
+            else {
                 sql("UPDATE users SET language = 'English' WHERE id ="+update.getCallbackQuery().getMessage().getChatId());
                 a.setLanguage("English");
             }
-            if ("".equals(a.getNumber())||a.getNumber()==null) {
+            if (a.getNumber().equals("")||a.getNumber()==null) {
                 deleteMessage(update.getCallbackQuery().getMessage());
                 sendMeNumber(update.getCallbackQuery().getMessage().getChatId());
             } else {
@@ -179,7 +172,6 @@ public class AmabiliaBot extends TelegramLongPollingBot {
             }
         }
         if (cb.equals(Lan.backToMenu(a.getLanguage()))) {
-            if (a.getImage()!=null) {deleteMessage(a.getImage());a.setImage(null);}
             edit(update.getCallbackQuery().getMessage(), Lan.welcome(a.getLanguage(), sqlselect(String.valueOf(update.getCallbackQuery().getMessage().getChatId()), "firstname")),
             Lan.mainMenu(a.getLanguage()), 2);
 
@@ -188,7 +180,6 @@ public class AmabiliaBot extends TelegramLongPollingBot {
             cb.equals(Lan.mainMenu("Russian").get(0))||
             cb.equals(Lan.mainMenu("English").get(0))||
             cb.equals(Lan.goBack(a.getLanguage()))) {
-            if (a.getImage()!=null) {deleteMessage(a.getImage());a.setImage(null);}
                 if ((a.getLanguage() == null) || (a.getLanguage().equals(""))) {
                  chooseLanguage(update.getCallbackQuery().getMessage(), true);
                 } else {
@@ -229,13 +220,10 @@ public class AmabiliaBot extends TelegramLongPollingBot {
         }
         for (String t: showAllProducts(a.getLanguage())) {
             if (cb.equals(t)) {
-                if (a.getSentMessage()!=null) {deleteMessage(a.getSentMessage()); a.setSentMessage(null);}
-                if (a.getReceivedMes()!=null) deleteMessage(a.getReceivedMes()); a.setReceivedMes(null);
-                if (a.getImage()!=null) {deleteMessage(a.getImage());a.setImage(null);}
                 SendPhoto aa = new SendPhoto();
                 aa.setChatId(update.getCallbackQuery().getMessage().getChatId());
                 aa.setPhoto(sqlQuery("SELECT imageid from table0 where "+a.getLanguage()+" = '"+t+"'", "imageid"));
-                a.setImage(execute(aa));
+                execute(aa);
                 send(t + "\n"+
                 Lan.cost(a.getLanguage()) + sqlQuery("SELECT cost from table0 where "+a.getLanguage()+" = '"+t+"'", "cost") + " "+ Lan.currency(a.getLanguage()),
                 update.getCallbackQuery().getMessage().getChatId(), Lan.listTypes(a.getLanguage()).get(Integer.parseInt(sqlQuery("SELECT type from table0 where "+a.getLanguage()+" = '"+t+"'", "type"))), Lan.goBack(a.getLanguage()), Lan.backToMenu(a.getLanguage()), true);
@@ -248,15 +236,9 @@ public class AmabiliaBot extends TelegramLongPollingBot {
     private void handleIncomingText(Message message) throws TelegramApiException, InterruptedException, SQLException {
         if (message.getText().equals("/start")) {
             if ((a.getLanguage() == null) || (a.getLanguage().equals(""))) {
-                if (a.getSentMessage()!=null) {deleteMessage(a.getSentMessage()); a.setSentMessage(null);}
-                if (a.getReceivedMes()!=null) deleteMessage(a.getReceivedMes()); a.setReceivedMes(null);
-                if (a.getImage()!=null) {deleteMessage(a.getImage());a.setImage(null);}
                 chooseLanguage(message, false);
             }
             else {
-                if (a.getSentMessage()!=null) {deleteMessage(a.getSentMessage()); a.setSentMessage(null);}
-                if (a.getReceivedMes()!=null) deleteMessage(a.getReceivedMes()); a.setReceivedMes(null);
-                if (a.getImage()!=null) {deleteMessage(a.getImage());a.setImage(null);}
                 send(Lan.welcome(a.getLanguage(), message.getFrom().getFirstName()), message.getChatId(),Lan.mainMenu(a.getLanguage()), null, 2);
             }
         }
@@ -457,7 +439,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
         }
     }
         try {
-            a.setSentMessage(execute(sendMessage));
+            execute(sendMessage);
         }
         catch (TelegramApiException e) {e.printStackTrace();}
     }
@@ -534,7 +516,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
         rows2.add(row2);
         replyMarkup.setKeyboard(rows2).setResizeKeyboard(true).setOneTimeKeyboard(true);
         sendMessage.setReplyMarkup(replyMarkup);
-        try { a.setSentMessage(execute(sendMessage));}
+        try { execute(sendMessage);}
         catch (TelegramApiException e) {e.printStackTrace();}
     }
 
@@ -724,6 +706,30 @@ public class AmabiliaBot extends TelegramLongPollingBot {
             catch(Exception ex) {
                 System.err.println(ex);
             }
+        return lan;
+    }
+    public List<String> sqlGetUserData(String id) throws SQLException {
+        List<String> lan = new ArrayList<>();
+        try {
+            Connection conn = getConnection();
+            if (conn!=null) {
+                Statement prst = conn.createStatement();
+                ResultSet rs = prst.executeQuery("select * from users where id ="+id);
+                while (rs.next()){
+                    lan.add(rs.getString("firstname"));
+                    lan.add(rs.getString("phone"));
+                    lan.add(rs.getString("language"));
+                    lan.add(rs.getString("rmid"));
+                    lan.add(rs.getString("smid"));
+                    lan.add(rs.getString("image"));
+                }
+                prst.close();
+                conn.close();
+            }
+        }
+        catch(Exception ex) {
+            System.err.println(ex);
+        }
         return lan;
     }
 }
