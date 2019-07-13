@@ -226,6 +226,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                 send(t + "\n"+
                 Lan.cost(a.getLanguage()) + sqlQuery("SELECT cost from table0 where "+a.getLanguage()+" = '"+t+"'", "cost") + " "+ Lan.currency(a.getLanguage()),
                 update.getCallbackQuery().getMessage().getChatId(), Lan.listTypes(a.getLanguage()).get(Integer.parseInt(sqlQuery("SELECT type from table0 where "+a.getLanguage()+" = '"+t+"'", "type"))), Lan.goBack(a.getLanguage()), Lan.backToMenu(a.getLanguage()), true);
+                deleteMessage(sqlQuery("SELECT image from users where id="+update.getCallbackQuery().getMessage().getChatId(), "image"), update.getCallbackQuery().getMessage().getChatId().toString());
             }
         }
     }
@@ -525,6 +526,13 @@ public class AmabiliaBot extends TelegramLongPollingBot {
         DeleteMessage dm = new DeleteMessage()
                 .setMessageId(message.getMessageId())
                 .setChatId(message.getChatId());
+        try {execute(dm);}
+        catch (TelegramApiException e) {e.printStackTrace();}
+    }
+    public void deleteMessage(String Messageid, String Chatid){
+        DeleteMessage dm = new DeleteMessage()
+                .setMessageId(Integer.parseInt(Messageid))
+                .setChatId(Chatid);
         try {execute(dm);}
         catch (TelegramApiException e) {e.printStackTrace();}
     }
