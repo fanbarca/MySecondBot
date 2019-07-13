@@ -227,7 +227,14 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                 cb.equals(Lan.mainMenu("English").get(1))) {
             if ((a.getLanguage() == null) || (a.getLanguage().equals(""))) {
                 chooseLanguage(update.getCallbackQuery().getMessage(), true);
-            } else edit(update.getCallbackQuery().getMessage(), Lan.deliveryCost(a.getLanguage()), Lan.backToMenu(a.getLanguage()));
+            } else {
+                edit(update.getCallbackQuery().getMessage(), Lan.deliveryCost(a.getLanguage()), Lan.backToMenu(a.getLanguage()));
+                String image = sqlQuery("SELECT image from users where id="+update.getCallbackQuery().getMessage().getChatId(), "image");
+                if (image!=null) {
+                    deleteMessage(image, update.getCallbackQuery().getMessage().getChatId().toString());
+                    sql("update users set image = null where id="+update.getCallbackQuery().getMessage().getChatId());
+                }
+            }
         }
          else if (cb.equals(Lan.mainMenu("Uzbek").get(2))||
                 cb.equals(Lan.mainMenu("Russian").get(2))||
@@ -244,6 +251,11 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                     edit(update.getCallbackQuery().getMessage(), Lan.emptyOrders(a.getLanguage()), Lan.backToMenu(a.getLanguage()));
                 } else {
                     edit(update.getCallbackQuery().getMessage(), Lan.myOrders(a.getLanguage())+"\n"+listMyOrders(update.getCallbackQuery().getMessage().getChatId().toString(),"orderid"), Lan.backToMenu(a.getLanguage()));
+                }
+                String image = sqlQuery("SELECT image from users where id="+update.getCallbackQuery().getMessage().getChatId(), "image");
+                if (image!=null) {
+                    deleteMessage(image, update.getCallbackQuery().getMessage().getChatId().toString());
+                    sql("update users set image = null where id="+update.getCallbackQuery().getMessage().getChatId());
                 }
             }
         }
@@ -291,8 +303,10 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                 execute(em);
                 List<String> keyb = new ArrayList<>();
                 if (i>0) keyb.add(":point_left: "+showAllProducts(a.getLanguage()).get(i-1));
+                else keyb.add("-");
                 keyb.add("🛒:heavy_plus_sign:"+t);
                 if (i<showAllProducts(a.getLanguage()).size()-1) keyb.add(showAllProducts(a.getLanguage()).get(i+1)+" :point_right:");
+                else keyb.add("-");
                 keyb.add(Lan.listTypes(a.getLanguage()).get(Integer.parseInt(sqlQuery("SELECT type from table0 where "+a.getLanguage()+" = '"+t+"'", "type"))));
                 keyb.add(Lan.mainMenu(a.getLanguage()).get(3));
                 keyb.add(Lan.goBack(a.getLanguage()));
