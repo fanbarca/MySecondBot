@@ -154,11 +154,5 @@ class Lan {
         else if (lan.equals("English")) r = "sum";
         return r;
     }
-    public static String toCart(String lan) {
-        String r="";
-        if (lan.equals("Uzbek")) r = "Savatchaga :heavy_plus_sign:🛒";
-        else if (lan.equals("Russian")) r = "В корзину :heavy_plus_sign:🛒";
-        else if (lan.equals("English")) r = "Add to cart :heavy_plus_sign:🛒";
-        return r;
-    }
+ 
 }

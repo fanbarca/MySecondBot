@@ -256,8 +256,9 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                 }
             }
         }
-        for (String t: showAllProducts(a.getLanguage())) {
-            if (cb.equals(t)) {
+        for (int i = 0; i<showAllProducts(a.getLanguage()).size(); i++) {
+            if (cb.equals(showAllProducts(a.getLanguage()).get(i))) {
+                String t = showAllProducts(a.getLanguage()).get(i);
                 SendPhoto aa = new SendPhoto();
                 aa.setChatId(update.getCallbackQuery().getMessage().getChatId());
                 aa.setPhoto(sqlQuery("SELECT imageid from table0 where "+a.getLanguage()+" = '"+t+"'", "imageid"));
@@ -265,10 +266,11 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                 sql("update users set image ="+image+" where id ="+update.getCallbackQuery().getMessage().getChatId());
                 a.setImage(image);
                 List<String> keyb = new ArrayList<>();
-                keyb.add(":point_left::arrow_left:");
-                keyb.add(Lan.toCart(a.getLanguage()));
-                keyb.add(":arrow_right::point_right:");
+                if (i>0) keyb.add(":arrow_left:"+showAllProducts(a.getLanguage()).get(i-1));
+                keyb.add("🛒:heavy_plus_sign:"+t);
+                if (i<showAllProducts(a.getLanguage()).size()-1) keyb.add(showAllProducts(a.getLanguage()).get(i+1)+":arrow_right:");
                 keyb.add(Lan.listTypes(a.getLanguage()).get(Integer.parseInt(sqlQuery("SELECT type from table0 where "+a.getLanguage()+" = '"+t+"'", "type"))));
+                keyb.add(Lan.mainMenu(a.getLanguage()).get(3));
                 keyb.add(Lan.goBack(a.getLanguage()));
                 keyb.add(Lan.backToMenu(a.getLanguage()));
                 send(t + "\n"+
@@ -276,6 +278,9 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                 update.getCallbackQuery().getMessage().getChatId(), keyb, null, 3);
                 deleteMessage(update.getCallbackQuery().getMessage());
             }
+        }
+        if (cb.equals(":arrow_left:")) {
+
         }
     }
 
