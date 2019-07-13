@@ -4,9 +4,9 @@ package SecondPackage;
 public class Order {
 
 
-    private Integer sentMessage;
-    private Integer receivedMes;
-    private Integer image;
+    private String sentMessage;
+    private String receivedMes;
+    private String image;
     private String language;
     private String number;
     private String firstName;
@@ -20,9 +20,9 @@ public class Order {
 		this.firstName = firstName;
 		this.number = number;
 		this.language = language;
-		this.image = Integer.parseInt(image);
-		this.receivedMes = Integer.parseInt(receivedMes);
-		this.sentMessage = Integer.parseInt(sentMessage);
+		this.image = image;
+		this.receivedMes = receivedMes;
+		this.sentMessage = sentMessage;
 	}
 	public Order(String firstName,
 				 String number,
@@ -31,7 +31,7 @@ public class Order {
 		this.firstName = firstName;
 		this.number = number;
 		this.language = language;
-		this.receivedMes = Integer.parseInt(receivedMes);
+		this.receivedMes = receivedMes;
 		this.sentMessage = null;
 		this.image = null;
 	}
@@ -64,32 +64,32 @@ public class Order {
 	}
 
 
-	public Integer getImage() {
+	public String getImage() {
 		return image;
 	}
 
 
-	public void setImage(Integer image) {
+	public void setImage(String image) {
 		this.image = image;
 	}
 
 
-	public Integer getReceivedMes() {
+	public String getReceivedMes() {
 		return receivedMes;
 	}
 
 
-	public void setReceivedMes(Integer receivedMes) {
+	public void setReceivedMes(String receivedMes) {
 		this.receivedMes = receivedMes;
 	}
 
 
-	public Integer getSentMessage() {
+	public String getSentMessage() {
 		return sentMessage;
 	}
 
 
-	public void setSentMessage(Integer sentMessage) {
+	public void setSentMessage(String sentMessage) {
 		this.sentMessage = sentMessage;
 	}
 

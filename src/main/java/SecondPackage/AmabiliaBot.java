@@ -76,8 +76,8 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                                 m.getMessageId()+"')");
                             a = new Order(
                                     sqlGetUserData(m.getFrom().getId().toString()).get(0),
-                                    sqlGetUserData(m.getFrom().getId().toString()).get(1),
-                                    sqlGetUserData(m.getFrom().getId().toString()).get(2),
+                                    null,
+                                    null,
                                     sqlGetUserData(m.getFrom().getId().toString()).get(3)
                             );
                         // send(":boom: Новый пользователь!" +
@@ -114,11 +114,12 @@ public class AmabiliaBot extends TelegramLongPollingBot {
         forwardMessage(message, myID);
     }
 
-    private void handlePhoto(Message message) {
+    private void handlePhoto(Message message) throws SQLException {
             String photoId = message.getPhoto().get(message.getPhoto().size()-1).getFileId();
             String caption = message.getCaption();
             sql("UPDATE table0 SET imageid = '"+photoId+"' where russian = '"+caption+"'");
             sql("UPDATE users SET image = '"+message.getMessageId()+"' where id = '"+message.getChatId()+"'");
+            a.setImage(sqlGetUserData(message.getChatId().toString()).get(5));
     }
 
     private void handleDocument(Message message) {
@@ -130,7 +131,8 @@ public class AmabiliaBot extends TelegramLongPollingBot {
             sql("UPDATE users SET phone = "+
                     message.getContact().getPhoneNumber()+
                     " WHERE id ="+message.getFrom().getId());
-            send(Lan.welcome(a.getLanguage(), message.getFrom().getFirstName()),
+            a.setNumber(sqlGetUserData(message.getChatId().toString()).get(1));
+        send(Lan.welcome(a.getLanguage(), message.getFrom().getFirstName()),
                     message.getChatId(), Lan.mainMenu(a.getLanguage()),null, 2);
     }
 
