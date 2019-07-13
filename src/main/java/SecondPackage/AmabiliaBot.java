@@ -281,10 +281,10 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                 sql("update users set image ="+image+" where id ="+update.getCallbackQuery().getMessage().getChatId());
                 List<String> keyb = new ArrayList<>();
                 if (i>0) keyb.add(":point_left: "+showAllProducts(a.getLanguage()).get(i-1));
-                else keyb.add("-");
+                else keyb.add(":point_left: "+showAllProducts(a.getLanguage()).get(showAllProducts(a.getLanguage()).size()-1));
                 keyb.add("🛒:heavy_plus_sign:"+t);
                 if (i<showAllProducts(a.getLanguage()).size()-1) keyb.add(showAllProducts(a.getLanguage()).get(i+1)+" :point_right:");
-                else keyb.add("-");
+                else keyb.add(showAllProducts(a.getLanguage()).get(0)+" :point_right:");
                 keyb.add(Lan.listTypes(a.getLanguage()).get(Integer.parseInt(sqlQuery("SELECT type from table0 where "+a.getLanguage()+" = '"+t+"'", "type"))));
                 keyb.add(Lan.mainMenu(a.getLanguage()).get(3));
                 keyb.add(Lan.goBack(a.getLanguage()));
