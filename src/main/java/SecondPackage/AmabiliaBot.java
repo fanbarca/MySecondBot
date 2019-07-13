@@ -173,7 +173,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
         if (cb.equals(Lan.backToMenu(a.getLanguage()))) {
             edit(update.getCallbackQuery().getMessage(), Lan.welcome(a.getLanguage(), sqlselect(String.valueOf(update.getCallbackQuery().getMessage().getChatId()), "firstname")),
             Lan.mainMenu(a.getLanguage()), 2);
-
+            deleteMessage(sqlQuery("SELECT image from users where id="+update.getCallbackQuery().getMessage().getChatId(), "image"), update.getCallbackQuery().getMessage().getChatId().toString());
         }
         if (cb.equals(Lan.mainMenu("Uzbek").get(0))||
             cb.equals(Lan.mainMenu("Russian").get(0))||
@@ -183,6 +183,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                  chooseLanguage(update.getCallbackQuery().getMessage(), true);
                 } else {
                  edit(update.getCallbackQuery().getMessage(),Lan.chooseDish(a.getLanguage()), Lan.listTypes(a.getLanguage()),3);
+                 deleteMessage(sqlQuery("SELECT image from users where id="+update.getCallbackQuery().getMessage().getChatId(), "image"), update.getCallbackQuery().getMessage().getChatId().toString());
                 }
          }
          else if (cb.equals(Lan.mainMenu("Uzbek").get(1))||
