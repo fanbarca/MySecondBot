@@ -199,12 +199,17 @@ public class Bot extends TelegramLongPollingBot {
         }
         for (int i = 0; i<DataBase.showAllProducts(a.getLanguage()).size(); i++) {
             String t = DataBase.showAllProducts(a.getLanguage()).get(i);
-            if (cb.contains("🛒:heavy_plus_sign:"+DataBase.showAllProducts(a.getLanguage()).get(i))) {
+            if (cb.contains("🛒:heavy_plus_sign:"+t)) {
                 DataBase.sql("insert into cart (userid, item) values ("+update.getCallbackQuery().getFrom().getId()
-                +",'"+DataBase.showAllProducts(a.getLanguage()).get(i)+"')");
+                +",'"+t+"')");
                 editPic("<b>"+t+"</b>\n"+ Lan.cost(a.getLanguage()) + DataBase.sqlQuery("SELECT cost from table0 where "+a.getLanguage()+" = '"+t+"'", "cost") + " "+ Lan.currency(a.getLanguage()),
                 update.getCallbackQuery().getMessage(), keyb(i, t, update.getCallbackQuery().getFrom().getId()), t,  3);
-            } else if (cb.contains(DataBase.showAllProducts(a.getLanguage()).get(i))) {
+            } else if (cb.contains("🛒:x:"+t)) {
+                DataBase.sql("delete from cart where userid ="+update.getCallbackQuery().getFrom().getId()
+                +" and item = '"+t+"'");
+                editPic("<b>"+t+"</b>\n"+ Lan.cost(a.getLanguage()) + DataBase.sqlQuery("SELECT cost from table0 where "+a.getLanguage()+" = '"+t+"'", "cost") + " "+ Lan.currency(a.getLanguage()),
+                update.getCallbackQuery().getMessage(), keyb(i, t, update.getCallbackQuery().getFrom().getId()), t,  3);
+            } else if (cb.contains(t)) {
                 editPic("<b>"+t+"</b>\n"+ Lan.cost(a.getLanguage()) + DataBase.sqlQuery("SELECT cost from table0 where "+a.getLanguage()+" = '"+t+"'", "cost") + " "+ Lan.currency(a.getLanguage()),
                 update.getCallbackQuery().getMessage(), keyb(i, t, update.getCallbackQuery().getFrom().getId()), t,  3);
             }
@@ -227,6 +232,7 @@ public class Bot extends TelegramLongPollingBot {
                 keyb.add(Lan.listTypes(a.getLanguage()).get(Integer.parseInt(DataBase.sqlQuery("SELECT type from table0 where "+a.getLanguage()+" = '"+t+"'", "type"))));
                 keyb.add(Lan.mainMenu(a.getLanguage()).get(3));
                 keyb.add(Lan.goBack(a.getLanguage()));
+                if (items.contains(t)) keyb.add("🛒:x:"+t);
                 keyb.add(Lan.backToMenu(a.getLanguage()));
                 return keyb;
 	}
