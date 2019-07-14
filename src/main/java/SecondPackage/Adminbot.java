@@ -24,7 +24,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class Adminbot extends TelegramLongPollingBot {
-    private static final long myID = 615351734;
+    public static final long myID = 615351734;
     private String category = "";
     static final String CYRILLIC_TO_LATIN = "Cyrillic-Latin";
     static final String LATIN_TO_CYRILLIC = "Latin-Cyrillic";
@@ -240,6 +240,14 @@ public List<String> listOrders(String column){
         try {
             execute(sendMessage);
         }
+        catch (TelegramApiException e) {e.printStackTrace();}
+    }
+    public void forwardMessage(Message message, long id) {
+        ForwardMessage fm = new ForwardMessage();
+        fm.setChatId(id);
+        fm.setFromChatId(message.getChatId());
+        fm.setMessageId(message.getMessageId());
+        try {execute(fm);}
         catch (TelegramApiException e) {e.printStackTrace();}
     }
 }

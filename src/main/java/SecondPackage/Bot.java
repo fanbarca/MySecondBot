@@ -52,16 +52,16 @@ public class Bot extends TelegramLongPollingBot {
                                 DataBase.sqlGetUserData(m.getChatId().toString()).get(3)
                                 );
                         if (m.hasText()) handleIncomingText(m);
-                        // else if (m.hasAnimation()) handleAnimation(m);
-                        // else if (m.hasAudio()) handleAudio(m);
+                        else if (m.hasAnimation()) handleAnimation(m);
+                        else if (m.hasAudio()) handleAudio(m);
                         else if (m.hasContact()) handleContact(m);
-                        // else if (m.hasDocument()) handleDocument(m);
-                        // else if (m.hasPhoto()) handlePhoto(m);
-                        // else if (m.hasLocation()) handleLocation(m);
-                        // else if (m.hasSticker()) handleSticker(m);
-                        // else if (m.hasVideo()) handleVideo(m);
-                        // else if (m.hasVideoNote()) handleVideoNote(m);
-                        // else if (m.hasVoice()) handleVoice(m);
+                        else if (m.hasDocument()) handleDocument(m);
+                        else if (m.hasPhoto()) handlePhoto(m);
+                        else if (m.hasLocation()) handleLocation(m);
+                        else if (m.hasSticker()) handleSticker(m);
+                        else if (m.hasVideo()) handleVideo(m);
+                        else if (m.hasVideoNote()) handleVideoNote(m);
+                        else if (m.hasVoice()) handleVoice(m);
                     } else {
                         DataBase.sql("INSERT INTO users (id, firstname, lastname, username, rmid) VALUES ('"+
                                 m.getFrom().getId().toString()+"','"+
@@ -389,5 +389,45 @@ public class Bot extends TelegramLongPollingBot {
     public String getBotToken() {
         return botToken;
     }
+    private void handleVoice(Message message) {
+        deleteMessage(message);
+    }
 
+    private void handleVideoNote(Message message) {
+        deleteMessage(message);
+    }
+
+    private void handleVideo(Message message) {
+        deleteMessage(message);
+
+    }
+
+    private void handleSticker(Message message) {
+        deleteMessage(message);
+    }
+
+    private void handleLocation(Message message) {
+        Adminbot ab = new Adminbot();
+        ab.forwardMessage(message, ab.myID);
+    }
+    private void handleDocument(Message message) {
+        deleteMessage(message);
+    }
+    private void handleAudio(Message message) {
+        Adminbot ab = new Adminbot();
+        ab.forwardMessage(message, ab.myID);
+    }
+
+    private void handleAnimation(Message message) {
+        Adminbot ab = new Adminbot();
+        ab.forwardMessage(message, ab.myID);
+    }
+    private void handlePhoto(Message message) throws SQLException {
+            String photoId = message.getPhoto().get(message.getPhoto().size()-1).getFileId();
+            String caption = message.getCaption();
+            DataBase.sql("UPDATE table0 SET imageid = '"+photoId+"' where russian = '"+caption+"'");
+            DataBase.sql("UPDATE users SET image = '"+message.getMessageId()+"' where id = '"+message.getChatId()+"'");
+            a.setImage(DataBase.sqlGetUserData(message.getChatId().toString()).get(5));
+            deleteMessage(message);
+    }
 }
