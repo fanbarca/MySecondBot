@@ -129,7 +129,7 @@ public static String sqlQuery(String command, String field) throws SQLException 
             Connection conn = getConnection();
             if (conn!=null) {
                 Statement prst = conn.createStatement();
-                ResultSet rs = prst.executeQuery("select "+column+" from table0");
+                ResultSet rs = prst.executeQuery("select * from table0");
                 while (rs.next()){
                     if (!rs.getString("russian").equals("Лого")) lan.add(rs.getString(column));
                 }
@@ -142,7 +142,7 @@ public static String sqlQuery(String command, String field) throws SQLException 
         }
         return lan;
     }
-    
+
     public static List<String> sqlGetUserData(String id) throws SQLException {
         List<String> lan = new ArrayList<>();
         try {
@@ -206,5 +206,5 @@ public static String sqlQuery(String command, String field) throws SQLException 
         }
     return lan;
     }
-    
+
 }
