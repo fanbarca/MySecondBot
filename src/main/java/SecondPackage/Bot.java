@@ -82,7 +82,7 @@ public class Bot extends TelegramLongPollingBot {
                         if (m.hasText()) handleIncomingText(m);
                     }
             } else if (update.hasCallbackQuery()) {
-                String cb = update.hasCallbackQuery().getData();
+                String cb = update.getCallbackQuery().getData();
                 Message cbm = update.getCallbackQuery().getMessage();
                 String chatId = update.getCallbackQuery().getMessage().getChatId().toString();
                 if (DataBase.sqlIdList().contains(chatId)) {
