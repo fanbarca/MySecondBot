@@ -82,7 +82,7 @@ public class Bot extends TelegramLongPollingBot {
                         if (m.hasText()) handleIncomingText(m);
                     }
             } else if (update.hasCallbackQuery()) {
-
+                String cb = update.hasCallbackQuery().getData();
                 Message cbm = update.getCallbackQuery().getMessage();
                 String chatId = update.getCallbackQuery().getMessage().getChatId().toString();
                 if (DataBase.sqlIdList().contains(chatId)) {
@@ -105,7 +105,7 @@ public class Bot extends TelegramLongPollingBot {
                                     DataBase.sqlGetUserData(update.getCallbackQuery().getFrom().getId().toString()).get(3)
                             );
                 }
-                if (a.getLanguage()==null) chooseLanguage(update.getCallbackQuery().getMessage(), false);
+                if (a.getLanguage()==null&&!(cb.equals("O'zbek")||cb.equals("Русский")||cb.equals("English")))) chooseLanguage(update.getCallbackQuery().getMessage(), false);
                 else handleCallback(update);
             }
         } catch(Exception e){
