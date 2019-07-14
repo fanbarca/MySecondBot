@@ -142,12 +142,12 @@ public class Bot extends TelegramLongPollingBot {
                 deleteMessage(update.getCallbackQuery().getMessage());
                 sendMeNumber(update.getCallbackQuery().getMessage().getChatId());
             } else {
-                editCaption(Lan.welcome(a.getLanguage(), a.getFirstName()), update.getCallbackQuery().getMessage(), Lan.mainMenu(a.getLanguage()), 2);
+                editPic(Lan.welcome(a.getLanguage(), a.getFirstName()), update.getCallbackQuery().getMessage(), Lan.mainMenu(a.getLanguage()), "Лого",2);
             }
         }
         if (cb.equals(Lan.backToMenu(a.getLanguage()))) {
-            editCaption(Lan.welcome(a.getLanguage(), DataBase.sqlselect(String.valueOf(update.getCallbackQuery().getMessage().getChatId()), "firstname")), update.getCallbackQuery().getMessage(),
-            Lan.mainMenu(a.getLanguage()),  2);
+            editPic(Lan.welcome(a.getLanguage(), DataBase.sqlselect(String.valueOf(update.getCallbackQuery().getMessage().getChatId()), "firstname")), update.getCallbackQuery().getMessage(),
+            Lan.mainMenu(a.getLanguage()), "Лого", 2);
            }
         if (cb.equals(Lan.mainMenu("Uzbek").get(0))||
             cb.equals(Lan.mainMenu("Russian").get(0))||
@@ -156,7 +156,7 @@ public class Bot extends TelegramLongPollingBot {
                 if ((a.getLanguage() == null) || (a.getLanguage().equals(""))) {
                  chooseLanguage(update.getCallbackQuery().getMessage(), true);
                 } else {
-                editCaption(Lan.chooseDish(a.getLanguage()), update.getCallbackQuery().getMessage(),Lan.listTypes(a.getLanguage()),3);
+                editPic(Lan.chooseDish(a.getLanguage()), update.getCallbackQuery().getMessage(),Lan.listTypes(a.getLanguage()),"Лого",3);
                 }
          }
          else if (cb.equals(Lan.mainMenu("Uzbek").get(1))||
@@ -165,7 +165,7 @@ public class Bot extends TelegramLongPollingBot {
             if ((a.getLanguage() == null) || (a.getLanguage().equals(""))) {
                 chooseLanguage(update.getCallbackQuery().getMessage(), true);
             } else {
-                editCaption(Lan.deliveryCost(a.getLanguage()), update.getCallbackQuery().getMessage(), Lan.keyBoard(a.getLanguage()),2);
+                editPic(Lan.deliveryCost(a.getLanguage()), update.getCallbackQuery().getMessage(), Lan.keyBoard(a.getLanguage()),"Лого", 2);
             }
         }
          else if (cb.equals(Lan.mainMenu("Uzbek").get(2))||
@@ -180,9 +180,9 @@ public class Bot extends TelegramLongPollingBot {
                 chooseLanguage(update.getCallbackQuery().getMessage(), true);
             } else {
                 if (DataBase.listMyOrders(update.getCallbackQuery().getMessage().getChatId().toString(),"orderid").size()==0){
-                    editCaption(Lan.emptyOrders(a.getLanguage()), update.getCallbackQuery().getMessage(), Lan.keyBoard(a.getLanguage()),2);
+                    editPic(Lan.emptyOrders(a.getLanguage()), update.getCallbackQuery().getMessage(), Lan.keyBoard(a.getLanguage()),"Лого", 2);
                 } else {
-                    editCaption(Lan.myOrders(a.getLanguage())+"\n"+DataBase.listMyOrders(update.getCallbackQuery().getMessage().getChatId().toString(),"orderid"), update.getCallbackQuery().getMessage(),Lan.keyBoard(a.getLanguage()), 2);
+                    editPic(Lan.myOrders(a.getLanguage())+"\n"+DataBase.listMyOrders(update.getCallbackQuery().getMessage().getChatId().toString(),"orderid"), update.getCallbackQuery().getMessage(),Lan.keyBoard(a.getLanguage()),"Лого",2);
                 }
             }
         }
@@ -295,7 +295,7 @@ public class Bot extends TelegramLongPollingBot {
                 markup.setKeyboard(rows);
                 em.setReplyMarkup(markup);
                 ec.setReplyMarkup(markup);
-                if (productName!=null) execute(em);
+                execute(em);
                 execute(ec);
     }
 
