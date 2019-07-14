@@ -156,12 +156,7 @@ public class Bot extends TelegramLongPollingBot {
                 if ((a.getLanguage() == null) || (a.getLanguage().equals(""))) {
                  chooseLanguage(update.getCallbackQuery().getMessage(), true);
                 } else {
-                 editPic(Lan.chooseDish(a.getLanguage()), update.getCallbackQuery().getMessage(),Lan.listTypes(a.getLanguage()),"Лого",3);
-                String image = DataBase.sqlQuery("SELECT image from users where id="+update.getCallbackQuery().getMessage().getChatId(), "image");
-                if (image!=null) {
-                    deleteMessage(image, update.getCallbackQuery().getMessage().getChatId().toString());
-                    DataBase.sql("update users set image = null where id="+update.getCallbackQuery().getMessage().getChatId());
-                }
+                editPic(Lan.chooseDish(a.getLanguage()), update.getCallbackQuery().getMessage(),Lan.listTypes(a.getLanguage()),"Лого",3);
                 }
          }
          else if (cb.equals(Lan.mainMenu("Uzbek").get(1))||
@@ -256,11 +251,12 @@ public class Bot extends TelegramLongPollingBot {
 
 	private void handleIncomingText(Message m) throws SQLException, TelegramApiException {
         if (m.getText().equals("/start")) {
+            if (a.getSentMessage()!=null) deleteMessage(DataBase.sqlQuery("SELECT smid from users where id="+m.getChatId(), "smid"), m.getChatId().toString());
             deleteMessage(m);
             if (a.getLanguage() == null) {
                 chooseLanguage(m, false);
             } else {
-                sendPic(Lan.welcome(a.getLanguage(), a.getFirstName()), m,Lan.mainMenu(a.getLanguage()), "Лого", 2);
+            sendPic(Lan.welcome(a.getLanguage(), a.getFirstName()), m,Lan.mainMenu(a.getLanguage()), "Лого", 2);
             }
          }
 	}
@@ -279,6 +275,7 @@ public class Bot extends TelegramLongPollingBot {
                 ec.setChatId(message.getChatId().toString());
                 ec.setMessageId(messageId);
                 ec.setCaption(EmojiParser.parseToUnicode(text));
+                ec.setParseMode("HTML");
                 InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
                 List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
                 for (int i = 0; i < list.size(); i += flag) {
@@ -308,6 +305,7 @@ public class Bot extends TelegramLongPollingBot {
         SendPhoto aa = new SendPhoto();
                 aa.setChatId(message.getChatId());
                 aa.setPhoto(file_id);
+                aa.setParseMode("HTML");
                 aa.setCaption(EmojiParser.parseToUnicode(text));
         InlineKeyboardMarkup inlineMarkup = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
