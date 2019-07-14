@@ -16,6 +16,7 @@ public class Main {
         try {
             botsApi.registerBot(new AmabiliaBot());
             botsApi.registerBot(new Adminbot());
+            botsApi.registerBot(new Bot());
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }

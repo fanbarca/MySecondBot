@@ -9,6 +9,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageCaption;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageMedia;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageReplyMarkup;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.PhotoSize;
@@ -40,17 +41,17 @@ public class Bot extends TelegramLongPollingBot {
         try {
             if (update.hasMessage()) {
                 m = update.getMessage();
-                if (DataBase.sqlIdList().contains(m.getFrom().getId().toString())) {
+                if (DataBase.sqlIdList().contains(m.getChatId().toString())) {
                         a = new Order(
-                                DataBase.sqlGetUserData(m.getFrom().getId().toString()).get(0),
-                                DataBase.sqlGetUserData(m.getFrom().getId().toString()).get(1),
-                                DataBase.sqlGetUserData(m.getFrom().getId().toString()).get(2),
-                                DataBase.sqlGetUserData(m.getFrom().getId().toString()).get(3)
+                                DataBase.sqlGetUserData(m.getChatId().toString()).get(0),
+                                DataBase.sqlGetUserData(m.getChatId().toString()).get(1),
+                                DataBase.sqlGetUserData(m.getChatId().toString()).get(2),
+                                DataBase.sqlGetUserData(m.getChatId().toString()).get(3)
                                 );
                         if (m.hasText()) handleIncomingText(m);
                         // else if (m.hasAnimation()) handleAnimation(m);
                         // else if (m.hasAudio()) handleAudio(m);
-                        // else if (m.hasContact()) handleContact(m);
+                        else if (m.hasContact()) handleContact(m);
                         // else if (m.hasDocument()) handleDocument(m);
                         // else if (m.hasPhoto()) handlePhoto(m);
                         // else if (m.hasLocation()) handleLocation(m);
@@ -106,23 +107,170 @@ public class Bot extends TelegramLongPollingBot {
                 BotLogger.error(Main.LOGTAG, e);
         }
     }
+    private void handleContact(Message message) throws SQLException, TelegramApiException {
+            DataBase.sql("UPDATE users SET phone = "+
+                    message.getContact().getPhoneNumber()+
+                    " WHERE id ="+message.getFrom().getId());
+            a.setNumber(DataBase.sqlGetUserData(message.getChatId().toString()).get(1));
+        deleteMessage(DataBase.sqlQuery("SELECT smid from users where id="+message.getChatId(), "smid"), message.getChatId().toString());
+        deleteMessage(message);
+        sendPic(Lan.welcome(a.getLanguage(), message.getFrom().getFirstName()),
+                    message, Lan.mainMenu(a.getLanguage()),"Лого", 2);
+    }
+    private void handleCallback(Update update) throws TelegramApiException, SQLException {
+        AnswerCallbackQuery answer = new AnswerCallbackQuery()
+                .setCallbackQueryId(update.getCallbackQuery().getId()).setShowAlert(false);
+        execute(answer);
+        String cb = update.getCallbackQuery().getData();
+        if (cb.equals("O'zbek")||cb.equals("Русский")||cb.equals("English")){
+            if (cb.equals("O'zbek")) {
+                DataBase.sql("UPDATE users SET language = 'Uzbek' WHERE id ="+update.getCallbackQuery().getMessage().getChatId());
+                a.setLanguage("Uzbek");
+            }
+            else if (cb.equals("Русский")) {
+                DataBase.sql("UPDATE users SET language = 'Russian' WHERE id ="+update.getCallbackQuery().getMessage().getChatId());
+                a.setLanguage("Russian");
+            }
+            else {
+                DataBase.sql("UPDATE users SET language = 'English' WHERE id ="+update.getCallbackQuery().getMessage().getChatId());
+                a.setLanguage("English");
+            }
+            if (a.getNumber()==null) {
+                deleteMessage(update.getCallbackQuery().getMessage());
+                sendMeNumber(update.getCallbackQuery().getMessage().getChatId());
+            } else {
+                editCaption(Lan.welcome(a.getLanguage(), a.getFirstName()), update.getCallbackQuery().getMessage(), Lan.mainMenu(a.getLanguage()), 2);
+            }
+        }
+        if (cb.equals(Lan.backToMenu(a.getLanguage()))) {
+            editPic(Lan.welcome(a.getLanguage(), DataBase.sqlselect(String.valueOf(update.getCallbackQuery().getMessage().getChatId()), "firstname")), update.getCallbackQuery().getMessage(),
+            Lan.mainMenu(a.getLanguage()), "Лого", 2);
+           }
+        if (cb.equals(Lan.mainMenu("Uzbek").get(0))||
+            cb.equals(Lan.mainMenu("Russian").get(0))||
+            cb.equals(Lan.mainMenu("English").get(0))||
+            cb.equals(Lan.goBack(a.getLanguage()))) {
+                if ((a.getLanguage() == null) || (a.getLanguage().equals(""))) {
+                 chooseLanguage(update.getCallbackQuery().getMessage(), true);
+                } else {
+                 editPic(Lan.chooseDish(a.getLanguage()), update.getCallbackQuery().getMessage(),Lan.listTypes(a.getLanguage()),"Лого",3);
+                String image = DataBase.sqlQuery("SELECT image from users where id="+update.getCallbackQuery().getMessage().getChatId(), "image");
+                if (image!=null) {
+                    deleteMessage(image, update.getCallbackQuery().getMessage().getChatId().toString());
+                    DataBase.sql("update users set image = null where id="+update.getCallbackQuery().getMessage().getChatId());
+                }
+                }
+         }
+         else if (cb.equals(Lan.mainMenu("Uzbek").get(1))||
+                cb.equals(Lan.mainMenu("Russian").get(1))||
+                cb.equals(Lan.mainMenu("English").get(1))) {
+            if ((a.getLanguage() == null) || (a.getLanguage().equals(""))) {
+                chooseLanguage(update.getCallbackQuery().getMessage(), true);
+            } else {
+                editCaption(Lan.deliveryCost(a.getLanguage()), update.getCallbackQuery().getMessage(), Lan.keyBoard(a.getLanguage()),2);
+            }
+        }
+         else if (cb.equals(Lan.mainMenu("Uzbek").get(2))||
+                cb.equals(Lan.mainMenu("Russian").get(2))||
+                cb.equals(Lan.mainMenu("English").get(2))) {
+             chooseLanguage(update.getCallbackQuery().getMessage(), true);
+        }
+         else if (cb.equals(Lan.mainMenu("Uzbek").get(3))||
+                cb.equals(Lan.mainMenu("Russian").get(3))||
+                cb.equals(Lan.mainMenu("English").get(3))) {
+            if ((a.getLanguage() == null) || (a.getLanguage().equals(""))) {
+                chooseLanguage(update.getCallbackQuery().getMessage(), true);
+            } else {
+                if (DataBase.listMyOrders(update.getCallbackQuery().getMessage().getChatId().toString(),"orderid").size()==0){
+                    editCaption(Lan.emptyOrders(a.getLanguage()), update.getCallbackQuery().getMessage(), Lan.keyBoard(a.getLanguage()),2);
+                } else {
+                    editCaption(Lan.myOrders(a.getLanguage())+"\n"+DataBase.listMyOrders(update.getCallbackQuery().getMessage().getChatId().toString(),"orderid"), update.getCallbackQuery().getMessage(),Lan.keyBoard(a.getLanguage()), 2);
+                }
+            }
+        }
+        for (String t: Lan.listTypes(a.getLanguage())) {
+            String language = a.getLanguage();
+            if (cb.equals(t)&&!cb.equals(Lan.backToMenu(a.getLanguage()))) {
+                List<String> a = DataBase.showProducts(language, language, String.valueOf(Lan.listTypes(language).indexOf(t)));
+                editPic(t, update.getCallbackQuery().getMessage(), a, "Лого",  a.size()>1?2:1);
+            }
+        }
+        for (int i = 0; i<DataBase.showAllProducts(a.getLanguage()).size(); i++) {
+            String t = DataBase.showAllProducts(a.getLanguage()).get(i);
+            List<String> keyb = new ArrayList<>();
+                if (i>0) keyb.add(":point_left: "+DataBase.showAllProducts(a.getLanguage()).get(i-1));
+                else keyb.add(":point_left: "+DataBase.showAllProducts(a.getLanguage()).get(DataBase.showAllProducts(a.getLanguage()).size()-1));
+                keyb.add("🛒:heavy_plus_sign:"+t);
+                if (i<DataBase.showAllProducts(a.getLanguage()).size()-1) keyb.add(DataBase.showAllProducts(a.getLanguage()).get(i+1)+" :point_right:");
+                else keyb.add(DataBase.showAllProducts(a.getLanguage()).get(0)+" :point_right:");
+                keyb.add(Lan.listTypes(a.getLanguage()).get(Integer.parseInt(DataBase.sqlQuery("SELECT type from table0 where "+a.getLanguage()+" = '"+t+"'", "type"))));
+                keyb.add(Lan.mainMenu(a.getLanguage()).get(3));
+                keyb.add(Lan.goBack(a.getLanguage()));
+                keyb.add(Lan.backToMenu(a.getLanguage()));
+            if (cb.contains(DataBase.showAllProducts(a.getLanguage()).get(i))) {
+                editPic("<b>"+t+"</b>\n"+ Lan.cost(a.getLanguage()) + DataBase.sqlQuery("SELECT cost from table0 where "+a.getLanguage()+" = '"+t+"'", "cost") + " "+ Lan.currency(a.getLanguage()),
+                update.getCallbackQuery().getMessage(), keyb, t,  3);
+            } else if (cb.equals("🛒:heavy_plus_sign:"+DataBase.showAllProducts(a.getLanguage()).get(i))) {
 
-    private void handleCallback(Update update) {
-
+            }
+        }
 	}
 
-	private void handleIncomingText(Message m) {
+	private void chooseLanguage(Message message, boolean edit) throws SQLException, TelegramApiException {
+                List<String> list = new ArrayList<String>();
+                list.add("O'zbek");
+                list.add("Русский");
+                list.add("English");
+            if (edit) editPic(":uz: Tilni tanlang\n" +
+                ":ru: Выберите язык\n" +
+                ":gb: Choose language" , message, list, "Лого", 3);
+            else sendPic(":uz: Tilni tanlang\n" +
+                ":ru: Выберите язык\n" +
+                ":gb: Choose language" , message, list, "Лого", 3);
+	}
+	public void sendMeNumber(long ChatId){
+        SendMessage sendMessage = new SendMessage()
+                .setChatId(ChatId)
+                .setText(EmojiParser.parseToUnicode(Lan.sendMeContact(a.getLanguage())))
+                .setParseMode("HTML");
+        ReplyKeyboardMarkup replyMarkup = new ReplyKeyboardMarkup();
+        KeyboardRow row2 = new KeyboardRow();
+        KeyboardButton keyboardButton =
+                new KeyboardButton()
+                        .setRequestContact(true)
+                        .setText(EmojiParser.parseToUnicode(Lan.myContact(a.getLanguage())));
+        List<KeyboardRow> rows2 = new ArrayList<KeyboardRow>();
+        row2.add(keyboardButton);
+        rows2.add(row2);
+        replyMarkup.setKeyboard(rows2).setResizeKeyboard(true).setOneTimeKeyboard(true);
+        sendMessage.setReplyMarkup(replyMarkup);
+        try {
+            int smid = execute(sendMessage).getMessageId();
+            DataBase.sql("update users set smid ="+smid+" where id = "+ChatId);
+            }
+        catch (TelegramApiException e) {e.printStackTrace();}
+    }
 
+	private void handleIncomingText(Message m) throws SQLException, TelegramApiException {
+        if (m.getText().equals("/start")) {
+            if (a.getSentMessage()!=null) deleteMessage(DataBase.sqlQuery("SELECT smid from users where id="+m.getChatId(), "smid"), m.getChatId().toString());
+            deleteMessage(m);
+            if (a.getLanguage() == null) {
+                chooseLanguage(m, false);
+            } else {
+            sendPic(Lan.welcome(a.getLanguage(), a.getFirstName()), m,Lan.mainMenu(a.getLanguage()), "Лого", 2);
+            }
+         }
 	}
 
 	@Override
     public String getBotUsername() {
-        return null;
+        return "BringFoodBot";
     }
 
     @Override
     public String getBotToken() {
-        return null;
+        return "798926499:AAHFI2emsMTG2oFUsjqkUG6VKfCGdZF--SM";
     }
     public void editPic(String text, Message message, List<String> list, String productName, int flag) throws TelegramApiException, SQLException {
                 Integer messageId= Integer.parseInt(DataBase.sqlQuery("select image from users where id="+message.getChatId(), "image"));
@@ -195,5 +343,45 @@ public class Bot extends TelegramLongPollingBot {
                 DataBase.sql("update users set image ="+image+" where id ="+message.getChatId());
         }
         catch (TelegramApiException e) {e.printStackTrace();}
+    }
+     public void deleteMessage(Message message){
+        DeleteMessage dm = new DeleteMessage()
+                .setMessageId(message.getMessageId())
+                .setChatId(message.getChatId());
+        try {execute(dm);}
+        catch (TelegramApiException e) {e.printStackTrace();}
+    }
+    public void deleteMessage(String Messageid, String Chatid){
+        DeleteMessage dm = new DeleteMessage()
+                .setMessageId(Integer.parseInt(Messageid))
+                .setChatId(Chatid);
+        try {execute(dm);}
+        catch (TelegramApiException e) {e.printStackTrace();}
+    }
+    public void editCaption(String text, Message message, List<String> list, int flag) throws TelegramApiException, SQLException {
+                Integer messageId= Integer.parseInt(DataBase.sqlQuery("select image from users where id="+message.getChatId(), "image"));
+                EditMessageCaption ec = new EditMessageCaption();
+                ec.setChatId(message.getChatId().toString());
+                ec.setMessageId(messageId);
+                ec.setCaption(EmojiParser.parseToUnicode(text));
+                InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
+                List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
+                for (int i = 0; i < list.size(); i += flag) {
+                    List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
+                    row.add(new InlineKeyboardButton()
+                            .setText(EmojiParser.parseToUnicode(list.get(i)))
+                            .setCallbackData(list.get(i)));
+                    if ((flag==2)||(flag==3)) { if ((i + 1) < list.size()) row.add(new InlineKeyboardButton()
+                            .setText(EmojiParser.parseToUnicode(list.get(i + 1)))
+                            .setCallbackData(list.get(i + 1)));}
+                    if (flag==3) {if ((i + 2) < list.size()) row.add(new InlineKeyboardButton()
+                            .setText(EmojiParser.parseToUnicode(list.get(i + 2)))
+                            .setCallbackData(list.get(i + 2)));
+                            }
+                    rows.add(row);
+                }
+                markup.setKeyboard(rows);
+                ec.setReplyMarkup(markup);
+                execute(ec);
     }
 }

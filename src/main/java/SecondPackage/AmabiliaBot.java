@@ -53,12 +53,12 @@ public class AmabiliaBot extends TelegramLongPollingBot {
         try {
             if (update.hasMessage()) {
                 m = update.getMessage();
-                if (sqlIdList().contains(m.getFrom().getId().toString())) {
+                if (sqlIdList().contains(m.getChatId().toString())) {
                         a = new Order(
-                                sqlGetUserData(m.getFrom().getId().toString()).get(0),
-                                sqlGetUserData(m.getFrom().getId().toString()).get(1),
-                                sqlGetUserData(m.getFrom().getId().toString()).get(2),
-                                sqlGetUserData(m.getFrom().getId().toString()).get(3)
+                                sqlGetUserData(m.getChatId().toString()).get(0),
+                                sqlGetUserData(m.getChatId().toString()).get(1),
+                                sqlGetUserData(m.getChatId().toString()).get(2),
+                                sqlGetUserData(m.getChatId().toString()).get(3)
                                 );
                         if (m.hasText()) handleIncomingText(m);
                         else if (m.hasAnimation()) handleAnimation(m);
@@ -163,7 +163,6 @@ public class AmabiliaBot extends TelegramLongPollingBot {
         deleteMessage(message);
         send(Lan.welcome(a.getLanguage(), message.getFrom().getFirstName()),
                     message.getChatId(), Lan.mainMenu(a.getLanguage()),null, 2);
-
     }
 
     private void handleAudio(Message message) {

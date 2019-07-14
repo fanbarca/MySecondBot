@@ -154,5 +154,10 @@ class Lan {
         else if (lan.equals("English")) r = "sum";
         return r;
     }
- 
+    public static List<String> keyBoard(String lan){
+        List<String> list = new ArrayList<>();
+            list.add(goBack(lan));
+            list.add(backToMenu(lan));
+        return list;
+    }
 }
