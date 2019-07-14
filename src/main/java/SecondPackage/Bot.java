@@ -273,9 +273,12 @@ public class Bot extends TelegramLongPollingBot {
         return "798926499:AAHFI2emsMTG2oFUsjqkUG6VKfCGdZF--SM";
     }
     public void editPic(String text, Message message, List<String> list, String productName, int flag) throws TelegramApiException, SQLException {
+                String file_id = "";
+        if (productName.equals("Лого")) DataBase.sqlQuery("SELECT imageid from table0 where Russian = 'Лого'", "imageid");
+        else DataBase.sqlQuery("SELECT imageid from table0 where "+a.getLanguage()+" = '"+productName+"'", "imageid");
                 Integer messageId= Integer.parseInt(DataBase.sqlQuery("select image from users where id="+message.getChatId(), "image"));
                 InputMediaPhoto imp = new InputMediaPhoto();
-                imp.setMedia(DataBase.sqlQuery("SELECT imageid from table0 where "+a.getLanguage()+" = '"+productName+"'", "imageid"));
+                imp.setMedia(file_id);
                 EditMessageMedia em = new EditMessageMedia();
                 em.setChatId(message.getChatId());
                 em.setMessageId(messageId);
@@ -307,9 +310,12 @@ public class Bot extends TelegramLongPollingBot {
     }
 
      public void sendPic(String text, Message message, List<String> inline,String productName, int flag) throws SQLException, TelegramApiException {
+        String file_id = "";
+        if (productName.equals("Лого")) DataBase.sqlQuery("SELECT imageid from table0 where Russian = 'Лого'", "imageid");
+        else DataBase.sqlQuery("SELECT imageid from table0 where "+a.getLanguage()+" = '"+productName+"'", "imageid");
         SendPhoto aa = new SendPhoto();
                 aa.setChatId(message.getChatId());
-                aa.setPhoto(DataBase.sqlQuery("SELECT imageid from table0 where "+a.getLanguage()+" = '"+productName+"'", "imageid"));
+                aa.setPhoto(file_id);
                 aa.setCaption(EmojiParser.parseToUnicode(text));
         InlineKeyboardMarkup inlineMarkup = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
