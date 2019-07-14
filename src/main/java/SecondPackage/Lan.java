@@ -67,9 +67,9 @@ class Lan {
     }
     public static String emptyOrders(String lan) {
         String r="";
-        if (lan.equals("Uzbek")) r = ":o:Buyurtmalar ro'yxati bo'sh";
-        else if (lan.equals("Russian")) r = ":o:Список заказов пуст";
-        else if (lan.equals("English")) r = ":o:Orders list is empty";
+        if (lan.equals("Uzbek")) r = ":o: Hali hech narsa yo'q";
+        else if (lan.equals("Russian")) r = ":o: Тут пока ничего нет";
+        else if (lan.equals("English")) r = ":o: There's nothing yet";
         return r;
     }
     public static String myOrders(String lan) {
@@ -160,4 +160,5 @@ class Lan {
             list.add(backToMenu(lan));
         return list;
     }
+
 }

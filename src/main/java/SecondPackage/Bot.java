@@ -189,8 +189,10 @@ public class Bot extends TelegramLongPollingBot {
         for (String t: Lan.listTypes(a.getLanguage())) {
             String language = a.getLanguage();
             if (cb.equals(t)&&!cb.equals(Lan.backToMenu(a.getLanguage()))) {
-                List<String> a = DataBase.showProducts(language, language, String.valueOf(Lan.listTypes(language).indexOf(t)));
-                editPic(t, update.getCallbackQuery().getMessage(), a, "Лого",  a.size()>1?2:1);
+                List<String> list = DataBase.showProducts(language, language, String.valueOf(Lan.listTypes(language).indexOf(t)));
+                String nothing = "";
+                if (list.size()<3) nothing = Lan.emptyOrders(a.getLanguage());
+                editPic(t+"\n"+nothing, update.getCallbackQuery().getMessage(), list, "Лого",  list.size()>1?2:1);
             }
         }
         for (int i = 0; i<DataBase.showAllProducts(a.getLanguage()).size(); i++) {
