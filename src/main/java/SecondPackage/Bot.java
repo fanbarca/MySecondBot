@@ -98,10 +98,10 @@ public class Bot extends TelegramLongPollingBot {
                                 update.getCallbackQuery().getFrom().getUserName()+"','"+
                                 cbm.getMessageId()+"')");
                             a = new Order(
-                                    DataBase.sqlGetUserData(cbm.getFrom().getId().toString()).get(0),
+                                    DataBase.sqlGetUserData(update.getCallbackQuery().getFrom().getId().toString()).get(0),
                                     null,
                                     null,
-                                    DataBase.sqlGetUserData(cbm.getFrom().getId().toString()).get(3)
+                                    DataBase.sqlGetUserData(update.getCallbackQuery().getFrom().getId().toString()).get(3)
                             );
                 }
                 handleCallback(update);
