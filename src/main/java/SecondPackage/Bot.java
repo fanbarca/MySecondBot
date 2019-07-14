@@ -294,8 +294,8 @@ public class Bot extends TelegramLongPollingBot {
                 }
                 markup.setKeyboard(rows);
                 ec.setReplyMarkup(markup);
-                execute(ec);
                 if (productName!=null) execute(em);
+                execute(ec);
     }
 
      public void sendPic(String text, Message message, List<String> inline,String productName, int flag) throws SQLException, TelegramApiException {
