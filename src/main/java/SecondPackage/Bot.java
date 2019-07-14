@@ -293,6 +293,7 @@ public class Bot extends TelegramLongPollingBot {
                     rows.add(row);
                 }
                 markup.setKeyboard(rows);
+                em.setReplyMarkup(markup);
                 ec.setReplyMarkup(markup);
                 if (productName!=null) execute(em);
                 execute(ec);
