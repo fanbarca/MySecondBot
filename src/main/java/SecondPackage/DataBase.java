@@ -131,7 +131,7 @@ public static String sqlQuery(String command, String field) throws SQLException 
                 Statement prst = conn.createStatement();
                 ResultSet rs = prst.executeQuery("select "+column+" from table0");
                 while (rs.next()){
-                    lan.add(rs.getString(column));
+                    if (!rs.getString("russian").equals("Лого")) lan.add(rs.getString(column));
                 }
                 prst.close();
                 conn.close();
