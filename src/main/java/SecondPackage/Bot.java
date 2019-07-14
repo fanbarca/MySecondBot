@@ -256,12 +256,11 @@ public class Bot extends TelegramLongPollingBot {
 
 	private void handleIncomingText(Message m) throws SQLException, TelegramApiException {
         if (m.getText().equals("/start")) {
-            if (a.getSentMessage()!=null) deleteMessage(DataBase.sqlQuery("SELECT smid from users where id="+m.getChatId(), "smid"), m.getChatId().toString());
             deleteMessage(m);
             if (a.getLanguage() == null) {
                 chooseLanguage(m, false);
             } else {
-            sendPic(Lan.welcome(a.getLanguage(), a.getFirstName()), m,Lan.mainMenu(a.getLanguage()), "Лого", 2);
+                sendPic(Lan.welcome(a.getLanguage(), a.getFirstName()), m,Lan.mainMenu(a.getLanguage()), "Лого", 2);
             }
          }
 	}
