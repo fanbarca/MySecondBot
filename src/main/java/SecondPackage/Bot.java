@@ -181,10 +181,13 @@ public class Bot extends TelegramLongPollingBot {
             if ((a.getLanguage() == null) || (a.getLanguage().equals(""))) {
                 chooseLanguage(update.getCallbackQuery().getMessage(), true);
             } else {
-                if (DataBase.listMyOrders(update.getCallbackQuery().getMessage().getChatId().toString(),"orderid").size()==0){
+                List<String> items = DataBase.sqlQueryList("select * from cart where userid ="+update.getCallbackQuery().getMessage().getChatId(), "item");
+                if (items.size()==0){
                     editPic(Lan.emptyOrders(a.getLanguage()), update.getCallbackQuery().getMessage(), Lan.keyBoard(a.getLanguage()),"Лого", 2);
                 } else {
-                    editPic(Lan.myOrders(a.getLanguage())+"\n"+DataBase.listMyOrders(update.getCallbackQuery().getMessage().getChatId().toString(),"orderid"), update.getCallbackQuery().getMessage(),Lan.keyBoard(a.getLanguage()),"Лого",2);
+                    String cart ="";
+                    for (String s: items) cart += "\n"+s;
+                    editPic(Lan.mainMenu(a.getLanguage()).get(3)+"\n"+cart, update.getCallbackQuery().getMessage(),Lan.keyBoard(a.getLanguage()),"Лого",2);
                 }
             }
         }
