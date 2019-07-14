@@ -210,7 +210,7 @@ public class Bot extends TelegramLongPollingBot {
                 keyb.add(Lan.goBack(a.getLanguage()));
                 keyb.add(Lan.backToMenu(a.getLanguage()));
             if (cb.equals("🛒:heavy_plus_sign:"+DataBase.showAllProducts(a.getLanguage()).get(i))) {
-                DataBase.sql("insert into cart values ("+update.getCallbackQuery().getMessage()
+                DataBase.sql("insert into cart (userid, item) values ("+update.getCallbackQuery().getFrom().toString()
                 +",'"+DataBase.showAllProducts(a.getLanguage()).get(i)+"')");
                 editPic("<b>"+t+"</b>\n"+ Lan.cost(a.getLanguage()) + DataBase.sqlQuery("SELECT cost from table0 where "+a.getLanguage()+" = '"+t+"'", "cost") + " "+ Lan.currency(a.getLanguage()),
                 update.getCallbackQuery().getMessage(), keyb, t,  3);
