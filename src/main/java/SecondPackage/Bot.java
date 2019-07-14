@@ -274,8 +274,8 @@ public class Bot extends TelegramLongPollingBot {
     }
     public void editPic(String text, Message message, List<String> list, String productName, int flag) throws TelegramApiException, SQLException {
                 String file_id = "";
-        if (productName.equals("Лого")) DataBase.sqlQuery("SELECT imageid from table0 where Russian = 'Лого'", "imageid");
-        else DataBase.sqlQuery("SELECT imageid from table0 where "+a.getLanguage()+" = '"+productName+"'", "imageid");
+        if (productName.equals("Лого")) file_id = DataBase.sqlQuery("SELECT imageid from table0 where Russian = 'Лого'", "imageid");
+        else file_id = DataBase.sqlQuery("SELECT imageid from table0 where "+a.getLanguage()+" = '"+productName+"'", "imageid");
                 Integer messageId= Integer.parseInt(DataBase.sqlQuery("select image from users where id="+message.getChatId(), "image"));
                 InputMediaPhoto imp = new InputMediaPhoto();
                 imp.setMedia(file_id);
@@ -311,8 +311,8 @@ public class Bot extends TelegramLongPollingBot {
 
      public void sendPic(String text, Message message, List<String> inline,String productName, int flag) throws SQLException, TelegramApiException {
         String file_id = "";
-        if (productName.equals("Лого")) DataBase.sqlQuery("SELECT imageid from table0 where Russian = 'Лого'", "imageid");
-        else DataBase.sqlQuery("SELECT imageid from table0 where "+a.getLanguage()+" = '"+productName+"'", "imageid");
+        if (productName.equals("Лого")) file_id = DataBase.sqlQuery("SELECT imageid from table0 where Russian = 'Лого'", "imageid");
+        else file_id = DataBase.sqlQuery("SELECT imageid from table0 where "+a.getLanguage()+" = '"+productName+"'", "imageid");
         SendPhoto aa = new SendPhoto();
                 aa.setChatId(message.getChatId());
                 aa.setPhoto(file_id);
