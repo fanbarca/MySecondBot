@@ -90,12 +90,12 @@ public class Bot extends TelegramLongPollingBot {
                                 DataBase.sqlGetUserData(chatId).get(2),
                                 DataBase.sqlGetUserData(chatId).get(3)
                                 );
-            } else {
+                } else {
                     DataBase.sql("INSERT INTO users (id, firstname, lastname, username, rmid) VALUES ('"+
                                 chatId+"','"+
-                                cbm.getFrom().getFirstName()+"','"+
-                                cbm.getFrom().getLastName()+"','"+
-                                cbm.getFrom().getUserName()+"','"+
+                                update.getCallbackQuery().getFrom().getFirstName()+"','"+
+                                update.getCallbackQuery().getFrom().getLastName()+"','"+
+                                update.getCallbackQuery().getFrom().getUserName()+"','"+
                                 cbm.getMessageId()+"')");
                             a = new Order(
                                     DataBase.sqlGetUserData(cbm.getFrom().getId().toString()).get(0),
@@ -207,11 +207,14 @@ public class Bot extends TelegramLongPollingBot {
                 keyb.add(Lan.mainMenu(a.getLanguage()).get(3));
                 keyb.add(Lan.goBack(a.getLanguage()));
                 keyb.add(Lan.backToMenu(a.getLanguage()));
-            if (cb.contains(DataBase.showAllProducts(a.getLanguage()).get(i))) {
+            if (cb.equals("🛒:heavy_plus_sign:"+DataBase.showAllProducts(a.getLanguage()).get(i))) {
+                DataBase.sql("insert into cart values ("+update.getCallbackQuery().getMessage()
+                +",'"+DataBase.showAllProducts(a.getLanguage()).get(i)+"')");
                 editPic("<b>"+t+"</b>\n"+ Lan.cost(a.getLanguage()) + DataBase.sqlQuery("SELECT cost from table0 where "+a.getLanguage()+" = '"+t+"'", "cost") + " "+ Lan.currency(a.getLanguage()),
                 update.getCallbackQuery().getMessage(), keyb, t,  3);
-            } else if (cb.equals("🛒:heavy_plus_sign:"+DataBase.showAllProducts(a.getLanguage()).get(i))) {
-
+            } else if (cb.contains(DataBase.showAllProducts(a.getLanguage()).get(i))) {
+                editPic("<b>"+t+"</b>\n"+ Lan.cost(a.getLanguage()) + DataBase.sqlQuery("SELECT cost from table0 where "+a.getLanguage()+" = '"+t+"'", "cost") + " "+ Lan.currency(a.getLanguage()),
+                update.getCallbackQuery().getMessage(), keyb, t,  3);
             }
         }
 	}
