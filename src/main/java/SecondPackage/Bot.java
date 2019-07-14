@@ -305,8 +305,7 @@ public class Bot extends TelegramLongPollingBot {
         SendPhoto aa = new SendPhoto();
                 aa.setChatId(message.getChatId());
                 aa.setPhoto(file_id);
-                aa.setParseMode("HTML");
-                aa.setCaption(EmojiParser.parseToUnicode(text));
+                aa.setCaption(EmojiParser.parseToUnicode(text)).setParseMode("HTML");
         InlineKeyboardMarkup inlineMarkup = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
         if (inline!=null) {
@@ -359,7 +358,7 @@ public class Bot extends TelegramLongPollingBot {
                 EditMessageCaption ec = new EditMessageCaption();
                 ec.setChatId(message.getChatId().toString());
                 ec.setMessageId(messageId);
-                ec.setCaption(EmojiParser.parseToUnicode(text));
+                ec.setCaption(EmojiParser.parseToUnicode(text)).setParseMode("HTML");
                 InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
                 List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
                 for (int i = 0; i < list.size(); i += flag) {
