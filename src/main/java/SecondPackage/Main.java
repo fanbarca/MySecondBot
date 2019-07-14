@@ -14,7 +14,7 @@ public class Main {
 
         TelegramBotsApi botsApi = new TelegramBotsApi();
         try {
-            botsApi.registerBot(new AmabiliaBot());
+//            botsApi.registerBot(new AmabiliaBot());
             botsApi.registerBot(new Adminbot());
             botsApi.registerBot(new Bot());
         } catch (TelegramApiException e) {
