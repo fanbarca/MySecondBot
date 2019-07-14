@@ -105,7 +105,7 @@ public class Bot extends TelegramLongPollingBot {
                                     DataBase.sqlGetUserData(update.getCallbackQuery().getFrom().getId().toString()).get(3)
                             );
                 }
-                if (a.getLanguage()==null&&!(cb.equals("O'zbek")||cb.equals("Русский")||cb.equals("English")))) chooseLanguage(update.getCallbackQuery().getMessage(), false);
+                if (a.getLanguage()==null&&!(cb.equals("O'zbek")||cb.equals("Русский")||cb.equals("English"))) chooseLanguage(update.getCallbackQuery().getMessage(), false);
                 else handleCallback(update);
             }
         } catch(Exception e){
