@@ -199,18 +199,25 @@ public class Bot extends TelegramLongPollingBot {
         }
         for (int i = 0; i<DataBase.showAllProducts(a.getLanguage()).size(); i++) {
             String t = DataBase.showAllProducts(a.getLanguage()).get(i);
+
             List<String> keyb = new ArrayList<>();
                 if (i>0) keyb.add(":point_left: "+DataBase.showAllProducts(a.getLanguage()).get(i-1));
                 else keyb.add(":point_left: "+DataBase.showAllProducts(a.getLanguage()).get(DataBase.showAllProducts(a.getLanguage()).size()-1));
-                keyb.add("🛒:heavy_plus_sign:"+t);
+                List<String> items = DataBase.sqlQueryList("select * from cart where userid ="+update.getCallbackQuery().getFrom().getId(), "item");
+                if (items.contains(t)) {
+                    int occurrences = Collections.frequency(items, t);
+                    keyb.add("🛒 "+occurrences+" "+t);
+                } else {
+                    keyb.add("🛒:heavy_plus_sign:"+t);
+                }
                 if (i<DataBase.showAllProducts(a.getLanguage()).size()-1) keyb.add(DataBase.showAllProducts(a.getLanguage()).get(i+1)+" :point_right:");
                 else keyb.add(DataBase.showAllProducts(a.getLanguage()).get(0)+" :point_right:");
                 keyb.add(Lan.listTypes(a.getLanguage()).get(Integer.parseInt(DataBase.sqlQuery("SELECT type from table0 where "+a.getLanguage()+" = '"+t+"'", "type"))));
                 keyb.add(Lan.mainMenu(a.getLanguage()).get(3));
                 keyb.add(Lan.goBack(a.getLanguage()));
                 keyb.add(Lan.backToMenu(a.getLanguage()));
-            if (cb.equals("🛒:heavy_plus_sign:"+DataBase.showAllProducts(a.getLanguage()).get(i))) {
-                DataBase.sql("insert into cart (userid, item) values ("+update.getCallbackQuery().getFrom().toString()
+            if (cb.contains("🛒")) {
+                DataBase.sql("insert into cart (userid, item) values ("+update.getCallbackQuery().getFrom().getId()
                 +",'"+DataBase.showAllProducts(a.getLanguage()).get(i)+"')");
                 editPic("<b>"+t+"</b>\n"+ Lan.cost(a.getLanguage()) + DataBase.sqlQuery("SELECT cost from table0 where "+a.getLanguage()+" = '"+t+"'", "cost") + " "+ Lan.currency(a.getLanguage()),
                 update.getCallbackQuery().getMessage(), keyb, t,  3);

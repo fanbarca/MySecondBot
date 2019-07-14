@@ -50,7 +50,7 @@ public static Connection getConnection() throws URISyntaxException, SQLException
         String dbUrl = "jdbc:postgresql://" + dbUri.getHost() + ':' + dbUri.getPort() + dbUri.getPath() + "?sslmode=require";
         return DriverManager.getConnection(dbUrl, username, password);
     }
-public static String sqlQuery(String command, String field) throws SQLException {
+    public static String sqlQuery(String command, String field) throws SQLException {
             String lan = "";
             try {
                 Connection conn = getConnection();
@@ -205,6 +205,25 @@ public static String sqlQuery(String command, String field) throws SQLException 
             System.err.println(ex);
         }
     return lan;
+    }
+    public static List<String> sqlQueryList(String command, String field) throws SQLException {
+            List<String> lan = new ArrayList<>();
+            try {
+                Connection conn = getConnection();
+                if (conn!=null) {
+                    Statement prst = conn.createStatement();
+                    ResultSet rs = prst.executeQuery(command);
+                    while (rs.next()){
+                        lan.add(rs.getString(field));
+                    }
+                    prst.close();
+                    conn.close();
+                }
+            }
+            catch(Exception ex) {
+                System.err.println(ex);
+            }
+        return lan;
     }
 
 }
