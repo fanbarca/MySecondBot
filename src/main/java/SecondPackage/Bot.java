@@ -34,6 +34,9 @@ import java.util.*;
 import java.sql.*;
 
 public class Bot extends TelegramLongPollingBot {
+    private String botName ="DeliverySuperBot";
+    private String botToken ="780864630:AAHpUc01UagThYH7wRi15zJQjwu06A6NaWM";
+
     Order a;
     @Override
     public void onUpdateReceived(Update update) {
@@ -262,16 +265,6 @@ public class Bot extends TelegramLongPollingBot {
             }
          }
 	}
-
-	@Override
-    public String getBotUsername() {
-        return "BringFoodBot";
-    }
-
-    @Override
-    public String getBotToken() {
-        return "798926499:AAHFI2emsMTG2oFUsjqkUG6VKfCGdZF--SM";
-    }
     public void editPic(String text, Message message, List<String> list, String productName, int flag) throws TelegramApiException, SQLException {
                 String file_id = "";
         if (productName.equals("Лого")) file_id = DataBase.sqlQuery("SELECT imageid from table0 where Russian = 'Лого'", "imageid");
@@ -390,4 +383,14 @@ public class Bot extends TelegramLongPollingBot {
                 ec.setReplyMarkup(markup);
                 execute(ec);
     }
+    @Override
+    public String getBotUsername() {
+        return botName;
+    }
+
+    @Override
+    public String getBotToken() {
+        return botToken;
+    }
+
 }

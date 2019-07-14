@@ -42,6 +42,9 @@ public class AmabiliaBot extends TelegramLongPollingBot {
     static SimpleDateFormat time = new SimpleDateFormat("HH:mm");
     private static final String DRIVER = "org.postgresql.Driver";
     Order a;
+    private String botName ="";
+    private String botToken ="";
+
     {
     date.setTimeZone(zone);
     time.setTimeZone(zone);
@@ -661,12 +664,12 @@ public class AmabiliaBot extends TelegramLongPollingBot {
 
     @Override
     public String getBotUsername() {
-        return "DeliverySuperBot";
+        return botName;
     }
 
     @Override
     public String getBotToken() {
-        return "780864630:AAHpUc01UagThYH7wRi15zJQjwu06A6NaWM";
+        return botToken;
     }
 
 
