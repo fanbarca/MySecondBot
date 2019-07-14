@@ -206,7 +206,7 @@ public class Bot extends TelegramLongPollingBot {
                 List<String> items = DataBase.sqlQueryList("select * from cart where userid ="+update.getCallbackQuery().getFrom().getId(), "item");
                 if (items.contains(t)) {
                     int occurrences = Collections.frequency(items, t);
-                    keyb.add("🛒 "+occurrences+" "+t);
+                    keyb.add("🛒:heavy_plus_sign:"+t+" "+occurrences);
                 } else {
                     keyb.add("🛒:heavy_plus_sign:"+t);
                 }
@@ -216,7 +216,7 @@ public class Bot extends TelegramLongPollingBot {
                 keyb.add(Lan.mainMenu(a.getLanguage()).get(3));
                 keyb.add(Lan.goBack(a.getLanguage()));
                 keyb.add(Lan.backToMenu(a.getLanguage()));
-            if (cb.contains("🛒")) {
+            if (cb.contains("🛒:heavy_plus_sign:"+DataBase.showAllProducts(a.getLanguage()).get(i))) {
                 DataBase.sql("insert into cart (userid, item) values ("+update.getCallbackQuery().getFrom().getId()
                 +",'"+DataBase.showAllProducts(a.getLanguage()).get(i)+"')");
                 editPic("<b>"+t+"</b>\n"+ Lan.cost(a.getLanguage()) + DataBase.sqlQuery("SELECT cost from table0 where "+a.getLanguage()+" = '"+t+"'", "cost") + " "+ Lan.currency(a.getLanguage()),
