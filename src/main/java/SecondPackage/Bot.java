@@ -219,9 +219,9 @@ public class Bot extends TelegramLongPollingBot {
                 list.add("O'zbek");
                 list.add("Русский");
                 list.add("English");
-            if (edit) editPic(":uz: Tilni tanlang\n" +
+            if (edit) editCaption(":uz: Tilni tanlang\n" +
                 ":ru: Выберите язык\n" +
-                ":gb: Choose language" , message, list, "Лого", 3);
+                ":gb: Choose language" , message, list, 3);
             else sendPic(":uz: Tilni tanlang\n" +
                 ":ru: Выберите язык\n" +
                 ":gb: Choose language" , message, list, "Лого", 3);
@@ -294,8 +294,8 @@ public class Bot extends TelegramLongPollingBot {
                 }
                 markup.setKeyboard(rows);
                 ec.setReplyMarkup(markup);
-                execute(em);
                 execute(ec);
+                execute(em);
     }
 
      public void sendPic(String text, Message message, List<String> inline,String productName, int flag) throws SQLException, TelegramApiException {
