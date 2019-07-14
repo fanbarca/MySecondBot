@@ -229,9 +229,10 @@ public class Bot extends TelegramLongPollingBot {
             if (edit) editCaption(":uz: Tilni tanlang\n" +
                 ":ru: Выберите язык\n" +
                 ":gb: Choose language" , message, list, 3);
-            else sendPic(":uz: Tilni tanlang\n" +
+            else {sendPic(":uz: Tilni tanlang\n" +
                 ":ru: Выберите язык\n" +
                 ":gb: Choose language" , message, list, "Лого", 3);
+                deleteMessage(message);}
 	}
 	public void sendMeNumber(long ChatId){
         SendMessage sendMessage = new SendMessage()
