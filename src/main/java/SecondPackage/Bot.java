@@ -244,7 +244,7 @@ public class Bot extends TelegramLongPollingBot {
         }
         if (cb.contains(Lan.clearCart(a.getLanguage()))) {
             DataBase.sql("delete from cart where userid ="+update.getCallbackQuery().getFrom().getId());
-            editPic(Lan.emptyOrders(a.getLanguage()), update.getCallbackQuery().getMessage(), Lan.keyBoard(a.getLanguage()),"Лого", 2);
+            editPic(Lan.mainMenu(a.getLanguage()).get(3)+"\n"+Lan.emptyOrders(a.getLanguage()), update.getCallbackQuery().getMessage(), Lan.keyBoard(a.getLanguage()),"Лого", 2);
         }
 	}
 
