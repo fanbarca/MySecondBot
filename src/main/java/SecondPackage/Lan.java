@@ -152,9 +152,9 @@ class Lan {
     }
     public static String currency(String lan) {
         String r="";
-        if (lan.equals("Uzbek")) r = "so'm";
-        else if (lan.equals("Russian")) r = "сум";
-        else if (lan.equals("English")) r = "sum";
+        if (lan.equals("Uzbek")) r = " so'm";
+        else if (lan.equals("Russian")) r = " сум";
+        else if (lan.equals("English")) r = " sum";
         return r;
     }
     public static List<String> keyBoard(String lan){

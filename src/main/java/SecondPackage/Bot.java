@@ -187,7 +187,7 @@ public class Bot extends TelegramLongPollingBot {
             } else {
                 List<String> items = DataBase.sqlQueryList("select * from cart where userid ="+update.getCallbackQuery().getMessage().getChatId(), "item");
                 if (items.size()==0){
-                    editPic(Lan.emptyOrders(a.getLanguage()), update.getCallbackQuery().getMessage(), Lan.keyBoard(a.getLanguage()),"Лого", 2);
+                    editPic(Lan.mainMenu(a.getLanguage()).get(3)+"\n"+Lan.emptyOrders(a.getLanguage()), update.getCallbackQuery().getMessage(), Lan.keyBoard(a.getLanguage()),"Лого", 2);
                 } else {
                     String cart ="";
                     List<String> itemNames = new ArrayList<String>();
@@ -195,9 +195,14 @@ public class Bot extends TelegramLongPollingBot {
                         itemNames.add(DataBase.sqlQuery("select * from table0 where id ="+s, a.getLanguage()));
                     }
                     Set<String> distinct = new HashSet<>(itemNames);
+                    Integer totalCost = 0;
                     for (String s: distinct) {
-                        cart += "\n" +s + ": " + Collections.frequency(itemNames, s);
+                        String cost = DataBase.sqlQuery("select cost from table0 where "+a.getLanguage()+" ="+s, "cost");
+                        Integer result = Integer.parseInt(cost)*Collections.frequency(itemNames, s);
+                        totalCost += result;
+                        cart += "\n" +s + ": " + Collections.frequency(itemNames, s)+ " * "+cost + Lan.currency(a.getLanguage())+" = "+result+ Lan.currency(a.getLanguage());
                     }
+                        cart += "\n"+ totalCost+ Lan.currency(a.getLanguage());
                             List<String> list = new ArrayList<>();
                             list.add(Lan.clearCart(a.getLanguage()));
                             list.add(Lan.goBack(a.getLanguage()));
