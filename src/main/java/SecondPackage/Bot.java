@@ -298,13 +298,13 @@ public class Bot extends TelegramLongPollingBot {
                 String file_id = "";
         if (productName.equals("Лого")) file_id = DataBase.sqlQuery("SELECT imageid from table0 where Russian = 'Лого'", "imageid");
         else file_id = DataBase.sqlQuery("SELECT imageid from table0 where "+a.getLanguage()+" = '"+productName+"'", "imageid");
-                Integer messageId= Integer.parseInt(DataBase.sqlQuery("select image from users where id="+message.getChatId(), "image"));
+                //Integer messageId= Integer.parseInt(DataBase.sqlQuery("select image from users where id="+message.getChatId(), "image"));
                 InputMediaPhoto imp = new InputMediaPhoto();
                 imp.setMedia(file_id);
                 imp.setCaption(EmojiParser.parseToUnicode(text)).setParseMode("HTML");
                 EditMessageMedia em = new EditMessageMedia();
                 em.setChatId(message.getChatId());
-                em.setMessageId(messageId);
+                em.setMessageId(message.getMessageId());
                 em.setMedia(imp);
                 InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
                 List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
@@ -383,10 +383,10 @@ public class Bot extends TelegramLongPollingBot {
         catch (TelegramApiException e) {e.printStackTrace();}
     }
     public void editCaption(String text, Message message, List<String> list, int flag) throws TelegramApiException, SQLException {
-                Integer messageId= Integer.parseInt(DataBase.sqlQuery("select image from users where id="+message.getChatId(), "image"));
+                //Integer messageId= Integer.parseInt(DataBase.sqlQuery("select image from users where id="+message.getChatId(), "image"));
                 EditMessageCaption ec = new EditMessageCaption();
                 ec.setChatId(message.getChatId().toString());
-                ec.setMessageId(messageId);
+                ec.setMessageId(message.getMessageId());
                 ec.setCaption(EmojiParser.parseToUnicode(text)).setParseMode("HTML");
                 InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
                 List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
