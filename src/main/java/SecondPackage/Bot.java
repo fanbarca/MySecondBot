@@ -190,17 +190,20 @@ public class Bot extends TelegramLongPollingBot {
                     editPic(Lan.mainMenu(a.getLanguage()).get(3)+"\n"+Lan.emptyOrders(a.getLanguage()), update.getCallbackQuery().getMessage(), Lan.keyBoard(a.getLanguage()),"Лого", 2);
                 } else {
                     String cart ="";
+                    String result =0;
                     Map<String, String> itemNames = new HashMap<String, String>();
                     for (String s: items) {
                         Integer number = Collections.frequency(items, s);
-                        Integer cost  = Integer.parseInt(DataBase.sqlQuery("select cost from table0 where id ="+s, "cost"));
+                        Integer cost  = Integer.parseInt(DataBase.sqlQuery("select * from table0 where id ="+s, "cost"));
                         itemNames.put(DataBase.sqlQuery("select * from table0 where id ="+s, a.getLanguage()),
-                        Lan.cost(a.getLanguage()) + number +" * "+ cost + " = "+ cost*number+ Lan.currency(a.getLanguage())
-                        );
+                        number +" * "+ cost + " = "+ cost*number+ Lan.currency(a.getLanguage())
+                        ); 
+                        result += cost*number;
                     }
                     for (Map.Entry<String, String> entry : itemNames.entrySet()) {
                         cart+=entry.getKey() + "  -  " + entry.getValue()+"\n";
                     }
+                        cart+="\n"+Lan.total(a.getLanguage())+result+Lan.currency(a.getLanguage());
                             List<String> list = new ArrayList<>();
                             list.add(Lan.clearCart(a.getLanguage()));
                             list.add(Lan.goBack(a.getLanguage()));
@@ -225,15 +228,15 @@ public class Bot extends TelegramLongPollingBot {
             if (cb.contains("🛒:heavy_plus_sign:"+t)) {
                 DataBase.sql("insert into cart (userid, item) values ("+update.getCallbackQuery().getFrom().getId()
                 +",'"+prodId+"')");
-                editPic("<b>"+t+"</b>\n"+ Lan.cost(a.getLanguage()) + DataBase.sqlQuery("SELECT cost from table0 where "+a.getLanguage()+" = '"+t+"'", "cost") + " "+ Lan.currency(a.getLanguage()),
+                editPic("<b>"+t+"</b>\n"+ Lan.cost(a.getLanguage()) + DataBase.sqlQuery("SELECT cost from table0 where "+a.getLanguage()+" = '"+t+"'", "cost") + Lan.currency(a.getLanguage()),
                 update.getCallbackQuery().getMessage(), keyb(i, t, update.getCallbackQuery().getFrom().getId()), t,  3);
             } else if (cb.contains("🛒:x:"+t)) {
                 DataBase.sql("delete from cart where userid ="+update.getCallbackQuery().getFrom().getId()
                 +" and item = '"+prodId+"'");
-                editPic("<b>"+t+"</b>\n"+ Lan.cost(a.getLanguage()) + DataBase.sqlQuery("SELECT cost from table0 where "+a.getLanguage()+" = '"+t+"'", "cost") + " "+ Lan.currency(a.getLanguage()),
+                editPic("<b>"+t+"</b>\n"+ Lan.cost(a.getLanguage()) + DataBase.sqlQuery("SELECT cost from table0 where "+a.getLanguage()+" = '"+t+"'", "cost") +  Lan.currency(a.getLanguage()),
                 update.getCallbackQuery().getMessage(), keyb(i, t, update.getCallbackQuery().getFrom().getId()), t,  3);
             } else if (cb.contains(t)) {
-                editPic("<b>"+t+"</b>\n"+ Lan.cost(a.getLanguage()) + DataBase.sqlQuery("SELECT cost from table0 where "+a.getLanguage()+" = '"+t+"'", "cost") + " "+ Lan.currency(a.getLanguage()),
+                editPic("<b>"+t+"</b>\n"+ Lan.cost(a.getLanguage()) + DataBase.sqlQuery("SELECT cost from table0 where "+a.getLanguage()+" = '"+t+"'", "cost") +  Lan.currency(a.getLanguage()),
                 update.getCallbackQuery().getMessage(), keyb(i, t, update.getCallbackQuery().getFrom().getId()), t,  3);
             }
         }

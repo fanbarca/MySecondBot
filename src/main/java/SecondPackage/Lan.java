@@ -170,4 +170,11 @@ class Lan {
         else if (lan.equals("English")) r = ":x: Empty cart";
         return r;
     }
+    public static String total(String lan) {
+        String r="";
+        if (lan.equals("Uzbek")) r = "Umumiy: ";
+        else if (lan.equals("Russian")) r = "Всего: ";
+        else if (lan.equals("English")) r = "Total: ";
+        return r;
+    }
 }
