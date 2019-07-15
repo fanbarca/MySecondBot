@@ -198,7 +198,11 @@ public class Bot extends TelegramLongPollingBot {
                     for (String s: distinct) {
                         cart += "\n" +s + ": " + Collections.frequency(itemNames, s);
                     }
-                    editPic(Lan.mainMenu(a.getLanguage()).get(3)+"\n"+cart, update.getCallbackQuery().getMessage(),Lan.keyBoard(a.getLanguage()),"Лого",2);
+                            List<String> list = new ArrayList<>();
+                            list.add(Lan.clearCart(a.getLanguage()));
+                            list.add(Lan.goBack(a.getLanguage()));
+                            list.add(Lan.backToMenu(a.getLanguage()));
+                    editPic(Lan.mainMenu(a.getLanguage()).get(3)+"\n"+cart, update.getCallbackQuery().getMessage(),list,"Лого",2);
                 }
             }
         }
@@ -249,7 +253,7 @@ public class Bot extends TelegramLongPollingBot {
                 keyb.add(Lan.listTypes(a.getLanguage()).get(Integer.parseInt(DataBase.sqlQuery("SELECT type from table0 where "+a.getLanguage()+" = '"+t+"'", "type"))));
                 keyb.add(Lan.mainMenu(a.getLanguage()).get(3));
                 keyb.add(Lan.goBack(a.getLanguage()));
-                if (items.contains(t)) keyb.add("🛒:x:"+t);
+                if (items.contains(prodId)) keyb.add("🛒:x:"+t);
                 keyb.add(Lan.backToMenu(a.getLanguage()));
                 return keyb;
 	}

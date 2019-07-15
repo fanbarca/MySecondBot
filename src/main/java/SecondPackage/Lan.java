@@ -163,5 +163,11 @@ class Lan {
             list.add(backToMenu(lan));
         return list;
     }
-
+    public static String clearCart(String lan) {
+        String r="";
+        if (lan.equals("Uzbek")) r = "Bo'shatish";
+        else if (lan.equals("Russian")) r = "Очистить";
+        else if (lan.equals("English")) r = "Empty cart";
+        return r;
+    }
 }
