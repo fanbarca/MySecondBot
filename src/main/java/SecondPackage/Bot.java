@@ -195,10 +195,12 @@ public class Bot extends TelegramLongPollingBot {
                         Integer number = Collections.frequency(items, s);
                         Integer cost  = Integer.parseInt(DataBase.sqlQuery("select cost from table0 where id ="+s, "cost"));
                         itemNames.put(DataBase.sqlQuery("select * from table0 where id ="+s, a.getLanguage()),
-                        "\n"+Lan.cost(a.getLanguage()) + number +" * "+ cost + " = "+ cost*number+ Lan.currency(a.getLanguage())
+                        Lan.cost(a.getLanguage()) + number +" * "+ cost + " = "+ cost*number+ Lan.currency(a.getLanguage())
                         );
                     }
-                    cart += itemNames.values();
+                    for (Map.Entry<String, String> entry : itemNames.entrySet()) {
+                        cart+=entry.getKey() + "  -  " + entry.getValue()+"\n";
+                    }
                             List<String> list = new ArrayList<>();
                             list.add(Lan.clearCart(a.getLanguage()));
                             list.add(Lan.goBack(a.getLanguage()));
