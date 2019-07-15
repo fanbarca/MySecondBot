@@ -113,13 +113,22 @@ public class Bot extends TelegramLongPollingBot {
         }
     }
     private void handleContact(Message message) throws SQLException, TelegramApiException {
+        if (message.hasText()&&!message.hasContact()) {
+            if (message.getText().startsWith("+998")) {
+                DataBase.sql("UPDATE users SET phone = "+
+                    message.getText()+" WHERE id ="+message.getFrom().getId());
+                    a.setNumber(DataBase.sqlGetUserData(message.getChatId().toString()).get(1));
+                    deleteMessage(message);
+            }
+        } else {
             DataBase.sql("UPDATE users SET phone = "+
                     message.getContact().getPhoneNumber()+
                     " WHERE id ="+message.getFrom().getId());
             a.setNumber(DataBase.sqlGetUserData(message.getChatId().toString()).get(1));
         deleteMessage(DataBase.sqlQuery("SELECT smid from users where id="+message.getChatId(), "smid"), message.getChatId().toString());
         deleteMessage(message);
-        sendPic(Lan.welcome(a.getLanguage(), message.getFrom().getFirstName()),
+        }
+        if (a.getNumber()!=null) sendPic(Lan.welcome(a.getLanguage(), message.getFrom().getFirstName()),
                     message, Lan.mainMenu(a.getLanguage()),"Лого", 2);
     }
     private void handleCallback(Update update) throws TelegramApiException, SQLException {
@@ -284,6 +293,11 @@ public class Bot extends TelegramLongPollingBot {
             } else {
             sendPic(Lan.welcome(a.getLanguage(), a.getFirstName()), m,Lan.mainMenu(a.getLanguage()), "Лого", 2);
             }
+         } else if (m.getText().startsWith("+998")) {
+            if (a.getNumber()==null) {
+                handleContact(m);
+                deleteMessage(m);
+                }
          }
 	}
     public void editPic(String text, Message message, List<String> list, String productName, int flag) throws TelegramApiException, SQLException {

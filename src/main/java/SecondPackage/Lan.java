@@ -46,9 +46,12 @@ class Lan {
         }
     public static String sendMeContact(String lan){
         String r="";
-        if (lan.equals("Uzbek")) r = "Siz bilan aloqaga chiqishimiz uchun, telefon raqamingizni jo'nating :telephone_receiver:";
-        else if (lan.equals("Russian")) r = "Отправьте мне свой номер телефона что-бы мы могли c вами связаться :telephone_receiver:";
-        else if (lan.equals("English")) r = "Send me your phone number, so we can contact you :telephone_receiver:";
+        if (lan.equals("Uzbek")) r = "Siz bilan aloqaga chiqishimiz uchun, telefon raqamingizni jo'nating,\nbuning uchun, \""+
+        myContact(lan)+"\" tugmaisini bosing, yoki raqamingizni +998xxxxxxx ko'rinishda jo'nating";
+        else if (lan.equals("Russian")) r = "Отправьте мне свой номер телефона что-бы мы могли c вами связаться,\nдля этого, нажмите на кнопку \""+
+        myContact(lan)+"\", или напишите свой номер в формате +998xxxxxxx";
+        else if (lan.equals("English")) r = "Send me your phone number, so we can contact you,\nfor this, press the \""+
+        myContact(lan)+"\" button, or text me your number as +998xxxxxxx";
         return r;
     }
     public static String myContact(String lan){
