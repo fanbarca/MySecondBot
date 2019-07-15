@@ -197,8 +197,8 @@ public class Bot extends TelegramLongPollingBot {
                     Set<String> distinct = new HashSet<>(itemNames);
                     Integer totalCost = 0;
                     for (String s: distinct) {
-                        String cost = DataBase.sqlQuery("select cost from table0 where "+a.getLanguage()+" ="+s, "cost");
-                        Integer result = Integer.parseInt(cost)*Collections.frequency(itemNames, s);
+                        Integer cost = Integer.parseInt(DataBase.sqlQuery("select cost from table0 where "+a.getLanguage()+" ="+s, "cost"));
+                        Integer result = cost*Collections.frequency(itemNames, s);
                         totalCost += result;
                         cart += "\n" +s + ": " + Collections.frequency(itemNames, s)+ " * "+cost + Lan.currency(a.getLanguage())+" = "+result+ Lan.currency(a.getLanguage());
                     }
