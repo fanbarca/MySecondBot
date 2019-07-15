@@ -293,15 +293,11 @@ public class Bot extends TelegramLongPollingBot {
                 Integer messageId= Integer.parseInt(DataBase.sqlQuery("select image from users where id="+message.getChatId(), "image"));
                 InputMediaPhoto imp = new InputMediaPhoto();
                 imp.setMedia(file_id);
+                imp.setCaption(EmojiParser.parseToUnicode(text)).setParseMode("HTML");
                 EditMessageMedia em = new EditMessageMedia();
                 em.setChatId(message.getChatId());
                 em.setMessageId(messageId);
                 em.setMedia(imp);
-                EditMessageCaption ec = new EditMessageCaption();
-                ec.setChatId(message.getChatId().toString());
-                ec.setMessageId(messageId);
-                ec.setCaption(EmojiParser.parseToUnicode(text));
-                ec.setParseMode("HTML");
                 InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
                 List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
                 for (int i = 0; i < list.size(); i += flag) {
@@ -320,9 +316,7 @@ public class Bot extends TelegramLongPollingBot {
                 }
                 markup.setKeyboard(rows);
                 em.setReplyMarkup(markup);
-                ec.setReplyMarkup(markup);
                 execute(em);
-                execute(ec);
     }
 
      public void sendPic(String text, Message message, List<String> inline,String productName, int flag) throws SQLException, TelegramApiException {
