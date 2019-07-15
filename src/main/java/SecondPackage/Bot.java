@@ -190,7 +190,14 @@ public class Bot extends TelegramLongPollingBot {
                     editPic(Lan.emptyOrders(a.getLanguage()), update.getCallbackQuery().getMessage(), Lan.keyBoard(a.getLanguage()),"Лого", 2);
                 } else {
                     String cart ="";
-                    for (String s: items) cart += "\n"+s;
+                    List<String> itemNames = new ArrayList<String>();
+                    for (String s: items) {
+                        itemNames.add(DataBase.sqlQuery("select * from table0 where id ="+s, a.getLanguage()));
+                    }
+                    Set<String> distinct = new HashSet<>(itemNames);
+                    for (String s: distinct) {
+                        cart += "\n" +s + ": " + Collections.frequency(itemNames, s);
+                    }
                     editPic(Lan.mainMenu(a.getLanguage()).get(3)+"\n"+cart, update.getCallbackQuery().getMessage(),Lan.keyBoard(a.getLanguage()),"Лого",2);
                 }
             }
@@ -206,14 +213,16 @@ public class Bot extends TelegramLongPollingBot {
         }
         for (int i = 0; i<DataBase.showAllProducts(a.getLanguage()).size(); i++) {
             String t = DataBase.showAllProducts(a.getLanguage()).get(i);
+            String prodId = DataBase.showAllProducts("id").get(i);
+
             if (cb.contains("🛒:heavy_plus_sign:"+t)) {
                 DataBase.sql("insert into cart (userid, item) values ("+update.getCallbackQuery().getFrom().getId()
-                +",'"+t+"')");
+                +",'"+prodId+"')");
                 editPic("<b>"+t+"</b>\n"+ Lan.cost(a.getLanguage()) + DataBase.sqlQuery("SELECT cost from table0 where "+a.getLanguage()+" = '"+t+"'", "cost") + " "+ Lan.currency(a.getLanguage()),
                 update.getCallbackQuery().getMessage(), keyb(i, t, update.getCallbackQuery().getFrom().getId()), t,  3);
             } else if (cb.contains("🛒:x:"+t)) {
                 DataBase.sql("delete from cart where userid ="+update.getCallbackQuery().getFrom().getId()
-                +" and item = '"+t+"'");
+                +" and item = '"+prodId+"'");
                 editPic("<b>"+t+"</b>\n"+ Lan.cost(a.getLanguage()) + DataBase.sqlQuery("SELECT cost from table0 where "+a.getLanguage()+" = '"+t+"'", "cost") + " "+ Lan.currency(a.getLanguage()),
                 update.getCallbackQuery().getMessage(), keyb(i, t, update.getCallbackQuery().getFrom().getId()), t,  3);
             } else if (cb.contains(t)) {
@@ -228,7 +237,8 @@ public class Bot extends TelegramLongPollingBot {
         if (i>0) keyb.add(":point_left: "+DataBase.showAllProducts(a.getLanguage()).get(i-1));
                 else keyb.add(":point_left: "+DataBase.showAllProducts(a.getLanguage()).get(DataBase.showAllProducts(a.getLanguage()).size()-1));
                 List<String> items = DataBase.sqlQueryList("select * from cart where userid ="+userid, "item");
-                if (items.contains(t)) {
+                String prodId = DataBase.showAllProducts("id").get(i);
+                if (items.contains(prodId)) {
                     int occurrences = Collections.frequency(items, t);
                     keyb.add("🛒:heavy_plus_sign:"+t+" "+occurrences);
                 } else {
