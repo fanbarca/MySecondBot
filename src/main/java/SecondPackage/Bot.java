@@ -239,7 +239,7 @@ public class Bot extends TelegramLongPollingBot {
                 List<String> items = DataBase.sqlQueryList("select * from cart where userid ="+userid, "item");
                 String prodId = DataBase.showAllProducts("id").get(i);
                 if (items.contains(prodId)) {
-                    int occurrences = Collections.frequency(items, t);
+                    int occurrences = Collections.frequency(items, prodId);
                     keyb.add("🛒:heavy_plus_sign:"+t+" "+occurrences);
                 } else {
                     keyb.add("🛒:heavy_plus_sign:"+t);
