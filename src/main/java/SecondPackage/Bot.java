@@ -190,19 +190,15 @@ public class Bot extends TelegramLongPollingBot {
                     editPic(Lan.mainMenu(a.getLanguage()).get(3)+"\n"+Lan.emptyOrders(a.getLanguage()), update.getCallbackQuery().getMessage(), Lan.keyBoard(a.getLanguage()),"Лого", 2);
                 } else {
                     String cart ="";
-                    List<String> itemNames = new ArrayList<String>();
+                    Map<String, String> itemNames = new HashMap<String, String>();
                     for (String s: items) {
-                        itemNames.add(DataBase.sqlQuery("select * from table0 where id ="+s, a.getLanguage()));
+                        Integer number = Collections.frequency(items, s);
+                        Integer cost  = Integer.parseInt(DataBase.sqlQuery("select cost from table0 where id ="+s, "cost"));
+                        itemNames.put(DataBase.sqlQuery("select * from table0 where id ="+s, a.getLanguage()),
+                        "\n"+Lan.cost(a.getLanguage()) + number +" * "+ cost + " = "+ cost*number+ Lan.currency(a.getLanguage())
+                        );
                     }
-                    Set<String> distinct = new HashSet<>(itemNames);
-                    Integer totalCost = 0;
-                    for (String s: distinct) {
-                        Integer cost = Integer.parseInt(DataBase.sqlQuery("select cost from table0 where "+a.getLanguage()+" ="+s, "cost"));
-                        Integer result = cost*Collections.frequency(itemNames, s);
-                        totalCost += result;
-                        cart += "\n" +s + ": " + Collections.frequency(itemNames, s)+ " * "+cost + Lan.currency(a.getLanguage())+" = "+result+ Lan.currency(a.getLanguage());
-                    }
-                        cart += "\n"+ totalCost+ Lan.currency(a.getLanguage());
+                    cart += itemNames.values();
                             List<String> list = new ArrayList<>();
                             list.add(Lan.clearCart(a.getLanguage()));
                             list.add(Lan.goBack(a.getLanguage()));
