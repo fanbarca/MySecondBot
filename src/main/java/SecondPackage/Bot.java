@@ -190,14 +190,14 @@ public class Bot extends TelegramLongPollingBot {
                     editPic(Lan.mainMenu(a.getLanguage()).get(3)+"\n"+Lan.emptyOrders(a.getLanguage()), update.getCallbackQuery().getMessage(), Lan.keyBoard(a.getLanguage()),"Лого", 2);
                 } else {
                     String cart ="";
-                    String result =0;
+                    Integer result =0;
                     Map<String, String> itemNames = new HashMap<String, String>();
                     for (String s: items) {
                         Integer number = Collections.frequency(items, s);
                         Integer cost  = Integer.parseInt(DataBase.sqlQuery("select * from table0 where id ="+s, "cost"));
                         itemNames.put(DataBase.sqlQuery("select * from table0 where id ="+s, a.getLanguage()),
                         number +" * "+ cost + " = "+ cost*number+ Lan.currency(a.getLanguage())
-                        ); 
+                        );
                         result += cost*number;
                     }
                     for (Map.Entry<String, String> entry : itemNames.entrySet()) {
