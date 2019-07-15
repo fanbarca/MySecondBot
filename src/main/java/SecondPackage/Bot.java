@@ -234,6 +234,10 @@ public class Bot extends TelegramLongPollingBot {
                 update.getCallbackQuery().getMessage(), keyb(i, t, update.getCallbackQuery().getFrom().getId()), t,  3);
             }
         }
+        if (cb.contains(Lan.clearCart(a.getLanguage()))) {
+            DataBase.sql("delete from cart where userid ="+update.getCallbackQuery().getFrom().getId());
+            editPic(Lan.emptyOrders(a.getLanguage()), update.getCallbackQuery().getMessage(), Lan.keyBoard(a.getLanguage()),"Лого", 2);
+        }
 	}
 
 	private List<String> keyb(int i, String t, Integer userid) throws SQLException {

@@ -165,9 +165,9 @@ class Lan {
     }
     public static String clearCart(String lan) {
         String r="";
-        if (lan.equals("Uzbek")) r = "Bo'shatish";
-        else if (lan.equals("Russian")) r = "Очистить";
-        else if (lan.equals("English")) r = "Empty cart";
+        if (lan.equals("Uzbek")) r = ":x: Bo'shatish";
+        else if (lan.equals("Russian")) r = ":x: Очистить";
+        else if (lan.equals("English")) r = ":x: Empty cart";
         return r;
     }
 }
