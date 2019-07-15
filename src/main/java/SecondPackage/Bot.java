@@ -191,17 +191,19 @@ public class Bot extends TelegramLongPollingBot {
                 } else {
                     String cart ="";
                     Integer result =0;
-                    Map<String, String> itemNames = new HashMap<String, String>();
+                    Map<String, List<Integer>> itemNames = new HashMap<String, List<Integer>>();
                     for (String s: items) {
                         Integer number = Collections.frequency(items, s);
                         Integer cost  = Integer.parseInt(DataBase.sqlQuery("select * from table0 where id ="+s, "cost"));
+                        List<Integer> aa = new ArrayList<>();
+                        aa.add(number);
+                        aa.add(cost);
                         itemNames.put(DataBase.sqlQuery("select * from table0 where id ="+s, a.getLanguage()),
-                        number +" * "+ cost + " = "+ cost*number+ Lan.currency(a.getLanguage())
-                        );
-                        result += cost*number;
+                        aa);
                     }
-                    for (Map.Entry<String, String> entry : itemNames.entrySet()) {
-                        cart+=entry.getKey() + "  -  " + entry.getValue()+"\n";
+                    for (Map.Entry<String, List<Integer>> entry : itemNames.entrySet()) {
+                        cart+=entry.getKey() + "  -  " + entry.getValue().get(0) +" * "+ entry.getValue().get(1) + " = "+ entry.getValue().get(0)*entry.getValue().get(1)+ Lan.currency(a.getLanguage());
+                        result += entry.getValue().get(0)*entry.getValue().get(1);
                     }
                         cart+="\n"+Lan.total(a.getLanguage())+result+Lan.currency(a.getLanguage());
                             List<String> list = new ArrayList<>();
