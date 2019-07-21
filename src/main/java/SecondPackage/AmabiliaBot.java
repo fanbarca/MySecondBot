@@ -688,7 +688,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
             }
     }
 
-        public List<String> sqlIdList() throws SQLException {
+        public static List<String> sqlIdList() throws SQLException {
             List<String> idList = new ArrayList<String>();
         try {
             Connection conn = getConnection();

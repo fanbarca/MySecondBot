@@ -19,6 +19,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -63,7 +64,7 @@ public class Adminbot extends TelegramLongPollingBot {
                             russian = update.getMessage().getText().substring(3);
                             AmabiliaBot.sql("insert into table0 (id, russian, type, instock) values ("+
                             String.format("%04d", rand.nextInt(10000))+", '"+russian+"', '"+category+"', true)");
-                            
+
                             send("Введите название продукта на узбекском", myID, list, false, 3);
                         } else if (update.getMessage().getText().contains("/U")) {
                             String Name = update.getMessage().getText().substring(3);
@@ -87,9 +88,21 @@ public class Adminbot extends TelegramLongPollingBot {
                             String command = update.getMessage().getText().substring(5);
                             AmabiliaBot.sql(command);
                         }
+                    } else if (update.getMessage().getText().contains("/broadcast")) {
+                        if (update.getMessage().getText().length()>11) {
+                            String command = update.getMessage().getText().substring(11);
+                            AmabiliaBot toAll = new AmabiliaBot();
+                            try {
+								for (int i=0; i<AmabiliaBot.sqlIdList().size(); i++) {
+                                    toAll.send(command, Long.parseLong(AmabiliaBot.sqlIdList().get(i)));
+								}
+							} catch (SQLException e) {
+								e.printStackTrace();
+							}
+                        }
                     }
                 } else if (update.getMessage().hasPhoto()) {
-                    
+
                 }
             }
         } else if (update.hasCallbackQuery()) {
