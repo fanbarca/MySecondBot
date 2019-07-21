@@ -543,7 +543,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
     }
         try {
             int smid = execute(sendMessage).getMessageId();
-            sql("update users set smid ="+smid+" where id = "+chatId);
+            //sql("update users set smid ="+smid+" where id = "+chatId);
         }
         catch (TelegramApiException e) {e.printStackTrace();}
     }
