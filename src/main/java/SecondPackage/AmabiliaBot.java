@@ -781,7 +781,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
         }
         return lan;
     }
-    public List<String> showAllProducts(String column){
+    public static List<String> showAllProducts(String column){
         List<String> lan = new ArrayList<>();
         try {
             Connection conn = getConnection();

@@ -7,6 +7,7 @@ import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.ForwardMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageReplyMarkup;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.PhotoSize;
@@ -54,7 +55,7 @@ public class Adminbot extends TelegramLongPollingBot {
                         a.add("Добавть продукт");
                         send("Выберите действие", myID, a,false, 2);
                     } else if(update.getMessage().getText().equals("Изменить Меню")){
-                        send("Изменить Меню", myID, Lan.listTypes("Russian"), true, 3);
+                        send("Изменить Меню", myID, showAllProducts("Russian"), true, 2);
                     } else if(update.getMessage().getText().equals("Заказы")){
                         send("Заказы", myID, listOrders("orderid"), true, 2);
                     } else if(update.getMessage().getText().equals("Добавть продукт")){
@@ -79,7 +80,7 @@ public class Adminbot extends TelegramLongPollingBot {
                     } else {
                         if (listener.equals("Russian")) {
                             Random rand = new Random();
-                            russian = update.getMessage().getText().substring(3);
+                            russian = update.getMessage().getText();
                             AmabiliaBot.sql("insert into table0 (id, russian, type, instock) values ("+
                             String.format("%04d", rand.nextInt(10000))+", '"+russian+"', '"+category+"', true)");
                             listener = "Uzbek";
@@ -111,6 +112,19 @@ public class Adminbot extends TelegramLongPollingBot {
                         listener = "Russian";
                         edit(update.getCallbackQuery().getMessage(), "Выбрана категория "+t+
                         "\nВведите название продукта на русском",  list, 1);
+                    } else if(update.getCallbackQuery().getData().equals("Назад")) {
+                        edit(update.getCallbackQuery().getMessage(), "Изменить Меню",
+                        Lan.listTypes("Russian"), 3);
+                    }
+                }
+                for (String t:AmabiliaBot.showAllProducts("Russian")) {
+                    if (update.getCallbackQuery().getData().contains(t)) {
+                        if (update.getCallbackQuery().getData().contains(":white_check_mark:")) {
+                            AmabiliaBot.sql("UPDATE table0 SET instock = false where russian = '"+t+"'");
+                        } else if (update.getCallbackQuery().getData().contains(":x:")) {
+                            AmabiliaBot.sql("UPDATE table0 SET instock = true where russian = '"+t+"'");
+                        }
+                        edit(update.getCallbackQuery().getMessage(), "Обнавлено", showAllProducts("Russian"), 2);
                     } else if(update.getCallbackQuery().getData().equals("Назад")) {
                         edit(update.getCallbackQuery().getMessage(), "Изменить Меню",
                         Lan.listTypes("Russian"), 3);
@@ -266,5 +280,26 @@ public List<String> listOrders(String column){
         fm.setMessageId(message.getMessageId());
         try {execute(fm);}
         catch (TelegramApiException e) {e.printStackTrace();}
+    }
+
+    public static List<String> showAllProducts(String column){
+        List<String> lan = new ArrayList<>();
+        try {
+            Connection conn = AmabiliaBot.getConnection();
+            if (conn!=null) {
+                Statement prst = conn.createStatement();
+                ResultSet rs = prst.executeQuery("select * from table0");
+                while (rs.next()){
+                    String mark = rs.getString("instock").equals("true")?" :white_check_mark:":" :x:";
+                    lan.add(rs.getString(column)+mark);
+                }
+                prst.close();
+                conn.close();
+            }
+        }
+        catch(Exception ex) {
+            System.err.println(ex);
+        }
+        return lan;
     }
 }
