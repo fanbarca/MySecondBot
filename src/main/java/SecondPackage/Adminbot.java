@@ -290,7 +290,7 @@ public List<String> listOrders(String column){
                 Statement prst = conn.createStatement();
                 ResultSet rs = prst.executeQuery("select * from table0");
                 while (rs.next()){
-                    String mark = rs.getString("instock").equals("'true'")?" :white_check_mark:":" :x:";
+                    String mark = rs.getString("instock").equals("true")?" :white_check_mark:":" :x:";
                     lan.add(rs.getString(column)+mark);
                 }
                 prst.close();

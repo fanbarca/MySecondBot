@@ -265,9 +265,9 @@ public class AmabiliaBot extends TelegramLongPollingBot {
         }
         for (String t: Lan.listTypes(a.getLanguage())) {
             String language = a.getLanguage();
-            if (cb.equals(t)&&!cb.equals(Lan.backToMenu(a.getLanguage()))) {
+            if (cb.equals(t)&&!cb.contains(Lan.backToMenu(a.getLanguage()))) {
                 List<String> a = showProducts(language, language, String.valueOf(Lan.listTypes(language).indexOf(t)));
-                edit(update.getCallbackQuery().getMessage(), t, a, a.size()>1?2:1);
+                edit(update.getCallbackQuery().getMessage(), t, a, 1);
                 String image = sqlQuery("SELECT image from users where id="+update.getCallbackQuery().getMessage().getChatId(), "image");
                 if (image!=null) {
                     deleteMessage(image, update.getCallbackQuery().getMessage().getChatId().toString());
@@ -766,9 +766,9 @@ public class AmabiliaBot extends TelegramLongPollingBot {
             Connection conn = getConnection();
             if (conn!=null) {
                 Statement prst = conn.createStatement();
-                ResultSet rs = prst.executeQuery("select "+column+" from table0 where type = '"+type+"'");
+                ResultSet rs = prst.executeQuery("select * from table0 where type = '"+type+"'");
                 while (rs.next()){
-                    lan.add(rs.getString(column));
+                    lan.add(rs.getString(column)+" "+rs.getString("cost"));
                 }
                 lan.add(Lan.goBack(language));
                 lan.add(Lan.backToMenu(language));
