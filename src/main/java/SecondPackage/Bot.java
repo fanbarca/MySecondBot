@@ -253,17 +253,15 @@ public class Bot extends TelegramLongPollingBot {
         List<String> items = DataBase.sqlQueryList("select * from cart where userid ="+userid, "item");
         String prodId = DataBase.showAllProducts("id").get(i);
         String prodName = DataBase.showAllProducts(a.getLanguage()).get(i);
-        String previous = DataBase.showAllProducts(a.getLanguage()).get(i-1);
-        String next = DataBase.showAllProducts(a.getLanguage()).get(i+1);
             if (items.contains(prodId)) {
                 int occurrences = Collections.frequency(items, prodId);
                 keyb.add(Lan.addToCart(a.getLanguage())+" \n"+Lan.total(a.getLanguage())+occurrences);
             } else {
                 keyb.add(Lan.addToCart(a.getLanguage()));
             }
-                if (i>0) keyb.add(":point_left: "+previous);
+                if (i>0) keyb.add(":point_left: "+DataBase.showAllProducts(a.getLanguage()).get(i-1));
                 else keyb.add(":point_left: "+DataBase.showAllProducts(a.getLanguage()).get(DataBase.showAllProducts(a.getLanguage()).size()-1));
-                if (i<DataBase.showAllProducts(a.getLanguage()).size()-1) keyb.add(next+" :point_right:");
+                if (i<DataBase.showAllProducts(a.getLanguage()).size()-1) keyb.add(DataBase.showAllProducts(a.getLanguage()).get(i+1)+" :point_right:");
                 else keyb.add(DataBase.showAllProducts(a.getLanguage()).get(0)+" :point_right:");
                 keyb.add(Lan.listTypes(a.getLanguage()).get(Integer.parseInt(DataBase.sqlQuery("SELECT type from table0 where "+a.getLanguage()+" = '"+prodName+"'", "type"))));
                 keyb.add(Lan.mainMenu(a.getLanguage()).get(3));
