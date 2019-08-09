@@ -8,7 +8,7 @@
   <component name="ChangeListManager">
     <list default="true" id="7fdc6f42-80e3-436b-99c6-634d7f7f8939" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/SecondPackage/AmabiliaBot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/SecondPackage/AmabiliaBot.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/SecondPackage/Bot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/SecondPackage/Bot.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -24,99 +24,36 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/main/java/SecondPackage/AmabiliaBot.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="215">
-              <caret line="221" column="31" lean-forward="true" selection-start-line="221" selection-start-column="31" selection-end-line="221" selection-end-column="31" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#1678#1694#0" expanded="true" />
-                <element signature="e#5282#5283#0" expanded="true" />
-                <element signature="e#5327#5328#0" expanded="true" />
-                <element signature="e#5380#5381#0" expanded="true" />
-                <element signature="e#5425#5426#0" expanded="true" />
-                <element signature="e#5571#5572#0" expanded="true" />
-                <element signature="e#5616#5617#0" expanded="true" />
-                <element signature="e#5668#5669#0" expanded="true" />
-                <element signature="e#5713#5714#0" expanded="true" />
-                <element signature="e#7096#7097#0" expanded="true" />
-                <element signature="e#7141#7142#0" expanded="true" />
-                <element signature="e#7194#7195#0" expanded="true" />
-                <element signature="e#7239#7240#0" expanded="true" />
-                <element signature="e#18440#18448#0" expanded="true" />
-                <element signature="e#18860#18868#0" expanded="true" />
-                <element signature="e#19442#19450#0" expanded="true" />
-                <element signature="e#19787#19795#0" expanded="true" />
-                <element signature="e#20107#20108#0" expanded="true" />
-                <element signature="e#20156#20157#0" expanded="true" />
-                <element signature="e#20274#20282#0" expanded="true" />
-                <element signature="e#20542#20550#0" expanded="true" />
-                <element signature="e#20841#20849#0" expanded="true" />
-                <element signature="e#21512#21540#0" expanded="true" />
-                <element signature="e#21591#21604#0" expanded="true" />
-                <element signature="e#21758#21780#0" expanded="true" />
-                <element signature="e#24351#24359#0" expanded="true" />
-                <element signature="e#24547#24555#0" expanded="true" />
-                <element signature="e#24775#24783#0" expanded="true" />
-                <element signature="e#25373#25401#0" expanded="true" />
-                <element signature="e#25517#25539#0" expanded="true" />
-                <element signature="e#27047#27060#0" expanded="true" />
-                <element signature="e#28776#28777#0" expanded="true" />
-                <element signature="e#28817#28818#0" expanded="true" />
-                <element signature="e#28866#28867#0" expanded="true" />
-                <element signature="e#28936#28937#0" expanded="true" />
-                <element signature="e#29470#29478#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/SecondPackage/Bot.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="144">
-              <caret line="8" selection-start-line="8" selection-end-line="8" />
+            <state relative-caret-position="211">
+              <caret line="223" column="13" lean-forward="true" selection-start-line="223" selection-start-column="13" selection-end-line="223" selection-end-column="13" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#342#343#0" expanded="true" />
-                <element signature="e#418#419#0" expanded="true" />
+                <element signature="e#11683#11706#0" expanded="true" />
+                <element signature="e#17442#17450#0" expanded="true" />
+                <element signature="e#18565#18578#0" expanded="true" />
+                <element signature="e#20850#20878#0" expanded="true" />
+                <element signature="e#21010#21032#0" expanded="true" />
+                <element signature="e#21916#21938#0" expanded="true" />
+                <element signature="e#23406#23434#0" expanded="true" />
+                <element signature="e#23588#23610#0" expanded="true" />
+                <element signature="e#26125#26153#0" expanded="true" />
+                <element signature="e#26285#26307#0" expanded="true" />
+                <element signature="e#27192#27214#0" expanded="true" />
+                <element signature="e#27946#27947#0" expanded="true" />
+                <element signature="e#27976#27977#0" expanded="true" />
+                <element signature="e#28025#28026#0" expanded="true" />
+                <element signature="e#28056#28057#0" expanded="true" />
+                <element signature="e#28104#28105#0" expanded="true" />
+                <element signature="e#28142#28143#0" expanded="true" />
+                <element signature="e#28195#28196#0" expanded="true" />
+                <element signature="e#28233#28234#0" expanded="true" />
+                <element signature="e#28372#28373#0" expanded="true" />
+                <element signature="e#28410#28411#0" expanded="true" />
+                <element signature="e#28602#28603#0" expanded="true" />
+                <element signature="e#28640#28641#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/SecondPackage/Lan.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="252">
-              <caret line="14" column="15" lean-forward="true" selection-start-line="14" selection-start-column="15" selection-end-line="14" selection-end-column="15" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/SecondPackage/Order.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="321">
-              <caret line="91" column="37" selection-start-line="91" selection-start-column="37" selection-end-line="91" selection-end-column="37" />
-              <folding>
-                <element signature="e#1257#1258#0" expanded="true" />
-                <element signature="e#1280#1281#0" expanded="true" />
-                <element signature="e#1327#1328#0" expanded="true" />
-                <element signature="e#1360#1361#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="jar://$MAVEN_REPOSITORY$/org/telegram/telegrambots-meta/4.2/telegrambots-meta-4.2.jar!/org/telegram/telegrambots/meta/api/objects/Message.class">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="198">
-              <caret line="160" column="29" selection-start-line="160" selection-start-column="20" selection-end-line="160" selection-end-column="29" />
             </state>
           </provider>
         </entry>
@@ -169,9 +106,9 @@
         <option value="$PROJECT_DIR$/src/main/java/SecondPackage/Main.java" />
         <option value="$PROJECT_DIR$/src/main/java/SecondPackage/Adminbot.java" />
         <option value="$PROJECT_DIR$/src/main/java/SecondPackage/Lan.java" />
-        <option value="$PROJECT_DIR$/src/main/java/SecondPackage/Bot.java" />
         <option value="$PROJECT_DIR$/src/main/java/SecondPackage/Order.java" />
         <option value="$PROJECT_DIR$/src/main/java/SecondPackage/AmabiliaBot.java" />
+        <option value="$PROJECT_DIR$/src/main/java/SecondPackage/Bot.java" />
       </list>
     </option>
   </component>
@@ -183,8 +120,8 @@
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-8" />
-    <option name="y" value="-8" />
+    <option name="x" value="-32" />
+    <option name="y" value="-460" />
     <option name="width" value="1382" />
     <option name="height" value="754" />
   </component>
@@ -198,6 +135,7 @@
     </navigator>
     <panes>
       <pane id="Scope" />
+      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -235,7 +173,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -287,20 +224,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1560590336061</updated>
-    </task>
-    <task id="LOCAL-00003" summary="new">
-      <created>1561782251635</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1561782251635</updated>
-    </task>
-    <task id="LOCAL-00004" summary="new">
-      <created>1561785248849</created>
-      <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1561785248849</updated>
     </task>
     <task id="LOCAL-00005" summary="new">
       <created>1562001213432</created>
@@ -631,14 +554,28 @@
       <option name="project" value="LOCAL" />
       <updated>1563001103904</updated>
     </task>
-    <option name="localTasksCounter" value="52" />
+    <task id="LOCAL-00052" summary="new">
+      <created>1563001808933</created>
+      <option name="number" value="00052" />
+      <option name="presentableId" value="LOCAL-00052" />
+      <option name="project" value="LOCAL" />
+      <updated>1563001808933</updated>
+    </task>
+    <task id="LOCAL-00053" summary="new">
+      <created>1563002218434</created>
+      <option name="number" value="00053" />
+      <option name="presentableId" value="LOCAL-00053" />
+      <option name="project" value="LOCAL" />
+      <updated>1563002218434</updated>
+    </task>
+    <option name="localTasksCounter" value="54" />
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1382" height="754" extended-state="6" />
+    <frame x="-560" y="-1088" width="1936" height="1066" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.16944024" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.12100213" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -850,31 +787,39 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/SecondPackage/English.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/SecondPackage/English.java" />
+    <entry file="file://$PROJECT_DIR$/src/main/java/SecondPackage/Uzbek.java" />
+    <entry file="file://$PROJECT_DIR$/src/main/java/SecondPackage/Russian.java" />
+    <entry file="file://$PROJECT_DIR$/src/main/java/SecondPackage/AmabiliaBot.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1728">
-          <caret line="105" column="32" selection-start-line="105" selection-start-column="32" selection-end-line="105" selection-end-column="32" />
+        <state relative-caret-position="249">
+          <caret line="215" column="64" lean-forward="true" selection-start-line="215" selection-start-column="64" selection-end-line="215" selection-end-column="64" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#5282#5283#0" expanded="true" />
+            <element signature="e#5327#5328#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/SecondPackage/Uzbek.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/SecondPackage/Order.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1026">
-          <caret line="62" column="22" selection-start-line="62" selection-end-line="65" />
+        <state relative-caret-position="1314">
+          <caret line="91" column="37" selection-start-line="91" selection-start-column="37" selection-end-line="91" selection-end-column="37" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/SecondPackage/Russian.java">
+    <entry file="jar://$MAVEN_REPOSITORY$/org/telegram/telegrambots-meta/4.2/telegrambots-meta-4.2.jar!/org/telegram/telegrambots/meta/api/objects/Message.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1026">
-          <caret line="63" column="39" selection-start-line="63" selection-start-column="15" selection-end-line="63" selection-end-column="39" />
+        <state relative-caret-position="2628">
+          <caret line="160" column="29" selection-start-line="160" selection-start-column="20" selection-end-line="160" selection-end-column="29" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/SecondPackage/Lan.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="252">
-          <caret line="14" column="15" lean-forward="true" selection-start-line="14" selection-start-column="15" selection-end-line="14" selection-end-column="15" />
+          <caret line="14" column="15" selection-start-line="14" selection-start-column="15" selection-end-line="14" selection-end-column="15" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -883,78 +828,33 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/SecondPackage/Bot.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="144">
-          <caret line="8" selection-start-line="8" selection-end-line="8" />
+        <state relative-caret-position="211">
+          <caret line="223" column="13" lean-forward="true" selection-start-line="223" selection-start-column="13" selection-end-line="223" selection-end-column="13" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#342#343#0" expanded="true" />
-            <element signature="e#418#419#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/telegram/telegrambots-meta/4.2/telegrambots-meta-4.2.jar!/org/telegram/telegrambots/meta/api/objects/Message.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="198">
-          <caret line="160" column="29" selection-start-line="160" selection-start-column="20" selection-end-line="160" selection-end-column="29" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/SecondPackage/Order.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="321">
-          <caret line="91" column="37" selection-start-line="91" selection-start-column="37" selection-end-line="91" selection-end-column="37" />
-          <folding>
-            <element signature="e#1257#1258#0" expanded="true" />
-            <element signature="e#1280#1281#0" expanded="true" />
-            <element signature="e#1327#1328#0" expanded="true" />
-            <element signature="e#1360#1361#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/SecondPackage/AmabiliaBot.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="215">
-          <caret line="221" column="31" lean-forward="true" selection-start-line="221" selection-start-column="31" selection-end-line="221" selection-end-column="31" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#1678#1694#0" expanded="true" />
-            <element signature="e#5282#5283#0" expanded="true" />
-            <element signature="e#5327#5328#0" expanded="true" />
-            <element signature="e#5380#5381#0" expanded="true" />
-            <element signature="e#5425#5426#0" expanded="true" />
-            <element signature="e#5571#5572#0" expanded="true" />
-            <element signature="e#5616#5617#0" expanded="true" />
-            <element signature="e#5668#5669#0" expanded="true" />
-            <element signature="e#5713#5714#0" expanded="true" />
-            <element signature="e#7096#7097#0" expanded="true" />
-            <element signature="e#7141#7142#0" expanded="true" />
-            <element signature="e#7194#7195#0" expanded="true" />
-            <element signature="e#7239#7240#0" expanded="true" />
-            <element signature="e#18440#18448#0" expanded="true" />
-            <element signature="e#18860#18868#0" expanded="true" />
-            <element signature="e#19442#19450#0" expanded="true" />
-            <element signature="e#19787#19795#0" expanded="true" />
-            <element signature="e#20107#20108#0" expanded="true" />
-            <element signature="e#20156#20157#0" expanded="true" />
-            <element signature="e#20274#20282#0" expanded="true" />
-            <element signature="e#20542#20550#0" expanded="true" />
-            <element signature="e#20841#20849#0" expanded="true" />
-            <element signature="e#21512#21540#0" expanded="true" />
-            <element signature="e#21591#21604#0" expanded="true" />
-            <element signature="e#21758#21780#0" expanded="true" />
-            <element signature="e#24351#24359#0" expanded="true" />
-            <element signature="e#24547#24555#0" expanded="true" />
-            <element signature="e#24775#24783#0" expanded="true" />
-            <element signature="e#25373#25401#0" expanded="true" />
-            <element signature="e#25517#25539#0" expanded="true" />
-            <element signature="e#27047#27060#0" expanded="true" />
-            <element signature="e#28776#28777#0" expanded="true" />
-            <element signature="e#28817#28818#0" expanded="true" />
-            <element signature="e#28866#28867#0" expanded="true" />
-            <element signature="e#28936#28937#0" expanded="true" />
-            <element signature="e#29470#29478#0" expanded="true" />
+            <element signature="e#11683#11706#0" expanded="true" />
+            <element signature="e#17442#17450#0" expanded="true" />
+            <element signature="e#18565#18578#0" expanded="true" />
+            <element signature="e#20850#20878#0" expanded="true" />
+            <element signature="e#21010#21032#0" expanded="true" />
+            <element signature="e#21916#21938#0" expanded="true" />
+            <element signature="e#23406#23434#0" expanded="true" />
+            <element signature="e#23588#23610#0" expanded="true" />
+            <element signature="e#26125#26153#0" expanded="true" />
+            <element signature="e#26285#26307#0" expanded="true" />
+            <element signature="e#27192#27214#0" expanded="true" />
+            <element signature="e#27946#27947#0" expanded="true" />
+            <element signature="e#27976#27977#0" expanded="true" />
+            <element signature="e#28025#28026#0" expanded="true" />
+            <element signature="e#28056#28057#0" expanded="true" />
+            <element signature="e#28104#28105#0" expanded="true" />
+            <element signature="e#28142#28143#0" expanded="true" />
+            <element signature="e#28195#28196#0" expanded="true" />
+            <element signature="e#28233#28234#0" expanded="true" />
+            <element signature="e#28372#28373#0" expanded="true" />
+            <element signature="e#28410#28411#0" expanded="true" />
+            <element signature="e#28602#28603#0" expanded="true" />
+            <element signature="e#28640#28641#0" expanded="true" />
           </folding>
         </state>
       </provider>

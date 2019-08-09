@@ -219,7 +219,7 @@ public class Bot extends TelegramLongPollingBot {
             if (cb.equals(t)&&!cb.equals(Lan.backToMenu(a.getLanguage()))) {
                 List<String> list = DataBase.showProducts(language, language, String.valueOf(Lan.listTypes(language).indexOf(t)));
                 String nothing = "";
-                if (list.size()<3) nothing = Lan.emptyOrders(a.getLanguage());
+                if (list.size()<1) nothing = Lan.emptyOrders(a.getLanguage());
                 editPic(t+"\n"+nothing, update.getCallbackQuery().getMessage(), list, "Лого",  1);
             }
         }
