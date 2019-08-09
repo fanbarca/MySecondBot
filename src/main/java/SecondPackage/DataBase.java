@@ -112,8 +112,6 @@ public static Connection getConnection() throws URISyntaxException, SQLException
                 while (rs.next()){
                     if (rs.getBoolean("instock")) lan.add(rs.getString(column)+" - "+rs.getString("cost")+" "+Lan.currency(language));
                 }
-                lan.add(Lan.goBack(language));
-                lan.add(Lan.backToMenu(language));
                 prst.close();
                 conn.close();
             }
