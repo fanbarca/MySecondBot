@@ -276,7 +276,7 @@ public class Bot extends TelegramLongPollingBot {
                 list.add("English");
             if (edit) editCaption(":uz: Tilni tanlang\n" +
                 ":ru: Выберите язык\n" +
-                ":gb: Choose language" , message, list, "Russian", 3);
+                ":gb: Choose language" , message, list, 3);
             else {sendPic(":uz: Tilni tanlang\n" +
                 ":ru: Выберите язык\n" +
                 ":gb: Choose language" , message, list, "Лого", 3);
@@ -347,6 +347,16 @@ public class Bot extends TelegramLongPollingBot {
                             .setCallbackData(list.get(i + 2)));
                             }
                     rows.add(row);
+                    if (flag==1) {
+                        List<InlineKeyboardButton> lastRow = new ArrayList<InlineKeyboardButton>();
+                                    lastRow.add(new InlineKeyboardButton()
+                            .setText(EmojiParser.parseToUnicode(Lan.goBack(a.getLanguage())))
+                            .setCallbackData(Lan.goBack(a.getLanguage())));
+                                    lastRow.add(new InlineKeyboardButton()
+                            .setText(EmojiParser.parseToUnicode(Lan.backToMenu(a.getLanguage())))
+                            .setCallbackData(Lan.backToMenu(a.getLanguage())));
+                    rows.add(lastRow);
+                    }
                 }
                 markup.setKeyboard(rows);
                 em.setReplyMarkup(markup);
@@ -408,7 +418,7 @@ public class Bot extends TelegramLongPollingBot {
         try {execute(dm);}
         catch (TelegramApiException e) {e.printStackTrace();}
     }
-    public void editCaption(String text, Message message, List<String> list, String language, int flag) throws TelegramApiException, SQLException {
+    public void editCaption(String text, Message message, List<String> list, int flag) throws TelegramApiException, SQLException {
                 //Integer messageId= Integer.parseInt(DataBase.sqlQuery("select image from users where id="+message.getChatId(), "image"));
                 EditMessageCaption ec = new EditMessageCaption();
                 ec.setChatId(message.getChatId().toString());
@@ -432,11 +442,11 @@ public class Bot extends TelegramLongPollingBot {
                     if (flag==1) {
                         List<InlineKeyboardButton> lastRow = new ArrayList<InlineKeyboardButton>();
                                     lastRow.add(new InlineKeyboardButton()
-                            .setText(EmojiParser.parseToUnicode(Lan.goBack(language)))
-                            .setCallbackData(Lan.goBack(language)));
+                            .setText(EmojiParser.parseToUnicode(Lan.goBack(a.getLanguage())))
+                            .setCallbackData(Lan.goBack(a.getLanguage())));
                                     lastRow.add(new InlineKeyboardButton()
-                            .setText(EmojiParser.parseToUnicode(Lan.backToMenu(language)))
-                            .setCallbackData(Lan.backToMenu(language)));
+                            .setText(EmojiParser.parseToUnicode(Lan.backToMenu(a.getLanguage())))
+                            .setCallbackData(Lan.backToMenu(a.getLanguage())));
                     rows.add(lastRow);
                     }
                 }
