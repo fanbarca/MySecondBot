@@ -177,4 +177,18 @@ class Lan {
         else if (lan.equals("English")) r = "Total: ";
         return r;
     }
+    public static String addToCart(String lan) {
+        String r="";
+        if (lan.equals("Uzbek")) r = "Savatchaga qo'shish";
+        else if (lan.equals("Russian")) r = "Добавить в корзину";
+        else if (lan.equals("English")) r = "Add to cart";
+        return r;
+    }
+    public static String removeFromCart(String lan) {
+        String r="";
+        if (lan.equals("Uzbek")) r = "Savatchadan olish";
+        else if (lan.equals("Russian")) r = "Убрать из корзины";
+        else if (lan.equals("English")) r = "Remove from cart";
+        return r;
+    }
 }

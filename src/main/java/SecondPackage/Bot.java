@@ -220,7 +220,7 @@ public class Bot extends TelegramLongPollingBot {
                 List<String> list = DataBase.showProducts(language, language, String.valueOf(Lan.listTypes(language).indexOf(t)));
                 String nothing = "";
                 if (list.size()<1) nothing = Lan.emptyOrders(a.getLanguage());
-                editPic(t+"\n"+nothing, update.getCallbackQuery().getMessage(), list, "Лого",  1);
+                editPic(t+"\n"+nothing, update.getCallbackQuery().getMessage(), list, "Лого", 1);
             }
         }
         for (int i = 0; i<DataBase.showAllProducts(a.getLanguage()).size(); i++) {
@@ -231,15 +231,15 @@ public class Bot extends TelegramLongPollingBot {
                 DataBase.sql("insert into cart (userid, item) values ("+update.getCallbackQuery().getFrom().getId()
                 +",'"+prodId+"')");
                 editPic("<b>"+t+"</b>\n"+ Lan.cost(a.getLanguage()) + DataBase.sqlQuery("SELECT cost from table0 where "+a.getLanguage()+" = '"+t+"'", "cost") + Lan.currency(a.getLanguage()),
-                update.getCallbackQuery().getMessage(), keyb(i, t, update.getCallbackQuery().getFrom().getId()), t,  3);
+                update.getCallbackQuery().getMessage(), keyb(i, update.getCallbackQuery().getFrom().getId()), t,  3);
             } else if (cb.contains("🛒:x:"+t)) {
                 DataBase.sql("delete from cart where userid ="+update.getCallbackQuery().getFrom().getId()
                 +" and item = '"+prodId+"'");
                 editPic("<b>"+t+"</b>\n"+ Lan.cost(a.getLanguage()) + DataBase.sqlQuery("SELECT cost from table0 where "+a.getLanguage()+" = '"+t+"'", "cost") +  Lan.currency(a.getLanguage()),
-                update.getCallbackQuery().getMessage(), keyb(i, t, update.getCallbackQuery().getFrom().getId()), t,  3);
+                update.getCallbackQuery().getMessage(), keyb(i, update.getCallbackQuery().getFrom().getId()), t,  3);
             } else if (cb.contains(t)) {
                 editPic("<b>"+t+"</b>\n"+ Lan.cost(a.getLanguage()) + DataBase.sqlQuery("SELECT cost from table0 where "+a.getLanguage()+" = '"+t+"'", "cost") +  Lan.currency(a.getLanguage()),
-                update.getCallbackQuery().getMessage(), keyb(i, t, update.getCallbackQuery().getFrom().getId()), t,  3);
+                update.getCallbackQuery().getMessage(), keyb(i, update.getCallbackQuery().getFrom().getId()), t,  3);
             }
         }
         if (cb.contains(Lan.clearCart(a.getLanguage()))) {
@@ -248,25 +248,28 @@ public class Bot extends TelegramLongPollingBot {
         }
 	}
 
-	private List<String> keyb(int i, String t, Integer userid) throws SQLException {
+	private List<String> keyb(int i, Integer userid) throws SQLException {
         List<String> keyb = new ArrayList<>();
-        if (i>0) keyb.add(":point_left: "+DataBase.showAllProducts(a.getLanguage()).get(i-1));
+        List<String> items = DataBase.sqlQueryList("select * from cart where userid ="+userid, "item");
+        String prodId = DataBase.showAllProducts("id").get(i);
+        String prodName = DataBase.showAllProducts(a.getLanguage()).get(i);
+        String previous = DataBase.showAllProducts(a.getLanguage()).get(i-1);
+        String next = DataBase.showAllProducts(a.getLanguage()).get(i+1);
+            if (items.contains(prodId)) {
+                int occurrences = Collections.frequency(items, prodId);
+                keyb.add(Lan.addToCart(a.getLanguage())+" \n"+Lan.total(a.getLanguage())+occurrences);
+            } else {
+                keyb.add(Lan.addToCart(a.getLanguage()));
+            }
+                if (i>0) keyb.add(":point_left: "+previous);
                 else keyb.add(":point_left: "+DataBase.showAllProducts(a.getLanguage()).get(DataBase.showAllProducts(a.getLanguage()).size()-1));
-                List<String> items = DataBase.sqlQueryList("select * from cart where userid ="+userid, "item");
-                String prodId = DataBase.showAllProducts("id").get(i);
-                if (items.contains(prodId)) {
-                    int occurrences = Collections.frequency(items, prodId);
-                    keyb.add("🛒:heavy_plus_sign:"+t+" "+occurrences);
-                } else {
-                    keyb.add("🛒:heavy_plus_sign:"+t);
-                }
-                if (i<DataBase.showAllProducts(a.getLanguage()).size()-1) keyb.add(DataBase.showAllProducts(a.getLanguage()).get(i+1)+" :point_right:");
+                if (i<DataBase.showAllProducts(a.getLanguage()).size()-1) keyb.add(next+" :point_right:");
                 else keyb.add(DataBase.showAllProducts(a.getLanguage()).get(0)+" :point_right:");
-                keyb.add(Lan.listTypes(a.getLanguage()).get(Integer.parseInt(DataBase.sqlQuery("SELECT type from table0 where "+a.getLanguage()+" = '"+t+"'", "type"))));
+                keyb.add(Lan.listTypes(a.getLanguage()).get(Integer.parseInt(DataBase.sqlQuery("SELECT type from table0 where "+a.getLanguage()+" = '"+prodName+"'", "type"))));
                 keyb.add(Lan.mainMenu(a.getLanguage()).get(3));
                 keyb.add(Lan.goBack(a.getLanguage()));
-                if (items.contains(prodId)) keyb.add("🛒:x:"+t);
                 keyb.add(Lan.backToMenu(a.getLanguage()));
+                if (items.contains(prodId)) keyb.add(Lan.removeFromCart(a.getLanguage()));
                 return keyb;
 	}
 	private void chooseLanguage(Message message, boolean edit) throws SQLException, TelegramApiException {
@@ -333,32 +336,72 @@ public class Bot extends TelegramLongPollingBot {
                 em.setMessageId(message.getMessageId());
                 em.setMedia(imp);
                 InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
-                List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
-                for (int i = 0; i < list.size(); i += flag) {
-                    List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
-                    row.add(new InlineKeyboardButton()
-                            .setText(EmojiParser.parseToUnicode(list.get(i)))
-                            .setCallbackData(list.get(i)));
-                    if ((flag==2)||(flag==3)) { if ((i + 1) < list.size()) row.add(new InlineKeyboardButton()
-                            .setText(EmojiParser.parseToUnicode(list.get(i + 1)))
-                            .setCallbackData(list.get(i + 1)));}
-                    if (flag==3) {if ((i + 2) < list.size()) row.add(new InlineKeyboardButton()
-                            .setText(EmojiParser.parseToUnicode(list.get(i + 2)))
-                            .setCallbackData(list.get(i + 2)));
-                            }
-                    rows.add(row);
-                }
-                if (flag==1) {
+                if (DataBase.showAllProducts(a.getLanguage()).contains(text)) {
+                    List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
+                        List<InlineKeyboardButton> row0 = new ArrayList<InlineKeyboardButton>();
+                        row0.add(new InlineKeyboardButton()
+                                .setText(EmojiParser.parseToUnicode(list.get(0)))
+                                .setCallbackData(list.get(0)));
+                        if (list.size()==8) {
+                            row0.add(new InlineKeyboardButton()
+                                .setText(EmojiParser.parseToUnicode(list.get(7)))
+                                .setCallbackData(list.get(7)));
+                        }
+                    List<InlineKeyboardButton> row1 = new ArrayList<InlineKeyboardButton>();
+                        row1.add(new InlineKeyboardButton()
+                            .setText(EmojiParser.parseToUnicode(list.get(1)))
+                            .setCallbackData(list.get(1)));
+                        row1.add(new InlineKeyboardButton()
+                            .setText(EmojiParser.parseToUnicode(list.get(2)))
+                            .setCallbackData(list.get(2)));
+                    List<InlineKeyboardButton> row2 = new ArrayList<InlineKeyboardButton>();
+                        row2.add(new InlineKeyboardButton()
+                            .setText(EmojiParser.parseToUnicode(list.get(3)))
+                            .setCallbackData(list.get(3)));
+                    List<InlineKeyboardButton> row3 = new ArrayList<InlineKeyboardButton>();
+                        row3.add(new InlineKeyboardButton()
+                            .setText(EmojiParser.parseToUnicode(list.get(4)))
+                            .setCallbackData(list.get(4)));
+                        row3.add(new InlineKeyboardButton()
+                            .setText(EmojiParser.parseToUnicode(list.get(5)))
+                            .setCallbackData(list.get(5)));
+                        row3.add(new InlineKeyboardButton()
+                            .setText(EmojiParser.parseToUnicode(list.get(6)))
+                            .setCallbackData(list.get(6)));
+
+                        rows.add(row0);
+                        rows.add(row1);
+                        rows.add(row2);
+                        rows.add(row3);
+                    markup.setKeyboard(rows);
+                } else {
+                    List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
+                    for (int i = 0; i < list.size(); i += flag) {
+                        List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
+                        row.add(new InlineKeyboardButton()
+                                .setText(EmojiParser.parseToUnicode(list.get(i)))
+                                .setCallbackData(list.get(i)));
+                        if ((flag==2)||(flag==3)) { if ((i + 1) < list.size()) row.add(new InlineKeyboardButton()
+                                .setText(EmojiParser.parseToUnicode(list.get(i + 1)))
+                                .setCallbackData(list.get(i + 1)));}
+                        if (flag==3) {if ((i + 2) < list.size()) row.add(new InlineKeyboardButton()
+                                .setText(EmojiParser.parseToUnicode(list.get(i + 2)))
+                                .setCallbackData(list.get(i + 2)));
+                        }
+                        rows.add(row);
+                    }
+                    if (Lan.listTypes(a.getLanguage()).contains(text)) {
                         List<InlineKeyboardButton> lastRow = new ArrayList<InlineKeyboardButton>();
-                                    lastRow.add(new InlineKeyboardButton()
-                            .setText(EmojiParser.parseToUnicode(Lan.goBack(a.getLanguage())))
-                            .setCallbackData(Lan.goBack(a.getLanguage())));
-                                    lastRow.add(new InlineKeyboardButton()
-                            .setText(EmojiParser.parseToUnicode(Lan.backToMenu(a.getLanguage())))
-                            .setCallbackData(Lan.backToMenu(a.getLanguage())));
-                    rows.add(lastRow);
+                        lastRow.add(new InlineKeyboardButton()
+                                .setText(EmojiParser.parseToUnicode(Lan.goBack(a.getLanguage())))
+                                .setCallbackData(Lan.goBack(a.getLanguage())));
+                        lastRow.add(new InlineKeyboardButton()
+                                .setText(EmojiParser.parseToUnicode(Lan.backToMenu(a.getLanguage())))
+                                .setCallbackData(Lan.backToMenu(a.getLanguage())));
+                        rows.add(lastRow);
+                    }
+                    markup.setKeyboard(rows);
                 }
-                markup.setKeyboard(rows);
                 em.setReplyMarkup(markup);
                 execute(em);
     }
