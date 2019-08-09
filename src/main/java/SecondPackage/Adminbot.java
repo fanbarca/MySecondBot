@@ -4,6 +4,7 @@ import com.vdurmont.emoji.EmojiParser;
 
 import org.postgresql.core.SqlCommand;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
+import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
 import org.telegram.telegrambots.meta.api.methods.ForwardMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
@@ -105,6 +106,13 @@ public class Adminbot extends TelegramLongPollingBot {
                 }
             }
         } else if (update.hasCallbackQuery()) {
+            AnswerCallbackQuery answer = new AnswerCallbackQuery()
+                .setCallbackQueryId(update.getCallbackQuery().getId()).setShowAlert(false);
+            try {
+				execute(answer);
+			} catch (TelegramApiException e) {
+				e.printStackTrace();
+			}
                 if (update.getCallbackQuery().getMessage().getChatId().equals(myID)) {
                 for (String t:Lan.listTypes("Russian")) {
                     if (update.getCallbackQuery().getData().equals(t)) {
@@ -124,7 +132,7 @@ public class Adminbot extends TelegramLongPollingBot {
                         } else if (update.getCallbackQuery().getData().contains(":x:")) {
                             AmabiliaBot.sql("UPDATE table0 SET instock = true where russian = '"+t+"'");
                         }
-                        edit(update.getCallbackQuery().getMessage(), "Обнавлено", showAllProducts("Russian"), 3);
+                        edit(update.getCallbackQuery().getMessage(), update.getCallbackQuery().getMessage().getText(), showAllProducts("Russian"), 3);
                     } else if(update.getCallbackQuery().getData().equals("Назад")) {
                         edit(update.getCallbackQuery().getMessage(), "Изменить Меню",
                         Lan.listTypes("Russian"), 3);
