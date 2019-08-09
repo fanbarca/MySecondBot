@@ -768,7 +768,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                 Statement prst = conn.createStatement();
                 ResultSet rs = prst.executeQuery("select * from table0 where type = '"+type+"' and instock = true");
                 while (rs.next()){
-                    lan.add(rs.getString(column)+" "+rs.getInt("cost"));
+                    lan.add(rs.getString(column)+" - "+rs.getInt("cost"));
                 }
                 lan.add(Lan.goBack(language));
                 lan.add(Lan.backToMenu(language));
