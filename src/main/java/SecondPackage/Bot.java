@@ -347,7 +347,8 @@ public class Bot extends TelegramLongPollingBot {
                             .setCallbackData(list.get(i + 2)));
                             }
                     rows.add(row);
-                    if (flag==1) {
+                }
+                if (flag==1) {
                         List<InlineKeyboardButton> lastRow = new ArrayList<InlineKeyboardButton>();
                                     lastRow.add(new InlineKeyboardButton()
                             .setText(EmojiParser.parseToUnicode(Lan.goBack(a.getLanguage())))
@@ -356,7 +357,6 @@ public class Bot extends TelegramLongPollingBot {
                             .setText(EmojiParser.parseToUnicode(Lan.backToMenu(a.getLanguage())))
                             .setCallbackData(Lan.backToMenu(a.getLanguage())));
                     rows.add(lastRow);
-                    }
                 }
                 markup.setKeyboard(rows);
                 em.setReplyMarkup(markup);
@@ -439,7 +439,9 @@ public class Bot extends TelegramLongPollingBot {
                             .setCallbackData(list.get(i + 2)));
                             }
                     rows.add(row);
-                    if (flag==1) {
+
+                }
+                if (flag==1) {
                         List<InlineKeyboardButton> lastRow = new ArrayList<InlineKeyboardButton>();
                                     lastRow.add(new InlineKeyboardButton()
                             .setText(EmojiParser.parseToUnicode(Lan.goBack(a.getLanguage())))
@@ -449,7 +451,6 @@ public class Bot extends TelegramLongPollingBot {
                             .setCallbackData(Lan.backToMenu(a.getLanguage())));
                     rows.add(lastRow);
                     }
-                }
                 markup.setKeyboard(rows);
                 ec.setReplyMarkup(markup);
                 execute(ec);
