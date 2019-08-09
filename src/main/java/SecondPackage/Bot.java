@@ -334,7 +334,7 @@ public class Bot extends TelegramLongPollingBot {
                 em.setMessageId(message.getMessageId());
                 em.setMedia(imp);
                 InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
-                if (DataBase.showAllProducts(a.getLanguage()).contains(text)) {
+                if (DataBase.showAllProducts(a.getLanguage()).contains(productName)) {
                     List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
                         List<InlineKeyboardButton> row0 = new ArrayList<InlineKeyboardButton>();
                         row0.add(new InlineKeyboardButton()
