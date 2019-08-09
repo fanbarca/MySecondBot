@@ -789,7 +789,7 @@ public class AmabiliaBot extends TelegramLongPollingBot {
                 Statement prst = conn.createStatement();
                 ResultSet rs = prst.executeQuery("select * from table0 ORDER BY type ASC");
                 while (rs.next()){
-                    lan.add(rs.getString(column));
+                    if (!rs.getString("type").equals("99")) lan.add(rs.getString(column));
                 }
                 prst.close();
                 conn.close();

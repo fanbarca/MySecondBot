@@ -55,7 +55,7 @@ public class Adminbot extends TelegramLongPollingBot {
                         a.add("Добавть продукт");
                         send("Выберите действие", myID, a,false, 2);
                     } else if(update.getMessage().getText().equals("Изменить Меню")){
-                        send("Изменить Меню", myID, showAllProducts("Russian"), true, 2);
+                        send("Изменить Меню", myID, showAllProducts("Russian"), true, 3);
                     } else if(update.getMessage().getText().equals("Заказы")){
                         send("Заказы", myID, listOrders("orderid"), true, 2);
                     } else if(update.getMessage().getText().equals("Добавть продукт")){
@@ -124,7 +124,7 @@ public class Adminbot extends TelegramLongPollingBot {
                         } else if (update.getCallbackQuery().getData().contains(":x:")) {
                             AmabiliaBot.sql("UPDATE table0 SET instock = true where russian = '"+t+"'");
                         }
-                        edit(update.getCallbackQuery().getMessage(), "Обнавлено", showAllProducts("Russian"), 2);
+                        edit(update.getCallbackQuery().getMessage(), "Обнавлено", showAllProducts("Russian"), 3);
                     } else if(update.getCallbackQuery().getData().equals("Назад")) {
                         edit(update.getCallbackQuery().getMessage(), "Изменить Меню",
                         Lan.listTypes("Russian"), 3);
@@ -293,7 +293,7 @@ public List<String> listOrders(String column){
                     String mark="";
                     if (rs.getBoolean("instock")) mark = ":white_check_mark: ";
                     else mark = ":x: ";
-                    lan.add(mark + rs.getString(column));
+                    if (!rs.getString("type").equals("99")) lan.add(mark + rs.getString(column));
                 }
                 prst.close();
                 conn.close();
