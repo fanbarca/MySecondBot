@@ -288,10 +288,12 @@ public List<String> listOrders(String column){
             Connection conn = AmabiliaBot.getConnection();
             if (conn!=null) {
                 Statement prst = conn.createStatement();
-                ResultSet rs = prst.executeQuery("select * from table0");
+                ResultSet rs = prst.executeQuery("select * from table0 ORDER BY type ASC");
                 while (rs.next()){
-                    String mark = rs.getString("instock").equals("true")?" :white_check_mark:":" :x:";
-                    lan.add(rs.getString(column)+mark);
+                    String mark="";
+                    if (rs.getBoolean("instock")) mark = ":white_check_mark: ";
+                    else mark = ":x: ";
+                    lan.add(mark + rs.getString(column));
                 }
                 prst.close();
                 conn.close();
