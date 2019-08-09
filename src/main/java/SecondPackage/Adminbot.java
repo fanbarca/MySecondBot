@@ -210,12 +210,13 @@ public void edit (Message message, String newText, List<String> list, int flag) 
             row.add(new InlineKeyboardButton()
                     .setText(EmojiParser.parseToUnicode(list.get(i)))
                     .setCallbackData(list.get(i)));
-            if ((flag==2)||(flag==3)) row.add(new InlineKeyboardButton()
+            if ((flag==2)||(flag==3)) {if ((i + 1) < list.size()) row.add(new InlineKeyboardButton()
                     .setText(EmojiParser.parseToUnicode(list.get(i + 1)))
-                    .setCallbackData(list.get(i + 1)));
-            if (flag==3) row.add(new InlineKeyboardButton()
+                    .setCallbackData(list.get(i + 1)));}
+            if (flag==3) {if ((i + 2) < list.size()) row.add(new InlineKeyboardButton()
                     .setText(EmojiParser.parseToUnicode(list.get(i + 2)))
                     .setCallbackData(list.get(i + 2)));
+            }
             rows.add(row);
         }
         markup.setKeyboard(rows);
