@@ -363,7 +363,7 @@ public class Bot extends TelegramLongPollingBot {
                         if (list.size()==6) {
                             row0.add(new InlineKeyboardButton()
                                 .setText(EmojiParser.parseToUnicode(list.get(5)))
-                                .setCallbackData(list.get(7)+productId));
+                                .setCallbackData(list.get(5)+productId));
                         }
 //                    List<InlineKeyboardButton> row1 = new ArrayList<InlineKeyboardButton>();
 //                        row1.add(new InlineKeyboardButton()

@@ -8,6 +8,7 @@
   <component name="ChangeListManager">
     <list default="true" id="7fdc6f42-80e3-436b-99c6-634d7f7f8939" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/SecondPackage/Bot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/SecondPackage/Bot.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -25,8 +26,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/SecondPackage/Bot.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="440">
-              <caret line="264" column="105" selection-start-line="264" selection-start-column="105" selection-end-line="264" selection-end-column="105" />
+            <state relative-caret-position="-509">
+              <caret line="365" column="59" selection-start-line="365" selection-start-column="59" selection-end-line="365" selection-end-column="59" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#11683#11706#0" expanded="true" />
@@ -44,12 +45,12 @@
                 <element signature="e#26125#26153#0" expanded="true" />
                 <element signature="e#26285#26307#0" expanded="true" />
                 <element signature="e#27192#27214#0" expanded="true" />
-                <element signature="e#30920#30921#0" expanded="true" />
-                <element signature="e#31000#31001#0" expanded="true" />
-                <element signature="e#31086#31087#0" expanded="true" />
-                <element signature="e#31177#31178#0" expanded="true" />
-                <element signature="e#31354#31355#0" expanded="true" />
-                <element signature="e#31584#31585#0" expanded="true" />
+                <element signature="e#31252#31253#0" expanded="true" />
+                <element signature="e#31332#31333#0" expanded="true" />
+                <element signature="e#31418#31419#0" expanded="true" />
+                <element signature="e#31509#31510#0" expanded="true" />
+                <element signature="e#31686#31687#0" expanded="true" />
+                <element signature="e#31916#31917#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -245,13 +246,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1560590336061</updated>
-    </task>
-    <task id="LOCAL-00021" summary="new">
-      <created>1562419803917</created>
-      <option name="number" value="00021" />
-      <option name="presentableId" value="LOCAL-00021" />
-      <option name="project" value="LOCAL" />
-      <updated>1562419803917</updated>
     </task>
     <task id="LOCAL-00022" summary="new">
       <created>1562420092274</created>
@@ -589,7 +583,14 @@
       <option name="project" value="LOCAL" />
       <updated>1565415034879</updated>
     </task>
-    <option name="localTasksCounter" value="70" />
+    <task id="LOCAL-00070" summary="new">
+      <created>1565439496993</created>
+      <option name="number" value="00070" />
+      <option name="presentableId" value="LOCAL-00070" />
+      <option name="project" value="LOCAL" />
+      <updated>1565439496993</updated>
+    </task>
+    <option name="localTasksCounter" value="71" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -856,8 +857,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/SecondPackage/Bot.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="440">
-          <caret line="264" column="105" selection-start-line="264" selection-start-column="105" selection-end-line="264" selection-end-column="105" />
+        <state relative-caret-position="-509">
+          <caret line="365" column="59" selection-start-line="365" selection-start-column="59" selection-end-line="365" selection-end-column="59" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#11683#11706#0" expanded="true" />
@@ -875,12 +876,12 @@
             <element signature="e#26125#26153#0" expanded="true" />
             <element signature="e#26285#26307#0" expanded="true" />
             <element signature="e#27192#27214#0" expanded="true" />
-            <element signature="e#30920#30921#0" expanded="true" />
-            <element signature="e#31000#31001#0" expanded="true" />
-            <element signature="e#31086#31087#0" expanded="true" />
-            <element signature="e#31177#31178#0" expanded="true" />
-            <element signature="e#31354#31355#0" expanded="true" />
-            <element signature="e#31584#31585#0" expanded="true" />
+            <element signature="e#31252#31253#0" expanded="true" />
+            <element signature="e#31332#31333#0" expanded="true" />
+            <element signature="e#31418#31419#0" expanded="true" />
+            <element signature="e#31509#31510#0" expanded="true" />
+            <element signature="e#31686#31687#0" expanded="true" />
+            <element signature="e#31916#31917#0" expanded="true" />
           </folding>
         </state>
       </provider>
