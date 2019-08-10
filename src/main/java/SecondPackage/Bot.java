@@ -243,7 +243,7 @@ public class Bot extends TelegramLongPollingBot {
                     total = Lan.inCart(a.getLanguage(), occurrences);
                 }
                 editPic("<b>"+t+"</b>\n"+ Lan.cost(a.getLanguage()) + DataBase.sqlQuery("SELECT cost from table0 where "+a.getLanguage()+" = '"+t+"'", "cost") + Lan.currency(a.getLanguage())+" "+total,
-                update.getCallbackQuery().getMessage(), keyb(i, occurrences), t,  3);
+                update.getCallbackQuery().getMessage(), keyb(i, occurrences), prodId,  3);
             }
         }
         if (cb.contains(Lan.clearCart(a.getLanguage()))) {
