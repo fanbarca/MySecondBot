@@ -252,13 +252,20 @@ public class Bot extends TelegramLongPollingBot {
                     occurrences = Collections.frequency(items, prodId);
                     total = Lan.inCart(a.getLanguage(), occurrences);
                 }
-                if (cb.contains(Lan.addToCart(a.getLanguage()))) DataBase.sql("insert into cart (userid, item) values ("+update.getCallbackQuery().getFrom().getId()
+                if (cb.contains(Lan.addToCart(a.getLanguage()))) {
+                    DataBase.sql("insert into cart (userid, item) values ("+update.getCallbackQuery().getFrom().getId()
                             +",'"+prodId+"')");
-                else if (cb.contains(Lan.removeFromCart(a.getLanguage()))) DataBase.sql("delete from cart where userid ="+update.getCallbackQuery().getFrom().getId()
+                    editPic("<b>"+name+"</b>\n"+ Lan.cost(a.getLanguage()) + DataBase.sqlQuery("SELECT cost from table0 where id = '"+prodId+"'", "cost") + Lan.currency(a.getLanguage())+".    "+total,
+                            update.getCallbackQuery().getMessage(), keyb(occurrences, name), prodId,  3);
+                }
+                else if (cb.contains(Lan.removeFromCart(a.getLanguage()))) {
+                    DataBase.sql("delete from cart where userid ="+update.getCallbackQuery().getFrom().getId()
                             +" and item = '"+prodId+"'");
+                    editPic("<b>"+name+"</b>\n"+ Lan.cost(a.getLanguage()) + DataBase.sqlQuery("SELECT cost from table0 where id = '"+prodId+"'", "cost") + Lan.currency(a.getLanguage())+".    "+total,
+                            update.getCallbackQuery().getMessage(), keyb(occurrences, name), prodId,  3);
+                }
 
-                editPic("<b>"+name+"</b>\n"+ Lan.cost(a.getLanguage()) + DataBase.sqlQuery("SELECT cost from table0 where id = '"+prodId+"'", "cost") + Lan.currency(a.getLanguage())+".    "+total,
-                update.getCallbackQuery().getMessage(), keyb(occurrences, name), prodId,  3);
+
             }
         }
         if (cb.contains(Lan.clearCart(a.getLanguage()))) {
@@ -350,7 +357,7 @@ public class Bot extends TelegramLongPollingBot {
                         row0.add(new InlineKeyboardButton()
                                 .setText(EmojiParser.parseToUnicode(list.get(0)))
                                 .setCallbackData(list.get(0)+productId));
-                        if (list.size()==8) {
+                        if (list.size()==6) {
                             row0.add(new InlineKeyboardButton()
                                 .setText(EmojiParser.parseToUnicode(list.get(5)))
                                 .setCallbackData(list.get(7)+productId));
