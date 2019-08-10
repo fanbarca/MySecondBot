@@ -179,16 +179,16 @@ class Lan {
     }
     public static String addToCart(String lan) {
         String r="";
-        if (lan.equals("Uzbek")) r = "Savatchaga qo'shish";
-        else if (lan.equals("Russian")) r = "Добавить в корзину";
-        else if (lan.equals("English")) r = "Add to cart";
+        if (lan.equals("Uzbek")) r = ":heavy_plus_sign: Savatchaga qo'shish";
+        else if (lan.equals("Russian")) r = ":heavy_plus_sign: Добавить в корзину";
+        else if (lan.equals("English")) r = ":heavy_plus_sign: Add to cart";
         return r;
     }
     public static String removeFromCart(String lan) {
         String r="";
-        if (lan.equals("Uzbek")) r = "Savatchadan olish";
-        else if (lan.equals("Russian")) r = "Убрать из корзины";
-        else if (lan.equals("English")) r = "Remove from cart";
+        if (lan.equals("Uzbek")) r = ":heavy_minus_sign: Savatchadan olish";
+        else if (lan.equals("Russian")) r = ":heavy_minus_sign: Убрать из корзины";
+        else if (lan.equals("English")) r = ":heavy_minus_sign: Remove from cart";
         return r;
     }
     public static String inCart(String lan, int items) {

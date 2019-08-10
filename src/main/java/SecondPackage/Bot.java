@@ -228,7 +228,7 @@ public class Bot extends TelegramLongPollingBot {
             String prodId = DataBase.showAllProducts("id").get(i);
             List<String> items = DataBase.sqlQueryList("select * from cart where userid ="+update.getCallbackQuery().getFrom().getId(), "item");
 
-            if (cb.contains(t)) {
+            if (cb.contains(prodId)) {
                 if (cb.contains(Lan.addToCart(a.getLanguage()))) {
                     DataBase.sql("insert into cart (userid, item) values ("+update.getCallbackQuery().getFrom().getId()
                             +",'"+prodId+"')");
@@ -319,10 +319,10 @@ public class Bot extends TelegramLongPollingBot {
                 }
          }
 	}
-    public void editPic(String text, Message message, List<String> list, String productName, int flag) throws TelegramApiException, SQLException {
+    public void editPic(String text, Message message, List<String> list, String productId, int flag) throws TelegramApiException, SQLException {
                 String file_id = "";
-        if (productName.equals("Лого")) file_id = DataBase.sqlQuery("SELECT imageid from table0 where Russian = 'Лого'", "imageid");
-        else file_id = DataBase.sqlQuery("SELECT imageid from table0 where "+a.getLanguage()+" = '"+productName+"'", "imageid");
+        if (productId.equals("8955")) file_id = DataBase.sqlQuery("SELECT imageid from table0 where Russian = 'Лого'", "imageid");
+        else file_id = DataBase.sqlQuery("SELECT imageid from table0 where id = '"+productId+"'", "imageid");
                 //Integer messageId= Integer.parseInt(DataBase.sqlQuery("select image from users where id="+message.getChatId(), "image"));
                 InputMediaPhoto imp = new InputMediaPhoto();
                 imp.setMedia(file_id);
@@ -332,16 +332,16 @@ public class Bot extends TelegramLongPollingBot {
                 em.setMessageId(message.getMessageId());
                 em.setMedia(imp);
                 InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
-                if (DataBase.showAllProducts(a.getLanguage()).contains(productName)) {
+                if (DataBase.sqlQueryList("select * from table0", "id").contains(productId)) {
                     List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
                         List<InlineKeyboardButton> row0 = new ArrayList<InlineKeyboardButton>();
                         row0.add(new InlineKeyboardButton()
                                 .setText(EmojiParser.parseToUnicode(list.get(0)))
-                                .setCallbackData(list.get(0)+productName));
+                                .setCallbackData(list.get(0)+productId));
                         if (list.size()==8) {
                             row0.add(new InlineKeyboardButton()
                                 .setText(EmojiParser.parseToUnicode(list.get(7)))
-                                .setCallbackData(list.get(7)+productName));
+                                .setCallbackData(list.get(7)+productId));
                         }
                     List<InlineKeyboardButton> row1 = new ArrayList<InlineKeyboardButton>();
                         row1.add(new InlineKeyboardButton()
@@ -386,7 +386,7 @@ public class Bot extends TelegramLongPollingBot {
                         }
                         rows.add(row);
                     }
-                    if (Lan.listTypes(a.getLanguage()).contains(text)) {
+                    if (flag == 1) {
                         List<InlineKeyboardButton> lastRow = new ArrayList<InlineKeyboardButton>();
                         lastRow.add(new InlineKeyboardButton()
                                 .setText(EmojiParser.parseToUnicode(Lan.goBack(a.getLanguage())))
