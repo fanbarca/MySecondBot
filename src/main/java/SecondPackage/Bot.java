@@ -227,12 +227,12 @@ public class Bot extends TelegramLongPollingBot {
             String t = DataBase.showAllProducts(a.getLanguage()).get(i);
             String prodId = DataBase.showAllProducts("id").get(i);
 
-            if (cb.contains("🛒:heavy_plus_sign:"+t)) {
+            if (cb.contains(Lan.addToCart(a.getLanguage())+t)) {
                 DataBase.sql("insert into cart (userid, item) values ("+update.getCallbackQuery().getFrom().getId()
                 +",'"+prodId+"')");
                 editPic("<b>"+t+"</b>\n"+ Lan.cost(a.getLanguage()) + DataBase.sqlQuery("SELECT cost from table0 where "+a.getLanguage()+" = '"+t+"'", "cost") + Lan.currency(a.getLanguage()),
                 update.getCallbackQuery().getMessage(), keyb(i, update.getCallbackQuery().getFrom().getId()), t,  3);
-            } else if (cb.contains("🛒:x:"+t)) {
+            } else if (cb.contains(Lan.removeFromCart(a.getLanguage())+t)) {
                 DataBase.sql("delete from cart where userid ="+update.getCallbackQuery().getFrom().getId()
                 +" and item = '"+prodId+"'");
                 editPic("<b>"+t+"</b>\n"+ Lan.cost(a.getLanguage()) + DataBase.sqlQuery("SELECT cost from table0 where "+a.getLanguage()+" = '"+t+"'", "cost") +  Lan.currency(a.getLanguage()),
@@ -339,11 +339,11 @@ public class Bot extends TelegramLongPollingBot {
                         List<InlineKeyboardButton> row0 = new ArrayList<InlineKeyboardButton>();
                         row0.add(new InlineKeyboardButton()
                                 .setText(EmojiParser.parseToUnicode(list.get(0)))
-                                .setCallbackData(list.get(0)));
+                                .setCallbackData(list.get(0)+productName));
                         if (list.size()==8) {
                             row0.add(new InlineKeyboardButton()
                                 .setText(EmojiParser.parseToUnicode(list.get(7)))
-                                .setCallbackData(list.get(7)));
+                                .setCallbackData(list.get(7)+productName));
                         }
                     List<InlineKeyboardButton> row1 = new ArrayList<InlineKeyboardButton>();
                         row1.add(new InlineKeyboardButton()
