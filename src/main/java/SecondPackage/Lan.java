@@ -191,4 +191,11 @@ class Lan {
         else if (lan.equals("English")) r = "Remove from cart";
         return r;
     }
+    public static String inCart(String lan, int items) {
+        String r="";
+        if (lan.equals("Uzbek")) r = "Savatchada : " + items + "ta";
+        else if (lan.equals("Russian")) r = "В корзине: "+ items + "шт." ;
+        else if (lan.equals("English")) r = "In your cart: "+items;
+        return r;
+    }
 }

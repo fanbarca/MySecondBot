@@ -226,25 +226,23 @@ public class Bot extends TelegramLongPollingBot {
         for (int i = 0; i<DataBase.showAllProducts(a.getLanguage()).size(); i++) {
             String t = DataBase.showAllProducts(a.getLanguage()).get(i);
             String prodId = DataBase.showAllProducts("id").get(i);
-            int occurrences = 0;
-            String total = "";
             List<String> items = DataBase.sqlQueryList("select * from cart where userid ="+update.getCallbackQuery().getFrom().getId(), "item");
-            if (items.contains(prodId)) {
-                occurrences = Collections.frequency(items, prodId);
-                total = Lan.total(a.getLanguage())+occurrences;
-            }
-            if (cb.contains(Lan.addToCart(a.getLanguage())+t)) {
-                DataBase.sql("insert into cart (userid, item) values ("+update.getCallbackQuery().getFrom().getId()
-                +",'"+prodId+"')");
+
+            if (cb.contains(t)) {
+                if (cb.contains(Lan.addToCart(a.getLanguage()))) {
+                    DataBase.sql("insert into cart (userid, item) values ("+update.getCallbackQuery().getFrom().getId()
+                            +",'"+prodId+"')");
+                } else if (cb.contains(Lan.removeFromCart(a.getLanguage()))) {
+                    DataBase.sql("delete from cart where userid ="+update.getCallbackQuery().getFrom().getId()
+                            +" and item = '"+prodId+"'");
+                }
+                int occurrences = 0;
+                String total = "";
+                if (items.contains(prodId)) {
+                    occurrences = Collections.frequency(items, prodId);
+                    total = Lan.inCart(a.getLanguage(), occurrences);
+                }
                 editPic("<b>"+t+"</b>\n"+ Lan.cost(a.getLanguage()) + DataBase.sqlQuery("SELECT cost from table0 where "+a.getLanguage()+" = '"+t+"'", "cost") + Lan.currency(a.getLanguage())+" "+total,
-                update.getCallbackQuery().getMessage(), keyb(i, occurrences), t,  3);
-            } else if (cb.contains(Lan.removeFromCart(a.getLanguage())+t)) {
-                DataBase.sql("delete from cart where userid ="+update.getCallbackQuery().getFrom().getId()
-                +" and item = '"+prodId+"'");
-                editPic("<b>"+t+"</b>\n"+ Lan.cost(a.getLanguage()) + DataBase.sqlQuery("SELECT cost from table0 where "+a.getLanguage()+" = '"+t+"'", "cost") +  Lan.currency(a.getLanguage()),
-                update.getCallbackQuery().getMessage(), keyb(i, occurrences), t,  3);
-            } else if (cb.contains(t)) {
-                editPic("<b>"+t+"</b>\n"+ Lan.cost(a.getLanguage()) + DataBase.sqlQuery("SELECT cost from table0 where "+a.getLanguage()+" = '"+t+"'", "cost") +  Lan.currency(a.getLanguage()),
                 update.getCallbackQuery().getMessage(), keyb(i, occurrences), t,  3);
             }
         }
