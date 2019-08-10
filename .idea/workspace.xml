@@ -26,8 +26,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/SecondPackage/Bot.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="425">
-              <caret line="234" column="72" lean-forward="true" selection-start-line="234" selection-start-column="72" selection-end-line="234" selection-end-column="72" />
+            <state relative-caret-position="285">
+              <caret line="233" column="63" selection-start-line="233" selection-start-column="63" selection-end-line="233" selection-end-column="63" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#11683#11706#0" expanded="true" />
@@ -46,18 +46,12 @@
                 <element signature="e#26125#26153#0" expanded="true" />
                 <element signature="e#26285#26307#0" expanded="true" />
                 <element signature="e#27192#27214#0" expanded="true" />
-                <element signature="e#27946#27947#0" expanded="true" />
-                <element signature="e#27976#27977#0" expanded="true" />
-                <element signature="e#28025#28026#0" expanded="true" />
-                <element signature="e#28056#28057#0" expanded="true" />
-                <element signature="e#28104#28105#0" expanded="true" />
-                <element signature="e#28142#28143#0" expanded="true" />
-                <element signature="e#28195#28196#0" expanded="true" />
-                <element signature="e#28233#28234#0" expanded="true" />
-                <element signature="e#28372#28373#0" expanded="true" />
-                <element signature="e#28410#28411#0" expanded="true" />
-                <element signature="e#28602#28603#0" expanded="true" />
-                <element signature="e#28640#28641#0" expanded="true" />
+                <element signature="e#30627#30628#0" expanded="true" />
+                <element signature="e#30707#30708#0" expanded="true" />
+                <element signature="e#30793#30794#0" expanded="true" />
+                <element signature="e#30884#30885#0" expanded="true" />
+                <element signature="e#31061#31062#0" expanded="true" />
+                <element signature="e#31291#31292#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -251,13 +245,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1560590336061</updated>
-    </task>
-    <task id="LOCAL-00009" summary="new">
-      <created>1562005464560</created>
-      <option name="number" value="00009" />
-      <option name="presentableId" value="LOCAL-00009" />
-      <option name="project" value="LOCAL" />
-      <updated>1562005464560</updated>
     </task>
     <task id="LOCAL-00010" summary="new">
       <created>1562405903743</created>
@@ -595,7 +582,14 @@
       <option name="project" value="LOCAL" />
       <updated>1565395123240</updated>
     </task>
-    <option name="localTasksCounter" value="58" />
+    <task id="LOCAL-00058" summary="new">
+      <created>1565395872209</created>
+      <option name="number" value="00058" />
+      <option name="presentableId" value="LOCAL-00058" />
+      <option name="project" value="LOCAL" />
+      <updated>1565395872209</updated>
+    </task>
+    <option name="localTasksCounter" value="59" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -862,8 +856,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/SecondPackage/Bot.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="425">
-          <caret line="234" column="72" lean-forward="true" selection-start-line="234" selection-start-column="72" selection-end-line="234" selection-end-column="72" />
+        <state relative-caret-position="285">
+          <caret line="233" column="63" selection-start-line="233" selection-start-column="63" selection-end-line="233" selection-end-column="63" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#11683#11706#0" expanded="true" />
@@ -882,18 +876,12 @@
             <element signature="e#26125#26153#0" expanded="true" />
             <element signature="e#26285#26307#0" expanded="true" />
             <element signature="e#27192#27214#0" expanded="true" />
-            <element signature="e#27946#27947#0" expanded="true" />
-            <element signature="e#27976#27977#0" expanded="true" />
-            <element signature="e#28025#28026#0" expanded="true" />
-            <element signature="e#28056#28057#0" expanded="true" />
-            <element signature="e#28104#28105#0" expanded="true" />
-            <element signature="e#28142#28143#0" expanded="true" />
-            <element signature="e#28195#28196#0" expanded="true" />
-            <element signature="e#28233#28234#0" expanded="true" />
-            <element signature="e#28372#28373#0" expanded="true" />
-            <element signature="e#28410#28411#0" expanded="true" />
-            <element signature="e#28602#28603#0" expanded="true" />
-            <element signature="e#28640#28641#0" expanded="true" />
+            <element signature="e#30627#30628#0" expanded="true" />
+            <element signature="e#30707#30708#0" expanded="true" />
+            <element signature="e#30793#30794#0" expanded="true" />
+            <element signature="e#30884#30885#0" expanded="true" />
+            <element signature="e#31061#31062#0" expanded="true" />
+            <element signature="e#31291#31292#0" expanded="true" />
           </folding>
         </state>
       </provider>

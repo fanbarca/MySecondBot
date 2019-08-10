@@ -226,20 +226,26 @@ public class Bot extends TelegramLongPollingBot {
         for (int i = 0; i<DataBase.showAllProducts(a.getLanguage()).size(); i++) {
             String t = DataBase.showAllProducts(a.getLanguage()).get(i);
             String prodId = DataBase.showAllProducts("id").get(i);
-
+            int occurrences = 0;
+            String total = "";
+            List<String> items = DataBase.sqlQueryList("select * from cart where userid ="+update.getCallbackQuery().getFrom().getId(), "item");
+            if (items.contains(prodId)) {
+                occurrences = Collections.frequency(items, prodId);
+                total = Lan.total(a.getLanguage())+occurrences;
+            }
             if (cb.contains(Lan.addToCart(a.getLanguage())+t)) {
                 DataBase.sql("insert into cart (userid, item) values ("+update.getCallbackQuery().getFrom().getId()
                 +",'"+prodId+"')");
-                editPic("<b>"+t+"</b>\n"+ Lan.cost(a.getLanguage()) + DataBase.sqlQuery("SELECT cost from table0 where "+a.getLanguage()+" = '"+t+"'", "cost") + Lan.currency(a.getLanguage()),
-                update.getCallbackQuery().getMessage(), keyb(i, update.getCallbackQuery().getFrom().getId()), t,  3);
+                editPic("<b>"+t+"</b>\n"+ Lan.cost(a.getLanguage()) + DataBase.sqlQuery("SELECT cost from table0 where "+a.getLanguage()+" = '"+t+"'", "cost") + Lan.currency(a.getLanguage())+" "+total,
+                update.getCallbackQuery().getMessage(), keyb(i, occurrences), t,  3);
             } else if (cb.contains(Lan.removeFromCart(a.getLanguage())+t)) {
                 DataBase.sql("delete from cart where userid ="+update.getCallbackQuery().getFrom().getId()
                 +" and item = '"+prodId+"'");
                 editPic("<b>"+t+"</b>\n"+ Lan.cost(a.getLanguage()) + DataBase.sqlQuery("SELECT cost from table0 where "+a.getLanguage()+" = '"+t+"'", "cost") +  Lan.currency(a.getLanguage()),
-                update.getCallbackQuery().getMessage(), keyb(i, update.getCallbackQuery().getFrom().getId()), t,  3);
+                update.getCallbackQuery().getMessage(), keyb(i, occurrences), t,  3);
             } else if (cb.contains(t)) {
                 editPic("<b>"+t+"</b>\n"+ Lan.cost(a.getLanguage()) + DataBase.sqlQuery("SELECT cost from table0 where "+a.getLanguage()+" = '"+t+"'", "cost") +  Lan.currency(a.getLanguage()),
-                update.getCallbackQuery().getMessage(), keyb(i, update.getCallbackQuery().getFrom().getId()), t,  3);
+                update.getCallbackQuery().getMessage(), keyb(i, occurrences), t,  3);
             }
         }
         if (cb.contains(Lan.clearCart(a.getLanguage()))) {
@@ -248,17 +254,11 @@ public class Bot extends TelegramLongPollingBot {
         }
 	}
 
-	private List<String> keyb(int i, Integer userid) throws SQLException {
+	private List<String> keyb(int i, Integer occurances) throws SQLException {
         List<String> keyb = new ArrayList<>();
-        List<String> items = DataBase.sqlQueryList("select * from cart where userid ="+userid, "item");
-        String prodId = DataBase.showAllProducts("id").get(i);
         String prodName = DataBase.showAllProducts(a.getLanguage()).get(i);
-            if (items.contains(prodId)) {
-                int occurrences = Collections.frequency(items, prodId);
-                keyb.add(Lan.addToCart(a.getLanguage())+" \n"+Lan.total(a.getLanguage())+occurrences);
-            } else {
+
                 keyb.add(Lan.addToCart(a.getLanguage()));
-            }
                 if (i>0) keyb.add(":point_left: "+DataBase.showAllProducts(a.getLanguage()).get(i-1));
                 else keyb.add(":point_left: "+DataBase.showAllProducts(a.getLanguage()).get(DataBase.showAllProducts(a.getLanguage()).size()-1));
                 if (i<DataBase.showAllProducts(a.getLanguage()).size()-1) keyb.add(DataBase.showAllProducts(a.getLanguage()).get(i+1)+" :point_right:");
@@ -267,7 +267,7 @@ public class Bot extends TelegramLongPollingBot {
                 keyb.add(Lan.mainMenu(a.getLanguage()).get(3));
                 keyb.add(Lan.goBack(a.getLanguage()));
                 keyb.add(Lan.backToMenu(a.getLanguage()));
-                if (items.contains(prodId)) keyb.add(Lan.removeFromCart(a.getLanguage()));
+                if (occurances>0) keyb.add(Lan.removeFromCart(a.getLanguage()));
                 return keyb;
 	}
 	private void chooseLanguage(Message message, boolean edit) throws SQLException, TelegramApiException {
