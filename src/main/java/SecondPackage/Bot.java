@@ -263,6 +263,9 @@ public class Bot extends TelegramLongPollingBot {
                             +" and item = '"+prodId+"'");
                     editPic("<b>"+name+"</b>\n"+ Lan.cost(a.getLanguage()) + DataBase.sqlQuery("SELECT cost from table0 where id = '"+prodId+"'", "cost") + Lan.currency(a.getLanguage())+".    "+total,
                             update.getCallbackQuery().getMessage(), keyb(occurrences, name), prodId,  3);
+                } else {
+                    editPic("<b>"+name+"</b>\n"+ Lan.cost(a.getLanguage()) + DataBase.sqlQuery("SELECT cost from table0 where id = '"+prodId+"'", "cost") + Lan.currency(a.getLanguage())+".    "+total,
+                            update.getCallbackQuery().getMessage(), keyb(occurrences, name), prodId,  3);
                 }
 
 
