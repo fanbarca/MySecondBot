@@ -227,7 +227,7 @@ public class Bot extends TelegramLongPollingBot {
             String prodId = DataBase.showAllProducts("id").get(i);
             List<String> items = DataBase.sqlQueryList("select * from cart where userid ="+update.getCallbackQuery().getFrom().getId(), "item");
             String name = DataBase.sqlQuery("select * from table0 where id ="+prodId, a.getLanguage());
-            if (cb.contains(prodId)||cb.contains(DataBase.showAllProducts(a.getLanguage()).get(i))) {
+            if (cb.contains(prodId)||cb.contains(name)) {
                 if (cb.contains(Lan.addToCart(a.getLanguage()))) {
                     DataBase.sql("insert into cart (userid, item) values ("+update.getCallbackQuery().getFrom().getId()
                             +",'"+prodId+"')");
