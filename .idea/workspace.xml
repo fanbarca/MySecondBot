@@ -8,6 +8,7 @@
   <component name="ChangeListManager">
     <list default="true" id="7fdc6f42-80e3-436b-99c6-634d7f7f8939" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/SecondPackage/Bot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/SecondPackage/Bot.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -25,8 +26,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/SecondPackage/Bot.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="295">
-              <caret line="332" column="89" selection-start-line="332" selection-start-column="80" selection-end-line="332" selection-end-column="89" />
+            <state relative-caret-position="415">
+              <caret line="251" column="106" selection-start-line="251" selection-start-column="106" selection-end-line="251" selection-end-column="106" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#11683#11706#0" expanded="true" />
@@ -44,12 +45,12 @@
                 <element signature="e#26125#26153#0" expanded="true" />
                 <element signature="e#26285#26307#0" expanded="true" />
                 <element signature="e#27192#27214#0" expanded="true" />
-                <element signature="e#30534#30535#0" expanded="true" />
-                <element signature="e#30614#30615#0" expanded="true" />
-                <element signature="e#30700#30701#0" expanded="true" />
-                <element signature="e#30791#30792#0" expanded="true" />
-                <element signature="e#30968#30969#0" expanded="true" />
-                <element signature="e#31198#31199#0" expanded="true" />
+                <element signature="e#30530#30531#0" expanded="true" />
+                <element signature="e#30610#30611#0" expanded="true" />
+                <element signature="e#30696#30697#0" expanded="true" />
+                <element signature="e#30787#30788#0" expanded="true" />
+                <element signature="e#30964#30965#0" expanded="true" />
+                <element signature="e#31194#31195#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -245,20 +246,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1560590336061</updated>
-    </task>
-    <task id="LOCAL-00025" summary="new">
-      <created>1562422869504</created>
-      <option name="number" value="00025" />
-      <option name="presentableId" value="LOCAL-00025" />
-      <option name="project" value="LOCAL" />
-      <updated>1562422869504</updated>
-    </task>
-    <task id="LOCAL-00026" summary="new">
-      <created>1562423404659</created>
-      <option name="number" value="00026" />
-      <option name="presentableId" value="LOCAL-00026" />
-      <option name="project" value="LOCAL" />
-      <updated>1562423404659</updated>
     </task>
     <task id="LOCAL-00027" summary="new">
       <created>1562425888035</created>
@@ -589,7 +576,21 @@
       <option name="project" value="LOCAL" />
       <updated>1565496842023</updated>
     </task>
-    <option name="localTasksCounter" value="74" />
+    <task id="LOCAL-00074" summary="new">
+      <created>1565497557600</created>
+      <option name="number" value="00074" />
+      <option name="presentableId" value="LOCAL-00074" />
+      <option name="project" value="LOCAL" />
+      <updated>1565497557606</updated>
+    </task>
+    <task id="LOCAL-00075" summary="new">
+      <created>1565498549851</created>
+      <option name="number" value="00075" />
+      <option name="presentableId" value="LOCAL-00075" />
+      <option name="project" value="LOCAL" />
+      <updated>1565498549851</updated>
+    </task>
+    <option name="localTasksCounter" value="76" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -856,8 +857,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/SecondPackage/Bot.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="295">
-          <caret line="332" column="89" selection-start-line="332" selection-start-column="80" selection-end-line="332" selection-end-column="89" />
+        <state relative-caret-position="415">
+          <caret line="251" column="106" selection-start-line="251" selection-start-column="106" selection-end-line="251" selection-end-column="106" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#11683#11706#0" expanded="true" />
@@ -875,12 +876,12 @@
             <element signature="e#26125#26153#0" expanded="true" />
             <element signature="e#26285#26307#0" expanded="true" />
             <element signature="e#27192#27214#0" expanded="true" />
-            <element signature="e#30534#30535#0" expanded="true" />
-            <element signature="e#30614#30615#0" expanded="true" />
-            <element signature="e#30700#30701#0" expanded="true" />
-            <element signature="e#30791#30792#0" expanded="true" />
-            <element signature="e#30968#30969#0" expanded="true" />
-            <element signature="e#31198#31199#0" expanded="true" />
+            <element signature="e#30530#30531#0" expanded="true" />
+            <element signature="e#30610#30611#0" expanded="true" />
+            <element signature="e#30696#30697#0" expanded="true" />
+            <element signature="e#30787#30788#0" expanded="true" />
+            <element signature="e#30964#30965#0" expanded="true" />
+            <element signature="e#31194#31195#0" expanded="true" />
           </folding>
         </state>
       </provider>

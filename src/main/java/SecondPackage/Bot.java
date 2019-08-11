@@ -249,7 +249,7 @@ public class Bot extends TelegramLongPollingBot {
         for (String name:DataBase.showAllProducts(a.getLanguage())) {
             if (cb.contains(name)) {
             List<String> cart = DataBase.sqlQueryList("select item from cart where userid ="+update.getCallbackQuery().getFrom().getId(), "item");
-            String prodId = DataBase.sqlQuery("select id from table0 where "+a.getLanguage()+" ="+name, "id");
+            String prodId = DataBase.sqlQuery("select id from table0 where "+a.getLanguage()+" ='"+name+"'", "id");
             int occurrences = 0;
             String total = "";
             if (cart.contains(prodId)) {
