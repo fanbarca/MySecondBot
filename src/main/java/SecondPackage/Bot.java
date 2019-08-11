@@ -505,7 +505,7 @@ public class Bot extends TelegramLongPollingBot {
                 List<InlineKeyboardButton> lastRow = new ArrayList<InlineKeyboardButton>();
                 lastRow.add(new InlineKeyboardButton()
                         .setText(EmojiParser.parseToUnicode(Lan.clearCart(a.getLanguage())))
-                        .setCallbackData(Lan.goBack(a.getLanguage())));
+                        .setCallbackData(Lan.clearCart(a.getLanguage())));
                 rows.add(lastRow);
             }
             if (text.contains(Lan.mainMenu(a.getLanguage()).get(0)) ||
