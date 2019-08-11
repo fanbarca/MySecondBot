@@ -58,6 +58,7 @@ public class Adminbot extends TelegramLongPollingBot {
                     } else if(update.getMessage().getText().equals("Указать наличие")){
                         send("Указать наличие", myID, DataBase.productsAvailability("Russian"), true, 3);
                     } else if(update.getMessage().getText().equals("Удалить продукт")){
+                        listener = "Delete";
                         send("Удалить продукт", myID, DataBase.showAllProducts("Russian", false), true, 3);
                     } else if(update.getMessage().getText().equals("Добавть продукт")){
                         send("В какой раздел?", myID, Lan.listTypes("Russian"), true, 3);
@@ -139,10 +140,15 @@ public class Adminbot extends TelegramLongPollingBot {
                     if (update.getCallbackQuery().getData().contains(t)) {
                         if (update.getCallbackQuery().getData().contains(":white_check_mark:")) {
                             DataBase.sql("UPDATE table0 SET instock = false where russian = '"+t+"'");
+                            edit(update.getCallbackQuery().getMessage(), update.getCallbackQuery().getMessage().getText(), DataBase.productsAvailability("Russian"), 3);
                         } else if (update.getCallbackQuery().getData().contains(":x:")) {
                             DataBase.sql("UPDATE table0 SET instock = true where russian = '"+t+"'");
+                            edit(update.getCallbackQuery().getMessage(), update.getCallbackQuery().getMessage().getText(), DataBase.productsAvailability("Russian"), 3);
+                        } else if (listener.equals("Delete")) {
+                            listener = "";
+                            DataBase.sql("delete from table0 where russian = '"+t+"'");
+                            edit(update.getCallbackQuery().getMessage(), update.getCallbackQuery().getMessage().getText(), DataBase.showAllProducts("Russian", false), 3);
                         }
-                        edit(update.getCallbackQuery().getMessage(), update.getCallbackQuery().getMessage().getText(), DataBase.productsAvailability("Russian"), 3);
                     }
                 }
             }
