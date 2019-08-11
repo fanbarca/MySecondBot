@@ -253,9 +253,6 @@ public class Bot extends TelegramLongPollingBot {
 //                keyb.add(":point_left: "+prevName);
 //                keyb.add(nextName+" :point_right:");
         keyb.add(Lan.listTypes(a.getLanguage()).get(Integer.parseInt(DataBase.sqlQuery("SELECT type from table0 where " + a.getLanguage() + " = '" + name + "'", "type"))));
-        keyb.add(Lan.mainMenu(a.getLanguage()).get(3));
-        keyb.add(Lan.goBack(a.getLanguage()));
-        keyb.add(Lan.backToMenu(a.getLanguage()));
         if (occurances > 0) keyb.add(Lan.removeFromCart(a.getLanguage()));
         return keyb;
     }
@@ -451,10 +448,10 @@ public class Bot extends TelegramLongPollingBot {
             row0.add(new InlineKeyboardButton()
                     .setText(EmojiParser.parseToUnicode(list.get(0)))
                     .setCallbackData(productId + list.get(0)));
-            if (list.size() == 6) {
+            if (list.size() == 3) {
                 row0.add(new InlineKeyboardButton()
-                        .setText(EmojiParser.parseToUnicode(list.get(5)))
-                        .setCallbackData(productId + list.get(5)));
+                        .setText(EmojiParser.parseToUnicode(list.get(2)))
+                        .setCallbackData(productId + list.get(2)));
             }
             List<InlineKeyboardButton> row2 = new ArrayList<InlineKeyboardButton>();
             row2.add(new InlineKeyboardButton()
@@ -462,14 +459,14 @@ public class Bot extends TelegramLongPollingBot {
                     .setCallbackData(list.get(1)));
             List<InlineKeyboardButton> row3 = new ArrayList<InlineKeyboardButton>();
             row3.add(new InlineKeyboardButton()
-                    .setText(EmojiParser.parseToUnicode(list.get(2)))
-                    .setCallbackData(list.get(2)));
+                    .setText(EmojiParser.parseToUnicode(Lan.goBack(a.getLanguage())))
+                    .setCallbackData(a.getLanguage()));
             row3.add(new InlineKeyboardButton()
-                    .setText(EmojiParser.parseToUnicode(list.get(3)))
-                    .setCallbackData(list.get(3)));
+                    .setText(EmojiParser.parseToUnicode(Lan.mainMenu(a.getLanguage()).get(3)))
+                    .setCallbackData(Lan.mainMenu(a.getLanguage()).get(3)));
             row3.add(new InlineKeyboardButton()
-                    .setText(EmojiParser.parseToUnicode(list.get(4)))
-                    .setCallbackData(list.get(4)));
+                    .setText(EmojiParser.parseToUnicode(Lan.backToMenu(a.getLanguage())))
+                    .setCallbackData(Lan.backToMenu(a.getLanguage())));
 
             rows.add(row0);
             rows.add(row2);
@@ -485,22 +482,24 @@ public class Bot extends TelegramLongPollingBot {
         } else {
             markup = new InlineKeyboardMarkup();
             List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
-            for (int i = 0; i < list.size(); i += flag) {
-                List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
-                row.add(new InlineKeyboardButton()
-                        .setText(EmojiParser.parseToUnicode(list.get(i)))
-                        .setCallbackData(list.get(i)));
-                if ((flag == 2) || (flag == 3)) {
-                    if ((i + 1) < list.size()) row.add(new InlineKeyboardButton()
-                            .setText(EmojiParser.parseToUnicode(list.get(i + 1)))
-                            .setCallbackData(list.get(i + 1)));
+            if (list!=null){
+                for (int i = 0; i < list.size(); i += flag) {
+                    List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
+                    row.add(new InlineKeyboardButton()
+                            .setText(EmojiParser.parseToUnicode(list.get(i)))
+                            .setCallbackData(list.get(i)));
+                    if ((flag == 2) || (flag == 3)) {
+                        if ((i + 1) < list.size()) row.add(new InlineKeyboardButton()
+                                .setText(EmojiParser.parseToUnicode(list.get(i + 1)))
+                                .setCallbackData(list.get(i + 1)));
+                    }
+                    if (flag == 3) {
+                        if ((i + 2) < list.size()) row.add(new InlineKeyboardButton()
+                                .setText(EmojiParser.parseToUnicode(list.get(i + 2)))
+                                .setCallbackData(list.get(i + 2)));
+                    }
+                    rows.add(row);
                 }
-                if (flag == 3) {
-                    if ((i + 2) < list.size()) row.add(new InlineKeyboardButton()
-                            .setText(EmojiParser.parseToUnicode(list.get(i + 2)))
-                            .setCallbackData(list.get(i + 2)));
-                }
-                rows.add(row);
             }
             if (text.contains(Lan.total(a.getLanguage()))) {
                 List<InlineKeyboardButton> lastRow = new ArrayList<InlineKeyboardButton>();
@@ -509,8 +508,8 @@ public class Bot extends TelegramLongPollingBot {
                         .setCallbackData(Lan.goBack(a.getLanguage())));
                 rows.add(lastRow);
             }
-            if (text.contains(Lan.mainMenu(a.getLanguage()).get(0))||
-                    text.contains(Lan.mainMenu(a.getLanguage()).get(1))||
+            if (text.contains(Lan.mainMenu(a.getLanguage()).get(0)) ||
+                    text.contains(Lan.mainMenu(a.getLanguage()).get(1)) ||
                     text.contains(Lan.mainMenu(a.getLanguage()).get(3))) {
                 List<InlineKeyboardButton> lastRow = new ArrayList<InlineKeyboardButton>();
                 lastRow.add(new InlineKeyboardButton()
@@ -521,6 +520,7 @@ public class Bot extends TelegramLongPollingBot {
                         .setCallbackData(Lan.backToMenu(a.getLanguage())));
                 rows.add(lastRow);
             }
+
             markup.setKeyboard(rows);
         }
         return markup;
