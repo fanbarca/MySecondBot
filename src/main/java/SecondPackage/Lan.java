@@ -138,9 +138,9 @@ class Lan {
         }
     public static String deliveryCost(String lan) {
         String r="";
-        if (lan.equals("Uzbek")) r = "Yetkazib berish:\n3km gacha - 8000 so'm\nundan keyin - 1000 so'm/km ";
-        else if (lan.equals("Russian")) r = "Доставка:\nдо 3 км - 8000 сум\nдалее - 1000 сум/км";
-        else if (lan.equals("English")) r = "Delivery:\nup to 3 km - 8000 sum\nfarther - 1000 sum per km";
+        if (lan.equals("Uzbek")) r = "\n3km gacha - 8000 so'm\nundan keyin - 1000 so'm/km ";
+        else if (lan.equals("Russian")) r = "\nдо 3 км - 8000 сум\nдалее - 1000 сум/км";
+        else if (lan.equals("English")) r = "\nup to 3 km - 8000 sum\nfarther - 1000 sum per km";
         return r;
     }
     public static String cost(String lan) {

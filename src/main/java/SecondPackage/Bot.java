@@ -172,7 +172,7 @@ public class Bot extends TelegramLongPollingBot {
             if ((a.getLanguage() == null) || (a.getLanguage().equals(""))) {
                 chooseLanguage(update.getCallbackQuery().getMessage(), true);
             } else {
-                editPic(Lan.deliveryCost(a.getLanguage()), update.getCallbackQuery().getMessage(), Lan.keyBoard(a.getLanguage()), "Лого", 2);
+                editPic(Lan.mainMenu(a.getLanguage()).get(1)+Lan.deliveryCost(a.getLanguage()), update.getCallbackQuery().getMessage(), null, "Лого", 2);
             }
         } else if (cb.equals(Lan.mainMenu("Uzbek").get(2)) ||
                 cb.equals(Lan.mainMenu("Russian").get(2)) ||
@@ -330,45 +330,20 @@ public class Bot extends TelegramLongPollingBot {
         em.setChatId(message.getChatId());
         em.setMessageId(message.getMessageId());
         em.setMedia(imp);
-        InlineKeyboardMarkup markup = null;
-        if (DataBase.sqlQueryList("select * from table0", "id").contains(productId)) {
-            markup = productMarkup(productId, list);
-        } else {
-            markup = new InlineKeyboardMarkup();
-            List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
-            for (int i = 0; i < list.size(); i += flag) {
-                List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
-                row.add(new InlineKeyboardButton()
-                        .setText(EmojiParser.parseToUnicode(list.get(i)))
-                        .setCallbackData(list.get(i)));
-                if ((flag == 2) || (flag == 3)) {
-                    if ((i + 1) < list.size()) row.add(new InlineKeyboardButton()
-                            .setText(EmojiParser.parseToUnicode(list.get(i + 1)))
-                            .setCallbackData(list.get(i + 1)));
-                }
-                if (flag == 3) {
-                    if ((i + 2) < list.size()) row.add(new InlineKeyboardButton()
-                            .setText(EmojiParser.parseToUnicode(list.get(i + 2)))
-                            .setCallbackData(list.get(i + 2)));
-                }
-                rows.add(row);
-            }
-            if (flag == 1) {
-                List<InlineKeyboardButton> lastRow = new ArrayList<InlineKeyboardButton>();
-                lastRow.add(new InlineKeyboardButton()
-                        .setText(EmojiParser.parseToUnicode(Lan.goBack(a.getLanguage())))
-                        .setCallbackData(Lan.goBack(a.getLanguage())));
-                lastRow.add(new InlineKeyboardButton()
-                        .setText(EmojiParser.parseToUnicode(Lan.backToMenu(a.getLanguage())))
-                        .setCallbackData(Lan.backToMenu(a.getLanguage())));
-                rows.add(lastRow);
-            }
-            markup.setKeyboard(rows);
-        }
+        InlineKeyboardMarkup markup = markUp(text, productId,list, flag);
         em.setReplyMarkup(markup);
         execute(em);
     }
-
+    public void editCaption(String text, Message message, List<String> list, String productId, int flag) throws TelegramApiException, SQLException {
+        //Integer messageId= Integer.parseInt(DataBase.sqlQuery("select image from users where id="+message.getChatId(), "image"));
+        EditMessageCaption ec = new EditMessageCaption();
+        ec.setChatId(message.getChatId().toString());
+        ec.setMessageId(message.getMessageId());
+        ec.setCaption(EmojiParser.parseToUnicode(text)).setParseMode("HTML");
+        InlineKeyboardMarkup markup = markUp(text, productId,list, flag);
+        ec.setReplyMarkup(markup);
+        execute(ec);
+    }
     public void sendPic(String text, Message message, List<String> inline, String productName, int flag) throws SQLException, TelegramApiException {
         String file_id = "";
         if (productName.equals("Лого"))
@@ -379,33 +354,9 @@ public class Bot extends TelegramLongPollingBot {
         aa.setChatId(message.getChatId());
         aa.setPhoto(file_id);
         aa.setCaption(EmojiParser.parseToUnicode(text)).setParseMode("HTML");
-        InlineKeyboardMarkup inlineMarkup = new InlineKeyboardMarkup();
-        List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
-        if (inline != null) {
-            for (int i = 0; i < inline.size(); i += flag) {
-                List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
-                row.add(new InlineKeyboardButton()
-                        .setText(EmojiParser.parseToUnicode(inline.get(i)))
-                        .setCallbackData(inline.get(i)));
-                if ((flag == 2) || (flag == 3)) {
-                    if ((i + 1) < inline.size()) {
-                        row.add(new InlineKeyboardButton()
-                                .setText(EmojiParser.parseToUnicode(inline.get(i + 1)))
-                                .setCallbackData(inline.get(i + 1)));
-                    }
-                }
-                if (flag == 3) {
-                    if ((i + 2) < inline.size()) {
-                        row.add(new InlineKeyboardButton()
-                                .setText(EmojiParser.parseToUnicode(inline.get(i + 2)))
-                                .setCallbackData(inline.get(i + 2)));
-                    }
-                }
-                rows.add(row);
-            }
-            inlineMarkup.setKeyboard(rows);
-            aa.setReplyMarkup(inlineMarkup);
-        }
+        InlineKeyboardMarkup inlineMarkup = markUp(text, "Лого",inline, flag);
+        aa.setReplyMarkup(inlineMarkup);
+
         try {
             String image = execute(aa).getMessageId().toString();
             DataBase.sql("update users set image =" + image + " where id =" + message.getChatId());
@@ -436,50 +387,7 @@ public class Bot extends TelegramLongPollingBot {
         }
     }
 
-    public void editCaption(String text, Message message, List<String> list, String productId, int flag) throws TelegramApiException, SQLException {
-        //Integer messageId= Integer.parseInt(DataBase.sqlQuery("select image from users where id="+message.getChatId(), "image"));
-        EditMessageCaption ec = new EditMessageCaption();
-        ec.setChatId(message.getChatId().toString());
-        ec.setMessageId(message.getMessageId());
-        ec.setCaption(EmojiParser.parseToUnicode(text)).setParseMode("HTML");
-        InlineKeyboardMarkup markup;
-        if (DataBase.sqlQueryList("select * from table0", "id").contains(productId)) {
-            markup = productMarkup(productId, list);
-        } else {
-            markup = new InlineKeyboardMarkup();
-            List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
-            for (int i = 0; i < list.size(); i += flag) {
-                List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
-                row.add(new InlineKeyboardButton()
-                        .setText(EmojiParser.parseToUnicode(list.get(i)))
-                        .setCallbackData(list.get(i)));
-                if ((flag == 2) || (flag == 3)) {
-                    if ((i + 1) < list.size()) row.add(new InlineKeyboardButton()
-                            .setText(EmojiParser.parseToUnicode(list.get(i + 1)))
-                            .setCallbackData(list.get(i + 1)));
-                }
-                if (flag == 3) {
-                    if ((i + 2) < list.size()) row.add(new InlineKeyboardButton()
-                            .setText(EmojiParser.parseToUnicode(list.get(i + 2)))
-                            .setCallbackData(list.get(i + 2)));
-                }
-                rows.add(row);
-            }
-            if (flag == 1) {
-                List<InlineKeyboardButton> lastRow = new ArrayList<InlineKeyboardButton>();
-                lastRow.add(new InlineKeyboardButton()
-                        .setText(EmojiParser.parseToUnicode(Lan.goBack(a.getLanguage())))
-                        .setCallbackData(Lan.goBack(a.getLanguage())));
-                lastRow.add(new InlineKeyboardButton()
-                        .setText(EmojiParser.parseToUnicode(Lan.backToMenu(a.getLanguage())))
-                        .setCallbackData(Lan.backToMenu(a.getLanguage())));
-                rows.add(lastRow);
-            }
-            markup.setKeyboard(rows);
-        }
-        ec.setReplyMarkup(markup);
-        execute(ec);
-    }
+
 
     @Override
     public String getBotUsername() {
@@ -570,10 +478,57 @@ public class Bot extends TelegramLongPollingBot {
 
         return markup;
     }
+    private InlineKeyboardMarkup markUp(String text, String productId, List<String> list, int flag) throws SQLException {
+        InlineKeyboardMarkup markup;
+        if (DataBase.sqlQueryList("select * from table0", "id").contains(productId)) {
+            markup = productMarkup(productId, list);
+        } else {
+            markup = new InlineKeyboardMarkup();
+            List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
+            for (int i = 0; i < list.size(); i += flag) {
+                List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
+                row.add(new InlineKeyboardButton()
+                        .setText(EmojiParser.parseToUnicode(list.get(i)))
+                        .setCallbackData(list.get(i)));
+                if ((flag == 2) || (flag == 3)) {
+                    if ((i + 1) < list.size()) row.add(new InlineKeyboardButton()
+                            .setText(EmojiParser.parseToUnicode(list.get(i + 1)))
+                            .setCallbackData(list.get(i + 1)));
+                }
+                if (flag == 3) {
+                    if ((i + 2) < list.size()) row.add(new InlineKeyboardButton()
+                            .setText(EmojiParser.parseToUnicode(list.get(i + 2)))
+                            .setCallbackData(list.get(i + 2)));
+                }
+                rows.add(row);
+            }
+            if (text.contains(Lan.total(a.getLanguage()))) {
+                List<InlineKeyboardButton> lastRow = new ArrayList<InlineKeyboardButton>();
+                lastRow.add(new InlineKeyboardButton()
+                        .setText(EmojiParser.parseToUnicode(Lan.clearCart(a.getLanguage())))
+                        .setCallbackData(Lan.goBack(a.getLanguage())));
+                rows.add(lastRow);
+            }
+            if (text.contains(Lan.mainMenu(a.getLanguage()).get(0))||
+                    text.contains(Lan.mainMenu(a.getLanguage()).get(1))||
+                    text.contains(Lan.mainMenu(a.getLanguage()).get(3))) {
+                List<InlineKeyboardButton> lastRow = new ArrayList<InlineKeyboardButton>();
+                lastRow.add(new InlineKeyboardButton()
+                        .setText(EmojiParser.parseToUnicode(Lan.goBack(a.getLanguage())))
+                        .setCallbackData(Lan.goBack(a.getLanguage())));
+                lastRow.add(new InlineKeyboardButton()
+                        .setText(EmojiParser.parseToUnicode(Lan.backToMenu(a.getLanguage())))
+                        .setCallbackData(Lan.backToMenu(a.getLanguage())));
+                rows.add(lastRow);
+            }
+            markup.setKeyboard(rows);
+        }
+        return markup;
+    }
     private void showCart(Update update) throws TelegramApiException, SQLException {
         List<String> items = DataBase.sqlQueryList("select item from cart where userid =" + update.getCallbackQuery().getMessage().getChatId(), "item");
         if (items.size() == 0) {
-            editPic(Lan.mainMenu(a.getLanguage()).get(3) + "\n" + Lan.emptyOrders(a.getLanguage()), update.getCallbackQuery().getMessage(), Lan.keyBoard(a.getLanguage()), "Лого", 2);
+            editPic(Lan.mainMenu(a.getLanguage()).get(3) + "\n" + Lan.emptyOrders(a.getLanguage()), update.getCallbackQuery().getMessage(), null, "Лого", 2);
         } else {
             String cart = "";
             int result = 0;
@@ -594,9 +549,6 @@ public class Bot extends TelegramLongPollingBot {
                 list.add(":heavy_multiplication_x: "+entry.getKey());
             }
             cart += "\n" + Lan.total(a.getLanguage()) + result + Lan.currency(a.getLanguage());
-            list.add(Lan.clearCart(a.getLanguage()));
-            list.add(Lan.goBack(a.getLanguage()));
-            list.add(Lan.backToMenu(a.getLanguage()));
             editPic(Lan.mainMenu(a.getLanguage()).get(3) + "\n" + cart, update.getCallbackQuery().getMessage(), list, "Лого", 2);
         }
     }
