@@ -147,7 +147,7 @@ public class Adminbot extends TelegramLongPollingBot {
                         } else if (listener.equals("Delete")) {
                             listener = "";
                             DataBase.sql("delete from table0 where russian = '"+t+"'");
-                            edit(update.getCallbackQuery().getMessage(), update.getCallbackQuery().getMessage().getText(), DataBase.showAllProducts("Russian", false), 3);
+                            edit(update.getCallbackQuery().getMessage(), "Удалено!", null, 3);
                         }
                     }
                 }
@@ -224,24 +224,26 @@ public void edit (Message message, String newText, List<String> list, int flag) 
                 .setMessageId(message.getMessageId())
                 .setParseMode("HTML")
                 .setText(EmojiParser.parseToUnicode(newText));
-        InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
-        List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
-        for (int i = 0; i < list.size(); i += flag) {
-            List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
-            row.add(new InlineKeyboardButton()
-                    .setText(EmojiParser.parseToUnicode(list.get(i)))
-                    .setCallbackData(list.get(i)));
-            if ((flag==2)||(flag==3)) {if ((i + 1) < list.size()) row.add(new InlineKeyboardButton()
-                    .setText(EmojiParser.parseToUnicode(list.get(i + 1)))
-                    .setCallbackData(list.get(i + 1)));}
-            if (flag==3) {if ((i + 2) < list.size()) row.add(new InlineKeyboardButton()
-                    .setText(EmojiParser.parseToUnicode(list.get(i + 2)))
-                    .setCallbackData(list.get(i + 2)));
+        if (list!=null) {
+            InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
+            List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
+            for (int i = 0; i < list.size(); i += flag) {
+                List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
+                row.add(new InlineKeyboardButton()
+                        .setText(EmojiParser.parseToUnicode(list.get(i)))
+                        .setCallbackData(list.get(i)));
+                if ((flag==2)||(flag==3)) {if ((i + 1) < list.size()) row.add(new InlineKeyboardButton()
+                        .setText(EmojiParser.parseToUnicode(list.get(i + 1)))
+                        .setCallbackData(list.get(i + 1)));}
+                if (flag==3) {if ((i + 2) < list.size()) row.add(new InlineKeyboardButton()
+                        .setText(EmojiParser.parseToUnicode(list.get(i + 2)))
+                        .setCallbackData(list.get(i + 2)));
+                }
+                rows.add(row);
             }
-            rows.add(row);
+            markup.setKeyboard(rows);
+            sendMessage.setReplyMarkup(markup);
         }
-        markup.setKeyboard(rows);
-        sendMessage.setReplyMarkup(markup);
         try { execute(sendMessage);}
         catch (TelegramApiException e) {e.printStackTrace();}
     }
