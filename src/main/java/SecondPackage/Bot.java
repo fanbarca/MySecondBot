@@ -247,6 +247,7 @@ public class Bot extends TelegramLongPollingBot {
         }
 
         for (String name:DataBase.showAllProducts(a.getLanguage())) {
+            if (cb.contains(name)) {
             List<String> items = DataBase.sqlQueryList("select * from cart where userid ="+update.getCallbackQuery().getFrom().getId(), "item");
             String prodId = DataBase.sqlQuery("select * from table0 where "+a.getLanguage()+" ="+name, "id");
             int occurrences = 0;
@@ -257,6 +258,7 @@ public class Bot extends TelegramLongPollingBot {
             }
             editPic("<b>"+name+"</b>\n"+ Lan.cost(a.getLanguage()) + DataBase.sqlQuery("SELECT cost from table0 where "+a.getLanguage()+" = '"+name+"'", "cost") + Lan.currency(a.getLanguage())+".    "+total,
                     update.getCallbackQuery().getMessage(), keyb(occurrences, name), prodId,  3);
+            }
         }
         if (cb.contains(Lan.clearCart(a.getLanguage()))) {
             DataBase.sql("delete from cart where userid ="+update.getCallbackQuery().getFrom().getId());
