@@ -548,7 +548,7 @@ public class Bot extends TelegramLongPollingBot {
                 result += entry.getValue().get(0) * entry.getValue().get(1);
                 list.add(":heavy_multiplication_x: "+entry.getKey());
             }
-            cart += "\n" + Lan.total(a.getLanguage()) + result + Lan.currency(a.getLanguage());
+            if (list.size()>1) cart += "\n" + Lan.total(a.getLanguage()) + result + Lan.currency(a.getLanguage());
             editPic(Lan.mainMenu(a.getLanguage()).get(3) + "\n" + cart, update.getCallbackQuery().getMessage(), list, "Лого", 2);
         }
     }
