@@ -477,7 +477,7 @@ public class Bot extends TelegramLongPollingBot {
     }
     private InlineKeyboardMarkup markUp(String text, String productId, List<String> list, int flag) throws SQLException {
         InlineKeyboardMarkup markup;
-        if (DataBase.sqlQueryList("select * from table0", "id").contains(productId)) {
+        if (DataBase.sqlQueryList("select id from table0", "id").contains(productId)) {
             markup = productMarkup(productId, list);
         } else {
             markup = new InlineKeyboardMarkup();

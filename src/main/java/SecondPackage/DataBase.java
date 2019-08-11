@@ -129,7 +129,7 @@ public static Connection getConnection() throws URISyntaxException, SQLException
             Connection conn = getConnection();
             if (conn!=null) {
                 Statement prst = conn.createStatement();
-                ResultSet rs = prst.executeQuery("select "+column+" from table0 "+stock+"order by type asc, "+column+" asc");
+                ResultSet rs = prst.executeQuery("select * from table0 "+stock+"order by type asc, "+column+" asc");
                 while (rs.next()){
                     if (!rs.getString("russian").equals("Лого")) lan.add(rs.getString(column));
                 }
