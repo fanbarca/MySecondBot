@@ -248,12 +248,12 @@ public class Bot extends TelegramLongPollingBot {
 
         for (String name:DataBase.showAllProducts(a.getLanguage())) {
             if (cb.contains(name)) {
-            List<String> items = DataBase.sqlQueryList("select * from cart where userid ="+update.getCallbackQuery().getFrom().getId(), "item");
-            String prodId = DataBase.sqlQuery("select * from table0 where "+a.getLanguage()+" ="+name, "id");
+            List<String> cart = DataBase.sqlQueryList("select item from cart where userid ="+update.getCallbackQuery().getFrom().getId(), "item");
+            String prodId = DataBase.sqlQuery("select id from table0 where "+a.getLanguage()+" ="+name, "id");
             int occurrences = 0;
             String total = "";
-            if (items.contains(prodId)) {
-                occurrences = Collections.frequency(items, prodId);
+            if (cart.contains(prodId)) {
+                occurrences = Collections.frequency(cart, prodId);
                 total = Lan.inCart(a.getLanguage(), occurrences);
             }
             editPic("<b>"+name+"</b>\n"+ Lan.cost(a.getLanguage()) + DataBase.sqlQuery("SELECT cost from table0 where "+a.getLanguage()+" = '"+name+"'", "cost") + Lan.currency(a.getLanguage())+".    "+total,
@@ -331,7 +331,7 @@ public class Bot extends TelegramLongPollingBot {
          }
 	}
     public void editPic(String text, Message message, List<String> list, String productId, int flag) throws TelegramApiException, SQLException {
-                String file_id = "";
+                String file_id;
         if (productId.equals("Лого")) file_id = DataBase.sqlQuery("SELECT imageid from table0 where Russian = 'Лого'", "imageid");
         else file_id = DataBase.sqlQuery("SELECT imageid from table0 where id = "+productId, "imageid");
                 //Integer messageId= Integer.parseInt(DataBase.sqlQuery("select image from users where id="+message.getChatId(), "image"));
