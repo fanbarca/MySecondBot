@@ -26,19 +26,19 @@ class Lan {
         List<String> menu = new ArrayList<String>();
             if (lan.equals("Uzbek")) {
                 menu.add(":notebook_with_decorative_cover: Menyu");
-                menu.add(":truck: Yetkazish");
+                menu.add(":truck: Buyurtma berish");
                 menu.add(":uz: Til");
                 menu.add("🛒 Savatcha");
             }
             else if (lan.equals("Russian")) {
                 menu.add(":notebook_with_decorative_cover: Меню");
-                menu.add(":truck: Доставка");
+                menu.add(":truck: Оформить заказ");
                 menu.add(":ru: Язык");
                 menu.add("🛒 Корзина");
             }
             else if (lan.equals("English")) {
                 menu.add(":notebook_with_decorative_cover: Menu");
-                menu.add(":truck: Delivery");
+                menu.add(":truck: Place an order");
                 menu.add(":gb: Language");
                 menu.add("🛒 Shopping cart");
             }

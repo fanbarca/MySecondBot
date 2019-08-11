@@ -511,6 +511,13 @@ public class Bot extends TelegramLongPollingBot {
             if (text.contains(Lan.mainMenu(a.getLanguage()).get(0)) ||
                     text.contains(Lan.mainMenu(a.getLanguage()).get(1)) ||
                     text.contains(Lan.mainMenu(a.getLanguage()).get(3))) {
+                if (text.contains(Lan.mainMenu(a.getLanguage()).get(1))) {
+                    List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
+                    row.add(new InlineKeyboardButton()
+                            .setText(EmojiParser.parseToUnicode(Lan.mainMenu(a.getLanguage()).get(1)))
+                            .setCallbackData(Lan.mainMenu(a.getLanguage()).get(1)+"+"));
+                    rows.add(row);
+                }
                 List<InlineKeyboardButton> lastRow = new ArrayList<InlineKeyboardButton>();
                 lastRow.add(new InlineKeyboardButton()
                         .setText(EmojiParser.parseToUnicode(Lan.goBack(a.getLanguage())))
@@ -562,6 +569,7 @@ public class Bot extends TelegramLongPollingBot {
                 list.add(":heavy_multiplication_x: "+entry.getKey());
             }
             if (list.size()>1) cart += "\n" + Lan.total(a.getLanguage()) + result + Lan.currency(a.getLanguage());
+
             editPic(Lan.mainMenu(a.getLanguage()).get(3) + "\n" + cart, update.getCallbackQuery().getMessage(), list, "Лого", 2);
         }
     }
