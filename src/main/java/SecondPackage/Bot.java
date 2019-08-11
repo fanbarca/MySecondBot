@@ -333,7 +333,7 @@ public class Bot extends TelegramLongPollingBot {
     public void editPic(String text, Message message, List<String> list, String productId, int flag) throws TelegramApiException, SQLException {
                 String file_id = "";
         if (productId.equals("Лого")) file_id = DataBase.sqlQuery("SELECT imageid from table0 where Russian = 'Лого'", "imageid");
-        else file_id = DataBase.sqlQuery("SELECT imageid from table0 where id = '"+productId+"'", "imageid");
+        else file_id = DataBase.sqlQuery("SELECT imageid from table0 where id = "+productId, "imageid");
                 //Integer messageId= Integer.parseInt(DataBase.sqlQuery("select image from users where id="+message.getChatId(), "image"));
                 InputMediaPhoto imp = new InputMediaPhoto();
                 imp.setMedia(file_id);
