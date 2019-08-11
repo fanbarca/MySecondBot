@@ -194,7 +194,7 @@ public class Bot extends TelegramLongPollingBot {
             if (cb.equals(t) && !cb.equals(Lan.backToMenu(a.getLanguage()))) {
                 String nothing = "";
                 if (list.size() < 1) nothing = Lan.emptyOrders(a.getLanguage());
-                editPic(t + "\n" + nothing, update.getCallbackQuery().getMessage(), list, "Лого", 1);
+                editPic(Lan.mainMenu(a.getLanguage()).get(0)+" :arrow_forward: "+t + "\n" + nothing, update.getCallbackQuery().getMessage(), list, "Лого", 1);
             }
         }
         if (cb.contains(Lan.removeFromCart(a.getLanguage())) || cb.contains(Lan.addToCart(a.getLanguage()))) {
@@ -242,7 +242,7 @@ public class Bot extends TelegramLongPollingBot {
         }
         if (cb.contains(Lan.clearCart(a.getLanguage()))) {
             DataBase.sql("delete from cart where userid =" + update.getCallbackQuery().getFrom().getId());
-            editPic(Lan.mainMenu(a.getLanguage()).get(3) + "\n" + Lan.emptyOrders(a.getLanguage()), update.getCallbackQuery().getMessage(), Lan.keyBoard(a.getLanguage()), "Лого", 2);
+            showCart(update);
         }
     }
 

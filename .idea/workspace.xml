@@ -9,7 +9,6 @@
     <list default="true" id="7fdc6f42-80e3-436b-99c6-634d7f7f8939" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/SecondPackage/Bot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/SecondPackage/Bot.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/SecondPackage/Lan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/SecondPackage/Lan.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -27,8 +26,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/SecondPackage/Bot.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="691">
-              <caret line="550" selection-start-line="550" selection-end-line="550" />
+            <state relative-caret-position="421">
+              <caret line="196" column="79" selection-start-line="196" selection-start-column="79" selection-end-line="196" selection-end-column="79" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#26470#26471#0" expanded="true" />
@@ -43,6 +42,8 @@
                 <element signature="e#26935#26936#0" expanded="true" />
                 <element signature="e#27128#27129#0" expanded="true" />
                 <element signature="e#27166#27167#0" expanded="true" />
+                <element signature="e#26512#26534#0" expanded="true" />
+                <element signature="e#27092#27114#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -60,8 +61,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/SecondPackage/Lan.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="421">
-              <caret line="172" column="30" selection-start-line="172" selection-start-column="25" selection-end-line="172" selection-end-column="30" />
+            <state relative-caret-position="295">
+              <caret line="84" column="31" selection-start-line="84" selection-start-column="31" selection-end-line="84" selection-end-column="31" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -238,20 +239,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1560590336061</updated>
-    </task>
-    <task id="LOCAL-00033" summary="new">
-      <created>1562513710444</created>
-      <option name="number" value="00033" />
-      <option name="presentableId" value="LOCAL-00033" />
-      <option name="project" value="LOCAL" />
-      <updated>1562513710444</updated>
-    </task>
-    <task id="LOCAL-00034" summary="new">
-      <created>1562513870621</created>
-      <option name="number" value="00034" />
-      <option name="presentableId" value="LOCAL-00034" />
-      <option name="project" value="LOCAL" />
-      <updated>1562513870621</updated>
     </task>
     <task id="LOCAL-00035" summary="new">
       <created>1562514228537</created>
@@ -582,7 +569,21 @@
       <option name="project" value="LOCAL" />
       <updated>1565508990873</updated>
     </task>
-    <option name="localTasksCounter" value="82" />
+    <task id="LOCAL-00082" summary="new">
+      <created>1565528188492</created>
+      <option name="number" value="00082" />
+      <option name="presentableId" value="LOCAL-00082" />
+      <option name="project" value="LOCAL" />
+      <updated>1565528188493</updated>
+    </task>
+    <task id="LOCAL-00083" summary="new">
+      <created>1565529604114</created>
+      <option name="number" value="00083" />
+      <option name="presentableId" value="LOCAL-00083" />
+      <option name="project" value="LOCAL" />
+      <updated>1565529604115</updated>
+    </task>
+    <option name="localTasksCounter" value="84" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -839,8 +840,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/SecondPackage/Lan.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="421">
-          <caret line="172" column="30" selection-start-line="172" selection-start-column="25" selection-end-line="172" selection-end-column="30" />
+        <state relative-caret-position="295">
+          <caret line="84" column="31" selection-start-line="84" selection-start-column="31" selection-end-line="84" selection-end-column="31" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -849,8 +850,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/SecondPackage/Bot.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="691">
-          <caret line="550" selection-start-line="550" selection-end-line="550" />
+        <state relative-caret-position="421">
+          <caret line="196" column="79" selection-start-line="196" selection-start-column="79" selection-end-line="196" selection-end-column="79" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#26470#26471#0" expanded="true" />
@@ -865,6 +866,8 @@
             <element signature="e#26935#26936#0" expanded="true" />
             <element signature="e#27128#27129#0" expanded="true" />
             <element signature="e#27166#27167#0" expanded="true" />
+            <element signature="e#26512#26534#0" expanded="true" />
+            <element signature="e#27092#27114#0" expanded="true" />
           </folding>
         </state>
       </provider>
