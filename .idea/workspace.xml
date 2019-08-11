@@ -8,7 +8,9 @@
   <component name="ChangeListManager">
     <list default="true" id="7fdc6f42-80e3-436b-99c6-634d7f7f8939" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/SecondPackage/Adminbot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/SecondPackage/Adminbot.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/SecondPackage/Bot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/SecondPackage/Bot.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/SecondPackage/DataBase.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/SecondPackage/DataBase.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -23,11 +25,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/SecondPackage/Bot.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="493">
-              <caret line="509" column="13" lean-forward="true" selection-start-line="509" selection-start-column="13" selection-end-line="509" selection-end-column="13" />
+            <state relative-caret-position="351">
+              <caret line="226" column="49" selection-start-line="226" selection-start-column="49" selection-end-line="226" selection-end-column="49" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#26470#26471#0" expanded="true" />
@@ -49,11 +51,39 @@
           </provider>
         </entry>
       </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/java/SecondPackage/Adminbot.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="534">
+              <caret line="140" column="25" selection-start-line="140" selection-start-column="25" selection-end-line="140" selection-end-column="25" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#9636#9637#0" expanded="true" />
+                <element signature="e#9672#9673#0" expanded="true" />
+                <element signature="e#9721#9722#0" expanded="true" />
+                <element signature="e#9791#9792#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/SecondPackage/AmabiliaBot.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="313">
+              <caret line="491" column="4" selection-start-line="491" selection-start-column="4" selection-end-line="548" selection-end-column="5" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/SecondPackage/DataBase.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-756">
-              <caret line="57" column="60" selection-start-line="57" selection-start-column="60" selection-end-line="57" selection-end-column="60" />
+            <state relative-caret-position="759">
+              <caret line="250" column="5" selection-start-line="250" selection-start-column="5" selection-end-line="250" selection-end-column="5" />
             </state>
           </provider>
         </entry>
@@ -87,6 +117,8 @@
       <find>phone</find>
       <find>Лого</find>
       <find>editPic</find>
+      <find>showAllProducts</find>
+      <find>Amabilia</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -118,12 +150,12 @@
         <option value="$PROJECT_DIR$/src/main/java/SecondPackage/English.java" />
         <option value="$PROJECT_DIR$/src/main/java/SecondPackage/Translation.java" />
         <option value="$PROJECT_DIR$/src/main/java/SecondPackage/Main.java" />
-        <option value="$PROJECT_DIR$/src/main/java/SecondPackage/Adminbot.java" />
         <option value="$PROJECT_DIR$/src/main/java/SecondPackage/Order.java" />
-        <option value="$PROJECT_DIR$/src/main/java/SecondPackage/AmabiliaBot.java" />
-        <option value="$PROJECT_DIR$/src/main/java/SecondPackage/DataBase.java" />
         <option value="$PROJECT_DIR$/src/main/java/SecondPackage/Lan.java" />
+        <option value="$PROJECT_DIR$/src/main/java/SecondPackage/AmabiliaBot.java" />
         <option value="$PROJECT_DIR$/src/main/java/SecondPackage/Bot.java" />
+        <option value="$PROJECT_DIR$/src/main/java/SecondPackage/DataBase.java" />
+        <option value="$PROJECT_DIR$/src/main/java/SecondPackage/Adminbot.java" />
       </list>
     </option>
   </component>
@@ -239,20 +271,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1560590336061</updated>
-    </task>
-    <task id="LOCAL-00036" summary="new">
-      <created>1562516181737</created>
-      <option name="number" value="00036" />
-      <option name="presentableId" value="LOCAL-00036" />
-      <option name="project" value="LOCAL" />
-      <updated>1562516181737</updated>
-    </task>
-    <task id="LOCAL-00037" summary="new">
-      <created>1562516752430</created>
-      <option name="number" value="00037" />
-      <option name="presentableId" value="LOCAL-00037" />
-      <option name="project" value="LOCAL" />
-      <updated>1562516752430</updated>
     </task>
     <task id="LOCAL-00038" summary="new">
       <created>1562517096238</created>
@@ -583,7 +601,21 @@
       <option name="project" value="LOCAL" />
       <updated>1565530313567</updated>
     </task>
-    <option name="localTasksCounter" value="85" />
+    <task id="LOCAL-00085" summary="new">
+      <created>1565531131320</created>
+      <option name="number" value="00085" />
+      <option name="presentableId" value="LOCAL-00085" />
+      <option name="project" value="LOCAL" />
+      <updated>1565531131320</updated>
+    </task>
+    <task id="LOCAL-00086" summary="new">
+      <created>1565531446097</created>
+      <option name="number" value="00086" />
+      <option name="presentableId" value="LOCAL-00086" />
+      <option name="project" value="LOCAL" />
+      <updated>1565531446097</updated>
+    </task>
+    <option name="localTasksCounter" value="87" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -781,20 +813,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/SecondPackage/Adminbot.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="705">
-          <caret line="59" column="5" lean-forward="true" selection-start-line="59" selection-start-column="5" selection-end-line="59" selection-end-column="5" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#33444#33445#0" expanded="true" />
-            <element signature="e#33485#33486#0" expanded="true" />
-            <element signature="e#33534#33535#0" expanded="true" />
-            <element signature="e#33604#33605#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$MAVEN_REPOSITORY$/org/telegram/telegrambots-meta/4.2/telegrambots-meta-4.2.jar!/org/telegram/telegrambots/meta/generics/LongPollingBot.class">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="126">
@@ -805,18 +823,6 @@
     <entry file="file://$PROJECT_DIR$/src/main/java/SecondPackage/English.java" />
     <entry file="file://$PROJECT_DIR$/src/main/java/SecondPackage/Uzbek.java" />
     <entry file="file://$PROJECT_DIR$/src/main/java/SecondPackage/Russian.java" />
-    <entry file="file://$PROJECT_DIR$/src/main/java/SecondPackage/AmabiliaBot.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="249">
-          <caret line="215" column="64" lean-forward="true" selection-start-line="215" selection-start-column="64" selection-end-line="215" selection-end-column="64" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#5282#5283#0" expanded="true" />
-            <element signature="e#5327#5328#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/SecondPackage/Order.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1314">
@@ -831,13 +837,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/SecondPackage/DataBase.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-756">
-          <caret line="57" column="60" selection-start-line="57" selection-start-column="60" selection-end-line="57" selection-end-column="60" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/SecondPackage/Lan.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="295">
@@ -848,10 +847,20 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/SecondPackage/AmabiliaBot.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="313">
+          <caret line="491" column="4" selection-start-line="491" selection-start-column="4" selection-end-line="548" selection-end-column="5" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/SecondPackage/Bot.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="493">
-          <caret line="509" column="13" lean-forward="true" selection-start-line="509" selection-start-column="13" selection-end-line="509" selection-end-column="13" />
+        <state relative-caret-position="351">
+          <caret line="226" column="49" selection-start-line="226" selection-start-column="49" selection-end-line="226" selection-end-column="49" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#26470#26471#0" expanded="true" />
@@ -868,6 +877,27 @@
             <element signature="e#27166#27167#0" expanded="true" />
             <element signature="e#26512#26534#0" expanded="true" />
             <element signature="e#27092#27114#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/SecondPackage/DataBase.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="759">
+          <caret line="250" column="5" selection-start-line="250" selection-start-column="5" selection-end-line="250" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/SecondPackage/Adminbot.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="534">
+          <caret line="140" column="25" selection-start-line="140" selection-start-column="25" selection-end-line="140" selection-end-column="25" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#9636#9637#0" expanded="true" />
+            <element signature="e#9672#9673#0" expanded="true" />
+            <element signature="e#9721#9722#0" expanded="true" />
+            <element signature="e#9791#9792#0" expanded="true" />
           </folding>
         </state>
       </provider>

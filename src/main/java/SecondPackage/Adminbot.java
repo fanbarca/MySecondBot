@@ -51,55 +51,65 @@ public class Adminbot extends TelegramLongPollingBot {
                 if (update.getMessage().hasText()) {
                     if(update.getMessage().getText().equals("/start")){
                         List<String> a = new ArrayList<>();
-                        a.add("Изменить Меню");
-                        a.add("Заказы");
+                        a.add("Указать наличие");
+                        a.add("Удалить продукт");
                         a.add("Добавть продукт");
-                        send("Выберите действие", myID, a,false, 2);
-                    } else if(update.getMessage().getText().equals("Изменить Меню")){
-                        send("Изменить Меню", myID, showAllProducts("Russian"), true, 3);
-                    } else if(update.getMessage().getText().equals("Заказы")){
-                        send("Заказы", myID, listOrders("orderid"), true, 2);
+                        send("Выберите действие", myID, a,false, 1);
+                    } else if(update.getMessage().getText().equals("Указать наличие")){
+                        send("Указать наличие", myID, DataBase.productsAvailability("Russian"), true, 3);
+                    } else if(update.getMessage().getText().equals("Удалить продукт")){
+                        send("Удалить продукт", myID, DataBase.showAllProducts("Russian", false), true, 3);
                     } else if(update.getMessage().getText().equals("Добавть продукт")){
                         send("В какой раздел?", myID, Lan.listTypes("Russian"), true, 3);
                     } else if (update.getMessage().getText().contains("/sql")) {
                         if (update.getMessage().getText().length()>5) {
                             String command = update.getMessage().getText().substring(5);
-                            AmabiliaBot.sql(command);
+                            DataBase.sql(command);
                         }
                     } else if (update.getMessage().getText().contains("/broadcast")) {
                         if (update.getMessage().getText().length()>11) {
                             String command = update.getMessage().getText().substring(11);
-                            AmabiliaBot toAll = new AmabiliaBot();
+                            Bot toAll = new Bot();
                             try {
-								for (int i=0; i<AmabiliaBot.sqlIdList().size(); i++) {
-                                    toAll.send(command, Long.parseLong(AmabiliaBot.sqlIdList().get(i)));
+								for (int i=0; i<DataBase.sqlIdList().size(); i++) {
+                                    toAll.send(command, Long.parseLong(DataBase.sqlIdList().get(i)), null, null, 0);
 								}
 							} catch (SQLException e) {
 								e.printStackTrace();
 							}
                         }
+                    } else if (update.getMessage().getText().contains("/deletebroadcast")) {
+                            Bot toAll = new Bot();
+                            try {
+                                for (int i=0; i<DataBase.sqlIdList().size(); i++) {
+                                    toAll.deleteMessage(DataBase.sqlQuery("select smid from users where userid ="+DataBase.sqlIdList().get(i), "smid"), DataBase.sqlIdList().get(i));
+                                }
+                            } catch (SQLException e) {
+                                e.printStackTrace();
+                            }
+
                     } else {
                         if (listener.equals("Russian")) {
                             Random rand = new Random();
                             russian = update.getMessage().getText();
-                            AmabiliaBot.sql("insert into table0 (id, russian, type, instock) values ("+
+                            DataBase.sql("insert into table0 (id, russian, type, instock) values ("+
                             String.format("%04d", rand.nextInt(10000))+", '"+russian+"', '"+category+"', true)");
                             listener = "Uzbek";
                             send("Введите название продукта на узбекском", myID, list, false, 3);
                         } else if (listener.equals("Uzbek")) {
                             String Name = update.getMessage().getText();
-                            AmabiliaBot.sql("UPDATE table0 SET uzbek = '"+Name+"' where russian = '"+russian+"'");
+                            DataBase.sql("UPDATE table0 SET uzbek = '"+Name+"' where russian = '"+russian+"'");
                             listener = "English";
                             send("Введите название продукта на английском", myID, list, false, 3);
                         } else if (listener.equals("English")) {
                             String Name = update.getMessage().getText();
                             listener = "Cost";
-                            AmabiliaBot.sql("UPDATE table0 SET english = '"+Name+"' where russian = '"+russian+"'");
+                            DataBase.sql("UPDATE table0 SET english = '"+Name+"' where russian = '"+russian+"'");
                             send("Введите стоимость продукта", myID, list, false, 3);
                         } else if (listener.equals("Cost")) {
                             String cost = update.getMessage().getText();
                             listener = "";
-                            AmabiliaBot.sql("UPDATE table0 SET cost = "+cost+" where russian = '"+russian+"'");
+                            DataBase.sql("UPDATE table0 SET cost = "+cost+" where russian = '"+russian+"'");
                             send("Готово", myID, list, false, 3);
                         }
                     }
@@ -125,17 +135,14 @@ public class Adminbot extends TelegramLongPollingBot {
                         Lan.listTypes("Russian"), 3);
                     }
                 }
-                for (String t:AmabiliaBot.showAllProducts("Russian")) {
+                for (String t:DataBase.showAllProducts("Russian", false)) {
                     if (update.getCallbackQuery().getData().contains(t)) {
                         if (update.getCallbackQuery().getData().contains(":white_check_mark:")) {
-                            AmabiliaBot.sql("UPDATE table0 SET instock = false where russian = '"+t+"'");
+                            DataBase.sql("UPDATE table0 SET instock = false where russian = '"+t+"'");
                         } else if (update.getCallbackQuery().getData().contains(":x:")) {
-                            AmabiliaBot.sql("UPDATE table0 SET instock = true where russian = '"+t+"'");
+                            DataBase.sql("UPDATE table0 SET instock = true where russian = '"+t+"'");
                         }
-                        edit(update.getCallbackQuery().getMessage(), update.getCallbackQuery().getMessage().getText(), showAllProducts("Russian"), 3);
-                    } else if(update.getCallbackQuery().getData().equals("Назад")) {
-                        edit(update.getCallbackQuery().getMessage(), "Изменить Меню",
-                        Lan.listTypes("Russian"), 3);
+                        edit(update.getCallbackQuery().getMessage(), update.getCallbackQuery().getMessage().getText(), DataBase.productsAvailability("Russian"), 3);
                     }
                 }
             }
@@ -236,7 +243,7 @@ public void edit (Message message, String newText, List<String> list, int flag) 
 public List<String> listOrders(String column){
         List<String> lan = new ArrayList<>();
         try {
-            Connection conn = AmabiliaBot.getConnection();
+            Connection conn = DataBase.getConnection();
             if (conn!=null) {
                 Statement prst = conn.createStatement();
                 ResultSet rs = prst.executeQuery("select "+column+" from orders");
@@ -255,7 +262,7 @@ public List<String> listOrders(String column){
     public List<String> showProducts(String column, String table){
         List<String> lan = new ArrayList<>();
         try {
-            Connection conn = AmabiliaBot.getConnection();
+            Connection conn = DataBase.getConnection();
             if (conn!=null) {
                 Statement prst = conn.createStatement();
                 ResultSet rs = prst.executeQuery("select "+column+" from "+table+" where instock = true");
@@ -291,26 +298,4 @@ public List<String> listOrders(String column){
         catch (TelegramApiException e) {e.printStackTrace();}
     }
 
-    public static List<String> showAllProducts(String column){
-        List<String> lan = new ArrayList<>();
-        try {
-            Connection conn = AmabiliaBot.getConnection();
-            if (conn!=null) {
-                Statement prst = conn.createStatement();
-                ResultSet rs = prst.executeQuery("select * from table0 ORDER BY type ASC, "+column+" ASC");
-                while (rs.next()){
-                    String mark="";
-                    if (rs.getBoolean("instock")) mark = ":white_check_mark: ";
-                    else mark = ":x: ";
-                    if (!rs.getString("type").equals("99")) lan.add(mark + rs.getString(column));
-                }
-                prst.close();
-                conn.close();
-            }
-        }
-        catch(Exception ex) {
-            System.err.println(ex);
-        }
-        return lan;
-    }
 }

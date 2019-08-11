@@ -194,7 +194,7 @@ public class Bot extends TelegramLongPollingBot {
             if (cb.equals(t) && !cb.equals(Lan.backToMenu(a.getLanguage()))) {
                 String nothing = "";
                 if (list.size() < 1) nothing = Lan.emptyOrders(a.getLanguage());
-                editPic(Lan.mainMenu(a.getLanguage()).get(0)+" :arrow_forward: "+t + "\n" + nothing, update.getCallbackQuery().getMessage(), list, "Лого", 1);
+                editPic(Lan.mainMenu(a.getLanguage()).get(0)+"    "+t + "\n" + nothing, update.getCallbackQuery().getMessage(), list, "Лого", 1);
             }
         }
         if (cb.contains(Lan.removeFromCart(a.getLanguage())) || cb.contains(Lan.addToCart(a.getLanguage()))) {
@@ -222,7 +222,7 @@ public class Bot extends TelegramLongPollingBot {
             editCaption(text, update.getCallbackQuery().getMessage(), keyb(occurrences, name), prodId, 3);
         }
 
-        for (String name : DataBase.showAllProducts(a.getLanguage())) {
+        for (String name : DataBase.showAllProducts(a.getLanguage(), true)) {
             String prodId = DataBase.sqlQuery("select id from table0 where " + a.getLanguage() + " ='" + name + "'", "id");
             if (cb.contains(name)&&!cb.contains(":heavy_multiplication_x:")) {
                 List<String> cart = DataBase.sqlQueryList("select item from cart where userid =" + update.getCallbackQuery().getFrom().getId(), "item");
@@ -460,7 +460,7 @@ public class Bot extends TelegramLongPollingBot {
             List<InlineKeyboardButton> row3 = new ArrayList<InlineKeyboardButton>();
             row3.add(new InlineKeyboardButton()
                     .setText(EmojiParser.parseToUnicode(Lan.goBack(a.getLanguage())))
-                    .setCallbackData(a.getLanguage()));
+                    .setCallbackData(Lan.goBack(a.getLanguage())));
             row3.add(new InlineKeyboardButton()
                     .setText(EmojiParser.parseToUnicode(Lan.mainMenu(a.getLanguage()).get(3)))
                     .setCallbackData(Lan.mainMenu(a.getLanguage()).get(3)));
@@ -551,5 +551,64 @@ public class Bot extends TelegramLongPollingBot {
             if (list.size()>1) cart += "\n" + Lan.total(a.getLanguage()) + result + Lan.currency(a.getLanguage());
             editPic(Lan.mainMenu(a.getLanguage()).get(3) + "\n" + cart, update.getCallbackQuery().getMessage(), list, "Лого", 2);
         }
+    }
+    public void send (String text, long chatId, List<String> inline,List<String> reply, int flag) {
+        SendMessage sendMessage = new SendMessage()
+                .setChatId(chatId)
+                .setText(EmojiParser.parseToUnicode(text))
+                .setParseMode("HTML");
+        if (inline!=null) {
+            InlineKeyboardMarkup inlineMarkup = new InlineKeyboardMarkup();
+            List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
+            for (int i = 0; i < inline.size(); i += flag) {
+                List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
+                row.add(new InlineKeyboardButton()
+                        .setText(EmojiParser.parseToUnicode(inline.get(i)))
+                        .setCallbackData(inline.get(i)));
+                if ((flag==2)||(flag==3)) {
+                    if ((i + 1) < inline.size()) {
+                        row.add(new InlineKeyboardButton()
+                                .setText(EmojiParser.parseToUnicode(inline.get(i + 1)))
+                                .setCallbackData(inline.get(i + 1)));
+                    }
+                }
+                if (flag==3){
+                    if ((i + 2) < inline.size()) {
+                        row.add(new InlineKeyboardButton()
+                                .setText(EmojiParser.parseToUnicode(inline.get(i + 2)))
+                                .setCallbackData(inline.get(i + 2)));
+                    }
+                }
+                rows.add(row);
+            }
+            inlineMarkup.setKeyboard(rows);
+            sendMessage.setReplyMarkup(inlineMarkup);
+        }
+        if (reply!=null) {
+            ReplyKeyboardMarkup replyMarkup = new ReplyKeyboardMarkup();
+            List<KeyboardRow> rows2 = new ArrayList<KeyboardRow>();
+            for (int i = 0; i < reply.size(); i += flag) {
+            KeyboardRow row2 = new KeyboardRow();
+            row2.add(new KeyboardButton().setText(EmojiParser.parseToUnicode(reply.get(i))));
+            if ((flag==2)||(flag==3)) {
+                if ((i + 1) < reply.size()) {
+                    row2.add(new KeyboardButton().setText(EmojiParser.parseToUnicode(reply.get(i + 1))));
+                }
+            }
+            if (flag==3){
+                if ((i + 2) < reply.size()) {
+                    row2.add(new KeyboardButton().setText(EmojiParser.parseToUnicode(reply.get(i + 2))));
+                }
+            }
+            rows2.add(row2);
+            replyMarkup.setKeyboard(rows2).setResizeKeyboard(true).setOneTimeKeyboard(false);
+            sendMessage.setReplyMarkup(replyMarkup);
+        }
+        }
+        try {
+            int smid = execute(sendMessage).getMessageId();
+            DataBase.sql("update users set smid ="+smid+" where id = "+chatId);
+        }
+        catch (TelegramApiException e) {e.printStackTrace();}
     }
 }

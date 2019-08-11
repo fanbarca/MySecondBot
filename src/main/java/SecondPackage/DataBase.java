@@ -121,13 +121,15 @@ public static Connection getConnection() throws URISyntaxException, SQLException
         }
         return lan;
     }
-    public static List<String> showAllProducts(String column){
+    public static List<String> showAllProducts(String column, boolean instock){
         List<String> lan = new ArrayList<>();
+        String stock = "";
+        if (instock) stock = "where instock = true ";
         try {
             Connection conn = getConnection();
             if (conn!=null) {
                 Statement prst = conn.createStatement();
-                ResultSet rs = prst.executeQuery("select * from table0 where instock = true order by type asc, "+column+" asc");
+                ResultSet rs = prst.executeQuery("select "+column+" from table0 "+stock+"order by type asc, "+column+" asc");
                 while (rs.next()){
                     if (!rs.getString("russian").equals("Лого")) lan.add(rs.getString(column));
                 }
@@ -140,6 +142,8 @@ public static Connection getConnection() throws URISyntaxException, SQLException
         }
         return lan;
     }
+
+
 
     public static List<String> sqlGetUserData(String id) throws SQLException {
         List<String> lan = new ArrayList<>();
@@ -223,5 +227,26 @@ public static Connection getConnection() throws URISyntaxException, SQLException
             }
         return lan;
     }
-
+    public static List<String> productsAvailability(String column){
+        List<String> lan = new ArrayList<>();
+        try {
+            Connection conn = DataBase.getConnection();
+            if (conn!=null) {
+                Statement prst = conn.createStatement();
+                ResultSet rs = prst.executeQuery("select * from table0 ORDER BY type ASC, "+column+" ASC");
+                while (rs.next()){
+                    String mark="";
+                    if (rs.getBoolean("instock")) mark = ":white_check_mark: ";
+                    else mark = ":x: ";
+                    if (!rs.getString("type").equals("99")) lan.add(mark + rs.getString(column));
+                }
+                prst.close();
+                conn.close();
+            }
+        }
+        catch(Exception ex) {
+            System.err.println(ex);
+        }
+        return lan;
+    }
 }
