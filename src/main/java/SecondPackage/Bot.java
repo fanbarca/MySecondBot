@@ -516,6 +516,19 @@ public class Bot extends TelegramLongPollingBot {
                         .setText(EmojiParser.parseToUnicode(Lan.goBack(a.getLanguage())))
                         .setCallbackData(Lan.goBack(a.getLanguage())));
                 lastRow.add(new InlineKeyboardButton()
+                        .setText(EmojiParser.parseToUnicode(Lan.mainMenu(a.getLanguage()).get(3)))
+                        .setCallbackData(Lan.mainMenu(a.getLanguage()).get(3)));
+                lastRow.add(new InlineKeyboardButton()
+                        .setText(EmojiParser.parseToUnicode(Lan.backToMenu(a.getLanguage())))
+                        .setCallbackData(Lan.backToMenu(a.getLanguage())));
+                rows.add(lastRow);
+            }
+            if (text.contains(Lan.chooseDish(a.getLanguage()))) {
+                List<InlineKeyboardButton> lastRow = new ArrayList<InlineKeyboardButton>();
+                lastRow.add(new InlineKeyboardButton()
+                        .setText(EmojiParser.parseToUnicode(Lan.mainMenu(a.getLanguage()).get(3)))
+                        .setCallbackData(Lan.mainMenu(a.getLanguage()).get(3)));
+                lastRow.add(new InlineKeyboardButton()
                         .setText(EmojiParser.parseToUnicode(Lan.backToMenu(a.getLanguage())))
                         .setCallbackData(Lan.backToMenu(a.getLanguage())));
                 rows.add(lastRow);

@@ -94,7 +94,6 @@ class Lan {
             list.add(":pizza: Pitsa");
             list.add(":meat_on_bone: Shashlik");
             list.add(":bread: Boshqa");
-            list.add(backToMenu(lan));
         }
         else if (lan.equals("Russian")) {
             list.add(":custard: Салаты");
@@ -106,7 +105,6 @@ class Lan {
             list.add(":pizza: Пицца");
             list.add(":meat_on_bone: Шашлык");
             list.add(":bread: Другое");
-            list.add(backToMenu(lan));
         }
         else if (lan.equals("English")) {
             list.add(":custard: Salads");
@@ -118,7 +116,6 @@ class Lan {
             list.add(":pizza: Pizza");
             list.add(":meat_on_bone: Barbecue");
             list.add(":bread: Other");
-            list.add(backToMenu(lan));
         }
         return list;
     }

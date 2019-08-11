@@ -146,7 +146,13 @@ public class Adminbot extends TelegramLongPollingBot {
                             edit(update.getCallbackQuery().getMessage(), update.getCallbackQuery().getMessage().getText(), DataBase.productsAvailability("Russian"), 3);
                         } else if (listener.equals("Delete")) {
                             listener = "";
-                            DataBase.sql("delete from table0 where russian = '"+t+"'");
+                            try {
+                                String prodId = DataBase.sqlQuery("select id from table0 where russian = '"+t+"'", "id");
+                                DataBase.sql("delete from cart where item = '"+prodId+"'");
+                                DataBase.sql("delete from table0 where russian = '"+t+"'");
+                            } catch (SQLException e) {
+                                e.printStackTrace();
+                            }
                             edit(update.getCallbackQuery().getMessage(), "Удалено!", null, 3);
                         }
                     }
