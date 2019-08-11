@@ -184,34 +184,7 @@ public class Bot extends TelegramLongPollingBot {
             if ((a.getLanguage() == null) || (a.getLanguage().equals(""))) {
                 chooseLanguage(update.getCallbackQuery().getMessage(), true);
             } else {
-                List<String> items = DataBase.sqlQueryList("select item from cart where userid =" + update.getCallbackQuery().getMessage().getChatId(), "item");
-                if (items.size() == 0) {
-                    editPic(Lan.mainMenu(a.getLanguage()).get(3) + "\n" + Lan.emptyOrders(a.getLanguage()), update.getCallbackQuery().getMessage(), Lan.keyBoard(a.getLanguage()), "Лого", 2);
-                } else {
-                    String cart = "";
-                    int result = 0;
-                    Map<String, List<Integer>> itemNames = new HashMap<String, List<Integer>>();
-                    for (String s : items) {
-                        Integer number = Collections.frequency(items, s);
-                        Integer cost = Integer.parseInt(DataBase.sqlQuery("select cost from table0 where id =" + s, "cost"));
-                        List<Integer> aa = new ArrayList<>();
-                        aa.add(number);
-                        aa.add(cost);
-                        itemNames.put(DataBase.sqlQuery("select "+a.getLanguage()+" from table0 where id =" + s, a.getLanguage()),
-                                aa);
-                    }
-                    List<String> list = new ArrayList<>();
-                    for (Map.Entry<String, List<Integer>> entry : itemNames.entrySet()) {
-                        cart += entry.getKey() + "  -  " + entry.getValue().get(0) + " * " + entry.getValue().get(1) + " = " + entry.getValue().get(0) * entry.getValue().get(1) + Lan.currency(a.getLanguage()) + "\n";
-                        result += entry.getValue().get(0) * entry.getValue().get(1);
-                        list.add(":heavy_multiplication_x: "+entry.getKey());
-                    }
-                    cart += "\n" + Lan.total(a.getLanguage()) + result + Lan.currency(a.getLanguage());
-                    list.add(Lan.clearCart(a.getLanguage()));
-                    list.add(Lan.goBack(a.getLanguage()));
-                    list.add(Lan.backToMenu(a.getLanguage()));
-                    editPic(Lan.mainMenu(a.getLanguage()).get(3) + "\n" + cart, update.getCallbackQuery().getMessage(), list, "Лого", 2);
-                }
+                showCart(update);
             }
         }
         for (String t : Lan.listTypes(a.getLanguage())) {
@@ -250,9 +223,9 @@ public class Bot extends TelegramLongPollingBot {
         }
 
         for (String name : DataBase.showAllProducts(a.getLanguage())) {
-            if (cb.contains(name)) {
+            String prodId = DataBase.sqlQuery("select id from table0 where " + a.getLanguage() + " ='" + name + "'", "id");
+            if (cb.contains(name)&&!cb.contains(":heavy_multiplication_x:")) {
                 List<String> cart = DataBase.sqlQueryList("select item from cart where userid =" + update.getCallbackQuery().getFrom().getId(), "item");
-                String prodId = DataBase.sqlQuery("select id from table0 where " + a.getLanguage() + " ='" + name + "'", "id");
                 int occurrences = 0;
                 String total = "";
                 if (cart.contains(prodId)) {
@@ -261,6 +234,10 @@ public class Bot extends TelegramLongPollingBot {
                 }
                 editPic("<b>" + name + "</b>\n" + Lan.cost(a.getLanguage()) + DataBase.sqlQuery("SELECT cost from table0 where " + a.getLanguage() + " = '" + name + "'", "cost") + Lan.currency(a.getLanguage()) + ".    " + total,
                         update.getCallbackQuery().getMessage(), keyb(occurrences, name), prodId, 3);
+            } else if (cb.contains(":heavy_multiplication_x: "+name)){
+                DataBase.sql("delete from cart where userid =" + update.getCallbackQuery().getFrom().getId()
+                        + " and item = '" + prodId + "'");
+                showCart(update);
             }
         }
         if (cb.contains(Lan.clearCart(a.getLanguage()))) {
@@ -592,5 +569,35 @@ public class Bot extends TelegramLongPollingBot {
             markup.setKeyboard(rows);
 
         return markup;
+    }
+    private void showCart(Update update) throws TelegramApiException, SQLException {
+        List<String> items = DataBase.sqlQueryList("select item from cart where userid =" + update.getCallbackQuery().getMessage().getChatId(), "item");
+        if (items.size() == 0) {
+            editPic(Lan.mainMenu(a.getLanguage()).get(3) + "\n" + Lan.emptyOrders(a.getLanguage()), update.getCallbackQuery().getMessage(), Lan.keyBoard(a.getLanguage()), "Лого", 2);
+        } else {
+            String cart = "";
+            int result = 0;
+            Map<String, List<Integer>> itemNames = new HashMap<String, List<Integer>>();
+            for (String s : items) {
+                Integer number = Collections.frequency(items, s);
+                Integer cost = Integer.parseInt(DataBase.sqlQuery("select cost from table0 where id =" + s, "cost"));
+                List<Integer> aa = new ArrayList<>();
+                aa.add(number);
+                aa.add(cost);
+                itemNames.put(DataBase.sqlQuery("select "+a.getLanguage()+" from table0 where id =" + s, a.getLanguage()),
+                        aa);
+            }
+            List<String> list = new ArrayList<>();
+            for (Map.Entry<String, List<Integer>> entry : itemNames.entrySet()) {
+                cart += entry.getKey() + "  -  " + entry.getValue().get(0) + " * " + entry.getValue().get(1) + " = " + entry.getValue().get(0) * entry.getValue().get(1) + Lan.currency(a.getLanguage()) + "\n";
+                result += entry.getValue().get(0) * entry.getValue().get(1);
+                list.add(":heavy_multiplication_x: "+entry.getKey());
+            }
+            cart += "\n" + Lan.total(a.getLanguage()) + result + Lan.currency(a.getLanguage());
+            list.add(Lan.clearCart(a.getLanguage()));
+            list.add(Lan.goBack(a.getLanguage()));
+            list.add(Lan.backToMenu(a.getLanguage()));
+            editPic(Lan.mainMenu(a.getLanguage()).get(3) + "\n" + cart, update.getCallbackQuery().getMessage(), list, "Лого", 2);
+        }
     }
 }
