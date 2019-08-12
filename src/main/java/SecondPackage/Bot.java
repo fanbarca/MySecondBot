@@ -222,7 +222,7 @@ public class Bot extends TelegramLongPollingBot {
             editCaption(text, update.getCallbackQuery().getMessage(), keyb(occurrences, name), prodId, 3);
         }
 
-        for (String name : DataBase.showAllProducts(a.getLanguage(), true)) {
+        for (String name : DataBase.showAllProducts(a.getLanguage(), false)) {
             String prodId = DataBase.sqlQuery("select id from table0 where " + a.getLanguage() + " ='" + name + "'", "id");
             if (cb.contains(name)&&!cb.contains(":heavy_multiplication_x:")) {
                 List<String> cart = DataBase.sqlQueryList("select item from cart where userid =" + update.getCallbackQuery().getFrom().getId(), "item");
@@ -501,44 +501,46 @@ public class Bot extends TelegramLongPollingBot {
                     rows.add(row);
                 }
             }
-            if (text.contains(Lan.total(a.getLanguage()))) {
+            if (a.getLanguage()!=null) {
+                if (text.contains(Lan.total(a.getLanguage()))) {
                 List<InlineKeyboardButton> lastRow = new ArrayList<InlineKeyboardButton>();
                 lastRow.add(new InlineKeyboardButton()
                         .setText(EmojiParser.parseToUnicode(Lan.clearCart(a.getLanguage())))
                         .setCallbackData(Lan.clearCart(a.getLanguage())));
                 rows.add(lastRow);
-            }
-            if (text.contains(Lan.mainMenu(a.getLanguage()).get(0)) ||
-                    text.contains(Lan.mainMenu(a.getLanguage()).get(1)) ||
-                    text.contains(Lan.mainMenu(a.getLanguage()).get(3))) {
-                if (text.contains(Lan.mainMenu(a.getLanguage()).get(1))) {
-                    List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
-                    row.add(new InlineKeyboardButton()
-                            .setText(EmojiParser.parseToUnicode(Lan.delivery(a.getLanguage())))
-                            .setCallbackData(Lan.delivery(a.getLanguage())));
-                    rows.add(row);
                 }
-                List<InlineKeyboardButton> lastRow = new ArrayList<InlineKeyboardButton>();
-                lastRow.add(new InlineKeyboardButton()
-                        .setText(EmojiParser.parseToUnicode(Lan.goBack(a.getLanguage())))
-                        .setCallbackData(Lan.goBack(a.getLanguage())));
-                if (!text.contains(Lan.mainMenu(a.getLanguage()).get(3))) lastRow.add(new InlineKeyboardButton()
-                        .setText(EmojiParser.parseToUnicode(Lan.mainMenu(a.getLanguage()).get(3)))
-                        .setCallbackData(Lan.mainMenu(a.getLanguage()).get(3)));
-                lastRow.add(new InlineKeyboardButton()
-                        .setText(EmojiParser.parseToUnicode(Lan.backToMenu(a.getLanguage())))
-                        .setCallbackData(Lan.backToMenu(a.getLanguage())));
-                rows.add(lastRow);
-            }
-            if (text.contains(Lan.chooseDish(a.getLanguage()))) {
-                List<InlineKeyboardButton> lastRow = new ArrayList<InlineKeyboardButton>();
-                lastRow.add(new InlineKeyboardButton()
-                        .setText(EmojiParser.parseToUnicode(Lan.mainMenu(a.getLanguage()).get(3)))
-                        .setCallbackData(Lan.mainMenu(a.getLanguage()).get(3)));
-                lastRow.add(new InlineKeyboardButton()
-                        .setText(EmojiParser.parseToUnicode(Lan.backToMenu(a.getLanguage())))
-                        .setCallbackData(Lan.backToMenu(a.getLanguage())));
-                rows.add(lastRow);
+                if (text.contains(Lan.mainMenu(a.getLanguage()).get(0)) ||
+                        text.contains(Lan.mainMenu(a.getLanguage()).get(1)) ||
+                        text.contains(Lan.mainMenu(a.getLanguage()).get(3))) {
+                    if (text.contains(Lan.mainMenu(a.getLanguage()).get(1))) {
+                        List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
+                        row.add(new InlineKeyboardButton()
+                                .setText(EmojiParser.parseToUnicode(Lan.delivery(a.getLanguage())))
+                                .setCallbackData(Lan.delivery(a.getLanguage())));
+                        rows.add(row);
+                    }
+                    List<InlineKeyboardButton> lastRow = new ArrayList<InlineKeyboardButton>();
+                    lastRow.add(new InlineKeyboardButton()
+                            .setText(EmojiParser.parseToUnicode(Lan.goBack(a.getLanguage())))
+                            .setCallbackData(Lan.goBack(a.getLanguage())));
+                    if (!text.contains(Lan.mainMenu(a.getLanguage()).get(3))) lastRow.add(new InlineKeyboardButton()
+                            .setText(EmojiParser.parseToUnicode(Lan.mainMenu(a.getLanguage()).get(3)))
+                            .setCallbackData(Lan.mainMenu(a.getLanguage()).get(3)));
+                    lastRow.add(new InlineKeyboardButton()
+                            .setText(EmojiParser.parseToUnicode(Lan.backToMenu(a.getLanguage())))
+                            .setCallbackData(Lan.backToMenu(a.getLanguage())));
+                    rows.add(lastRow);
+                }
+                if (text.contains(Lan.chooseDish(a.getLanguage()))) {
+                    List<InlineKeyboardButton> lastRow = new ArrayList<InlineKeyboardButton>();
+                    lastRow.add(new InlineKeyboardButton()
+                            .setText(EmojiParser.parseToUnicode(Lan.mainMenu(a.getLanguage()).get(3)))
+                            .setCallbackData(Lan.mainMenu(a.getLanguage()).get(3)));
+                    lastRow.add(new InlineKeyboardButton()
+                            .setText(EmojiParser.parseToUnicode(Lan.backToMenu(a.getLanguage())))
+                            .setCallbackData(Lan.backToMenu(a.getLanguage())));
+                    rows.add(lastRow);
+                }
             }
 
             markup.setKeyboard(rows);
