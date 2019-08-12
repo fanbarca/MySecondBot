@@ -26,24 +26,31 @@ class Lan {
         List<String> menu = new ArrayList<String>();
             if (lan.equals("Uzbek")) {
                 menu.add(":notebook_with_decorative_cover: Menyu");
-                menu.add(":truck: Buyurtma berish");
+                menu.add(":truck: Yetkazish buyurtmasi");
                 menu.add(":uz: Til");
                 menu.add("🛒 Savatcha");
             }
             else if (lan.equals("Russian")) {
                 menu.add(":notebook_with_decorative_cover: Меню");
-                menu.add(":truck: Оформить заказ");
+                menu.add(":truck: Заказать доставку");
                 menu.add(":ru: Язык");
                 menu.add("🛒 Корзина");
             }
             else if (lan.equals("English")) {
                 menu.add(":notebook_with_decorative_cover: Menu");
-                menu.add(":truck: Place an order");
+                menu.add(":truck: Order delivery");
                 menu.add(":gb: Language");
                 menu.add("🛒 Shopping cart");
             }
         return menu;
         }
+    public static String delivery(String lan){
+        String r="";
+        if (lan.equals("Uzbek")) r = ":truck: Buyurtma berish";
+        else if (lan.equals("Russian")) r = ":truck: Оформить заказ";
+        else if (lan.equals("English")) r = ":truck: Place an order";
+        return r;
+    }
     public static String sendMeContact(String lan){
         String r="";
         if (lan.equals("Uzbek")) r = "Siz bilan aloqaga chiqishimiz uchun, telefon raqamingizni jo'nating,\nbuning uchun, \""+
