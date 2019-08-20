@@ -244,6 +244,10 @@ public class Bot extends TelegramLongPollingBot {
             DataBase.sql("delete from cart where userid =" + update.getCallbackQuery().getFrom().getId());
             showCart(update);
         }
+        if (cb.contains(Lan.delivery(a.getLanguage()))) {
+            sendMeLocation(update.getCallbackQuery().getMessage().getChatId());
+            deleteMessage(update.getCallbackQuery().getMessage());
+        }
     }
 
     private List<String> keyb(Integer occurances, String name) throws SQLException {
@@ -284,6 +288,30 @@ public class Bot extends TelegramLongPollingBot {
                 new KeyboardButton()
                         .setRequestContact(true)
                         .setText(EmojiParser.parseToUnicode(Lan.myContact(a.getLanguage())));
+        List<KeyboardRow> rows2 = new ArrayList<KeyboardRow>();
+        row2.add(keyboardButton);
+        rows2.add(row2);
+        replyMarkup.setKeyboard(rows2).setResizeKeyboard(true).setOneTimeKeyboard(true);
+        sendMessage.setReplyMarkup(replyMarkup);
+        try {
+            int smid = execute(sendMessage).getMessageId();
+            DataBase.sql("update users set smid =" + smid + " where id = " + ChatId);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
+    }
+
+public void sendMeLocation(long ChatId) {
+        SendMessage sendMessage = new SendMessage()
+                .setChatId(ChatId)
+                .setText(EmojiParser.parseToUnicode(Lan.sendMeLocation(a.getLanguage())))
+                .setParseMode("HTML");
+        ReplyKeyboardMarkup replyMarkup = new ReplyKeyboardMarkup();
+        KeyboardRow row2 = new KeyboardRow();
+        KeyboardButton keyboardButton =
+                new KeyboardButton()
+                        .setRequestLocation(true)
+                        .setText(EmojiParser.parseToUnicode(Lan.myLocation(a.getLanguage())));
         List<KeyboardRow> rows2 = new ArrayList<KeyboardRow>();
         row2.add(keyboardButton);
         rows2.add(row2);
@@ -413,9 +441,13 @@ public class Bot extends TelegramLongPollingBot {
         deleteMessage(message);
     }
 
-    private void handleLocation(Message message) {
-        Adminbot ab = new Adminbot();
-        ab.forwardMessage(message, ab.myID);
+    private void handleLocation(Message message) throws SQLException, TelegramApiException {
+        deleteMessage(DataBase.sqlQuery("SELECT smid from users where id=" + message.getChatId(), "smid"), message.getChatId().toString());
+        deleteMessage(message);
+        sendPic(Lan.orderPlaced(a.getLanguage()),
+                message, Lan.mainMenu(a.getLanguage()), "Лого", 2);
+        Adminbot order = new Adminbot();
+        order.send("Новый заказ", order.myID, null, false, 1);
     }
 
     private void handleDocument(Message message) {
@@ -512,7 +544,7 @@ public class Bot extends TelegramLongPollingBot {
                 if (text.contains(Lan.mainMenu(a.getLanguage()).get(0)) ||
                         text.contains(Lan.mainMenu(a.getLanguage()).get(1)) ||
                         text.contains(Lan.mainMenu(a.getLanguage()).get(3))) {
-                    if (text.contains(Lan.mainMenu(a.getLanguage()).get(1))) {
+                    if (text.contains(Lan.mainMenu(a.getLanguage()).get(3))) {
                         List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
                         row.add(new InlineKeyboardButton()
                                 .setText(EmojiParser.parseToUnicode(Lan.delivery(a.getLanguage())))

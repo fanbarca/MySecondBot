@@ -202,4 +202,25 @@ class Lan {
         else if (lan.equals("English")) r = "In your cart: "+items;
         return r;
     }
+    public static String sendMeLocation(String lan) {
+        String r="";
+        if (lan.equals("Uzbek")) r = "Buyurtmani yetkazish kerak bo'lgan joyni lokatsiyasini yuboring";
+        else if (lan.equals("Russian")) r = "Отправьте локацию, куда надо доставить заказ";
+        else if (lan.equals("English")) r = "Send the location where you want your order to be delivered";
+        return r;
+    }
+    public static String myLocation(String lan) {
+        String r="";
+        if (lan.equals("Uzbek")) r = "Lokatsiyasini yuborish";
+        else if (lan.equals("Russian")) r = "Отправить локацию";
+        else if (lan.equals("English")) r = "Send location";
+        return r;
+    }
+    public static String orderPlaced(String lan) {
+        String r="";
+        if (lan.equals("Uzbek")) r = "Buyurtma tasdiqlandi";
+        else if (lan.equals("Russian")) r = "Заказ оформлен";
+        else if (lan.equals("English")) r = "Order has been placed";
+        return r;
+    }
 }
