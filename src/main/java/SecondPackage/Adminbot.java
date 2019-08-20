@@ -114,6 +114,7 @@ public class Adminbot extends TelegramLongPollingBot {
                             send("Готово", myID, list, false, 3);
                         }
                     }
+                    deleteMessage(update.getMessage());
                 }
             }
         } else if (update.hasCallbackQuery()) {
@@ -255,6 +256,11 @@ public void edit (Message message, String newText, List<String> list, int flag) 
                 }
                 rows.add(row);
             }
+            List<InlineKeyboardButton> lastRow = new ArrayList<InlineKeyboardButton>();
+            lastRow.add(new InlineKeyboardButton()
+                            .setText(EmojiParser.parseToUnicode("Отмена"))
+                            .setCallbackData("Отмена"));
+            rows.add(lastRow);
             markup.setKeyboard(rows);
             sendMessage.setReplyMarkup(markup);
         }
