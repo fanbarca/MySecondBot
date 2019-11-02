@@ -444,7 +444,7 @@ public void sendMeLocation(long ChatId) {
     }
 
     private void handleLocation(Update update) throws SQLException, TelegramApiException {
-        //        deleteMessage(DataBase.sqlQuery("SELECT smid from users where id=" + message.getChatId(), "smid"), message.getChatId().toString());
+        deleteMessage(DataBase.sqlQuery("SELECT smid from users where id=" + update.getMessage().getChatId(), "smid"), update.getMessage().getChatId().toString());
         sendPic(Lan.orderPlaced(a.getLanguage()),
                 update.getMessage(), Lan.mainMenu(a.getLanguage()), "Лого", 2);
         Adminbot order = new Adminbot();
@@ -652,7 +652,7 @@ public void sendMeLocation(long ChatId) {
     }
 
     public String curretCart(Update update) throws SQLException {
-        List<String> items = DataBase.sqlQueryList("select item from cart where userid =" + update.getCallbackQuery().getMessage().getChatId(), "item");
+        List<String> items = DataBase.sqlQueryList("select item from cart where userid =" + update.getMessage().getChatId(), "item");
         String cart = "";
         int result = 0;
         Map<String, List<Integer>> itemNames = new HashMap<String, List<Integer>>();
