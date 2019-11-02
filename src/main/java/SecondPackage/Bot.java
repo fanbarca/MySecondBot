@@ -448,7 +448,7 @@ public void sendMeLocation(long ChatId) {
         sendPic(Lan.orderPlaced(a.getLanguage()),
                 update.getMessage(), Lan.mainMenu(a.getLanguage()), "Лого", 2);
         Adminbot order = new Adminbot();
-        order.sendMe("Новый заказ \n" +curretCart(update));
+        order.sendMe("Новый заказ \n" +curretCart(update.getMessage().getChatId().toString()));
         order.sendLocation(update.getMessage().getLocation());
         order.sendContact(update, a.getNumber());
         deleteMessage(update.getMessage());
@@ -588,7 +588,7 @@ public void sendMeLocation(long ChatId) {
         if (items.size() == 0) {
             editPic(Lan.mainMenu(a.getLanguage()).get(3) + "\n" + Lan.emptyOrders(a.getLanguage()), update.getCallbackQuery().getMessage(), null, "Лого", 2);
         } else {
-            editPic(Lan.mainMenu(a.getLanguage()).get(3) + "\n" + curretCart(update), update.getCallbackQuery().getMessage(), null, "Лого", 2);
+            editPic(Lan.mainMenu(a.getLanguage()).get(3) + "\n" + curretCart(update.getCallbackQuery().getMessage().getChatId().toString()), update.getCallbackQuery().getMessage(), null, "Лого", 2);
         }
     }
     public void send (String text, long chatId, List<String> inline,List<String> reply, int flag) {
@@ -651,8 +651,8 @@ public void sendMeLocation(long ChatId) {
         catch (TelegramApiException e) {e.printStackTrace();}
     }
 
-    public String curretCart(Update update) throws SQLException {
-        List<String> items = DataBase.sqlQueryList("select item from cart where userid =" + update.getMessage().getChatId(), "item");
+    public String curretCart(String id) throws SQLException {
+        List<String> items = DataBase.sqlQueryList("select item from cart where userid =" + id, "item");
         String cart = "";
         int result = 0;
         Map<String, List<Integer>> itemNames = new HashMap<String, List<Integer>>();
