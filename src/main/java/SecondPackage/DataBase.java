@@ -189,6 +189,7 @@ public static Connection getConnection() throws URISyntaxException, SQLException
         return idList;
     }
 
+
     public static String sqlselect(String id, String column) throws SQLException {
         String lan = "";
         try {
@@ -239,6 +240,56 @@ public static Connection getConnection() throws URISyntaxException, SQLException
                     if (rs.getBoolean("instock")) mark = ":white_check_mark: ";
                     else mark = ":x: ";
                     if (!rs.getString("type").equals("99")) lan.add(mark + rs.getString(column));
+                }
+                prst.close();
+                conn.close();
+            }
+        }
+        catch(Exception ex) {
+            System.err.println(ex);
+        }
+        return lan;
+    }
+
+
+
+
+    //////////////////////////////////////////////////////////////////////////////////
+
+    public static List<String> sqlStudentsIdList() throws SQLException {
+        List<String> idList = new ArrayList<String>();
+        try {
+            Connection conn = getConnection();
+            if (conn!=null) {
+                Statement prst = conn.createStatement();
+                ResultSet rs = prst.executeQuery("select id from students");
+                while (rs.next()) {
+                    idList.add(rs.getString("id"));
+                }
+                prst.close();
+                conn.close();
+            }
+        }
+        catch(Exception ex) {
+            System.err.println(ex);
+        }
+        return idList;
+    }
+
+    public static List<String> sqlGetStudentData(String id) throws SQLException {
+        List<String> lan = new ArrayList<>();
+        try {
+            Connection conn = getConnection();
+            if (conn!=null) {
+                Statement prst = conn.createStatement();
+                ResultSet rs = prst.executeQuery("select * from users where id ="+id);
+                while (rs.next()){
+                    lan.add(rs.getString("firstname"));
+                    lan.add(rs.getString("phone"));
+                    lan.add(rs.getString("language"));
+                    lan.add(rs.getString("rmid"));
+                    lan.add(rs.getString("smid"));
+                    lan.add(rs.getString("image"));
                 }
                 prst.close();
                 conn.close();

@@ -28,6 +28,8 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class Adminbot extends TelegramLongPollingBot {
+
+
     public static final long myID = 615351734;
     private String category = "";
     private String listener = "";
@@ -317,6 +319,7 @@ public List<String> listOrders(String column){
         }
         catch (TelegramApiException e) {e.printStackTrace();}
     }
+
     public void forwardMessage(Message message, long id) {
         ForwardMessage fm = new ForwardMessage();
         fm.setChatId(id);
@@ -325,5 +328,7 @@ public List<String> listOrders(String column){
         try {execute(fm);}
         catch (TelegramApiException e) {e.printStackTrace();}
     }
-
+    public static long getMyID() {
+        return myID;
+    }
 }

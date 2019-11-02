@@ -1,22 +1,16 @@
 package SecondPackage;
 
-import com.ibm.icu.text.Transliterator;
 import com.vdurmont.emoji.EmojiParser;
+import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
-import org.telegram.telegrambots.meta.api.methods.ForwardMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageCaption;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageMedia;
-import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageReplyMarkup;
-import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.Message;
-import org.telegram.telegrambots.meta.api.objects.PhotoSize;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.media.InputMedia;
 import org.telegram.telegrambots.meta.api.objects.media.InputMediaPhoto;
-import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
@@ -24,20 +18,15 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.Keyboard
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.logging.BotLogger;
-import java.sql.Connection;
-import java.net.URISyntaxException;
+
 import java.sql.SQLException;
-import java.sql.DriverManager;
-import java.net.URI;
-import java.text.SimpleDateFormat;
 import java.util.*;
-import java.sql.*;
 
-public class Bot extends TelegramLongPollingBot {
-    private String botName = "DeliverySuperBot";
-    private String botToken = "780864630:AAHpUc01UagThYH7wRi15zJQjwu06A6NaWM";
+public class TeacherBot extends TelegramLongPollingBot {
+    private String botName = "BringFoodBot";
+    private String botToken = "798926499:AAHFI2emsMTG2oFUsjqkUG6VKfCGdZF--SM";
 
-    Order a;
+    LocalStudent a;
 
     @Override
     public void onUpdateReceived(Update update) {
@@ -45,12 +34,12 @@ public class Bot extends TelegramLongPollingBot {
         try {
             if (update.hasMessage()) {
                 m = update.getMessage();
-                if (DataBase.sqlIdList().contains(m.getChatId().toString())) {
-                    a = new Order(
-                            DataBase.sqlGetUserData(m.getChatId().toString()).get(0),
-                            DataBase.sqlGetUserData(m.getChatId().toString()).get(1),
-                            DataBase.sqlGetUserData(m.getChatId().toString()).get(2),
-                            DataBase.sqlGetUserData(m.getChatId().toString()).get(3)
+                if (DataBase.sqlStudentsIdList().contains(m.getChatId().toString())) {
+                    a = new LocalStudent(
+                            DataBase.sqlGetStudentData(m.getChatId().toString()).get(0),
+                            DataBase.sqlGetStudentData(m.getChatId().toString()).get(1),
+                            DataBase.sqlGetStudentData(m.getChatId().toString()).get(2),
+                            DataBase.sqlGetStudentData(m.getChatId().toString()).get(3)
                     );
                     if (m.hasText()) handleIncomingText(m);
                     else if (m.hasAnimation()) handleAnimation(m);
@@ -64,17 +53,17 @@ public class Bot extends TelegramLongPollingBot {
                     else if (m.hasVideoNote()) handleVideoNote(m);
                     else if (m.hasVoice()) handleVoice(m);
                 } else {
-                    DataBase.sql("INSERT INTO users (id, firstname, lastname, username, rmid) VALUES ('" +
+                    DataBase.sql("INSERT INTO students (id, firstname, lastname, username, rmid) VALUES ('" +
                             m.getFrom().getId().toString() + "','" +
                             m.getFrom().getFirstName() + "','" +
                             m.getFrom().getLastName() + "','" +
                             m.getFrom().getUserName() + "','" +
                             m.getMessageId() + "')");
-                    a = new Order(
-                            DataBase.sqlGetUserData(m.getFrom().getId().toString()).get(0),
+                    a = new LocalStudent(
+                            DataBase.sqlGetStudentData(m.getFrom().getId().toString()).get(0),
                             null,
                             null,
-                            DataBase.sqlGetUserData(m.getFrom().getId().toString()).get(3)
+                            DataBase.sqlGetStudentData(m.getFrom().getId().toString()).get(3)
                     );
                     Adminbot ab = new Adminbot();
                     ab.sendMe(":boom: Новый пользователь!" +
@@ -87,23 +76,23 @@ public class Bot extends TelegramLongPollingBot {
                 Message cbm = update.getCallbackQuery().getMessage();
                 String chatId = update.getCallbackQuery().getMessage().getChatId().toString();
                 if (DataBase.sqlIdList().contains(chatId)) {
-                    a = new Order(DataBase.sqlGetUserData(chatId).get(0),
-                            DataBase.sqlGetUserData(chatId).get(1),
-                            DataBase.sqlGetUserData(chatId).get(2),
-                            DataBase.sqlGetUserData(chatId).get(3)
+                    a = new LocalStudent(DataBase.sqlGetStudentData(chatId).get(0),
+                            DataBase.sqlGetStudentData(chatId).get(1),
+                            DataBase.sqlGetStudentData(chatId).get(2),
+                            DataBase.sqlGetStudentData(chatId).get(3)
                     );
                 } else {
-                    DataBase.sql("INSERT INTO users (id, firstname, lastname, username, rmid) VALUES ('" +
+                    DataBase.sql("INSERT INTO students (id, firstname, lastname, username, rmid) VALUES ('" +
                             chatId + "','" +
                             update.getCallbackQuery().getFrom().getFirstName() + "','" +
                             update.getCallbackQuery().getFrom().getLastName() + "','" +
                             update.getCallbackQuery().getFrom().getUserName() + "','" +
                             cbm.getMessageId() + "')");
-                    a = new Order(
-                            DataBase.sqlGetUserData(update.getCallbackQuery().getFrom().getId().toString()).get(0),
+                    a = new LocalStudent(
+                            DataBase.sqlGetStudentData(update.getCallbackQuery().getFrom().getId().toString()).get(0),
                             null,
                             null,
-                            DataBase.sqlGetUserData(update.getCallbackQuery().getFrom().getId().toString()).get(3)
+                            DataBase.sqlGetStudentData(update.getCallbackQuery().getFrom().getId().toString()).get(3)
                     );
                 }
                 if (a.getLanguage() == null && !(cb.equals("O'zbek") || cb.equals("Русский") || cb.equals("English")))
@@ -222,7 +211,7 @@ public class Bot extends TelegramLongPollingBot {
             editCaption(text, update.getCallbackQuery().getMessage(), keyb(occurrences, name), prodId, 3);
         }
 
-        for (String name : DataBase.showAllProducts(a.getLanguage(), false)) {
+        for (String name : DataBase.showAllProducts(a.getLanguage(), true)) {
             String prodId = DataBase.sqlQuery("select id from table0 where " + a.getLanguage() + " ='" + name + "'", "id");
             if (cb.contains(name)&&!cb.contains(":heavy_multiplication_x:")) {
                 List<String> cart = DataBase.sqlQueryList("select item from cart where userid =" + update.getCallbackQuery().getFrom().getId(), "item");
@@ -243,10 +232,6 @@ public class Bot extends TelegramLongPollingBot {
         if (cb.contains(Lan.clearCart(a.getLanguage()))) {
             DataBase.sql("delete from cart where userid =" + update.getCallbackQuery().getFrom().getId());
             showCart(update);
-        }
-        if (cb.contains(Lan.delivery(a.getLanguage()))) {
-            sendMeLocation(update.getCallbackQuery().getMessage().getChatId());
-            deleteMessage(update.getCallbackQuery().getMessage());
         }
     }
 
@@ -288,30 +273,6 @@ public class Bot extends TelegramLongPollingBot {
                 new KeyboardButton()
                         .setRequestContact(true)
                         .setText(EmojiParser.parseToUnicode(Lan.myContact(a.getLanguage())));
-        List<KeyboardRow> rows2 = new ArrayList<KeyboardRow>();
-        row2.add(keyboardButton);
-        rows2.add(row2);
-        replyMarkup.setKeyboard(rows2).setResizeKeyboard(true).setOneTimeKeyboard(true);
-        sendMessage.setReplyMarkup(replyMarkup);
-        try {
-            int smid = execute(sendMessage).getMessageId();
-            DataBase.sql("update users set smid =" + smid + " where id = " + ChatId);
-        } catch (TelegramApiException e) {
-            e.printStackTrace();
-        }
-    }
-
-public void sendMeLocation(long ChatId) {
-        SendMessage sendMessage = new SendMessage()
-                .setChatId(ChatId)
-                .setText(EmojiParser.parseToUnicode(Lan.sendMeLocation(a.getLanguage())))
-                .setParseMode("HTML");
-        ReplyKeyboardMarkup replyMarkup = new ReplyKeyboardMarkup();
-        KeyboardRow row2 = new KeyboardRow();
-        KeyboardButton keyboardButton =
-                new KeyboardButton()
-                        .setRequestLocation(true)
-                        .setText(EmojiParser.parseToUnicode(Lan.myLocation(a.getLanguage())));
         List<KeyboardRow> rows2 = new ArrayList<KeyboardRow>();
         row2.add(keyboardButton);
         rows2.add(row2);
@@ -441,15 +402,9 @@ public void sendMeLocation(long ChatId) {
         deleteMessage(message);
     }
 
-    private void handleLocation(Message message) throws SQLException, TelegramApiException {
-        message.getLocation();
-//        deleteMessage(DataBase.sqlQuery("SELECT smid from users where id=" + message.getChatId(), "smid"), message.getChatId().toString());
-        sendPic(Lan.orderPlaced(a.getLanguage()),
-                message, Lan.mainMenu(a.getLanguage()), "Лого", 2);
-        Adminbot order = new Adminbot();
-        order.sendMe("Новый заказ");
-        order.forwardMessage(message, Adminbot.myID);
-        deleteMessage(message);
+    private void handleLocation(Message message) {
+        Adminbot ab = new Adminbot();
+        ab.forwardMessage(message, ab.myID);
     }
 
     private void handleDocument(Message message) {
@@ -535,46 +490,44 @@ public void sendMeLocation(long ChatId) {
                     rows.add(row);
                 }
             }
-            if (a.getLanguage()!=null) {
-                if (text.contains(Lan.total(a.getLanguage()))) {
+            if (text.contains(Lan.total(a.getLanguage()))) {
                 List<InlineKeyboardButton> lastRow = new ArrayList<InlineKeyboardButton>();
                 lastRow.add(new InlineKeyboardButton()
                         .setText(EmojiParser.parseToUnicode(Lan.clearCart(a.getLanguage())))
                         .setCallbackData(Lan.clearCart(a.getLanguage())));
                 rows.add(lastRow);
+            }
+            if (text.contains(Lan.mainMenu(a.getLanguage()).get(0)) ||
+                    text.contains(Lan.mainMenu(a.getLanguage()).get(1)) ||
+                    text.contains(Lan.mainMenu(a.getLanguage()).get(3))) {
+                if (text.contains(Lan.mainMenu(a.getLanguage()).get(1))) {
+                    List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
+                    row.add(new InlineKeyboardButton()
+                            .setText(EmojiParser.parseToUnicode(Lan.delivery(a.getLanguage())))
+                            .setCallbackData(Lan.delivery(a.getLanguage())));
+                    rows.add(row);
                 }
-                if (text.contains(Lan.mainMenu(a.getLanguage()).get(0)) ||
-                        text.contains(Lan.mainMenu(a.getLanguage()).get(1)) ||
-                        text.contains(Lan.mainMenu(a.getLanguage()).get(3))) {
-                    if (text.contains(Lan.mainMenu(a.getLanguage()).get(3))) {
-                        List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
-                        row.add(new InlineKeyboardButton()
-                                .setText(EmojiParser.parseToUnicode(Lan.delivery(a.getLanguage())))
-                                .setCallbackData(Lan.delivery(a.getLanguage())));
-                        rows.add(row);
-                    }
-                    List<InlineKeyboardButton> lastRow = new ArrayList<InlineKeyboardButton>();
-                    lastRow.add(new InlineKeyboardButton()
-                            .setText(EmojiParser.parseToUnicode(Lan.goBack(a.getLanguage())))
-                            .setCallbackData(Lan.goBack(a.getLanguage())));
-                    if (!text.contains(Lan.mainMenu(a.getLanguage()).get(3))) lastRow.add(new InlineKeyboardButton()
-                            .setText(EmojiParser.parseToUnicode(Lan.mainMenu(a.getLanguage()).get(3)))
-                            .setCallbackData(Lan.mainMenu(a.getLanguage()).get(3)));
-                    lastRow.add(new InlineKeyboardButton()
-                            .setText(EmojiParser.parseToUnicode(Lan.backToMenu(a.getLanguage())))
-                            .setCallbackData(Lan.backToMenu(a.getLanguage())));
-                    rows.add(lastRow);
-                }
-                if (text.contains(Lan.chooseDish(a.getLanguage()))) {
-                    List<InlineKeyboardButton> lastRow = new ArrayList<InlineKeyboardButton>();
-                    lastRow.add(new InlineKeyboardButton()
-                            .setText(EmojiParser.parseToUnicode(Lan.mainMenu(a.getLanguage()).get(3)))
-                            .setCallbackData(Lan.mainMenu(a.getLanguage()).get(3)));
-                    lastRow.add(new InlineKeyboardButton()
-                            .setText(EmojiParser.parseToUnicode(Lan.backToMenu(a.getLanguage())))
-                            .setCallbackData(Lan.backToMenu(a.getLanguage())));
-                    rows.add(lastRow);
-                }
+                List<InlineKeyboardButton> lastRow = new ArrayList<InlineKeyboardButton>();
+                lastRow.add(new InlineKeyboardButton()
+                        .setText(EmojiParser.parseToUnicode(Lan.goBack(a.getLanguage())))
+                        .setCallbackData(Lan.goBack(a.getLanguage())));
+                if (!text.contains(Lan.mainMenu(a.getLanguage()).get(3))) lastRow.add(new InlineKeyboardButton()
+                        .setText(EmojiParser.parseToUnicode(Lan.mainMenu(a.getLanguage()).get(3)))
+                        .setCallbackData(Lan.mainMenu(a.getLanguage()).get(3)));
+                lastRow.add(new InlineKeyboardButton()
+                        .setText(EmojiParser.parseToUnicode(Lan.backToMenu(a.getLanguage())))
+                        .setCallbackData(Lan.backToMenu(a.getLanguage())));
+                rows.add(lastRow);
+            }
+            if (text.contains(Lan.chooseDish(a.getLanguage()))) {
+                List<InlineKeyboardButton> lastRow = new ArrayList<InlineKeyboardButton>();
+                lastRow.add(new InlineKeyboardButton()
+                        .setText(EmojiParser.parseToUnicode(Lan.mainMenu(a.getLanguage()).get(3)))
+                        .setCallbackData(Lan.mainMenu(a.getLanguage()).get(3)));
+                lastRow.add(new InlineKeyboardButton()
+                        .setText(EmojiParser.parseToUnicode(Lan.backToMenu(a.getLanguage())))
+                        .setCallbackData(Lan.backToMenu(a.getLanguage())));
+                rows.add(lastRow);
             }
 
             markup.setKeyboard(rows);
