@@ -6,13 +6,13 @@ import org.postgresql.core.SqlCommand;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
 import org.telegram.telegrambots.meta.api.methods.ForwardMessage;
+import org.telegram.telegrambots.meta.api.methods.send.SendContact;
+import org.telegram.telegrambots.meta.api.methods.send.SendLocation;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageReplyMarkup;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
-import org.telegram.telegrambots.meta.api.objects.Message;
-import org.telegram.telegrambots.meta.api.objects.PhotoSize;
-import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.*;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
@@ -319,7 +319,27 @@ public List<String> listOrders(String column){
         }
         catch (TelegramApiException e) {e.printStackTrace();}
     }
-
+    public void sendLocation(Location location) {
+        SendLocation sendMessage = new SendLocation()
+                .setLatitude(location.getLatitude())
+                .setLongitude(location.getLongitude())
+                .setChatId(myID);
+        try {
+            execute(sendMessage);
+        }
+        catch (TelegramApiException e) {e.printStackTrace();}
+    }
+    public void sendContact(Update update, String number) {
+        SendContact sendMessage = new SendContact()
+                .setFirstName(update.getMessage().getFrom().getFirstName())
+                .setLastName(update.getMessage().getFrom().getLastName())
+                .setPhoneNumber(number)
+                .setChatId(myID);
+        try {
+            execute(sendMessage);
+        }
+        catch (TelegramApiException e) {e.printStackTrace();}
+    }
     public void forwardMessage(Message message, long id) {
         ForwardMessage fm = new ForwardMessage();
         fm.setChatId(id);

@@ -11,6 +11,7 @@ import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageCa
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageMedia;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageReplyMarkup;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
+import org.telegram.telegrambots.meta.api.objects.Contact;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.PhotoSize;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -58,7 +59,7 @@ public class Bot extends TelegramLongPollingBot {
                     else if (m.hasContact()) handleContact(m);
                     else if (m.hasDocument()) handleDocument(m);
                     else if (m.hasPhoto()) handlePhoto(m);
-                    else if (m.hasLocation()) handleLocation(m);
+                    else if (m.hasLocation()) handleLocation(update);
                     else if (m.hasSticker()) handleSticker(m);
                     else if (m.hasVideo()) handleVideo(m);
                     else if (m.hasVideoNote()) handleVideoNote(m);
@@ -245,6 +246,7 @@ public class Bot extends TelegramLongPollingBot {
             showCart(update);
         }
         if (cb.contains(Lan.delivery(a.getLanguage()))) {
+
             sendMeLocation(update.getCallbackQuery().getMessage().getChatId());
             deleteMessage(update.getCallbackQuery().getMessage());
         }
@@ -441,15 +443,15 @@ public void sendMeLocation(long ChatId) {
         deleteMessage(message);
     }
 
-    private void handleLocation(Message message) throws SQLException, TelegramApiException {
-        message.getLocation();
-//        deleteMessage(DataBase.sqlQuery("SELECT smid from users where id=" + message.getChatId(), "smid"), message.getChatId().toString());
+    private void handleLocation(Update update) throws SQLException, TelegramApiException {
+        //        deleteMessage(DataBase.sqlQuery("SELECT smid from users where id=" + message.getChatId(), "smid"), message.getChatId().toString());
         sendPic(Lan.orderPlaced(a.getLanguage()),
-                message, Lan.mainMenu(a.getLanguage()), "Лого", 2);
+                update.getMessage(), Lan.mainMenu(a.getLanguage()), "Лого", 2);
         Adminbot order = new Adminbot();
-        order.sendMe("Новый заказ");
-        order.forwardMessage(message, Adminbot.myID);
-        deleteMessage(message);
+        order.sendMe("Новый заказ \n" +curretCart(update));
+        order.sendLocation(update.getMessage().getLocation());
+        order.sendContact(update, a.getNumber());
+        deleteMessage(update.getMessage());
     }
 
     private void handleDocument(Message message) {
@@ -586,27 +588,7 @@ public void sendMeLocation(long ChatId) {
         if (items.size() == 0) {
             editPic(Lan.mainMenu(a.getLanguage()).get(3) + "\n" + Lan.emptyOrders(a.getLanguage()), update.getCallbackQuery().getMessage(), null, "Лого", 2);
         } else {
-            String cart = "";
-            int result = 0;
-            Map<String, List<Integer>> itemNames = new HashMap<String, List<Integer>>();
-            for (String s : items) {
-                Integer number = Collections.frequency(items, s);
-                Integer cost = Integer.parseInt(DataBase.sqlQuery("select cost from table0 where id =" + s, "cost"));
-                List<Integer> aa = new ArrayList<>();
-                aa.add(number);
-                aa.add(cost);
-                itemNames.put(DataBase.sqlQuery("select "+a.getLanguage()+" from table0 where id =" + s, a.getLanguage()),
-                        aa);
-            }
-            List<String> list = new ArrayList<>();
-            for (Map.Entry<String, List<Integer>> entry : itemNames.entrySet()) {
-                cart += entry.getKey() + "  -  " + entry.getValue().get(0) + " * " + entry.getValue().get(1) + " = " + entry.getValue().get(0) * entry.getValue().get(1) + Lan.currency(a.getLanguage()) + "\n";
-                result += entry.getValue().get(0) * entry.getValue().get(1);
-                list.add(":heavy_multiplication_x: "+entry.getKey());
-            }
-            if (list.size()>1) cart += "\n" + Lan.total(a.getLanguage()) + result + Lan.currency(a.getLanguage());
-
-            editPic(Lan.mainMenu(a.getLanguage()).get(3) + "\n" + cart, update.getCallbackQuery().getMessage(), list, "Лого", 2);
+            editPic(Lan.mainMenu(a.getLanguage()).get(3) + "\n" + curretCart(update), update.getCallbackQuery().getMessage(), null, "Лого", 2);
         }
     }
     public void send (String text, long chatId, List<String> inline,List<String> reply, int flag) {
@@ -667,5 +649,29 @@ public void sendMeLocation(long ChatId) {
             DataBase.sql("update users set smid ="+smid+" where id = "+chatId);
         }
         catch (TelegramApiException e) {e.printStackTrace();}
+    }
+
+    public String curretCart(Update update) throws SQLException {
+        List<String> items = DataBase.sqlQueryList("select item from cart where userid =" + update.getCallbackQuery().getMessage().getChatId(), "item");
+        String cart = "";
+        int result = 0;
+        Map<String, List<Integer>> itemNames = new HashMap<String, List<Integer>>();
+        for (String s : items) {
+            Integer number = Collections.frequency(items, s);
+            Integer cost = Integer.parseInt(DataBase.sqlQuery("select cost from table0 where id =" + s, "cost"));
+            List<Integer> aa = new ArrayList<>();
+            aa.add(number);
+            aa.add(cost);
+            itemNames.put(DataBase.sqlQuery("select "+a.getLanguage()+" from table0 where id =" + s, a.getLanguage()),
+                    aa);
+        }
+        List<String> list = new ArrayList<>();
+        for (Map.Entry<String, List<Integer>> entry : itemNames.entrySet()) {
+            cart += entry.getKey() + "  -  " + entry.getValue().get(0) + " * " + entry.getValue().get(1) + " = " + entry.getValue().get(0) * entry.getValue().get(1) + Lan.currency(a.getLanguage()) + "\n";
+            result += entry.getValue().get(0) * entry.getValue().get(1);
+            list.add(":heavy_multiplication_x: "+entry.getKey());
+        }
+        if (list.size()>1) cart += "\n" + Lan.total(a.getLanguage()) + result + Lan.currency(a.getLanguage());
+        return cart;
     }
 }
