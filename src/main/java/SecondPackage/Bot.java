@@ -322,7 +322,7 @@ public void sendMeLocation(long ChatId) {
         try {
             int smid = execute(sendMessage).getMessageId();
             DataBase.sql("update users set smid =" + smid + " where id = " + ChatId);
-            DataBase.sql("update users set rmid = 0000 where id = " + ChatId);
+            DataBase.sql("update users set rmid = 0 where id = " + ChatId);
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
@@ -343,9 +343,9 @@ public void sendMeLocation(long ChatId) {
                 handleContact(update.getMessage());
             }
         } else {
-            if (DataBase.sqlQuery("SELECT rmid from users where id=" + update.getMessage().getChatId(), "rmid").equals("0000")) {
+            if (DataBase.sqlQuery("SELECT rmid from users where id=" + update.getMessage().getChatId(), "rmid").equals("0")) {
                 handleLocation(update);
-                DataBase.sql("update users set rmid = 1111 where id = " + update.getMessage().getChatId());
+                DataBase.sql("update users set rmid = 1 where id = " + update.getMessage().getChatId());
             } else {
                 deleteMessage(update.getMessage());
             }
