@@ -322,10 +322,10 @@ public void sendMeLocation(long ChatId) {
         try {
             int smid = execute(sendMessage).getMessageId();
             DataBase.sql("update users set smid =" + smid + " where id = " + ChatId);
+            DataBase.sql("update users set rmid = 0000 where id = " + ChatId);
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
-        a.setListener("address");
     }
 
     private void handleIncomingText(Update update) throws SQLException, TelegramApiException {
@@ -343,11 +343,9 @@ public void sendMeLocation(long ChatId) {
                 handleContact(update.getMessage());
             }
         } else {
-            if (a.getListener()!=null) {
-                if (a.getListener().equals("address")) {
-                    handleLocation(update);
-                    a.setListener(null);
-                }
+            if (DataBase.sqlQuery("SELECT rmid from users where id=" + update.getMessage().getChatId(), "rmid").equals("0000")) {
+                handleLocation(update);
+                DataBase.sql("update users set rmid = 1111 where id = " + update.getMessage().getChatId());
             } else {
                 deleteMessage(update.getMessage());
             }
