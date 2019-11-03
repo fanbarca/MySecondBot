@@ -242,16 +242,18 @@ public class Bot extends TelegramLongPollingBot {
             }
         }
         if (cb.contains(Lan.clearCart(a.getLanguage()))) {
-            clearCart(update.getCallbackQuery().getFrom().getId());
+            clearCart(update.getCallbackQuery().getFrom().getId().toString());
             showCart(update);
         }
         if (cb.contains(Lan.delivery(a.getLanguage()))) {
-
+            if (DataBase.sqlQueryList("select product from zakaz where userid =" + update.getCallbackQuery().getMessage().getChatId(), "product").size()>0) {
+                editPic(Lan.orderExists(a.getLanguage()), update.getCallbackQuery().getMessage(), Lan.YesNo(a.getLanguage()), "Лого", 2);
+            }
             sendMeLocation(update.getCallbackQuery().getMessage().getChatId());
             deleteMessage(update.getCallbackQuery().getMessage());
         }
     }
-    private void clearCart(int id){
+    private void clearCart(String id){
         DataBase.sql("delete from cart where userid =" + id);
 
     }
@@ -469,7 +471,7 @@ public void sendMeLocation(long ChatId) {
         DataBase.sql("insert into zakaz (userid, product) values ("
                 +update.getMessage().getChatId()+", '"
                 +curretCart(update.getMessage().getChatId().toString())+"' )");
-        clearCart(update.getCallbackQuery().getFrom().getId());
+        clearCart(update.getCallbackQuery().getFrom().getId().toString());
 
     }
 
@@ -615,7 +617,7 @@ public void sendMeLocation(long ChatId) {
         if (items.size() == 0) {
             editPic(Lan.mainMenu(a.getLanguage()).get(1) + "\n" + Lan.emptyOrders(a.getLanguage()), update.getCallbackQuery().getMessage(), null, "Лого", 2);
         } else {
-            editPic(Lan.mainMenu(a.getLanguage()).get(1) + "\n" + items, update.getCallbackQuery().getMessage(), null, "Лого", 2);
+            editPic(Lan.mainMenu(a.getLanguage()).get(1) + "\n" + items.get(0), update.getCallbackQuery().getMessage(), null, "Лого", 2);
         }
     }
     public void send (String text, long chatId, List<String> inline,List<String> reply, int flag) {

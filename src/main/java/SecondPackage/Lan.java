@@ -223,4 +223,27 @@ class Lan {
         else if (lan.equals("English")) r = "Order has been placed";
         return r;
     }
+    public static String orderExists(String lan) {
+        String r="";
+        if (lan.equals("Uzbek")) r = "Sizda buyurtma mavjud. Uni bekor qilasizmi?";
+        else if (lan.equals("Russian")) r = "У вас уже есть заказ. Хотите его отменить?";
+        else if (lan.equals("English")) r = "You've already placed your order. Would you like to cancel it?";
+        return r;
+    }
+    public static List<String> YesNo(String lan){
+        List<String> menu = new ArrayList<String>();
+        if (lan.equals("Uzbek")) {
+            menu.add("Ha");
+            menu.add("Yo'q");
+        }
+        else if (lan.equals("Russian")) {
+            menu.add("Да");
+            menu.add("Нет");
+        }
+        else if (lan.equals("English")) {
+            menu.add("Yes");
+            menu.add("No");
+        }
+        return menu;
+    }
 }
