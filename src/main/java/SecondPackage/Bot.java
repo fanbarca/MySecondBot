@@ -246,11 +246,12 @@ public class Bot extends TelegramLongPollingBot {
             showCart(update);
         }
         if (cb.contains(Lan.delivery(a.getLanguage()))) {
-            if (DataBase.sqlQueryList("select product from zakaz where userid =" + update.getCallbackQuery().getMessage().getChatId(), "product").size()>0) {
+            if (DataBase.sqlQueryList("select product from zakaz where userid =" + update.getCallbackQuery().getMessage().getChatId(), "product").size() > 0) {
                 editPic(Lan.orderExists(a.getLanguage()), update.getCallbackQuery().getMessage(), Lan.YesNo(a.getLanguage()), "Лого", 2);
+            } else {
+                sendMeLocation(update.getCallbackQuery().getMessage().getChatId());
+                deleteMessage(update.getCallbackQuery().getMessage());
             }
-            sendMeLocation(update.getCallbackQuery().getMessage().getChatId());
-            deleteMessage(update.getCallbackQuery().getMessage());
         }
     }
     private void clearCart(String id){
@@ -471,7 +472,7 @@ public void sendMeLocation(long ChatId) {
         DataBase.sql("insert into zakaz (userid, product) values ("
                 +update.getMessage().getChatId()+", '"
                 +curretCart(update.getMessage().getChatId().toString())+"' )");
-        clearCart(update.getCallbackQuery().getFrom().getId().toString());
+        clearCart(update.getMessage().getFrom().getId().toString());
 
     }
 
