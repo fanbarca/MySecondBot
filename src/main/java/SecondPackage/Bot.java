@@ -348,6 +348,8 @@ public void sendMeLocation(long ChatId) {
                     handleLocation(update);
                     a.setListener(null);
                 }
+            } else {
+                deleteMessage(update.getMessage());
             }
         }
     }
