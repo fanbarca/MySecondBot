@@ -466,7 +466,7 @@ public void sendMeLocation(long ChatId) {
         else order.sendMe("Адрес:\n\n"+update.getMessage().getText());
         order.sendContact(update, a.getNumber());
         deleteMessage(update.getMessage());
-        DataBase.sql("insert into orders (userid, product) values ("
+        DataBase.sql("insert into zakaz (userid, product) values ("
                 +update.getMessage().getChatId()+", '"
                 +curretCart(update.getMessage().getChatId().toString())+"' )");
         clearCart(update.getCallbackQuery().getFrom().getId());
@@ -611,7 +611,7 @@ public void sendMeLocation(long ChatId) {
         }
     }
     private void showOrders(Update update) throws TelegramApiException, SQLException {
-        List<String> items = DataBase.sqlQueryList("select product from orders where userid =" + update.getCallbackQuery().getMessage().getChatId(), "product");
+        List<String> items = DataBase.sqlQueryList("select product from zakaz where userid =" + update.getCallbackQuery().getMessage().getChatId(), "product");
         if (items.size() == 0) {
             editPic(Lan.mainMenu(a.getLanguage()).get(1) + "\n" + Lan.emptyOrders(a.getLanguage()), update.getCallbackQuery().getMessage(), null, "Лого", 2);
         } else {
