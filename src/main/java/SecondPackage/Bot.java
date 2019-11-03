@@ -611,7 +611,7 @@ public void sendMeLocation(long ChatId) {
         }
     }
     private void showOrders(Update update) throws TelegramApiException, SQLException {
-        List<String> items = DataBase.sqlQueryList("select product from cart where userid =" + update.getCallbackQuery().getMessage().getChatId(), "product");
+        List<String> items = DataBase.sqlQueryList("select product from orders where userid =" + update.getCallbackQuery().getMessage().getChatId(), "product");
         if (items.size() == 0) {
             editPic(Lan.mainMenu(a.getLanguage()).get(1) + "\n" + Lan.emptyOrders(a.getLanguage()), update.getCallbackQuery().getMessage(), null, "Лого", 2);
         } else {
