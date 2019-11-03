@@ -578,25 +578,27 @@ public void sendMeLocation(long ChatId) {
                         text.contains(Lan.mainMenu(a.getLanguage()).get(1)) ||
                         text.contains(Lan.mainMenu(a.getLanguage()).get(3))) {
                     if (text.contains(Lan.mainMenu(a.getLanguage()).get(3))) {
-                        if (text.contains(Lan.total(a.getLanguage()))) {
+                        if (text.contains(Lan.currency(a.getLanguage()))) {
                             List<InlineKeyboardButton> lastRow = new ArrayList<InlineKeyboardButton>();
                             lastRow.add(new InlineKeyboardButton()
                                     .setText(EmojiParser.parseToUnicode(Lan.clearCart(a.getLanguage())))
                                     .setCallbackData(Lan.clearCart(a.getLanguage())));
                             rows.add(lastRow);
+                            List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
+                            row.add(new InlineKeyboardButton()
+                                    .setText(EmojiParser.parseToUnicode(Lan.delivery(a.getLanguage())))
+                                    .setCallbackData(Lan.delivery(a.getLanguage())));
+                            rows.add(row);
                         }
-                        List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
-                        row.add(new InlineKeyboardButton()
-                                .setText(EmojiParser.parseToUnicode(Lan.delivery(a.getLanguage())))
-                                .setCallbackData(Lan.delivery(a.getLanguage())));
-                        rows.add(row);
                     }
                     if (text.contains(Lan.mainMenu(a.getLanguage()).get(1))){
-                        List<InlineKeyboardButton> lastRow = new ArrayList<InlineKeyboardButton>();
-                        lastRow.add(new InlineKeyboardButton()
-                                .setText(EmojiParser.parseToUnicode(Lan.clearOrders(a.getLanguage())))
-                                .setCallbackData(Lan.clearOrders(a.getLanguage())));
-                        rows.add(lastRow);
+                        if (text.contains(Lan.currency(a.getLanguage()))) {
+                            List<InlineKeyboardButton> lastRow = new ArrayList<InlineKeyboardButton>();
+                            lastRow.add(new InlineKeyboardButton()
+                                    .setText(EmojiParser.parseToUnicode(Lan.clearOrders(a.getLanguage())))
+                                    .setCallbackData(Lan.clearOrders(a.getLanguage())));
+                            rows.add(lastRow);
+                        }
                     }
                     List<InlineKeyboardButton> lastRow = new ArrayList<InlineKeyboardButton>();
 //                    lastRow.add(new InlineKeyboardButton()
