@@ -312,13 +312,13 @@ public void sendMeLocation(long ChatId) {
         KeyboardRow row2 = new KeyboardRow();
         KeyboardButton keyboardButton =
                 new KeyboardButton()
-                        //.setRequestLocation(true)
+                        .setRequestLocation(false)
                         .setText(EmojiParser.parseToUnicode(Lan.myLocation(a.getLanguage())));
         List<KeyboardRow> rows2 = new ArrayList<KeyboardRow>();
         row2.add(keyboardButton);
         rows2.add(row2);
         replyMarkup.setKeyboard(rows2).setResizeKeyboard(true).setOneTimeKeyboard(true);
-        sendMessage.setReplyMarkup(replyMarkup);
+        //sendMessage.setReplyMarkup(replyMarkup);
         try {
             int smid = execute(sendMessage).getMessageId();
             DataBase.sql("update users set smid =" + smid + " where id = " + ChatId);
@@ -342,10 +342,11 @@ public void sendMeLocation(long ChatId) {
             if (a.getNumber() == null) {
                 handleContact(update.getMessage());
             }
-        } else if (a.getListener().equals("address")) {
-            handleLocation(update);
-            deleteMessage(update.getMessage());
-            a.setListener(null);
+        } else if (a.getListener()!=null) {
+            if (a.getListener().equals("address")) {
+                handleLocation(update);
+                a.setListener(null);
+            }
         }
     }
 
