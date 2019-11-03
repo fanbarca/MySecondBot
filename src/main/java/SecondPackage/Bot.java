@@ -173,7 +173,7 @@ public class Bot extends TelegramLongPollingBot {
             if ((a.getLanguage() == null) || (a.getLanguage().equals(""))) {
                 chooseLanguage(update.getCallbackQuery().getMessage(), true);
             } else {
-                editPic(Lan.mainMenu(a.getLanguage()).get(1)+Lan.deliveryCost(a.getLanguage()), update.getCallbackQuery().getMessage(), null, "Лого", 2);
+                editPic(Lan.mainMenu(a.getLanguage()).get(1), update.getCallbackQuery().getMessage(), null, "Лого", 2);
             }
         } else if (cb.equals(Lan.mainMenu("Uzbek").get(2)) ||
                 cb.equals(Lan.mainMenu("Russian").get(2)) ||
@@ -242,14 +242,19 @@ public class Bot extends TelegramLongPollingBot {
             }
         }
         if (cb.contains(Lan.clearCart(a.getLanguage()))) {
-            DataBase.sql("delete from cart where userid =" + update.getCallbackQuery().getFrom().getId());
+            clearCart(update.getCallbackQuery().getFrom().getId());
             showCart(update);
         }
         if (cb.contains(Lan.delivery(a.getLanguage()))) {
 
             sendMeLocation(update.getCallbackQuery().getMessage().getChatId());
             deleteMessage(update.getCallbackQuery().getMessage());
+            clearCart(update.getCallbackQuery().getFrom().getId());
         }
+    }
+    private void clearCart(int id){
+        DataBase.sql("delete from cart where userid =" + id);
+
     }
 
     private List<String> keyb(Integer occurances, String name) throws SQLException {
@@ -597,7 +602,7 @@ public void sendMeLocation(long ChatId) {
         if (items.size() == 0) {
             editPic(Lan.mainMenu(a.getLanguage()).get(3) + "\n" + Lan.emptyOrders(a.getLanguage()), update.getCallbackQuery().getMessage(), null, "Лого", 2);
         } else {
-            editPic(Lan.mainMenu(a.getLanguage()).get(3) + "\n" + curretCart(update.getCallbackQuery().getMessage().getChatId().toString()), update.getCallbackQuery().getMessage(), null, "Лого", 2);
+            editPic(Lan.mainMenu(a.getLanguage()).get(3) + "\n" + curretCart(update.getCallbackQuery().getMessage().getChatId().toString()) +"\n"+ Lan.deliveryCost(a.getLanguage()), update.getCallbackQuery().getMessage(), null, "Лого", 2);
         }
     }
     public void send (String text, long chatId, List<String> inline,List<String> reply, int flag) {
