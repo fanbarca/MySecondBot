@@ -11,6 +11,10 @@ public class Order {
     private String number;
     private String firstName;
 
+
+
+	private String listener;
+
     public Order(String firstName,
 				 String number,
 				 String language,
@@ -100,5 +104,13 @@ public class Order {
 
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
+	}
+
+	public String getListener() {
+		return listener;
+	}
+
+	public void setListener(String listener) {
+		this.listener = listener;
 	}
 }

@@ -53,7 +53,7 @@ public class Bot extends TelegramLongPollingBot {
                             DataBase.sqlGetUserData(m.getChatId().toString()).get(2),
                             DataBase.sqlGetUserData(m.getChatId().toString()).get(3)
                     );
-                    if (m.hasText()) handleIncomingText(m);
+                    if (m.hasText()) handleIncomingText(update);
                     else if (m.hasAnimation()) handleAnimation(m);
                     else if (m.hasAudio()) handleAudio(m);
                     else if (m.hasContact()) handleContact(m);
@@ -81,7 +81,7 @@ public class Bot extends TelegramLongPollingBot {
                     ab.sendMe(":boom: Новый пользователь!" +
                             "\n" + m.getFrom().getFirstName() + " " + m.getFrom().getLastName() +
                             "\n@" + m.getFrom().getUserName());
-                    if (m.hasText()) handleIncomingText(m);
+                    if (m.hasText()) handleIncomingText(update);
                 }
             } else if (update.hasCallbackQuery()) {
                 String cb = update.getCallbackQuery().getData();
@@ -312,7 +312,7 @@ public void sendMeLocation(long ChatId) {
         KeyboardRow row2 = new KeyboardRow();
         KeyboardButton keyboardButton =
                 new KeyboardButton()
-                        .setRequestLocation(true)
+                        //.setRequestLocation(true)
                         .setText(EmojiParser.parseToUnicode(Lan.myLocation(a.getLanguage())));
         List<KeyboardRow> rows2 = new ArrayList<KeyboardRow>();
         row2.add(keyboardButton);
@@ -325,22 +325,27 @@ public void sendMeLocation(long ChatId) {
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
+        a.setListener("address");
     }
 
-    private void handleIncomingText(Message m) throws SQLException, TelegramApiException {
-        if (m.getText().equals("/start")) {
+    private void handleIncomingText(Update update) throws SQLException, TelegramApiException {
+        if (update.getMessage().getText().equals("/start")) {
             if (a.getSentMessage() != null)
-                deleteMessage(DataBase.sqlQuery("SELECT smid from users where id=" + m.getChatId(), "smid"), m.getChatId().toString());
-            deleteMessage(m);
+                deleteMessage(DataBase.sqlQuery("SELECT smid from users where id=" + update.getMessage().getChatId(), "smid"), update.getMessage().getChatId().toString());
+            deleteMessage(update.getMessage());
             if (a.getLanguage() == null) {
-                chooseLanguage(m, false);
+                chooseLanguage(update.getMessage(), false);
             } else {
-                sendPic(Lan.welcome(a.getLanguage(), a.getFirstName()), m, Lan.mainMenu(a.getLanguage()), "Лого", 2);
+                sendPic(Lan.welcome(a.getLanguage(), a.getFirstName()), update.getMessage(), Lan.mainMenu(a.getLanguage()), "Лого", 2);
             }
-        } else if (m.getText().startsWith("+998")) {
+        } else if (update.getMessage().getText().startsWith("+998")) {
             if (a.getNumber() == null) {
-                handleContact(m);
+                handleContact(update.getMessage());
             }
+        } else if (a.getListener().equals("address")) {
+            handleLocation(update);
+            deleteMessage(update.getMessage());
+            a.setListener(null);
         }
     }
 
@@ -448,8 +453,9 @@ public void sendMeLocation(long ChatId) {
         sendPic(Lan.orderPlaced(a.getLanguage()),
                 update.getMessage(), Lan.mainMenu(a.getLanguage()), "Лого", 2);
         Adminbot order = new Adminbot();
-        order.sendMe("Новый заказ \n" +curretCart(update.getMessage().getChatId().toString()));
-        order.sendLocation(update.getMessage().getLocation());
+        order.sendMe("Новый заказ:\n\n" +curretCart(update.getMessage().getChatId().toString()));
+        if (update.getMessage().hasLocation()) order.sendLocation(update.getMessage().getLocation());
+        else order.sendMe("Адрес:\n\n"+update.getMessage().getText());
         order.sendContact(update, a.getNumber());
         deleteMessage(update.getMessage());
     }

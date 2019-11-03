@@ -204,9 +204,9 @@ class Lan {
     }
     public static String sendMeLocation(String lan) {
         String r="";
-        if (lan.equals("Uzbek")) r = "Buyurtmani yetkazish kerak bo'lgan joyni lokatsiyasini yuboring";
-        else if (lan.equals("Russian")) r = "Отправьте локацию, куда надо доставить заказ";
-        else if (lan.equals("English")) r = "Send the location where you want your order to be delivered";
+        if (lan.equals("Uzbek")) r = "Buyurtmani qayerga yetkazish kerak?\nJoyni lokatsiyasini yuboring, yoki manzilni yozing";
+        else if (lan.equals("Russian")) r = "Rуда надо доставить заказ?\nОтправьте локацию, или напишите адрес";
+        else if (lan.equals("English")) r = "Where would you like your order to be delivered?\nSend the location or type the address";
         return r;
     }
     public static String myLocation(String lan) {
