@@ -253,12 +253,25 @@ public class Bot extends TelegramLongPollingBot {
                 deleteMessage(update.getCallbackQuery().getMessage());
             }
         }
+        if (Lan.YesNo(a.getLanguage()).contains(cb)) {
+            if (cb.equals(Lan.YesNo(a.getLanguage()).get(0))) {
+                clearOrders(update.getCallbackQuery().getMessage().getChatId().toString());
+                showCart(update);
+            } else if (cb.equals(Lan.YesNo(a.getLanguage()).get(1))) {
+                showOrders(update);
+            }
+        }
+        if (cb.contains(Lan.clearOrders(a.getLanguage()))) {
+            clearOrders(update.getCallbackQuery().getMessage().getChatId().toString());
+            showOrders(update);
+        }
     }
     private void clearCart(String id){
         DataBase.sql("delete from cart where userid =" + id);
-
     }
-
+    private void clearOrders(String id){
+        DataBase.sql("delete from zakaz where userid =" + id);
+    }
     private List<String> keyb(Integer occurances, String name) throws SQLException {
         List<String> keyb = new ArrayList<>();
 
@@ -560,27 +573,35 @@ public void sendMeLocation(long ChatId) {
                 }
             }
             if (a.getLanguage()!=null) {
-                if (text.contains(Lan.total(a.getLanguage()))) {
-                List<InlineKeyboardButton> lastRow = new ArrayList<InlineKeyboardButton>();
-                lastRow.add(new InlineKeyboardButton()
-                        .setText(EmojiParser.parseToUnicode(Lan.clearCart(a.getLanguage())))
-                        .setCallbackData(Lan.clearCart(a.getLanguage())));
-                rows.add(lastRow);
-                }
+
                 if (text.contains(Lan.mainMenu(a.getLanguage()).get(0)) ||
                         text.contains(Lan.mainMenu(a.getLanguage()).get(1)) ||
                         text.contains(Lan.mainMenu(a.getLanguage()).get(3))) {
                     if (text.contains(Lan.mainMenu(a.getLanguage()).get(3))) {
+                        if (text.contains(Lan.total(a.getLanguage()))) {
+                            List<InlineKeyboardButton> lastRow = new ArrayList<InlineKeyboardButton>();
+                            lastRow.add(new InlineKeyboardButton()
+                                    .setText(EmojiParser.parseToUnicode(Lan.clearCart(a.getLanguage())))
+                                    .setCallbackData(Lan.clearCart(a.getLanguage())));
+                            rows.add(lastRow);
+                        }
                         List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
                         row.add(new InlineKeyboardButton()
                                 .setText(EmojiParser.parseToUnicode(Lan.delivery(a.getLanguage())))
                                 .setCallbackData(Lan.delivery(a.getLanguage())));
                         rows.add(row);
                     }
+                    if (text.contains(Lan.mainMenu(a.getLanguage()).get(1))){
+                        List<InlineKeyboardButton> lastRow = new ArrayList<InlineKeyboardButton>();
+                        lastRow.add(new InlineKeyboardButton()
+                                .setText(EmojiParser.parseToUnicode(Lan.clearOrders(a.getLanguage())))
+                                .setCallbackData(Lan.clearOrders(a.getLanguage())));
+                        rows.add(lastRow);
+                    }
                     List<InlineKeyboardButton> lastRow = new ArrayList<InlineKeyboardButton>();
-                    lastRow.add(new InlineKeyboardButton()
-                            .setText(EmojiParser.parseToUnicode(Lan.goBack(a.getLanguage())))
-                            .setCallbackData(Lan.goBack(a.getLanguage())));
+//                    lastRow.add(new InlineKeyboardButton()
+//                            .setText(EmojiParser.parseToUnicode(Lan.goBack(a.getLanguage())))
+//                            .setCallbackData(Lan.goBack(a.getLanguage())));
                     if (!text.contains(Lan.mainMenu(a.getLanguage()).get(3))) lastRow.add(new InlineKeyboardButton()
                             .setText(EmojiParser.parseToUnicode(Lan.mainMenu(a.getLanguage()).get(3)))
                             .setCallbackData(Lan.mainMenu(a.getLanguage()).get(3)));
@@ -600,7 +621,6 @@ public void sendMeLocation(long ChatId) {
                     rows.add(lastRow);
                 }
             }
-
             markup.setKeyboard(rows);
         }
         return markup;
