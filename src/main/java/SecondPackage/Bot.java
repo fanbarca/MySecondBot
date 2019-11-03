@@ -173,7 +173,7 @@ public class Bot extends TelegramLongPollingBot {
             if ((a.getLanguage() == null) || (a.getLanguage().equals(""))) {
                 chooseLanguage(update.getCallbackQuery().getMessage(), true);
             } else {
-                editPic(Lan.mainMenu(a.getLanguage()).get(1), update.getCallbackQuery().getMessage(), null, "Лого", 2);
+                showOrders(update);
             }
         } else if (cb.equals(Lan.mainMenu("Uzbek").get(2)) ||
                 cb.equals(Lan.mainMenu("Russian").get(2)) ||
@@ -249,7 +249,6 @@ public class Bot extends TelegramLongPollingBot {
 
             sendMeLocation(update.getCallbackQuery().getMessage().getChatId());
             deleteMessage(update.getCallbackQuery().getMessage());
-            clearCart(update.getCallbackQuery().getFrom().getId());
         }
     }
     private void clearCart(int id){
@@ -331,6 +330,7 @@ public void sendMeLocation(long ChatId) {
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
+
     }
 
     private void handleIncomingText(Update update) throws SQLException, TelegramApiException {
@@ -466,6 +466,11 @@ public void sendMeLocation(long ChatId) {
         else order.sendMe("Адрес:\n\n"+update.getMessage().getText());
         order.sendContact(update, a.getNumber());
         deleteMessage(update.getMessage());
+        DataBase.sql("insert into orders (userid, product) values ("
+                +update.getMessage().getChatId()+", '"
+                +curretCart(update.getMessage().getChatId().toString())+"' )");
+        clearCart(update.getCallbackQuery().getFrom().getId());
+
     }
 
     private void handleDocument(Message message) {
@@ -603,6 +608,14 @@ public void sendMeLocation(long ChatId) {
             editPic(Lan.mainMenu(a.getLanguage()).get(3) + "\n" + Lan.emptyOrders(a.getLanguage()), update.getCallbackQuery().getMessage(), null, "Лого", 2);
         } else {
             editPic(Lan.mainMenu(a.getLanguage()).get(3) + "\n" + curretCart(update.getCallbackQuery().getMessage().getChatId().toString()) +"\n"+ Lan.deliveryCost(a.getLanguage()), update.getCallbackQuery().getMessage(), null, "Лого", 2);
+        }
+    }
+    private void showOrders(Update update) throws TelegramApiException, SQLException {
+        List<String> items = DataBase.sqlQueryList("select product from cart where userid =" + update.getCallbackQuery().getMessage().getChatId(), "product");
+        if (items.size() == 0) {
+            editPic(Lan.mainMenu(a.getLanguage()).get(1) + "\n" + Lan.emptyOrders(a.getLanguage()), update.getCallbackQuery().getMessage(), null, "Лого", 2);
+        } else {
+            editPic(Lan.mainMenu(a.getLanguage()).get(1) + "\n" + items, update.getCallbackQuery().getMessage(), null, "Лого", 2);
         }
     }
     public void send (String text, long chatId, List<String> inline,List<String> reply, int flag) {
