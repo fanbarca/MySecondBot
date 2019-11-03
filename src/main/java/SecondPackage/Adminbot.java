@@ -27,6 +27,8 @@ import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import static SecondPackage.DataBase.sqlQueryList;
+
 public class Adminbot extends TelegramLongPollingBot {
 
 
@@ -56,6 +58,7 @@ public class Adminbot extends TelegramLongPollingBot {
                         a.add("Указать наличие");
                         a.add("Удалить продукт");
                         a.add("Добавть продукт");
+                        a.add("Заказы");
                         send("Выберите действие", myID, a,false, 1);
                     } else if(update.getMessage().getText().equals("Указать наличие")){
                         send("Указать наличие", myID, DataBase.productsAvailability("Russian"), true, 3);
@@ -64,6 +67,14 @@ public class Adminbot extends TelegramLongPollingBot {
                         send("Удалить продукт", myID, DataBase.showAllProducts("Russian", false), true, 3);
                     } else if(update.getMessage().getText().equals("Добавть продукт")){
                         send("В какой раздел?", myID, Lan.listTypes("Russian"), true, 3);
+                    } else if(update.getMessage().getText().equals("Заказы")){
+                        try {
+                            for (String s: sqlQueryList("select product from zakaz", "product")) {
+                                send(s, myID, Lan.listTypes("Russian"), true, 3);
+                            }
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
                     } else if (update.getMessage().getText().contains("/sql")) {
                         if (update.getMessage().getText().length()>5) {
                             String command = update.getMessage().getText().substring(5);

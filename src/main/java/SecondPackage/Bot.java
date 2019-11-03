@@ -263,6 +263,8 @@ public class Bot extends TelegramLongPollingBot {
         }
         if (cb.contains(Lan.clearOrders(a.getLanguage()))) {
             clearOrders(update.getCallbackQuery().getMessage().getChatId().toString());
+            Adminbot order = new Adminbot();
+            order.sendMe("Заказ от " + update.getCallbackQuery().getFrom().getFirstName()+" отменён");
             showOrders(update);
         }
     }
@@ -477,7 +479,7 @@ public void sendMeLocation(long ChatId) {
         sendPic(Lan.orderPlaced(a.getLanguage()),
                 update.getMessage(), Lan.mainMenu(a.getLanguage()), "Лого", 2);
         Adminbot order = new Adminbot();
-        order.sendMe("Новый заказ:\n\n" +curretCart(update.getMessage().getChatId().toString()));
+        order.sendMe("Новый заказ пользователя: "+ update.getMessage().getFrom().getFirstName()+"\n\n" +curretCart(update.getMessage().getChatId().toString()));
         if (update.getMessage().hasLocation()) order.sendLocation(update.getMessage().getLocation());
         else order.sendMe("Адрес:\n\n"+update.getMessage().getText());
         order.sendContact(update, a.getNumber());
