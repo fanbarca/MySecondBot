@@ -342,10 +342,12 @@ public void sendMeLocation(long ChatId) {
             if (a.getNumber() == null) {
                 handleContact(update.getMessage());
             }
-        } else if (a.getListener()!=null) {
-            if (a.getListener().equals("address")) {
-                handleLocation(update);
-                a.setListener(null);
+        } else {
+            if (a.getListener()!=null) {
+                if (a.getListener().equals("address")) {
+                    handleLocation(update);
+                    a.setListener(null);
+                }
             }
         }
     }
