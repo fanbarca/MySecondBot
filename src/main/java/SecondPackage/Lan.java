@@ -181,6 +181,13 @@ class Lan {
         else if (lan.equals("English")) r = ":x: Cancel order";
         return r;
     }
+//    public static String orderComplete(String lan) {
+//        String r="";
+//        if (lan.equals("Uzbek")) r = "";
+//        else if (lan.equals("Russian")) r = ":x: Отменить заказ";
+//        else if (lan.equals("English")) r = ":x: Cancel order";
+//        return r;
+//    }
     public static String total(String lan) {
         String r="";
         if (lan.equals("Uzbek")) r = "Umumiy: ";
