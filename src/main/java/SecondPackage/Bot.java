@@ -36,9 +36,20 @@ import java.sql.Date;
 public class Bot extends TelegramLongPollingBot {
     private String botName = "DeliverySuperBot";
     private String botToken = "780864630:AAHpUc01UagThYH7wRi15zJQjwu06A6NaWM";
-
     Order a;
 
+
+
+
+    @Override
+    public String getBotUsername() {
+        return botName;
+    }
+
+    @Override
+    public String getBotToken() {
+        return botToken;
+    }
     @Override
     public void onUpdateReceived(Update update) {
         Message m;
@@ -115,6 +126,12 @@ public class Bot extends TelegramLongPollingBot {
         }
     }
 
+
+
+
+
+
+
     private void handleContact(Message message) throws SQLException, TelegramApiException {
         if (message.hasText() && !message.hasContact() && message.getText().startsWith("+998")) {
             DataBase.sql("UPDATE users SET phone = " +
@@ -129,6 +146,14 @@ public class Bot extends TelegramLongPollingBot {
         if (a.getNumber() != null) sendPic(Lan.welcome(a.getLanguage(), message.getFrom().getFirstName()),
                 message, Lan.mainMenu(a.getLanguage()), "Лого", 2);
     }
+
+
+
+
+
+
+
+
 
     private void handleCallback(Update update) throws TelegramApiException, SQLException {
         AnswerCallbackQuery answer = new AnswerCallbackQuery()
@@ -270,7 +295,17 @@ public class Bot extends TelegramLongPollingBot {
             clearOrders(update);
             showOrders(update);
         }
+        if (cb.contains("Отмена")) {
+            showCart(update);
+        }
     }
+
+
+
+
+
+
+
     private void clearCart(String id){
         DataBase.sql("delete from cart where userid =" + id);
     }
@@ -290,6 +325,13 @@ public class Bot extends TelegramLongPollingBot {
         return keyb;
     }
 
+
+
+
+
+
+
+
     private void chooseLanguage(Message message, boolean edit) throws SQLException, TelegramApiException {
         List<String> list = new ArrayList<String>();
         list.add("O'zbek");
@@ -305,6 +347,14 @@ public class Bot extends TelegramLongPollingBot {
             deleteMessage(message);
         }
     }
+
+
+
+
+
+
+
+
 
     public void sendMeNumber(long ChatId) {
         SendMessage sendMessage = new SendMessage()
@@ -330,6 +380,14 @@ public class Bot extends TelegramLongPollingBot {
         }
     }
 
+
+
+
+
+
+
+
+
 public void sendMeLocation(long ChatId) {
         SendMessage sendMessage = new SendMessage()
                 .setChatId(ChatId)
@@ -346,6 +404,13 @@ public void sendMeLocation(long ChatId) {
         rows2.add(row2);
         replyMarkup.setKeyboard(rows2).setResizeKeyboard(true).setOneTimeKeyboard(true);
         //sendMessage.setReplyMarkup(replyMarkup);
+        InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
+        List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
+        List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
+                    row.add(new InlineKeyboardButton()
+                            .setText(EmojiParser.parseToUnicode(Lan.clearOrders(a.getLanguage())))
+                            .setCallbackData("Отмена"));
+        sendMessage.setReplyMarkup(markup);
         try {
             int smid = execute(sendMessage).getMessageId();
             DataBase.sql("update users set smid =" + smid + " where id = " + ChatId);
@@ -353,8 +418,15 @@ public void sendMeLocation(long ChatId) {
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
-
     }
+
+
+
+
+
+
+
+
 
     private void handleIncomingText(Update update) throws SQLException, TelegramApiException {
         if (update.getMessage().getText().equals("/start")) {
@@ -379,6 +451,14 @@ public void sendMeLocation(long ChatId) {
             }
         }
     }
+
+
+
+
+
+
+
+
     public void editPicItems(String typeID, Message message,String productId) throws TelegramApiException, SQLException {
         //String language = a.getLanguage();
         //List<String> list = DataBase.showProducts(language, language, String.valueOf(Lan.listTypes(language).indexOf(type)));
@@ -402,6 +482,14 @@ public void sendMeLocation(long ChatId) {
         em.setReplyMarkup(markup);
         execute(em);
     }
+
+
+
+
+
+
+
+
     public void editPic(String text, Message message, List<String> list, String productId, int flag) throws TelegramApiException, SQLException {
         String file_id;
         if (productId.equals("Лого"))
@@ -419,6 +507,14 @@ public void sendMeLocation(long ChatId) {
         em.setReplyMarkup(markup);
         execute(em);
     }
+
+
+
+
+
+
+
+
     public void editCaption(String text, Message message, List<String> list, String productId, int flag) throws TelegramApiException, SQLException {
         //Integer messageId= Integer.parseInt(DataBase.sqlQuery("select image from users where id="+message.getChatId(), "image"));
         EditMessageCaption ec = new EditMessageCaption();
@@ -429,6 +525,15 @@ public void sendMeLocation(long ChatId) {
         ec.setReplyMarkup(markup);
         execute(ec);
     }
+
+
+
+
+
+
+
+
+
     public void sendPic(String text, Message message, List<String> inline, String productName, int flag) throws SQLException, TelegramApiException {
         String file_id = "";
         if (productName.equals("Лого"))
@@ -450,6 +555,14 @@ public void sendMeLocation(long ChatId) {
         }
     }
 
+
+
+
+
+
+
+
+
     public void deleteMessage(Message message) {
         DeleteMessage dm = new DeleteMessage()
                 .setMessageId(message.getMessageId())
@@ -460,6 +573,14 @@ public void sendMeLocation(long ChatId) {
             e.printStackTrace();
         }
     }
+
+
+
+
+
+
+
+
 
     public void deleteMessage(String Messageid, String Chatid) {
         DeleteMessage dm = new DeleteMessage()
@@ -474,32 +595,52 @@ public void sendMeLocation(long ChatId) {
 
 
 
-    @Override
-    public String getBotUsername() {
-        return botName;
-    }
 
-    @Override
-    public String getBotToken() {
-        return botToken;
-    }
+
+
 
     private void handleVoice(Message message) {
         deleteMessage(message);
     }
 
+
+
+
+
+
+
+
     private void handleVideoNote(Message message) {
         deleteMessage(message);
     }
+
+
+
+
+
+
+
+
 
     private void handleVideo(Message message) {
         deleteMessage(message);
 
     }
 
+
+
+
+
+
+
     private void handleSticker(Message message) {
         deleteMessage(message);
     }
+
+
+
+
+
 
     private void handleLocation(Update update) throws SQLException, TelegramApiException {
         deleteMessage(DataBase.sqlQuery("SELECT smid from users where id=" + update.getMessage().getChatId(), "smid"), update.getMessage().getChatId().toString());
@@ -518,19 +659,41 @@ public void sendMeLocation(long ChatId) {
 
     }
 
+
+
+
+
+
     private void handleDocument(Message message) {
         deleteMessage(message);
     }
+
+
+
+
+
 
     private void handleAudio(Message message) {
         Adminbot ab = new Adminbot();
         ab.forwardMessage(message, ab.myID);
     }
 
+
+
+
+
+
+
     private void handleAnimation(Message message) {
         Adminbot ab = new Adminbot();
         ab.forwardMessage(message, ab.myID);
     }
+
+
+
+
+
+
 
     private void handlePhoto(Message message) throws SQLException {
         String photoId = message.getPhoto().get(message.getPhoto().size() - 1).getFileId();
@@ -540,6 +703,12 @@ public void sendMeLocation(long ChatId) {
         a.setImage(DataBase.sqlGetUserData(message.getChatId().toString()).get(5));
         deleteMessage(message);
     }
+
+
+
+
+
+
 private InlineKeyboardMarkup listMarkup (List<String> list, long id) throws SQLException {
         InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
@@ -576,6 +745,15 @@ private InlineKeyboardMarkup listMarkup (List<String> list, long id) throws SQLE
             markup.setKeyboard(rows);
         return markup;
     }
+
+
+
+
+
+
+
+
+
     private InlineKeyboardMarkup productMarkup(String productId, List<String> list) {
         InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
             List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
@@ -608,6 +786,15 @@ private InlineKeyboardMarkup listMarkup (List<String> list, long id) throws SQLE
             markup.setKeyboard(rows);
         return markup;
     }
+
+
+
+
+
+
+
+
+
     private InlineKeyboardMarkup markUp(String text, String productId, List<String> list, int flag) throws SQLException {
         InlineKeyboardMarkup markup;
         if (DataBase.sqlQueryList("select id from table0", "id").contains(productId)) {
@@ -689,6 +876,11 @@ private InlineKeyboardMarkup listMarkup (List<String> list, long id) throws SQLE
         }
         return markup;
     }
+
+
+
+
+
     private void showCart(Update update) throws TelegramApiException, SQLException {
         List<String> items = DataBase.sqlQueryList("select item from cart where userid =" + update.getCallbackQuery().getMessage().getChatId(), "item");
         if (items.size() == 0) {
@@ -697,6 +889,11 @@ private InlineKeyboardMarkup listMarkup (List<String> list, long id) throws SQLE
             editPic(Lan.mainMenu(a.getLanguage()).get(3) + "\n" + curretCart(update.getCallbackQuery().getMessage().getChatId().toString()) +"\n"+ Lan.deliveryCost(a.getLanguage()), update.getCallbackQuery().getMessage(), null, "Лого", 2);
         }
     }
+
+
+
+
+
     private void showOrders(Update update) throws TelegramApiException, SQLException {
         List<String> items = DataBase.sqlQueryList("select product from zakaz where userid =" + update.getCallbackQuery().getMessage().getChatId(), "product");
         if (items.size() == 0) {
@@ -705,6 +902,11 @@ private InlineKeyboardMarkup listMarkup (List<String> list, long id) throws SQLE
             editPic(Lan.mainMenu(a.getLanguage()).get(1) + "\n" + items.get(0), update.getCallbackQuery().getMessage(), null, "Лого", 2);
         }
     }
+
+
+
+
+
     public void send (String text, long chatId, List<String> inline,List<String> reply, int flag) {
         SendMessage sendMessage = new SendMessage()
                 .setChatId(chatId)
@@ -765,6 +967,11 @@ private InlineKeyboardMarkup listMarkup (List<String> list, long id) throws SQLE
         catch (TelegramApiException e) {e.printStackTrace();}
     }
 
+
+
+
+
+
     public String curretCart(String id) throws SQLException {
         List<String> items = DataBase.sqlQueryList("select item from cart where userid =" + id, "item");
         String cart = "";
@@ -788,4 +995,9 @@ private InlineKeyboardMarkup listMarkup (List<String> list, long id) throws SQLE
         if (list.size()>1) cart += "\n" + Lan.total(a.getLanguage()) + result + Lan.currency(a.getLanguage());
         return cart;
     }
+
+
+
+
+
 }
