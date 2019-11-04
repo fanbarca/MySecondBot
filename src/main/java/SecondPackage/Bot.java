@@ -692,7 +692,7 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
 
     private void handleLocation(Update update) throws SQLException, TelegramApiException {
         editPic(Lan.orderPlaced(a.getLanguage()), update.getMessage().getChatId(),
-                Integer.parseInt(DataBase.sqlQuery("SELECT smid from users where id=" + update.getMessage().getChatId(), "smid")),
+                Integer.parseInt(DataBase.sqlQuery("SELECT image from users where id=" + update.getMessage().getChatId(), "image")),
                 Lan.mainMenu(a.getLanguage()), "Лого", 2);
         Adminbot order = new Adminbot();
         order.sendMe("Новый заказ пользователя: "+ update.getMessage().getFrom().getFirstName()+"\n\n" +curretCart(update.getMessage().getChatId().toString()));

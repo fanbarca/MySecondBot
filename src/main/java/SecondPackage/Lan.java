@@ -232,9 +232,9 @@ class Lan {
     }
     public static String orderPlaced(String lan) {
         String r="";
-        if (lan.equals("Uzbek")) r = "Buyurtma tasdiqlandi";
-        else if (lan.equals("Russian")) r = "Заказ оформлен";
-        else if (lan.equals("English")) r = "Order has been placed";
+        if (lan.equals("Uzbek")) r = "Buyurtma tasdiqlandi!";
+        else if (lan.equals("Russian")) r = "Заказ оформлен!";
+        else if (lan.equals("English")) r = "Order has been placed!";
         return r;
     }
     public static String orderExists(String lan) {
