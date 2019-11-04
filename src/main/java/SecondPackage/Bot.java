@@ -132,6 +132,10 @@ public class Bot extends TelegramLongPollingBot {
 
 
 
+
+
+
+
     private void handleContact(Message message) throws SQLException, TelegramApiException {
         if (message.hasText() && !message.hasContact() && message.getText().startsWith("+998")) {
             DataBase.sql("UPDATE users SET phone = " +
@@ -147,6 +151,41 @@ public class Bot extends TelegramLongPollingBot {
                 message, Lan.mainMenu(a.getLanguage()), "Лого", 2);
     }
 
+
+
+
+
+
+
+
+
+
+
+
+
+    private void handleIncomingText(Update update) throws SQLException, TelegramApiException {
+        if (update.getMessage().getText().equals("/start")) {
+            if (a.getSentMessage() != null)
+                deleteMessage(DataBase.sqlQuery("SELECT smid from users where id=" + update.getMessage().getChatId(), "smid"), update.getMessage().getChatId().toString());
+            deleteMessage(update.getMessage());
+            if (a.getLanguage() == null) {
+                chooseLanguage(update.getMessage(), false);
+            } else {
+                sendPic(Lan.welcome(a.getLanguage(), a.getFirstName()), update.getMessage(), Lan.mainMenu(a.getLanguage()), "Лого", 2);
+            }
+        } else if (update.getMessage().getText().startsWith("+998")) {
+            if (a.getNumber() == null) {
+                handleContact(update.getMessage());
+            }
+        } else {
+            if (DataBase.sqlQuery("SELECT rmid from users where id=" + update.getMessage().getChatId(), "rmid").equals("0")) {
+                handleLocation(update);
+                DataBase.sql("update users set rmid = 1 where id = " + update.getMessage().getChatId());
+            } else {
+                deleteMessage(update.getMessage());
+            }
+        }
+    }
 
 
 
@@ -332,6 +371,9 @@ public class Bot extends TelegramLongPollingBot {
 
 
 
+
+
+
     private void chooseLanguage(Message message, boolean edit) throws SQLException, TelegramApiException {
         List<String> list = new ArrayList<String>();
         list.add("O'zbek");
@@ -347,6 +389,9 @@ public class Bot extends TelegramLongPollingBot {
             deleteMessage(message);
         }
     }
+
+
+
 
 
 
@@ -411,6 +456,7 @@ public void sendMeLocation(long ChatId) {
                             .setText(EmojiParser.parseToUnicode(Lan.clearOrders(a.getLanguage())))
                             .setCallbackData("Отмена"));
         sendMessage.setReplyMarkup(markup);
+        rows.add(row);
         try {
             int smid = execute(sendMessage).getMessageId();
             DataBase.sql("update users set smid =" + smid + " where id = " + ChatId);
@@ -421,36 +467,6 @@ public void sendMeLocation(long ChatId) {
     }
 
 
-
-
-
-
-
-
-
-    private void handleIncomingText(Update update) throws SQLException, TelegramApiException {
-        if (update.getMessage().getText().equals("/start")) {
-            if (a.getSentMessage() != null)
-                deleteMessage(DataBase.sqlQuery("SELECT smid from users where id=" + update.getMessage().getChatId(), "smid"), update.getMessage().getChatId().toString());
-            deleteMessage(update.getMessage());
-            if (a.getLanguage() == null) {
-                chooseLanguage(update.getMessage(), false);
-            } else {
-                sendPic(Lan.welcome(a.getLanguage(), a.getFirstName()), update.getMessage(), Lan.mainMenu(a.getLanguage()), "Лого", 2);
-            }
-        } else if (update.getMessage().getText().startsWith("+998")) {
-            if (a.getNumber() == null) {
-                handleContact(update.getMessage());
-            }
-        } else {
-            if (DataBase.sqlQuery("SELECT rmid from users where id=" + update.getMessage().getChatId(), "rmid").equals("0")) {
-                handleLocation(update);
-                DataBase.sql("update users set rmid = 1 where id = " + update.getMessage().getChatId());
-            } else {
-                deleteMessage(update.getMessage());
-            }
-        }
-    }
 
 
 
@@ -507,6 +523,10 @@ public void sendMeLocation(long ChatId) {
         em.setReplyMarkup(markup);
         execute(em);
     }
+
+
+
+
 
 
 
