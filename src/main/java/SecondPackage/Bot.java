@@ -699,7 +699,6 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
         if (update.getMessage().hasLocation()) order.sendLocation(update.getMessage().getLocation());
         else order.sendMe("Адрес:\n\n"+update.getMessage().getText());
         order.sendContact(update, a.getNumber());
-        deleteMessage(update.getMessage());
         DataBase.sql("insert into zakaz (userid, product) values ("
                 +update.getMessage().getChatId()+", '"
                 +curretCart(update.getMessage().getChatId().toString())+"' )");
