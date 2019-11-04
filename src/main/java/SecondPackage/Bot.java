@@ -234,14 +234,16 @@ public class Bot extends TelegramLongPollingBot {
                 DataBase.sql("delete from cart where userid =" + update.getCallbackQuery().getFrom().getId()
                         + " and item = '" + prodId + "'");
                 showCart(update);
-            } else if (cb.contains("+"+prodId)){
+            } else if (cb.contains("+++")||cb.contains("---")) {
+                if (cb.contains("+++"+name)){
                 DataBase.sql("insert into cart (userid, item) values (" + update.getCallbackQuery().getFrom().getId()
                         + ",'" + prodId + "')");
                 editPicItems(type, update.getCallbackQuery().getMessage(), "Лого");
-            } else if (cb.contains("-"+prodId)){
+                } else if (cb.contains("---"+name)){
                 DataBase.sql("delete from cart where userid =" + update.getCallbackQuery().getFrom().getId()
                         + " and item = '" + prodId + "'");
                 editPicItems(type, update.getCallbackQuery().getMessage(), "Лого");
+                }
             }
         }
         if (cb.contains(Lan.clearCart(a.getLanguage()))) {
@@ -551,11 +553,11 @@ private InlineKeyboardMarkup listMarkup (List<String> list, long id) throws SQLE
                             if (!DataBase.sqlQueryList("select item from cart where userid = "+id, "item").contains(prodID)) {
                                 row.add(new InlineKeyboardButton()
                                     .setText(EmojiParser.parseToUnicode(":heavy_plus_sign:🛒"))
-                                    .setCallbackData("+"+name));
+                                    .setCallbackData("+++"+name));
                             } else {
                                 row.add(new InlineKeyboardButton()
                                     .setText(EmojiParser.parseToUnicode(":x:"))
-                                    .setCallbackData("-"+name));
+                                    .setCallbackData("---"+name));
                             }
                             rows.add(row);
                         }
