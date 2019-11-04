@@ -603,9 +603,9 @@ public void sendMeLocation(long ChatId) {
                         }
                     }
                     List<InlineKeyboardButton> lastRow = new ArrayList<InlineKeyboardButton>();
-//                    lastRow.add(new InlineKeyboardButton()
-//                            .setText(EmojiParser.parseToUnicode(Lan.goBack(a.getLanguage())))
-//                            .setCallbackData(Lan.goBack(a.getLanguage())));
+                    lastRow.add(new InlineKeyboardButton()
+                            .setText(EmojiParser.parseToUnicode(Lan.goBack(a.getLanguage())))
+                            .setCallbackData(Lan.goBack(a.getLanguage())));
                     if (!text.contains(Lan.mainMenu(a.getLanguage()).get(3))) lastRow.add(new InlineKeyboardButton()
                             .setText(EmojiParser.parseToUnicode(Lan.mainMenu(a.getLanguage()).get(3)))
                             .setCallbackData(Lan.mainMenu(a.getLanguage()).get(3)));

@@ -68,12 +68,12 @@ public class Adminbot extends TelegramLongPollingBot {
                     } else if(update.getMessage().getText().equals("Добавть продукт")){
                         send("В какой раздел?", myID, Lan.listTypes("Russian"), true, 3);
                     } else if(update.getMessage().getText().equals("Заказы")){
-                            ArrayList<String> list = new ArrayList<>();
-                            list.add("Готов");
                         try {
                             for (String s: DataBase.sqlQueryList("select product from zakaz", "product")) {
                                 String id = DataBase.sqlQuery("select userid from zakaz where product = '" +s+"'", "userid");
                                 String name = DataBase.sqlQuery("select firstname from users where id ="+id,"firstname");
+                                ArrayList<String> list = new ArrayList<>();
+                                list.add("Готов от "+name);
                                 send("Заказ от "+name+"\n"+s, myID, list, true, 3);
                             }
                         } catch (SQLException e) {
@@ -175,6 +175,11 @@ public class Adminbot extends TelegramLongPollingBot {
                         }
                     }
                 }
+                if (update.getCallbackQuery().getData().contains("Готов от")) {
+                    String name = update.getCallbackQuery().getData().substring(9);
+                    DataBase.sql("delete from zakaz where firstname = '"+name+"'");
+                    edit(update.getCallbackQuery().getMessage(), "Заказ завершён", null, 2);
+                }
                 if (update.getCallbackQuery().getData().equals("Отмена")) {
                     deleteMessage(update.getCallbackQuery().getMessage());
                 }
@@ -237,10 +242,12 @@ public void send (String text, long chatId, List<String> list, boolean inline, i
                 rows2.add(row2);
             }
         List<InlineKeyboardButton> lastRow = new ArrayList<InlineKeyboardButton>();
-        lastRow.add(new InlineKeyboardButton()
+        if (!text.contains("Заказ от")) {
+            lastRow.add(new InlineKeyboardButton()
                         .setText(EmojiParser.parseToUnicode("Отмена"))
                         .setCallbackData("Отмена"));
-        rows.add(lastRow);
+            rows.add(lastRow);
+        }
         inlineMarkup.setKeyboard(rows);
         replyMarkup.setKeyboard(rows2).setResizeKeyboard(true).setOneTimeKeyboard(false);
         if (inline) sendMessage.setReplyMarkup(inlineMarkup);
@@ -274,9 +281,11 @@ public void edit (Message message, String newText, List<String> list, int flag) 
                 rows.add(row);
             }
             List<InlineKeyboardButton> lastRow = new ArrayList<InlineKeyboardButton>();
-            lastRow.add(new InlineKeyboardButton()
+            if (!newText.contains("Заказ от")) {
+                lastRow.add(new InlineKeyboardButton()
                             .setText(EmojiParser.parseToUnicode("Отмена"))
                             .setCallbackData("Отмена"));
+            }
             rows.add(lastRow);
             markup.setKeyboard(rows);
             sendMessage.setReplyMarkup(markup);
