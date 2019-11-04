@@ -456,6 +456,7 @@ public void sendMeLocation(long ChatId) {
                             .setText(EmojiParser.parseToUnicode(Lan.clearOrders(a.getLanguage())))
                             .setCallbackData("Отмена"));
         rows.add(row);
+        markup.setKeyboard(rows);
         sendMessage.setReplyMarkup(markup);
         try {
             int smid = execute(sendMessage).getMessageId();
