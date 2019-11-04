@@ -234,11 +234,11 @@ public class Bot extends TelegramLongPollingBot {
                 DataBase.sql("delete from cart where userid =" + update.getCallbackQuery().getFrom().getId()
                         + " and item = '" + prodId + "'");
                 showCart(update);
-            } else if (cb.contains("+"+name)){
+            } else if (cb.contains("+"+prodId)){
                 DataBase.sql("insert into cart (userid, item) values (" + update.getCallbackQuery().getFrom().getId()
                         + ",'" + prodId + "')");
                 editPicItems(type, update.getCallbackQuery().getMessage(), "Лого");
-            } else if (cb.contains("-"+name)){
+            } else if (cb.contains("-"+prodId)){
                 DataBase.sql("delete from cart where userid =" + update.getCallbackQuery().getFrom().getId()
                         + " and item = '" + prodId + "'");
                 editPicItems(type, update.getCallbackQuery().getMessage(), "Лого");
