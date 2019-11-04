@@ -178,7 +178,7 @@ public class Adminbot extends TelegramLongPollingBot {
                 if (update.getCallbackQuery().getData().contains("Готов от")) {
                     String name = update.getCallbackQuery().getData().substring(9);
 					try {
-                        String id = DataBase.sqlQuery("select id from users where username ='"+name+"'", "id");
+                        String id = DataBase.sqlQuery("select id from users where firstname = '"+name+"'", "id");
                         DataBase.sql("delete from zakaz where userid = "+id);
 					} catch (SQLException e) {
 						e.printStackTrace();
