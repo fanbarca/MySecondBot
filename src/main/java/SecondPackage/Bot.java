@@ -255,24 +255,24 @@ public class Bot extends TelegramLongPollingBot {
         }
         if (Lan.YesNo(a.getLanguage()).contains(cb)) {
             if (cb.equals(Lan.YesNo(a.getLanguage()).get(0))) {
-                clearOrders(update.getCallbackQuery().getMessage().getChatId().toString());
+                clearOrders(update);
                 showCart(update);
             } else if (cb.equals(Lan.YesNo(a.getLanguage()).get(1))) {
                 showOrders(update);
             }
         }
         if (cb.contains(Lan.clearOrders(a.getLanguage()))) {
-            clearOrders(update.getCallbackQuery().getMessage().getChatId().toString());
-            Adminbot order = new Adminbot();
-            order.sendMe("Заказ от " + update.getCallbackQuery().getFrom().getFirstName()+" отменён");
+            clearOrders(update);
             showOrders(update);
         }
     }
     private void clearCart(String id){
         DataBase.sql("delete from cart where userid =" + id);
     }
-    private void clearOrders(String id){
-        DataBase.sql("delete from zakaz where userid =" + id);
+    private void clearOrders(Update update){
+        DataBase.sql("delete from zakaz where userid =" + update.getCallbackQuery().getMessage().getChatId());
+        Adminbot order = new Adminbot();
+        order.sendMe("Заказ от " + update.getCallbackQuery().getFrom().getFirstName()+" отменён");
     }
     private List<String> keyb(Integer occurances, String name) throws SQLException {
         List<String> keyb = new ArrayList<>();
