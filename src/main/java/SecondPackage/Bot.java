@@ -25,14 +25,13 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.Keyboard
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.logging.BotLogger;
-import java.sql.Connection;
+
 import java.net.URISyntaxException;
-import java.sql.SQLException;
-import java.sql.DriverManager;
 import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.sql.*;
+import java.sql.Date;
 
 public class Bot extends TelegramLongPollingBot {
     private String botName = "DeliverySuperBot";
@@ -188,9 +187,9 @@ public class Bot extends TelegramLongPollingBot {
                 showCart(update);
             }
         }
-        for (String type : Lan.listTypes(a.getLanguage())) {
-            if (cb.equals(type) && !cb.equals(Lan.backToMenu(a.getLanguage()))) {
-                editPicItems(type, update.getCallbackQuery().getMessage(), "Лого");
+        for (int i=0; i<Lan.listTypes(a.getLanguage()).size(); i++) {
+            if (cb.equals(Lan.listTypes(a.getLanguage()).get(i)) && !cb.equals(Lan.backToMenu(a.getLanguage()))) {
+                editPicItems(String.valueOf(i), update.getCallbackQuery().getMessage(), "Лого");
             }
         }
         if (cb.contains(Lan.removeFromCart(a.getLanguage())) || cb.contains(Lan.addToCart(a.getLanguage()))) {
@@ -220,6 +219,7 @@ public class Bot extends TelegramLongPollingBot {
 
         for (String name : DataBase.showAllProducts(a.getLanguage(), false)) {
             String prodId = DataBase.sqlQuery("select id from table0 where " + a.getLanguage() + " ='" + name + "'", "id");
+            String type = DataBase.sqlQuery("select type from table0 where " + a.getLanguage() + " ='" + name + "'", "type");
             if (cb.contains(name)&&!cb.contains(":heavy_multiplication_x:")) {
                 List<String> cart = DataBase.sqlQueryList("select item from cart where userid =" + update.getCallbackQuery().getFrom().getId(), "item");
                 int occurrences = 0;
@@ -237,11 +237,11 @@ public class Bot extends TelegramLongPollingBot {
             } else if (cb.contains("+"+name)){
                 DataBase.sql("insert into cart (userid, item) values (" + update.getCallbackQuery().getFrom().getId()
                         + ",'" + prodId + "')");
-                editPicItems(name, update.getCallbackQuery().getMessage(), "Лого");
+                editPicItems(type, update.getCallbackQuery().getMessage(), "Лого");
             } else if (cb.contains("-"+name)){
                 DataBase.sql("delete from cart where userid =" + update.getCallbackQuery().getFrom().getId()
                         + " and item = '" + prodId + "'");
-                editPicItems(name, update.getCallbackQuery().getMessage(), "Лого");
+                editPicItems(type, update.getCallbackQuery().getMessage(), "Лого");
             }
         }
         if (cb.contains(Lan.clearCart(a.getLanguage()))) {
@@ -377,10 +377,10 @@ public void sendMeLocation(long ChatId) {
             }
         }
     }
-    public void editPicItems(String type, Message message,String productId) throws TelegramApiException, SQLException {
+    public void editPicItems(String typeID, Message message,String productId) throws TelegramApiException, SQLException {
         //String language = a.getLanguage();
         //List<String> list = DataBase.showProducts(language, language, String.valueOf(Lan.listTypes(language).indexOf(type)));
-        List<String> listID = DataBase.sqlQueryList("select id from table0 where type = '"+type, "id");
+        List<String> listID = DataBase.sqlQueryList("select id from table0 where type = '"+typeID +"'", "id");
                 String nothing = "";
                 if (listID.size() < 1) nothing = Lan.emptyOrders(a.getLanguage());
         String file_id;
@@ -390,7 +390,8 @@ public void sendMeLocation(long ChatId) {
         //Integer messageId= Integer.parseInt(DataBase.sqlQuery("select image from users where id="+message.getChatId(), "image"));
         InputMediaPhoto imp = new InputMediaPhoto();
         imp.setMedia(file_id);
-        imp.setCaption(EmojiParser.parseToUnicode(Lan.mainMenu(a.getLanguage()).get(0)+"    "+type + "\n" + nothing)).setParseMode("HTML");
+        String typename = Lan.listTypes(a.getLanguage()).get(Integer.parseInt(typeID));
+        imp.setCaption(EmojiParser.parseToUnicode(Lan.mainMenu(a.getLanguage()).get(0)+"    "+typename + "\n" + nothing)).setParseMode("HTML");
         EditMessageMedia em = new EditMessageMedia();
         em.setChatId(message.getChatId());
         em.setMessageId(message.getMessageId());
