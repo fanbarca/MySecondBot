@@ -220,7 +220,7 @@ class Lan {
         String r="";
         if (lan.equals("Uzbek")) r = "Buyurtmani qayerga yetkazish kerak?\nJoyni lokatsiyasini yuboring, yoki manzilni yozing";
         else if (lan.equals("Russian")) r = "Куда надо доставить заказ?\nОтправьте локацию, или напишите адрес";
-        else if (lan.equals("English")) r = "Where would you like your order to be delivered?\nSend the location or type the address";
+        else if (lan.equals("English")) r = "Where would you like your order to be delivered?\nSend your location or type the address";
         return r;
     }
     public static String myLocation(String lan) {

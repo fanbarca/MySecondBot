@@ -763,29 +763,35 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
 
 
 
-private InlineKeyboardMarkup listMarkup (List<String> list, long id) throws SQLException {
+    private InlineKeyboardMarkup listMarkup (List<String> list, long id) throws SQLException {
         InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
             if (list!=null){
-                        for (String prodID:list) {
-                            String name = DataBase.sqlQuery("select "+a.getLanguage()+" from table0 where id ="+ prodID, a.getLanguage());
-                            List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
-                            row.add(new InlineKeyboardButton()
-                                    .setText(EmojiParser.parseToUnicode(name))
-                                    .setCallbackData(name));
-                            if (!DataBase.sqlQueryList("select item from cart where userid = "+id, "item").contains(prodID)) {
-                                row.add(new InlineKeyboardButton()
-                                    .setText(EmojiParser.parseToUnicode(":heavy_plus_sign:🛒"))
-                                    .setCallbackData("+++"+prodID));
-                            } else {
-                                row.add(new InlineKeyboardButton()
-                                    .setText(EmojiParser.parseToUnicode(":x:"))
-                                    .setCallbackData("---"+prodID));
-                            }
-                            rows.add(row);
-                        }
+                for (String prodID:list) {
+                    String name = DataBase.sqlQuery("select "+a.getLanguage()+" from table0 where id ="+ prodID, a.getLanguage());
+                    List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
+                    row.add(new InlineKeyboardButton()
+                            .setText(EmojiParser.parseToUnicode(name))
+                            .setCallbackData(name));
+                    if (!DataBase.sqlQueryList("select item from cart where userid = "+id, "item").contains(prodID)) {
+                        row.add(new InlineKeyboardButton()
+                                .setText(EmojiParser.parseToUnicode(":heavy_plus_sign:🛒"))
+                                .setCallbackData("+++"+prodID));
+                    } else {
+                        row.add(new InlineKeyboardButton()
+                                .setText(EmojiParser.parseToUnicode(":x:"))
+                                .setCallbackData("---"+prodID));
+                    }
+                    rows.add(row);
+                }
             }
-            List<InlineKeyboardButton> row2 = new ArrayList<InlineKeyboardButton>();
+//                List<InlineKeyboardButton> row1 = new ArrayList<InlineKeyboardButton>();
+//                row1.add(new InlineKeyboardButton()
+//                    .setText(EmojiParser.parseToUnicode(Lan.delivery(a.getLanguage())))
+//                    .setCallbackData(Lan.delivery(a.getLanguage())));
+//                rows.add(row1);
+
+        List<InlineKeyboardButton> row2 = new ArrayList<InlineKeyboardButton>();
             row2.add(new InlineKeyboardButton()
                     .setText(EmojiParser.parseToUnicode(Lan.goBack(a.getLanguage())))
                     .setCallbackData(Lan.goBack(a.getLanguage())));
@@ -897,7 +903,7 @@ private InlineKeyboardMarkup listMarkup (List<String> list, long id) throws SQLE
                         }
                     }
                     if (text.contains(Lan.mainMenu(a.getLanguage()).get(1))){
-                        if (text.contains(Lan.currency(a.getLanguage()))) {
+                        if (!text.contains(Lan.emptyOrders(a.getLanguage()))) {
                             List<InlineKeyboardButton> lastRow = new ArrayList<InlineKeyboardButton>();
                             lastRow.add(new InlineKeyboardButton()
                                     .setText(EmojiParser.parseToUnicode(Lan.clearOrders(a.getLanguage())))
