@@ -69,12 +69,12 @@ public class Adminbot extends TelegramLongPollingBot {
                         send("В какой раздел?", myID, Lan.listTypes("Russian"), true, 3);
                     } else if(update.getMessage().getText().equals("Заказы")){
                         try {
-                            for (String s: DataBase.sqlQueryList("select product from zakaz", "product")) {
-                                String id = DataBase.sqlQuery("select userid from zakaz where product = '" +s+"'", "userid");
-                                String name = DataBase.sqlQuery("select firstname from users where id ="+id,"firstname");
+                            for (String userID: DataBase.sqlQueryList("select userid from zakaz", "userid")) {
+                                String product = DataBase.sqlQuery("select product from zakaz where userid = '" +userID+"'", "product");
+                                String name = DataBase.sqlQuery("select firstname from users where id ="+userID,"firstname");
                                 ArrayList<String> list = new ArrayList<>();
                                 list.add("Готов от "+name);
-                                send("Заказ от "+name+"\n"+s, myID, list, true, 3);
+                                send("Заказ от "+name+"\n"+product, myID, list, true, 3);
                             }
                         } catch (SQLException e) {
                             e.printStackTrace();
