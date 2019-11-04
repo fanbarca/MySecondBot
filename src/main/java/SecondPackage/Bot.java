@@ -348,11 +348,31 @@ public class Bot extends TelegramLongPollingBot {
     private void clearCart(String id){
         DataBase.sql("delete from cart where userid =" + id);
     }
+
+
+
+
+
+
+
+
+
+
+
     private void clearOrders(Update update){
         DataBase.sql("delete from zakaz where userid =" + update.getCallbackQuery().getMessage().getChatId());
         Adminbot order = new Adminbot();
         order.sendMe("Заказ от " + update.getCallbackQuery().getFrom().getFirstName()+" отменён");
     }
+
+
+
+
+
+
+
+
+
     private List<String> keyb(Integer occurances, String name) throws SQLException {
         List<String> keyb = new ArrayList<>();
 
@@ -478,6 +498,36 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
         em.setReplyMarkup(markup);
         execute(em);
     }
+
+
+
+
+
+
+
+
+
+
+    public void editPic(String text, long chatid, int messageid, List<String> list, String productId, int flag) throws TelegramApiException, SQLException {
+        String file_id;
+        if (productId.equals("Лого"))
+            file_id = DataBase.sqlQuery("SELECT imageid from table0 where Russian = 'Лого'", "imageid");
+        else file_id = DataBase.sqlQuery("SELECT imageid from table0 where id = " + productId, "imageid");
+        //Integer messageId= Integer.parseInt(DataBase.sqlQuery("select image from users where id="+message.getChatId(), "image"));
+        InputMediaPhoto imp = new InputMediaPhoto();
+        imp.setMedia(file_id);
+        imp.setCaption(EmojiParser.parseToUnicode(text)).setParseMode("HTML");
+        EditMessageMedia em = new EditMessageMedia();
+        em.setChatId(chatid);
+        em.setMessageId(messageid);
+        em.setMedia(imp);
+        InlineKeyboardMarkup markup = markUp(text, productId,list, flag);
+        em.setReplyMarkup(markup);
+        execute(em);
+    }
+
+
+
 
 
 
@@ -641,9 +691,9 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
 
 
     private void handleLocation(Update update) throws SQLException, TelegramApiException {
-        deleteMessage(DataBase.sqlQuery("SELECT smid from users where id=" + update.getMessage().getChatId(), "smid"), update.getMessage().getChatId().toString());
-        sendPic(Lan.orderPlaced(a.getLanguage()),
-                update.getMessage(), Lan.mainMenu(a.getLanguage()), "Лого", 2);
+        editPic(Lan.orderPlaced(a.getLanguage()), update.getMessage().getChatId(),
+                Integer.parseInt(DataBase.sqlQuery("SELECT smid from users where id=" + update.getMessage().getChatId(), "smid")),
+                Lan.mainMenu(a.getLanguage()), "Лого", 2);
         Adminbot order = new Adminbot();
         order.sendMe("Новый заказ пользователя: "+ update.getMessage().getFrom().getFirstName()+"\n\n" +curretCart(update.getMessage().getChatId().toString()));
         if (update.getMessage().hasLocation()) order.sendLocation(update.getMessage().getLocation());
@@ -654,7 +704,7 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
                 +update.getMessage().getChatId()+", '"
                 +curretCart(update.getMessage().getChatId().toString())+"' )");
         clearCart(update.getMessage().getFrom().getId().toString());
-
+        deleteMessage(update.getMessage());
     }
 
 
