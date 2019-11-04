@@ -190,12 +190,11 @@ public class Bot extends TelegramLongPollingBot {
         }
         for (String t : Lan.listTypes(a.getLanguage())) {
             String language = a.getLanguage();
-            List<String> list = DataBase.showProducts(language, language, String.valueOf(Lan.listTypes(language).indexOf(t)));
-
             if (cb.equals(t) && !cb.equals(Lan.backToMenu(a.getLanguage()))) {
+                List<String> list = DataBase.showProducts(language, language, String.valueOf(Lan.listTypes(language).indexOf(t)));
                 String nothing = "";
                 if (list.size() < 1) nothing = Lan.emptyOrders(a.getLanguage());
-                editPic(Lan.mainMenu(a.getLanguage()).get(0)+"    "+t + "\n" + nothing, update.getCallbackQuery().getMessage(), list, "Лого", 1);
+                editPicItems(Lan.mainMenu(a.getLanguage()).get(0)+"    "+t + "\n" + nothing, update.getCallbackQuery().getMessage(), list, "Лого");
             }
         }
         if (cb.contains(Lan.removeFromCart(a.getLanguage())) || cb.contains(Lan.addToCart(a.getLanguage()))) {
@@ -374,7 +373,23 @@ public void sendMeLocation(long ChatId) {
             }
         }
     }
-
+    public void editPicItems(String text, Message message, List<String> list, String productId) throws TelegramApiException, SQLException {
+        String file_id;
+        if (productId.equals("Лого"))
+            file_id = DataBase.sqlQuery("SELECT imageid from table0 where Russian = 'Лого'", "imageid");
+        else file_id = DataBase.sqlQuery("SELECT imageid from table0 where id = " + productId, "imageid");
+        //Integer messageId= Integer.parseInt(DataBase.sqlQuery("select image from users where id="+message.getChatId(), "image"));
+        InputMediaPhoto imp = new InputMediaPhoto();
+        imp.setMedia(file_id);
+        imp.setCaption(EmojiParser.parseToUnicode(text)).setParseMode("HTML");
+        EditMessageMedia em = new EditMessageMedia();
+        em.setChatId(message.getChatId());
+        em.setMessageId(message.getMessageId());
+        em.setMedia(imp);
+        InlineKeyboardMarkup markup = listMarkup(list);
+        em.setReplyMarkup(markup);
+        execute(em);
+    }
     public void editPic(String text, Message message, List<String> list, String productId, int flag) throws TelegramApiException, SQLException {
         String file_id;
         if (productId.equals("Лого"))
@@ -513,7 +528,36 @@ public void sendMeLocation(long ChatId) {
         a.setImage(DataBase.sqlGetUserData(message.getChatId().toString()).get(5));
         deleteMessage(message);
     }
-
+private InlineKeyboardMarkup listMarkup (List<String> list) {
+        InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
+            List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
+                List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
+                    if (list!=null){
+                        for (int i = 0; i < list.size(); i++) {
+                            row.add(new InlineKeyboardButton()
+                                    .setText(EmojiParser.parseToUnicode(list.get(i)))
+                                    .setCallbackData(list.get(i)));
+                            row.add(new InlineKeyboardButton()
+                                        .setText(EmojiParser.parseToUnicode("+"))
+                                        .setCallbackData("+"+list.get(i)));
+                            rows.add(row);
+                        }
+                    }
+            List<InlineKeyboardButton> row2 = new ArrayList<InlineKeyboardButton>();
+            row2.add(new InlineKeyboardButton()
+                    .setText(EmojiParser.parseToUnicode(Lan.goBack(a.getLanguage())))
+                    .setCallbackData(Lan.goBack(a.getLanguage())));
+            row2.add(new InlineKeyboardButton()
+                    .setText(EmojiParser.parseToUnicode(Lan.mainMenu(a.getLanguage()).get(3)))
+                    .setCallbackData(Lan.mainMenu(a.getLanguage()).get(3)));
+            row2.add(new InlineKeyboardButton()
+                    .setText(EmojiParser.parseToUnicode(Lan.backToMenu(a.getLanguage())))
+                    .setCallbackData(Lan.backToMenu(a.getLanguage())));
+            rows.add(row);
+            rows.add(row2);
+            markup.setKeyboard(rows);
+        return markup;
+    }
     private InlineKeyboardMarkup productMarkup(String productId, List<String> list) {
         InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
             List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
@@ -530,22 +574,20 @@ public void sendMeLocation(long ChatId) {
             row2.add(new InlineKeyboardButton()
                     .setText(EmojiParser.parseToUnicode(list.get(1)))
                     .setCallbackData(list.get(1)));
+            row2.add(new InlineKeyboardButton()
+                    .setText(EmojiParser.parseToUnicode(Lan.mainMenu(a.getLanguage()).get(3)))
+                    .setCallbackData(Lan.mainMenu(a.getLanguage()).get(3)));
             List<InlineKeyboardButton> row3 = new ArrayList<InlineKeyboardButton>();
             row3.add(new InlineKeyboardButton()
                     .setText(EmojiParser.parseToUnicode(Lan.goBack(a.getLanguage())))
                     .setCallbackData(Lan.goBack(a.getLanguage())));
             row3.add(new InlineKeyboardButton()
-                    .setText(EmojiParser.parseToUnicode(Lan.mainMenu(a.getLanguage()).get(3)))
-                    .setCallbackData(Lan.mainMenu(a.getLanguage()).get(3)));
-            row3.add(new InlineKeyboardButton()
                     .setText(EmojiParser.parseToUnicode(Lan.backToMenu(a.getLanguage())))
                     .setCallbackData(Lan.backToMenu(a.getLanguage())));
-
             rows.add(row0);
             rows.add(row2);
             rows.add(row3);
             markup.setKeyboard(rows);
-
         return markup;
     }
     private InlineKeyboardMarkup markUp(String text, String productId, List<String> list, int flag) throws SQLException {
@@ -603,7 +645,7 @@ public void sendMeLocation(long ChatId) {
                         }
                     }
                     List<InlineKeyboardButton> lastRow = new ArrayList<InlineKeyboardButton>();
-                    lastRow.add(new InlineKeyboardButton()
+                    if (!text.contains(Lan.mainMenu(a.getLanguage()).get(1))) lastRow.add(new InlineKeyboardButton()
                             .setText(EmojiParser.parseToUnicode(Lan.goBack(a.getLanguage())))
                             .setCallbackData(Lan.goBack(a.getLanguage())));
                     if (!text.contains(Lan.mainMenu(a.getLanguage()).get(3))) lastRow.add(new InlineKeyboardButton()
