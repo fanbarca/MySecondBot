@@ -455,8 +455,8 @@ public void sendMeLocation(long ChatId) {
                     row.add(new InlineKeyboardButton()
                             .setText(EmojiParser.parseToUnicode(Lan.clearOrders(a.getLanguage())))
                             .setCallbackData("Отмена"));
-        sendMessage.setReplyMarkup(markup);
         rows.add(row);
+        sendMessage.setReplyMarkup(markup);
         try {
             int smid = execute(sendMessage).getMessageId();
             DataBase.sql("update users set smid =" + smid + " where id = " + ChatId);
