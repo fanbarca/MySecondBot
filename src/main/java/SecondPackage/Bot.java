@@ -188,9 +188,9 @@ public class Bot extends TelegramLongPollingBot {
                 showCart(update);
             }
         }
-        for (String t : Lan.listTypes(a.getLanguage())) {
-            if (cb.equals(t) && !cb.equals(Lan.backToMenu(a.getLanguage()))) {
-                editPicItems(t, update.getCallbackQuery().getMessage(), "Лого");
+        for (String type : Lan.listTypes(a.getLanguage())) {
+            if (cb.equals(type) && !cb.equals(Lan.backToMenu(a.getLanguage()))) {
+                editPicItems(type, update.getCallbackQuery().getMessage(), "Лого");
             }
         }
         if (cb.contains(Lan.removeFromCart(a.getLanguage())) || cb.contains(Lan.addToCart(a.getLanguage()))) {
@@ -377,11 +377,12 @@ public void sendMeLocation(long ChatId) {
             }
         }
     }
-    public void editPicItems(String t, Message message,String productId) throws TelegramApiException, SQLException {
-        String language = a.getLanguage();
-        List<String> list = DataBase.showProducts(language, language, String.valueOf(Lan.listTypes(language).indexOf(t)));
+    public void editPicItems(String type, Message message,String productId) throws TelegramApiException, SQLException {
+        //String language = a.getLanguage();
+        //List<String> list = DataBase.showProducts(language, language, String.valueOf(Lan.listTypes(language).indexOf(type)));
+        List<String> listID = DataBase.sqlQueryList("select id from table0 where type = '"+type, "id");
                 String nothing = "";
-                if (list.size() < 1) nothing = Lan.emptyOrders(a.getLanguage());
+                if (listID.size() < 1) nothing = Lan.emptyOrders(a.getLanguage());
         String file_id;
         if (productId.equals("Лого"))
             file_id = DataBase.sqlQuery("SELECT imageid from table0 where Russian = 'Лого'", "imageid");
@@ -389,12 +390,12 @@ public void sendMeLocation(long ChatId) {
         //Integer messageId= Integer.parseInt(DataBase.sqlQuery("select image from users where id="+message.getChatId(), "image"));
         InputMediaPhoto imp = new InputMediaPhoto();
         imp.setMedia(file_id);
-        imp.setCaption(EmojiParser.parseToUnicode(Lan.mainMenu(a.getLanguage()).get(0)+"    "+t + "\n" + nothing)).setParseMode("HTML");
+        imp.setCaption(EmojiParser.parseToUnicode(Lan.mainMenu(a.getLanguage()).get(0)+"    "+type + "\n" + nothing)).setParseMode("HTML");
         EditMessageMedia em = new EditMessageMedia();
         em.setChatId(message.getChatId());
         em.setMessageId(message.getMessageId());
         em.setMedia(imp);
-        InlineKeyboardMarkup markup = listMarkup(list, message.getChatId());
+        InlineKeyboardMarkup markup = listMarkup(listID, message.getChatId());
         em.setReplyMarkup(markup);
         execute(em);
     }
@@ -540,18 +541,19 @@ private InlineKeyboardMarkup listMarkup (List<String> list, long id) throws SQLE
         InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
             if (list!=null){
-                        for (String name:list) {
+                        for (String prodID:list) {
+                            String name = DataBase.sqlQuery("select "+a.getLanguage()+" from table0 where id ="+ prodID, a.getLanguage());
                             List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
                             row.add(new InlineKeyboardButton()
                                     .setText(EmojiParser.parseToUnicode(name))
                                     .setCallbackData(name));
-                            if (!DataBase.sqlQueryList("select item from cart where userid = "+id, "item").contains(name)) {
+                            if (!DataBase.sqlQueryList("select item from cart where userid = "+id, "item").contains(prodID)) {
                                 row.add(new InlineKeyboardButton()
-                                    .setText(EmojiParser.parseToUnicode(":x:"))
+                                    .setText(EmojiParser.parseToUnicode(":heavy_plus_sign:🛒"))
                                     .setCallbackData("+"+name));
                             } else {
                                 row.add(new InlineKeyboardButton()
-                                    .setText(EmojiParser.parseToUnicode("+🛒"))
+                                    .setText(EmojiParser.parseToUnicode(":x:"))
                                     .setCallbackData("-"+name));
                             }
                             rows.add(row);
