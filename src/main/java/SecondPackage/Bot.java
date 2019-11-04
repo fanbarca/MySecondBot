@@ -695,6 +695,9 @@ public void sendMeLocation(long ChatId) {
 
 
 
+
+
+
     private void handlePhoto(Message message) throws SQLException {
         String photoId = message.getPhoto().get(message.getPhoto().size() - 1).getFileId();
         String caption = message.getCaption();
@@ -703,6 +706,9 @@ public void sendMeLocation(long ChatId) {
         a.setImage(DataBase.sqlGetUserData(message.getChatId().toString()).get(5));
         deleteMessage(message);
     }
+
+
+
 
 
 
@@ -786,6 +792,8 @@ private InlineKeyboardMarkup listMarkup (List<String> list, long id) throws SQLE
             markup.setKeyboard(rows);
         return markup;
     }
+
+
 
 
 
@@ -881,6 +889,11 @@ private InlineKeyboardMarkup listMarkup (List<String> list, long id) throws SQLE
 
 
 
+
+
+
+
+
     private void showCart(Update update) throws TelegramApiException, SQLException {
         List<String> items = DataBase.sqlQueryList("select item from cart where userid =" + update.getCallbackQuery().getMessage().getChatId(), "item");
         if (items.size() == 0) {
@@ -894,6 +907,11 @@ private InlineKeyboardMarkup listMarkup (List<String> list, long id) throws SQLE
 
 
 
+
+
+
+
+
     private void showOrders(Update update) throws TelegramApiException, SQLException {
         List<String> items = DataBase.sqlQueryList("select product from zakaz where userid =" + update.getCallbackQuery().getMessage().getChatId(), "product");
         if (items.size() == 0) {
@@ -902,6 +920,13 @@ private InlineKeyboardMarkup listMarkup (List<String> list, long id) throws SQLE
             editPic(Lan.mainMenu(a.getLanguage()).get(1) + "\n" + items.get(0), update.getCallbackQuery().getMessage(), null, "Лого", 2);
         }
     }
+
+
+
+
+
+
+
 
 
 
@@ -966,6 +991,11 @@ private InlineKeyboardMarkup listMarkup (List<String> list, long id) throws SQLE
         }
         catch (TelegramApiException e) {e.printStackTrace();}
     }
+
+
+
+
+
 
 
 
