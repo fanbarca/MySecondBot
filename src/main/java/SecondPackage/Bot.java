@@ -336,8 +336,7 @@ public class Bot extends TelegramLongPollingBot {
             showOrders(update);
         }
         if (cb.contains("Отмена")) {
-            deleteMessage(update.getCallbackQuery().getMessage());
-            showCart(update, false);
+            showCart(update, true);
         }
     }
 
