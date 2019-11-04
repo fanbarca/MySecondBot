@@ -248,7 +248,7 @@ public class Bot extends TelegramLongPollingBot {
             if ((a.getLanguage() == null) || (a.getLanguage().equals(""))) {
                 chooseLanguage(update.getCallbackQuery().getMessage(), true);
             } else {
-                showCart(update);
+                showCart(update, true);
             }
         }
         for (int i=0; i<Lan.listTypes(a.getLanguage()).size(); i++) {
@@ -297,7 +297,7 @@ public class Bot extends TelegramLongPollingBot {
             } else if (cb.contains(":heavy_multiplication_x: "+name)){
                 DataBase.sql("delete from cart where userid =" + update.getCallbackQuery().getFrom().getId()
                         + " and item = '" + prodId + "'");
-                showCart(update);
+                showCart(update, true);
             } else if (cb.contains("+++")||cb.contains("---")) {
                 if (cb.contains("+++"+prodId)){
                 DataBase.sql("insert into cart (userid, item) values (" + update.getCallbackQuery().getFrom().getId()
@@ -312,7 +312,7 @@ public class Bot extends TelegramLongPollingBot {
         }
         if (cb.contains(Lan.clearCart(a.getLanguage()))) {
             clearCart(update.getCallbackQuery().getFrom().getId().toString());
-            showCart(update);
+            showCart(update, true);
         }
         if (cb.contains(Lan.delivery(a.getLanguage()))) {
             if (DataBase.sqlQueryList("select product from zakaz where userid =" + update.getCallbackQuery().getMessage().getChatId(), "product").size() > 0) {
@@ -325,7 +325,7 @@ public class Bot extends TelegramLongPollingBot {
         if (Lan.YesNo(a.getLanguage()).contains(cb)) {
             if (cb.equals(Lan.YesNo(a.getLanguage()).get(0))) {
                 clearOrders(update);
-                showCart(update);
+                showCart(update, true);
             } else if (cb.equals(Lan.YesNo(a.getLanguage()).get(1))) {
                 showOrders(update);
             }
@@ -335,7 +335,8 @@ public class Bot extends TelegramLongPollingBot {
             showOrders(update);
         }
         if (cb.contains("Отмена")) {
-            showCart(update);
+            deleteMessage(update.getCallbackQuery().getMessage());
+            showCart(update, false);
         }
     }
 
@@ -915,13 +916,22 @@ private InlineKeyboardMarkup listMarkup (List<String> list, long id) throws SQLE
 
 
 
-    private void showCart(Update update) throws TelegramApiException, SQLException {
+    private void showCart(Update update, boolean edit) throws TelegramApiException, SQLException {
         List<String> items = DataBase.sqlQueryList("select item from cart where userid =" + update.getCallbackQuery().getMessage().getChatId(), "item");
-        if (items.size() == 0) {
-            editPic(Lan.mainMenu(a.getLanguage()).get(3) + "\n" + Lan.emptyOrders(a.getLanguage()), update.getCallbackQuery().getMessage(), null, "Лого", 2);
+        if (edit) {
+            if (items.size() == 0) {
+                editPic(Lan.mainMenu(a.getLanguage()).get(3) + "\n" + Lan.emptyOrders(a.getLanguage()), update.getCallbackQuery().getMessage(), null, "Лого", 2);
+            } else {
+                editPic(Lan.mainMenu(a.getLanguage()).get(3) + "\n" + curretCart(update.getCallbackQuery().getMessage().getChatId().toString()) +"\n"+ Lan.deliveryCost(a.getLanguage()), update.getCallbackQuery().getMessage(), null, "Лого", 2);
+            }
         } else {
-            editPic(Lan.mainMenu(a.getLanguage()).get(3) + "\n" + curretCart(update.getCallbackQuery().getMessage().getChatId().toString()) +"\n"+ Lan.deliveryCost(a.getLanguage()), update.getCallbackQuery().getMessage(), null, "Лого", 2);
+            if (items.size() == 0) {
+                sendPic(Lan.mainMenu(a.getLanguage()).get(3) + "\n" + Lan.emptyOrders(a.getLanguage()), update.getCallbackQuery().getMessage(), null, "Лого", 2);
+            } else {
+                sendPic(Lan.mainMenu(a.getLanguage()).get(3) + "\n" + curretCart(update.getCallbackQuery().getMessage().getChatId().toString()) +"\n"+ Lan.deliveryCost(a.getLanguage()), update.getCallbackQuery().getMessage(), null, "Лого", 2);
+            }
         }
+
     }
 
 
