@@ -320,7 +320,6 @@ public class Bot extends TelegramLongPollingBot {
                 editPic(Lan.orderExists(a.getLanguage()), update.getCallbackQuery().getMessage(), Lan.YesNo(a.getLanguage()), "Лого", 2);
             } else {
                 sendMeLocation(update.getCallbackQuery().getMessage());
-                deleteMessage(update.getCallbackQuery().getMessage());
             }
         }
         if (Lan.YesNo(a.getLanguage()).contains(cb)) {
