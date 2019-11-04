@@ -278,7 +278,8 @@ public class Bot extends TelegramLongPollingBot {
                     DataBase.sqlQuery("SELECT cost from table0 where id = " + prodId, "cost") +
                     Lan.currency(a.getLanguage()) +
                     ".    " + total;
-            editCaption(text, update.getCallbackQuery().getMessage(), keyb(occurrences, name), prodId, 3);
+
+            editCaption(text, update.getCallbackQuery().getMessage(), markUp(text, prodId, keyb(occurrences, name), 3));
         }
 
         for (String name : DataBase.showAllProducts(a.getLanguage(), false)) {
@@ -318,7 +319,7 @@ public class Bot extends TelegramLongPollingBot {
             if (DataBase.sqlQueryList("select product from zakaz where userid =" + update.getCallbackQuery().getMessage().getChatId(), "product").size() > 0) {
                 editPic(Lan.orderExists(a.getLanguage()), update.getCallbackQuery().getMessage(), Lan.YesNo(a.getLanguage()), "Лого", 2);
             } else {
-                sendMeLocation(update.getCallbackQuery().getMessage().getChatId());
+                sendMeLocation(update.getCallbackQuery().getMessage());
                 deleteMessage(update.getCallbackQuery().getMessage());
             }
         }
@@ -434,22 +435,7 @@ public class Bot extends TelegramLongPollingBot {
 
 
 
-public void sendMeLocation(long ChatId) {
-        SendMessage sendMessage = new SendMessage()
-                .setChatId(ChatId)
-                .setText(EmojiParser.parseToUnicode(Lan.sendMeLocation(a.getLanguage())))
-                .setParseMode("HTML");
-        ReplyKeyboardMarkup replyMarkup = new ReplyKeyboardMarkup();
-        KeyboardRow row2 = new KeyboardRow();
-        KeyboardButton keyboardButton =
-                new KeyboardButton()
-                        .setRequestLocation(false)
-                        .setText(EmojiParser.parseToUnicode(Lan.myLocation(a.getLanguage())));
-        List<KeyboardRow> rows2 = new ArrayList<KeyboardRow>();
-        row2.add(keyboardButton);
-        rows2.add(row2);
-        replyMarkup.setKeyboard(rows2).setResizeKeyboard(true).setOneTimeKeyboard(true);
-        //sendMessage.setReplyMarkup(replyMarkup);
+public void sendMeLocation(Message message) throws TelegramApiException, SQLException {
         InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
         List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
@@ -458,14 +444,8 @@ public void sendMeLocation(long ChatId) {
                             .setCallbackData("Отмена"));
         rows.add(row);
         markup.setKeyboard(rows);
-        sendMessage.setReplyMarkup(markup);
-        try {
-            int smid = execute(sendMessage).getMessageId();
-            DataBase.sql("update users set smid =" + smid + " where id = " + ChatId);
-            DataBase.sql("update users set rmid = 0 where id = " + ChatId);
-        } catch (TelegramApiException e) {
-            e.printStackTrace();
-        }
+        editCaption(Lan.sendMeLocation(a.getLanguage()), message, markup);
+        DataBase.sql("update users set rmid = 0 where id = " + message.getChatId());
     }
 
 
@@ -536,14 +516,12 @@ public void sendMeLocation(long ChatId) {
 
 
 
-
-    public void editCaption(String text, Message message, List<String> list, String productId, int flag) throws TelegramApiException, SQLException {
+    public void editCaption(String text, Message message, InlineKeyboardMarkup markup) throws TelegramApiException, SQLException {
         //Integer messageId= Integer.parseInt(DataBase.sqlQuery("select image from users where id="+message.getChatId(), "image"));
         EditMessageCaption ec = new EditMessageCaption();
         ec.setChatId(message.getChatId().toString());
         ec.setMessageId(message.getMessageId());
         ec.setCaption(EmojiParser.parseToUnicode(text)).setParseMode("HTML");
-        InlineKeyboardMarkup markup = markUp(text, productId,list, flag);
         ec.setReplyMarkup(markup);
         execute(ec);
     }
