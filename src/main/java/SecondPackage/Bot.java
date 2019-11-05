@@ -544,7 +544,7 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
             file_id = DataBase.sqlQuery("SELECT imageid from table0 where Russian = 'Лого'", "imageid");
         else {
             file_id = DataBase.sqlQuery("SELECT imageid from table0 where id = " + productId, "imageid");
-            if (file_id.equals("null")) file_id = DataBase.sqlQuery("SELECT imageid from table0 where Russian = 'Лого'", "imageid");
+            if (file_id == null) file_id = DataBase.sqlQuery("SELECT imageid from table0 where Russian = 'Лого'", "imageid");
         }
         //Integer messageId= Integer.parseInt(DataBase.sqlQuery("select image from users where id="+message.getChatId(), "image"));
         InputMediaPhoto imp = new InputMediaPhoto();
@@ -594,7 +594,7 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
             file_id = DataBase.sqlQuery("SELECT imageid from table0 where Russian = 'Лого'", "imageid");
         else {
             file_id = DataBase.sqlQuery("SELECT imageid from table0 where " + a.getLanguage() + " = '" + productName + "'", "imageid");
-            if (file_id.equals("null")) file_id = DataBase.sqlQuery("SELECT imageid from table0 where Russian = 'Лого'", "imageid");
+            if (file_id == null) file_id = DataBase.sqlQuery("SELECT imageid from table0 where Russian = 'Лого'", "imageid");
         }
         SendPhoto aa = new SendPhoto();
         aa.setChatId(message.getChatId());
