@@ -273,7 +273,7 @@ public class Bot extends TelegramLongPollingBot {
                 occurrences = Collections.frequency(items, prodId);
                 total = Lan.inCart(a.getLanguage(), occurrences);
             }
-            String description = "\n\n<i>"+DataBase.sqlQuery("select "+a.getLanguage()+"description from table0 where id =" +prodId, a.getLanguage()+"description")+"</i>";
+            String description = "\n<i>"+DataBase.sqlQuery("select "+a.getLanguage()+"description from table0 where id =" +prodId, a.getLanguage()+"description")+"</i>\n";
             String text = "<b>" + name + "</b>"+description+"\n" +
                     Lan.cost(a.getLanguage()) +
                     DataBase.sqlQuery("SELECT cost from table0 where id = " + prodId, "cost") +
@@ -293,7 +293,7 @@ public class Bot extends TelegramLongPollingBot {
                     total = Lan.inCart(a.getLanguage(), occurrences);
                 }
 
-                String description = "\n\n<i>"+DataBase.sqlQuery("select "+a.getLanguage()+"description from table0 where id =" +prodId, a.getLanguage()+"description")+"</i>";
+                String description = "\n<i>"+DataBase.sqlQuery("select "+a.getLanguage()+"description from table0 where id =" +prodId, a.getLanguage()+"description")+"</i>\n";
                 editPic("<b>" + name + "</b>"+description+"\n" + Lan.cost(a.getLanguage()) + DataBase.sqlQuery("SELECT cost from table0 where " + a.getLanguage() + " = '" + name + "'", "cost") + Lan.currency(a.getLanguage()) + ".    " + total,
                         update.getCallbackQuery().getMessage(), keyb(occurrences, name), prodId, 3);
             } else if (cb.contains(":heavy_multiplication_x: "+name)){
@@ -542,7 +542,10 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
         String file_id;
         if (productId.equals("Лого"))
             file_id = DataBase.sqlQuery("SELECT imageid from table0 where Russian = 'Лого'", "imageid");
-        else file_id = DataBase.sqlQuery("SELECT imageid from table0 where id = " + productId, "imageid");
+        else {
+            file_id = DataBase.sqlQuery("SELECT imageid from table0 where id = " + productId, "imageid");
+            if (file_id.equals("null")) file_id = DataBase.sqlQuery("SELECT imageid from table0 where Russian = 'Лого'", "imageid");
+        }
         //Integer messageId= Integer.parseInt(DataBase.sqlQuery("select image from users where id="+message.getChatId(), "image"));
         InputMediaPhoto imp = new InputMediaPhoto();
         imp.setMedia(file_id);
@@ -589,8 +592,10 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
         String file_id = "";
         if (productName.equals("Лого"))
             file_id = DataBase.sqlQuery("SELECT imageid from table0 where Russian = 'Лого'", "imageid");
-        else
+        else {
             file_id = DataBase.sqlQuery("SELECT imageid from table0 where " + a.getLanguage() + " = '" + productName + "'", "imageid");
+            if (file_id.equals("null")) file_id = DataBase.sqlQuery("SELECT imageid from table0 where Russian = 'Лого'", "imageid");
+        }
         SendPhoto aa = new SendPhoto();
         aa.setChatId(message.getChatId());
         aa.setPhoto(file_id);
