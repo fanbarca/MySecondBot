@@ -478,7 +478,7 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
     public void editPicItems(String typeID, Message message,String productId) throws TelegramApiException, SQLException {
         //String language = a.getLanguage();
         //List<String> list = DataBase.showProducts(language, language, String.valueOf(Lan.listTypes(language).indexOf(type)));
-        List<String> listID = DataBase.sqlQueryList("select id from table0 where type = '"+typeID +"'", "id");
+        List<String> listID = DataBase.sqlQueryList("select id from table0 where instock = true and type = '"+typeID +"'", "id");
                 String nothing = "";
                 if (listID.size() < 1) nothing = Lan.emptyOrders(a.getLanguage());
         String file_id;
@@ -784,12 +784,6 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
                     rows.add(row);
                 }
             }
-//                List<InlineKeyboardButton> row1 = new ArrayList<InlineKeyboardButton>();
-//                row1.add(new InlineKeyboardButton()
-//                    .setText(EmojiParser.parseToUnicode(Lan.delivery(a.getLanguage())))
-//                    .setCallbackData(Lan.delivery(a.getLanguage())));
-//                rows.add(row1);
-
         List<InlineKeyboardButton> row2 = new ArrayList<InlineKeyboardButton>();
             row2.add(new InlineKeyboardButton()
                     .setText(EmojiParser.parseToUnicode(Lan.goBack(a.getLanguage())))

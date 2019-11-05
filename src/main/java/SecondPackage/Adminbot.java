@@ -111,7 +111,7 @@ public class Adminbot extends TelegramLongPollingBot {
                             Random rand = new Random();
                             russian = update.getMessage().getText();
                             DataBase.sql("insert into table0 (id, russian, type, instock) values ("+
-                            String.format("%04d", rand.nextInt(10000))+", '"+russian+"', '"+category+"', true)");
+                            String.format("%04d", rand.nextInt(8999)+1000)+", '"+russian+"', '"+category+"', true)");
                             listener = "Uzbek";
                             send("Введите название продукта на узбекском", myID, list, false, 3);
                         } else if (listener.equals("Uzbek")) {
