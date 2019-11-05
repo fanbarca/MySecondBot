@@ -57,7 +57,7 @@ public class Adminbot extends TelegramLongPollingBot {
                         List<String> a = new ArrayList<>();
                         a.add("Указать наличие");
                         a.add("Удалить продукт");
-                        a.add("Добавть продукт");
+                        a.add("Добавить продукт");
                         a.add("Заказы");
                         send("Выберите действие", myID, a,false, 1);
                     } else if(update.getMessage().getText().equals("Указать наличие")){
@@ -65,7 +65,7 @@ public class Adminbot extends TelegramLongPollingBot {
                     } else if(update.getMessage().getText().equals("Удалить продукт")){
                         listener = "Delete";
                         send("Удалить продукт", myID, DataBase.showAllProducts("Russian", false), true, 3);
-                    } else if(update.getMessage().getText().equals("Добавть продукт")){
+                    } else if(update.getMessage().getText().equals("Добавить продукт")){
                         send("В какой раздел?", myID, Lan.listTypes("Russian"), true, 3);
                     } else if(update.getMessage().getText().equals("Заказы")){
                         try {
@@ -126,8 +126,23 @@ public class Adminbot extends TelegramLongPollingBot {
                             send("Введите стоимость продукта", myID, list, false, 3);
                         } else if (listener.equals("Cost")) {
                             String cost = update.getMessage().getText();
-                            listener = "";
+                            listener = "Russiandescription";
                             DataBase.sql("UPDATE table0 SET cost = "+cost+" where russian = '"+russian+"'");
+                            send("Введите описание на русском", myID, list, false, 3);
+                        } else if (listener.equals("Russiandescription")) {
+                            String Name = update.getMessage().getText();
+                            DataBase.sql("UPDATE table0 SET Russiandescription = '"+Name+"' where russian = '"+russian+"'");
+                            listener = "Uzbekdescription";
+                            send("Введите описание на узбекском", myID, list, false, 3);
+                        } else if (listener.equals("Uzbekdescription")) {
+                            String Name = update.getMessage().getText();
+                            DataBase.sql("UPDATE table0 SET Uzbekdescription = '"+Name+"' where russian = '"+russian+"'");
+                            listener = "Englishdescription";
+                            send("Введите описание на английском", myID, list, false, 3);
+                        } else if (listener.equals("Englishdescription")) {
+                            String Name = update.getMessage().getText();
+                            listener = "";
+                            DataBase.sql("UPDATE table0 SET Englishdescription = '"+Name+"' where russian = '"+russian+"'");
                             send("Готово", myID, list, false, 3);
                         }
                     }

@@ -274,11 +274,11 @@ public class Bot extends TelegramLongPollingBot {
                 total = Lan.inCart(a.getLanguage(), occurrences);
             }
             String description = "\n\n<i>"+DataBase.sqlQuery("select "+a.getLanguage()+"description from table0 where id =" +prodId, a.getLanguage()+"description")+"</i>";
-            String text = "<b>" + name + "</b>\n" +
+            String text = "<b>" + name + "</b>"+description+"\n" +
                     Lan.cost(a.getLanguage()) +
                     DataBase.sqlQuery("SELECT cost from table0 where id = " + prodId, "cost") +
                     Lan.currency(a.getLanguage()) +
-                    ".    " + total +description;
+                    ".    " + total;
             editCaption(text, update.getCallbackQuery().getMessage(), markUp(text, prodId, keyb(occurrences, name), 3));
         }
         for (String name : DataBase.showAllProducts(a.getLanguage(), false)) {
@@ -294,7 +294,7 @@ public class Bot extends TelegramLongPollingBot {
                 }
 
                 String description = "\n\n<i>"+DataBase.sqlQuery("select "+a.getLanguage()+"description from table0 where id =" +prodId, a.getLanguage()+"description")+"</i>";
-                editPic("<b>" + name + "</b>\n" + Lan.cost(a.getLanguage()) + DataBase.sqlQuery("SELECT cost from table0 where " + a.getLanguage() + " = '" + name + "'", "cost") + Lan.currency(a.getLanguage()) + ".    " + total+description,
+                editPic("<b>" + name + "</b>"+description+"\n" + Lan.cost(a.getLanguage()) + DataBase.sqlQuery("SELECT cost from table0 where " + a.getLanguage() + " = '" + name + "'", "cost") + Lan.currency(a.getLanguage()) + ".    " + total,
                         update.getCallbackQuery().getMessage(), keyb(occurrences, name), prodId, 3);
             } else if (cb.contains(":heavy_multiplication_x: "+name)){
                 DataBase.sql("delete from cart where userid =" + update.getCallbackQuery().getFrom().getId()
