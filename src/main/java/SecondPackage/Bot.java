@@ -273,15 +273,14 @@ public class Bot extends TelegramLongPollingBot {
                 occurrences = Collections.frequency(items, prodId);
                 total = Lan.inCart(a.getLanguage(), occurrences);
             }
+            String description = "\n\n<i>"+DataBase.sqlQuery("select "+a.getLanguage()+"description from table0 where id =" +prodId, a.getLanguage()+"description")+"</i>";
             String text = "<b>" + name + "</b>\n" +
                     Lan.cost(a.getLanguage()) +
                     DataBase.sqlQuery("SELECT cost from table0 where id = " + prodId, "cost") +
                     Lan.currency(a.getLanguage()) +
-                    ".    " + total;
-
+                    ".    " + total +description;
             editCaption(text, update.getCallbackQuery().getMessage(), markUp(text, prodId, keyb(occurrences, name), 3));
         }
-
         for (String name : DataBase.showAllProducts(a.getLanguage(), false)) {
             String prodId = DataBase.sqlQuery("select id from table0 where " + a.getLanguage() + " ='" + name + "'", "id");
             String type = DataBase.sqlQuery("select type from table0 where " + a.getLanguage() + " ='" + name + "'", "type");
