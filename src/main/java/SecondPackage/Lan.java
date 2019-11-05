@@ -12,13 +12,13 @@ class Lan {
         String r="";
         String emoji = "\n:red_car::pizza::poultry_leg::hamburger:";
         if (lan.equals("Uzbek")) r = toLatinTrans.transliterate(name)+", \n" +
-                "<b>BIG FOOD</b> tayyor ovqat yetkazib berish xizmatiga xush kelibsiz!" +
+                "tayyor ovqat yetkazib berish xizmatiga xush kelibsiz!" +
                 emoji;
         else if (lan.equals("Russian")) r = toCyrilTrans.transliterate(name)+", \n" +
-                "Добро пожаловать в службу доставки готовых блюд <b>BIG FOOD</b>!" +
+                "Добро пожаловать в службу доставки готовых блюд!" +
                 emoji;
         else if (lan.equals("English")) r = toLatinTrans.transliterate(name)+", \n" +
-                "Welcome to ready meal delivery service <b>BIG FOOD</b>!"+
+                "Welcome to ready meal delivery service!"+
                 emoji;
         return r;
     }
