@@ -524,6 +524,7 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
         InlineKeyboardMarkup markup = markUp(text, productId,list, flag);
         em.setReplyMarkup(markup);
         execute(em);
+        DataBase.sql("update users set image =" + messageid + " where id =" + chatid);
     }
 
 
@@ -552,6 +553,7 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
         InlineKeyboardMarkup markup = markUp(text, productId,list, flag);
         em.setReplyMarkup(markup);
         execute(em);
+        DataBase.sql("update users set image =" + message.getMessageId() + " where id =" + message.getChatId());
     }
 
 
