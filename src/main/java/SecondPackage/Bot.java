@@ -180,8 +180,9 @@ public class Bot extends TelegramLongPollingBot {
             }
         } else {
             if (DataBase.sqlQuery("SELECT rmid from users where id=" + update.getMessage().getChatId(), "rmid").equals("0")) {
-                handleLocation(update);
-                DataBase.sql("update users set rmid = 1 where id = " + update.getMessage().getChatId());
+                String address =  "Адрес:\n\n"+update.getMessage().getText();
+                confirm(update.getMessage(), address, null);
+            DataBase.sql("update users set rmid = 1 where id = " + update.getMessage().getChatId());
             } else {
                 deleteMessage(update.getMessage());
             }
@@ -706,11 +707,16 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
         // editPic(Lan.orderTime(a.getLanguage()), update.getMessage().getChatId(),
         //         Integer.parseInt(DataBase.sqlQuery("SELECT image from users where id=" + update.getMessage().getChatId(), "image")),
         //         Lan.time(a.getLanguage()), "Лого", 1);
-        Location location = null;
-        String address = null;
-        if (update.getMessage().hasLocation()) location = update.getMessage().getLocation();
-        else address = "Адрес:\n\n"+update.getMessage().getText();
-        confirm(update.getMessage(), address, location);
+            if (DataBase.sqlQuery("SELECT rmid from users where id=" + update.getMessage().getChatId(), "rmid").equals("0")) {
+                Location location = null;
+                String address = null;
+            if (update.getMessage().hasLocation()) location = update.getMessage().getLocation();
+            else address = "Адрес:\n\n"+update.getMessage().getText();
+            confirm(update.getMessage(), address, location);
+            DataBase.sql("update users set rmid = 1 where id = " + update.getMessage().getChatId());
+            } else {
+                deleteMessage(update.getMessage());
+            }
     }
 
 
@@ -733,7 +739,7 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
         Adminbot order = new Adminbot();
         order.sendMe("Новый заказ пользователя: "+ message.getFrom().getFirstName()+"\n\n" +curretCart(message.getChatId().toString()));
         if (location!=null) order.sendLocation(location);
-        if (address!=null) order.sendMe("Адрес:\n\n"+address);
+        if (address!=null) order.sendMe(address);
         order.sendContact(message, a.getNumber());
         DataBase.sql("insert into zakaz (userid, product) values ("
                 +message.getChatId()+", '"
