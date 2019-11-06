@@ -325,7 +325,9 @@ public class Bot extends TelegramLongPollingBot {
             if (DataBase.sqlQueryList("select product from zakaz where userid =" + update.getCallbackQuery().getMessage().getChatId(), "product").size() > 0) {
                 editPic(Lan.orderExists(a.getLanguage()), update.getCallbackQuery().getMessage(), Lan.YesNo(a.getLanguage()), "Лого", 2);
             } else {
-                sendMeLocation(update.getCallbackQuery().getMessage());
+                ZoneId z = ZoneId.of("Asia/Tashkent");
+                if (LocalTime.now(z).getHour()>18) sendMeLocation(update.getCallbackQuery().getMessage());
+                else editPic(Lan.tooLate(a.getLanguage()), update.getCallbackQuery().getMessage(), Lan.keyBoard(a.getLanguage()), "Лого", 2);;
             }
         }
         if (Lan.YesNo(a.getLanguage()).contains(cb)) {
@@ -731,25 +733,33 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
 
 
     private List<String> timeKeys() {
-                List<String> menu = new ArrayList<String>();
+        List<String> menu = new ArrayList<String>();
         ZoneId z = ZoneId.of("Asia/Tashkent");
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm");
         int minutes = LocalTime.now(z).getMinute();
-        if (minutes<5) {
-            menu.add(dtf.format(LocalTime.now(z).plusHours(1).truncatedTo(ChronoUnit.HOURS)));
-        } else if (minutes<15) {
-            menu.add(dtf.format(LocalTime.now(z).truncatedTo(ChronoUnit.HOURS).plusMinutes(75)));
-        } else if (minutes<30) {
-            menu.add(dtf.format(LocalTime.now(z).truncatedTo(ChronoUnit.HOURS).plusMinutes(90)));
-        } else if (minutes<45) {
-            menu.add(dtf.format(LocalTime.now(z).truncatedTo(ChronoUnit.HOURS).plusMinutes(105)));
+        int hours = LocalTime.now(z).getHour();
+        if (hours<8) {
+            menu.add(dtf.format(LocalTime.now(z).withHour(9).withMinute(0)));
+            for (int i = 30; i<370; i+=30) {
+            menu.add(dtf.format(LocalTime.now(z).withHour(9).withMinute(0).plusMinutes(i)));
+            }
         } else {
-            menu.add(dtf.format(LocalTime.now(z).truncatedTo(ChronoUnit.HOURS).plusHours(2)));
-        }
-        for (int i = 150; i<600; i+=30) {
-            menu.add(dtf.format(LocalTime.now(z).truncatedTo(ChronoUnit.HOURS).plusMinutes(i)));
-        }
-        menu.add(Lan.clearOrders(a.getLanguage()));
+            if (minutes<5) {
+            menu.add(dtf.format(LocalTime.now(z).plusHours(1).truncatedTo(ChronoUnit.HOURS)));
+            } else if (minutes<15) {
+                menu.add(dtf.format(LocalTime.now(z).truncatedTo(ChronoUnit.HOURS).plusMinutes(75)));
+            } else if (minutes<30) {
+                menu.add(dtf.format(LocalTime.now(z).truncatedTo(ChronoUnit.HOURS).plusMinutes(90)));
+            } else if (minutes<45) {
+                menu.add(dtf.format(LocalTime.now(z).truncatedTo(ChronoUnit.HOURS).plusMinutes(105)));
+            } else {
+                menu.add(dtf.format(LocalTime.now(z).truncatedTo(ChronoUnit.HOURS).plusHours(2)));
+            }
+            for (int i = 150; i<550; i+=30) {
+                menu.add(dtf.format(LocalTime.now(z).truncatedTo(ChronoUnit.HOURS).plusMinutes(i)));
+            }
+            menu.add(Lan.clearOrders(a.getLanguage()));
+            }
         return menu;
     }
 

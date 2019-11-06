@@ -56,6 +56,13 @@ class Lan {
         else if (lan.equals("English")) r = ":truck: Place an order";
         return r;
     }
+    public static String tooLate(String lan){
+        String r="";
+        if (lan.equals("Uzbek")) r = "Yetkazish xizmati 9:00 dan 19:00 gacha ishlaydi";
+        else if (lan.equals("Russian")) r = "Доставка работает с 9:00 до 19:00";
+        else if (lan.equals("English")) r = "Delivery service hours are from 9:00 to 19:00";
+        return r;
+    }
     public static String sendMeContact(String lan){
         String r="";
         if (lan.equals("Uzbek")) r = "Siz bilan aloqaga chiqishimiz uchun, telefon raqamingizni jo'nating,\nbuning uchun, \""+
