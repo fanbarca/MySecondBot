@@ -719,9 +719,8 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
             editPic(Lan.orderTime(a.getLanguage()), update.getMessage().getChatId(),
                 Integer.parseInt(DataBase.sqlQuery("SELECT image from users where id=" + update.getMessage().getChatId(), "image")),
                 timeKeys(), "Лого", 1);
-            } else {
-                deleteMessage(update.getMessage());
             }
+            deleteMessage(update.getMessage());
     }
 
 
@@ -732,7 +731,7 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
 
 
     private List<String> timeKeys() {
-        ZoneId z = ZoneId.of("Uzbekistan/Tashkent");
+        ZoneId z = ZoneId.of("Asia/Tashkent");
         LocalTime localtime = LocalTime.now(z).plusHours(1).truncatedTo(ChronoUnit.HOURS);
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm");
         String roundedTime = dtf.format(localtime);
