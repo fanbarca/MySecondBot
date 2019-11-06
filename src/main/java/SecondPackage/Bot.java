@@ -746,7 +746,7 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
         } else {
             menu.add(dtf.format(LocalTime.now(z).truncatedTo(ChronoUnit.HOURS).plusHours(2)));
         }
-        for (int i = 120; i<350; i+=30) {
+        for (int i = 150; i<600; i+=30) {
             menu.add(dtf.format(LocalTime.now(z).truncatedTo(ChronoUnit.HOURS).plusMinutes(i)));
         }
         menu.add(Lan.clearOrders(a.getLanguage()));
