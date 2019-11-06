@@ -731,30 +731,25 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
 
 
     private List<String> timeKeys() {
+                List<String> menu = new ArrayList<String>();
         ZoneId z = ZoneId.of("Asia/Tashkent");
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm");
-        String nearestTime = dtf.format(LocalTime.now(z).plusHours(1).truncatedTo(ChronoUnit.MINUTES));
-        String roundedTime1 = dtf.format(LocalTime.now(z).plusMinutes(90).truncatedTo(ChronoUnit.MINUTES));
-        String roundedTime2 = dtf.format(LocalTime.now(z).plusHours(2).truncatedTo(ChronoUnit.HOURS));
-        String roundedTime3 = dtf.format(LocalTime.now(z).plusMinutes(150).truncatedTo(ChronoUnit.MINUTES));
-        String roundedTime4 = dtf.format(LocalTime.now(z).plusHours(3).truncatedTo(ChronoUnit.HOURS));
-        String roundedTime5 = dtf.format(LocalTime.now(z).plusMinutes(210).truncatedTo(ChronoUnit.MINUTES));
-        String roundedTime6 = dtf.format(LocalTime.now(z).plusHours(4).truncatedTo(ChronoUnit.HOURS));
-        String roundedTime7 = dtf.format(LocalTime.now(z).plusMinutes(270).truncatedTo(ChronoUnit.MINUTES));
-        String roundedTime8 = dtf.format(LocalTime.now(z).plusHours(5).truncatedTo(ChronoUnit.HOURS));
-        String roundedTime9 = dtf.format(LocalTime.now(z).plusMinutes(330).truncatedTo(ChronoUnit.MINUTES));
-
-        List<String> menu = new ArrayList<String>();
-        menu.add(nearestTime);
-        menu.add(roundedTime1);
-        menu.add(roundedTime2);
-        menu.add(roundedTime3);
-        menu.add(roundedTime4);
-        menu.add(roundedTime5);
-        menu.add(roundedTime6);
-        menu.add(roundedTime7);
-        menu.add(roundedTime8);
-        menu.add(roundedTime9);
+        int minutes = LocalTime.now(z).getMinute();
+        if (minutes<5) {
+            menu.add(dtf.format(LocalTime.now(z).plusHours(1).truncatedTo(ChronoUnit.HOURS)));
+        } else if (minutes<15) {
+            menu.add(dtf.format(LocalTime.now(z).truncatedTo(ChronoUnit.HOURS).plusMinutes(75)));
+        } else if (minutes<30) {
+            menu.add(dtf.format(LocalTime.now(z).truncatedTo(ChronoUnit.HOURS).plusMinutes(90)));
+        } else if (minutes<45) {
+            menu.add(dtf.format(LocalTime.now(z).truncatedTo(ChronoUnit.HOURS).plusMinutes(105)));
+        } else {
+            menu.add(dtf.format(LocalTime.now(z).truncatedTo(ChronoUnit.HOURS).plusHours(2)));
+        }
+        for (int i = 120; i<350; i+=30) {
+            menu.add(dtf.format(LocalTime.now(z).truncatedTo(ChronoUnit.HOURS).plusMinutes(i)));
+        }
+        menu.add(Lan.clearOrders(a.getLanguage()));
         return menu;
     }
 
