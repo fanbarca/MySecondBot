@@ -326,7 +326,7 @@ public class Bot extends TelegramLongPollingBot {
                 editPic(Lan.orderExists(a.getLanguage()), update.getCallbackQuery().getMessage(), Lan.YesNo(a.getLanguage()), "Лого", 2);
             } else {
                 ZoneId z = ZoneId.of("Asia/Tashkent");
-                if (LocalTime.now(z).getHour()>18) sendMeLocation(update.getCallbackQuery().getMessage());
+                if (LocalTime.now(z).getHour()<19) sendMeLocation(update.getCallbackQuery().getMessage());
                 else editPic(Lan.tooLate(a.getLanguage()), update.getCallbackQuery().getMessage(), Lan.keyBoard(a.getLanguage()), "Лого", 2);;
             }
         }
