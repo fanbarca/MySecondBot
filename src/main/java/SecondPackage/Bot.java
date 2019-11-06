@@ -718,7 +718,7 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
             }
             else DataBase.sql("update users set address = '"+update.getMessage().getText()+"'");
             // confirm(update.getMessage(), address, location);
-            editPic(Lan.orderTime(a.getLanguage()), update.getMessage().getChatId(),
+            editPic(Lan.orderTime(a.getLanguage()) + Lan.tooLate(a.getLanguage()), update.getMessage().getChatId(),
                 Integer.parseInt(DataBase.sqlQuery("SELECT image from users where id=" + update.getMessage().getChatId(), "image")),
                 timeKeys(), "Лого", 3);
             }
