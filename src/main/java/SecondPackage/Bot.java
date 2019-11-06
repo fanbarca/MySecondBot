@@ -30,6 +30,11 @@ import org.telegram.telegrambots.meta.logging.BotLogger;
 import java.net.URISyntaxException;
 import java.net.URI;
 import java.text.SimpleDateFormat;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.sql.*;
 import java.sql.Date;
@@ -179,10 +184,8 @@ public class Bot extends TelegramLongPollingBot {
                 handleContact(update.getMessage());
             }
         } else {
-            if (DataBase.sqlQuery("SELECT rmid from users where id=" + update.getMessage().getChatId(), "rmid").equals("0")) {
-                String address =  "Адрес:\n\n"+update.getMessage().getText();
-                confirm(update.getMessage(), address, null);
-            DataBase.sql("update users set rmid = 1 where id = " + update.getMessage().getChatId());
+            if (waitingForLocation(update.getMessage())) {
+                handleLocation(update);;
             } else {
                 deleteMessage(update.getMessage());
             }
@@ -703,23 +706,55 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
 
 
 
+
+
     private void handleLocation(Update update) throws SQLException, TelegramApiException {
-        // editPic(Lan.orderTime(a.getLanguage()), update.getMessage().getChatId(),
-        //         Integer.parseInt(DataBase.sqlQuery("SELECT image from users where id=" + update.getMessage().getChatId(), "image")),
-        //         Lan.time(a.getLanguage()), "Лого", 1);
-            if (DataBase.sqlQuery("SELECT rmid from users where id=" + update.getMessage().getChatId(), "rmid").equals("0")) {
-                Location location = null;
-                String address = null;
-            if (update.getMessage().hasLocation()) location = update.getMessage().getLocation();
-            else address = "Адрес:\n\n"+update.getMessage().getText();
-            confirm(update.getMessage(), address, location);
-            DataBase.sql("update users set rmid = 1 where id = " + update.getMessage().getChatId());
+            if (waitingForLocation(update.getMessage())) {
+            if (update.getMessage().hasLocation()) {
+                Location location = update.getMessage().getLocation();
+                DataBase.sql("update users set latitude = '"+location.getLatitude()+"', longitude = '"+location.getLongitude()+"'");
+            }
+            else DataBase.sql("update users set address = '"+update.getMessage().getText()+"'");
+            // confirm(update.getMessage(), address, location);
+            editPic(Lan.orderTime(a.getLanguage()), update.getMessage().getChatId(),
+                Integer.parseInt(DataBase.sqlQuery("SELECT image from users where id=" + update.getMessage().getChatId(), "image")),
+                timeKeys(), "Лого", 1);
             } else {
                 deleteMessage(update.getMessage());
             }
     }
 
 
+
+
+
+
+
+
+    private List<String> timeKeys() {
+        ZoneId z = ZoneId.of("Uzbekistan/Tashkent");
+        LocalTime localtime = LocalTime.now(z).plusHours(1).truncatedTo(ChronoUnit.HOURS);
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm");
+        String roundedTime = dtf.format(localtime);
+
+        List<String> menu = new ArrayList<String>();
+        menu.add(roundedTime);
+        return menu;
+    }
+
+
+
+
+
+
+
+
+
+
+
+    private boolean waitingForLocation(Message message) throws SQLException{
+        return DataBase.sqlQuery("SELECT rmid from users where id=" + message.getChatId(), "rmid").equals("0");
+    }
 
 
 
@@ -746,6 +781,7 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
                 +curretCart(message.getChatId().toString())+"' )");
         clearCart(message.getFrom().getId().toString());
         deleteMessage(message);
+        DataBase.sql("update users set rmid = 1 where id = " + message.getChatId());
     }
 
 
