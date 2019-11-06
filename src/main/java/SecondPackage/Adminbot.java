@@ -373,10 +373,10 @@ public List<String> listOrders(String column){
         }
         catch (TelegramApiException e) {e.printStackTrace();}
     }
-    public void sendContact(Update update, String number) {
+    public void sendContact(Message message, String number) {
         SendContact sendMessage = new SendContact()
-                .setFirstName(update.getMessage().getFrom().getFirstName())
-                .setLastName(update.getMessage().getFrom().getLastName())
+                .setFirstName(message.getFrom().getFirstName())
+                .setLastName(message.getFrom().getLastName())
                 .setPhoneNumber(number)
                 .setChatId(myID);
         try {

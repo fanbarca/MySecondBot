@@ -10,6 +10,7 @@ public class Order {
     private String language;
     private String number;
     private String firstName;
+    private String address;
 
 
 
@@ -55,6 +56,15 @@ public class Order {
 
 	public void setNumber(String number) {
 		this.number = number;
+    }
+    
+	public String getAddress() {
+		return address;
+	}
+
+
+	public void setAddress(String address) {
+		this.address = address;
 	}
 
 

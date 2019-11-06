@@ -12,6 +12,7 @@ import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageMe
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageReplyMarkup;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.Contact;
+import org.telegram.telegrambots.meta.api.objects.Location;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.PhotoSize;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -699,20 +700,49 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
 
 
     private void handleLocation(Update update) throws SQLException, TelegramApiException {
-        editPic(Lan.orderPlaced(a.getLanguage()), update.getMessage().getChatId(),
-                Integer.parseInt(DataBase.sqlQuery("SELECT image from users where id=" + update.getMessage().getChatId(), "image")),
-                Lan.mainMenu(a.getLanguage()), "Лого", 2);
-        Adminbot order = new Adminbot();
-        order.sendMe("Новый заказ пользователя: "+ update.getMessage().getFrom().getFirstName()+"\n\n" +curretCart(update.getMessage().getChatId().toString()));
-        if (update.getMessage().hasLocation()) order.sendLocation(update.getMessage().getLocation());
-        else order.sendMe("Адрес:\n\n"+update.getMessage().getText());
-        order.sendContact(update, a.getNumber());
-        DataBase.sql("insert into zakaz (userid, product) values ("
-                +update.getMessage().getChatId()+", '"
-                +curretCart(update.getMessage().getChatId().toString())+"' )");
-        clearCart(update.getMessage().getFrom().getId().toString());
-        deleteMessage(update.getMessage());
+        // editPic(Lan.orderTime(a.getLanguage()), update.getMessage().getChatId(),
+        //         Integer.parseInt(DataBase.sqlQuery("SELECT image from users where id=" + update.getMessage().getChatId(), "image")),
+        //         Lan.time(a.getLanguage()), "Лого", 1);
+        Location location = null;
+        String address = null;
+        if (update.getMessage().hasLocation()) location = update.getMessage().getLocation();
+        else address = "Адрес:\n\n"+update.getMessage().getText();
+        confirm(update.getMessage(), address, location);
     }
+
+
+
+
+
+
+
+
+
+
+
+    private void confirm(Message message, String address, Location location) throws SQLException, TelegramApiException {
+        List<String> list = new ArrayList<>();
+            list.add(Lan.clearOrders(a.getLanguage()));
+            list.add(Lan.backToMenu(a.getLanguage()));
+        editPic(Lan.orderPlaced(a.getLanguage()), message.getChatId(),
+                Integer.parseInt(DataBase.sqlQuery("SELECT image from users where id=" + message.getChatId(), "image")),
+                list, "Лого", 2);
+        Adminbot order = new Adminbot();
+        order.sendMe("Новый заказ пользователя: "+ message.getFrom().getFirstName()+"\n\n" +curretCart(message.getChatId().toString()));
+        if (location!=null) order.sendLocation(location);
+        if (address!=null) order.sendMe("Адрес:\n\n"+address);
+        order.sendContact(message, a.getNumber());
+        DataBase.sql("insert into zakaz (userid, product) values ("
+                +message.getChatId()+", '"
+                +curretCart(message.getChatId().toString())+"' )");
+        clearCart(message.getFrom().getId().toString());
+        deleteMessage(message);
+    }
+
+
+
+
+
 
 
 
@@ -728,10 +758,14 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
 
 
 
+
+
     private void handleAudio(Message message) {
         Adminbot ab = new Adminbot();
         ab.forwardMessage(message, ab.myID);
     }
+
+
 
 
 

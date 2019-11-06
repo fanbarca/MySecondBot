@@ -44,6 +44,28 @@ class Lan {
             }
         return menu;
         }
+    public static List<String> time(String lan){
+        List<String> menu = new ArrayList<String>();
+            if (lan.equals("Uzbek")) {
+                menu.add("1 soatdan keyin");
+                menu.add("1,5 soatdan keyin");
+                menu.add("2 soatdan keyin");
+                menu.add("2,5 soatdan keyin");
+            }
+            else if (lan.equals("Russian")) {
+                menu.add("Через час");
+                menu.add("Через полтора часа");
+                menu.add("Через два часа");
+                menu.add("Через 2,5 часа");
+            }
+            else if (lan.equals("English")) {
+                menu.add("In an hour");
+                menu.add("In an hour and a half");
+                menu.add("In two hours");
+                menu.add("In two and a half hours");
+            }
+        return menu;
+        }
     public static String delivery(String lan){
         String r="";
         if (lan.equals("Uzbek")) r = ":truck: Buyurtma berish";
@@ -140,6 +162,7 @@ class Lan {
         else if (lan.equals("English")) r = ":iphone: Home";
         return r;
         }
+        
     public static String deliveryCost(String lan) {
         String r="";
         if (lan.equals("Uzbek")) r = "\nYetkazish narxi:\n3km gacha - 8000 so'm\nundan keyin - 1000 so'm/km ";
@@ -235,6 +258,13 @@ class Lan {
         if (lan.equals("Uzbek")) r = "Buyurtma tasdiqlandi!";
         else if (lan.equals("Russian")) r = "Заказ оформлен!";
         else if (lan.equals("English")) r = "Order has been placed!";
+        return r;
+    }
+    public static String orderTime(String lan) {
+        String r="";
+        if (lan.equals("Uzbek")) r = "Buyurtmani yetkazish vaqtini tanlang";
+        else if (lan.equals("Russian")) r = "Выберите время доставки";
+        else if (lan.equals("English")) r = "Choose delivery time";
         return r;
     }
     public static String orderExists(String lan) {
