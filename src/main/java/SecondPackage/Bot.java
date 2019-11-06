@@ -718,7 +718,7 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
             // confirm(update.getMessage(), address, location);
             editPic(Lan.orderTime(a.getLanguage()), update.getMessage().getChatId(),
                 Integer.parseInt(DataBase.sqlQuery("SELECT image from users where id=" + update.getMessage().getChatId(), "image")),
-                timeKeys(), "Лого", 1);
+                timeKeys(), "Лого", 3);
             }
             deleteMessage(update.getMessage());
     }
@@ -732,12 +732,29 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
 
     private List<String> timeKeys() {
         ZoneId z = ZoneId.of("Asia/Tashkent");
-        LocalTime localtime = LocalTime.now(z).plusHours(1).truncatedTo(ChronoUnit.HOURS);
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm");
-        String roundedTime = dtf.format(localtime);
+        String nearestTime = dtf.format(LocalTime.now(z).plusHours(1).truncatedTo(ChronoUnit.MINUTES));
+        String roundedTime1 = dtf.format(LocalTime.now(z).plusMinutes(90).truncatedTo(ChronoUnit.MINUTES));
+        String roundedTime2 = dtf.format(LocalTime.now(z).plusHours(2).truncatedTo(ChronoUnit.HOURS));
+        String roundedTime3 = dtf.format(LocalTime.now(z).plusMinutes(150).truncatedTo(ChronoUnit.MINUTES));
+        String roundedTime4 = dtf.format(LocalTime.now(z).plusHours(3).truncatedTo(ChronoUnit.HOURS));
+        String roundedTime5 = dtf.format(LocalTime.now(z).plusMinutes(210).truncatedTo(ChronoUnit.MINUTES));
+        String roundedTime6 = dtf.format(LocalTime.now(z).plusHours(4).truncatedTo(ChronoUnit.HOURS));
+        String roundedTime7 = dtf.format(LocalTime.now(z).plusMinutes(270).truncatedTo(ChronoUnit.MINUTES));
+        String roundedTime8 = dtf.format(LocalTime.now(z).plusHours(5).truncatedTo(ChronoUnit.HOURS));
+        String roundedTime9 = dtf.format(LocalTime.now(z).plusMinutes(330).truncatedTo(ChronoUnit.MINUTES));
 
         List<String> menu = new ArrayList<String>();
-        menu.add(roundedTime);
+        menu.add(nearestTime);
+        menu.add(roundedTime1);
+        menu.add(roundedTime2);
+        menu.add(roundedTime3);
+        menu.add(roundedTime4);
+        menu.add(roundedTime5);
+        menu.add(roundedTime6);
+        menu.add(roundedTime7);
+        menu.add(roundedTime8);
+        menu.add(roundedTime9);
         return menu;
     }
 
