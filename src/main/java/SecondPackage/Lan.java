@@ -58,9 +58,9 @@ class Lan {
     }
     public static String tooLate(String lan){
         String r="";
-        if (lan.equals("Uzbek")) r = "Yetkazish xizmati 9:00 dan 19:00 gacha ishlaydi";
-        else if (lan.equals("Russian")) r = "Доставка работает с 9:00 до 19:00";
-        else if (lan.equals("English")) r = "Delivery service hours are from 9:00 to 19:00";
+        if (lan.equals("Uzbek")) r = "\n<b>Yetkazish xizmati 9:00 dan 19:00 gacha ishlaydi</b>";
+        else if (lan.equals("Russian")) r = "\n<b>Доставка работает с 9:00 до 19:00</b>";
+        else if (lan.equals("English")) r = "\n<b>Delivery service hours are from 9:00 to 19:00</b>";
         return r;
     }
     public static String sendMeContact(String lan){

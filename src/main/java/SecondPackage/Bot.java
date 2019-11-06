@@ -326,7 +326,7 @@ public class Bot extends TelegramLongPollingBot {
                 editPic(Lan.orderExists(a.getLanguage()), update.getCallbackQuery().getMessage(), Lan.YesNo(a.getLanguage()), "Лого", 2);
             } else {
                 ZoneId z = ZoneId.of("Asia/Tashkent");
-                if (LocalTime.now(z).getHour()<19) sendMeLocation(update.getCallbackQuery().getMessage());
+                if (LocalTime.now(z).getHour()<19&&LocalTime.now(z).getHour()>4) sendMeLocation(update.getCallbackQuery().getMessage());
                 else editPic(Lan.tooLate(a.getLanguage()), update.getCallbackQuery().getMessage(), Lan.keyBoard(a.getLanguage()), "Лого", 2);;
             }
         }
@@ -744,18 +744,23 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
             menu.add(dtf.format(LocalTime.now(z).withHour(9).withMinute(0).plusMinutes(i)));
             }
         } else {
+            int last=90;
             if (minutes<5) {
-            menu.add(dtf.format(LocalTime.now(z).plusHours(1).truncatedTo(ChronoUnit.HOURS)));
+                menu.add(dtf.format(LocalTime.now(z).plusHours(1).truncatedTo(ChronoUnit.HOURS)));
             } else if (minutes<15) {
                 menu.add(dtf.format(LocalTime.now(z).truncatedTo(ChronoUnit.HOURS).plusMinutes(75)));
+                last = 120;
             } else if (minutes<30) {
                 menu.add(dtf.format(LocalTime.now(z).truncatedTo(ChronoUnit.HOURS).plusMinutes(90)));
+                last = 120;
             } else if (minutes<45) {
                 menu.add(dtf.format(LocalTime.now(z).truncatedTo(ChronoUnit.HOURS).plusMinutes(105)));
+                last = 150;
             } else {
                 menu.add(dtf.format(LocalTime.now(z).truncatedTo(ChronoUnit.HOURS).plusHours(2)));
+                last = 150;
             }
-            for (int i = 150; i<550; i+=30) {
+            for (int i = last; i<(19-LocalTime.now(z).getHour())*60; i+=30) {
                 menu.add(dtf.format(LocalTime.now(z).truncatedTo(ChronoUnit.HOURS).plusMinutes(i)));
             }
             menu.add(Lan.clearOrders(a.getLanguage()));
@@ -1055,13 +1060,13 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
             if (items.size() == 0) {
                 editPic(Lan.mainMenu(a.getLanguage()).get(3) + "\n" + Lan.emptyOrders(a.getLanguage()), update.getCallbackQuery().getMessage(), null, "Лого", 2);
             } else {
-                editPic(Lan.mainMenu(a.getLanguage()).get(3) + "\n" + curretCart(update.getCallbackQuery().getMessage().getChatId().toString()) +"\n"+ Lan.deliveryCost(a.getLanguage()), update.getCallbackQuery().getMessage(), null, "Лого", 2);
+                editPic(Lan.mainMenu(a.getLanguage()).get(3) + "\n" + curretCart(update.getCallbackQuery().getMessage().getChatId().toString()) +"\n"+ Lan.deliveryCost(a.getLanguage())+Lan.tooLate(a.getLanguage()), update.getCallbackQuery().getMessage(), null, "Лого", 2);
             }
         } else {
             if (items.size() == 0) {
                 sendPic(Lan.mainMenu(a.getLanguage()).get(3) + "\n" + Lan.emptyOrders(a.getLanguage()), update.getCallbackQuery().getMessage(), null, "Лого", 2);
             } else {
-                sendPic(Lan.mainMenu(a.getLanguage()).get(3) + "\n" + curretCart(update.getCallbackQuery().getMessage().getChatId().toString()) +"\n"+ Lan.deliveryCost(a.getLanguage()), update.getCallbackQuery().getMessage(), null, "Лого", 2);
+                sendPic(Lan.mainMenu(a.getLanguage()).get(3) + "\n" + curretCart(update.getCallbackQuery().getMessage().getChatId().toString()) +"\n"+ Lan.deliveryCost(a.getLanguage())+Lan.tooLate(a.getLanguage()), update.getCallbackQuery().getMessage(), null, "Лого", 2);
             }
         }
 
