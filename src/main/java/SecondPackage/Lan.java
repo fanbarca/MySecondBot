@@ -204,6 +204,14 @@ class Lan {
         else if (lan.equals("English")) r = ":x: Cancel order";
         return r;
     }
+    public static String orderCancelled(String lan) {
+        String r="";
+        if (lan.equals("Uzbek")) r = "Buyurtma bekor qilindi";
+        else if (lan.equals("Russian")) r = "Заказ отменён";
+        else if (lan.equals("English")) r = "Order cancelled";
+        return r;
+    }
+    
 //    public static String orderComplete(String lan) {
 //        String r="";
 //        if (lan.equals("Uzbek")) r = "";

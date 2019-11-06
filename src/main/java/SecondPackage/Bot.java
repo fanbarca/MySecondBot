@@ -334,8 +334,11 @@ public class Bot extends TelegramLongPollingBot {
         }
         if (cb.contains(Lan.clearOrders(a.getLanguage()))) {
             clearOrders(update);
-            showOrders(update);
-        }
+            List<String> list = new ArrayList<>();
+            list.add(Lan.backToMenu(a.getLanguage()));
+            editPic(Lan.orderCancelled(a.getLanguage()), update.getCallbackQuery().getMessage().getChatId(),
+                update.getCallbackQuery().getMessage().getMessageId(),
+                list, "Лого", 1);        }
         if (cb.contains("Отмена")) {
             showCart(update, true);
         }
