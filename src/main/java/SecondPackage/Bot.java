@@ -905,9 +905,9 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
         DataBase.sql("insert into zakaz (userid, product) values ("
                 +message.getChatId()+", '"
                 +curretCart(message.getChatId().toString())+"' )");
-        clearCart(message.getFrom().getId().toString());
+        clearCart(message.getChatId().toString());
         //deleteMessage(message);
-        DataBase.sql("update zakaz set confirmed = true where id = " + message.getChatId());
+        DataBase.sql("update zakaz set confirmed = true, time = '"+time+"' where id = " + message.getChatId());
         DataBase.sql("update users set rmid = 1 where id = " + message.getChatId());
     }
 
