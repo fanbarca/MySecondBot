@@ -337,8 +337,8 @@ public class Bot extends TelegramLongPollingBot {
                 ZoneId z = ZoneId.of("Asia/Tashkent");
                 if (LocalTime.now(z).getHour()<19&&LocalTime.now(z).getHour()>4) {
                     String address = null;
-                    boolean hasLocation = !DataBase.sqlQuery("select latitude from users where id ="+update.getCallbackQuery().getMessage().getChatId(), "latitude").equals("null");
-                    boolean hasAddress = !DataBase.sqlQuery("select address from users where id ="+update.getCallbackQuery().getMessage().getChatId(), "address").equals("null");
+                    boolean hasLocation = DataBase.sqlQuery("select latitude from users where id ="+update.getCallbackQuery().getMessage().getChatId(), "latitude")!=null;
+                    boolean hasAddress = DataBase.sqlQuery("select address from users where id ="+update.getCallbackQuery().getMessage().getChatId(), "address")!=null;
                         InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
                         List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
                         List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
