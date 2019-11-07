@@ -337,8 +337,8 @@ public class Bot extends TelegramLongPollingBot {
                 ZoneId z = ZoneId.of("Asia/Tashkent");
                 if (LocalTime.now(z).getHour()<19&&LocalTime.now(z).getHour()>4) {
                     String address = null;
-                    boolean hasLocation = Boolean.getBoolean(DataBase.sqlQuery("select latitude from users where id ="+update.getCallbackQuery().getMessage().getChatId(), "latitude"));
-                    boolean hasAddress = Boolean.getBoolean(DataBase.sqlQuery("select address from users where id ="+update.getCallbackQuery().getMessage().getChatId(), "address"));
+                    boolean hasLocation = !DataBase.sqlQuery("select latitude from users where id ="+update.getCallbackQuery().getMessage().getChatId(), "latitude").equals("null");
+                    boolean hasAddress = !DataBase.sqlQuery("select address from users where id ="+update.getCallbackQuery().getMessage().getChatId(), "address").equals("null");
                         InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
                         List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
                         List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
@@ -353,10 +353,13 @@ public class Bot extends TelegramLongPollingBot {
                     } else if (hasAddress) {
                         address = DataBase.sqlQuery("select address from users where id ="+update.getCallbackQuery().getMessage().getChatId(), "address");
                         if (address!=null) {
-                        editCaption("address: "+address, update.getCallbackQuery().getMessage(), markup);
+                        editCaption("**Хотите использовать предыдущий адрес?\n\n"+address, update.getCallbackQuery().getMessage(), markup);
+                        } else {
+                            sendMeLocation(update.getCallbackQuery().getMessage());
                         }
+                    } else {
+                        sendMeLocation(update.getCallbackQuery().getMessage());
                     }
-                    //sendMeLocation(update.getCallbackQuery().getMessage());
                 }
                 else editPic(Lan.tooLate(a.getLanguage()), update.getCallbackQuery().getMessage(), Lan.keyBoard(a.getLanguage()), "Лого", 2);;
             }
