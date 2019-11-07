@@ -388,10 +388,7 @@ public class Bot extends TelegramLongPollingBot {
         if (cb.contains("OrderTime")) {
             String time = cb.substring(9);
             long userid = update.getCallbackQuery().getMessage().getChatId();
-            DataBase.sql("update zakaz set time ='"+time+"' where id = "+userid);
-            // String address = DataBase.sqlQuery("select address from users where id ="+userid, "address");
-            // Float latitude = Float.parseFloat(DataBase.sqlQuery("select latitude from users where id ="+userid, "latitude"));
-            // Float longitude = Float.parseFloat(DataBase.sqlQuery("select longitude from users where id ="+userid, "longitude"));
+            DataBase.sql("update zakaz set time ='"+time+"' where userid = "+userid);
             confirm(update.getCallbackQuery().getMessage());
         }
         if (cb.contains("UseNewLocation")) {
@@ -918,9 +915,6 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
         DataBase.sql("update zakaz set conformed = true where userid = " + message.getChatId());
         DataBase.sql("update users set rmid = 1 where id = " + message.getChatId());
     }
-
-
-
 
 
 
