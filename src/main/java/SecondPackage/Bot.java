@@ -899,16 +899,17 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
             String address = DataBase.sqlQuery("select address from users where id ="+message.getChatId(), "address");
             String latitude = DataBase.sqlQuery("select latitude from users where id ="+message.getChatId(), "latitude");
             String longitude = DataBase.sqlQuery("select longitude from users where id ="+message.getChatId(), "longitude");
-        List<String> list = new ArrayList<>();
+            if (address!=null) address= "Адрес: "+address;
+            else address="";
+            List<String> list = new ArrayList<>();
             list.add(Lan.mainMenu(a.getLanguage()).get(1));
             list.add(Lan.backToMenu(a.getLanguage()));
         editPic(Lan.orderPlaced(a.getLanguage()), message.getChatId(),
                 Integer.parseInt(DataBase.sqlQuery("SELECT image from users where id=" + message.getChatId(), "image")),
                 list, "Лого", 2);
         Adminbot order = new Adminbot();
-        order.sendMe("Новый заказ пользователя: "+ a.getFirstName()+"\n" +"Время доставки: "+time+"\n\n" +curretCart(message.getChatId().toString()));
+        order.sendMe("Новый заказ пользователя: "+ a.getFirstName()+"\n" +"Время доставки: "+time+"\n" +"Адрес: "+address+"\n"+curretCart(message.getChatId().toString()));
         if (latitude!=null&&longitude!=null) order.sendLocation(Float.parseFloat(latitude), Float.parseFloat(longitude));
-        if (address!=null) order.sendMe("Адрес: "+address);
         order.sendContact(a.getFirstName(), a.getNumber());
         clearCart(message.getChatId().toString());
         //deleteMessage(message);
@@ -1189,7 +1190,7 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
 
 
     private void showOrders(Update update) throws TelegramApiException, SQLException {
-        List<String> items = DataBase.sqlQueryList("select product from zakaz where userid =" + update.getCallbackQuery().getMessage().getChatId(), "product");
+        List<String> items = DataBase.sqlQueryList("select product from zakaz where userid =" + update.getCallbackQuery().getMessage().getChatId()+" and conformed = true", "product");
         if (items.size() == 0) {
             editPic(Lan.mainMenu(a.getLanguage()).get(1) + "\n" + Lan.emptyOrders(a.getLanguage()), update.getCallbackQuery().getMessage(), null, "Лого", 2);
         } else {
