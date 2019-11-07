@@ -336,7 +336,6 @@ public class Bot extends TelegramLongPollingBot {
             } else {
                 ZoneId z = ZoneId.of("Asia/Tashkent");
                 if (LocalTime.now(z).getHour()<19&&LocalTime.now(z).getHour()>4) {
-                    String addressByLocation = null;
                     String address = null;
                     boolean hasLocation = !DataBase.sqlQuery("select latitude from users where id ="+update.getCallbackQuery().getMessage().getChatId(), "latitude").equals("null");
                     boolean hasAddress = !DataBase.sqlQuery("select address from users where id ="+update.getCallbackQuery().getMessage().getChatId(), "address").equals("null");
@@ -350,12 +349,7 @@ public class Bot extends TelegramLongPollingBot {
                         markup.setKeyboard(rows);
 
                     if (hasLocation) {
-                        String latitude = DataBase.sqlQuery("select latitude from users where id ="+update.getCallbackQuery().getMessage().getChatId(), "latitude");
-                        String longitude = DataBase.sqlQuery("select longitude from users where id ="+update.getCallbackQuery().getMessage().getChatId(), "longitude");
-                        addressByLocation = getAddressCoordinates(latitude, longitude);
-                        if (addressByLocation!=null) {
-                        editCaption("location: "+addressByLocation, update.getCallbackQuery().getMessage(), markup);
-                        }
+                        editCaption("**Хотите использовать предыдущую геолакацию?", update.getCallbackQuery().getMessage(), markup);
                     } else if (hasAddress) {
                         address = DataBase.sqlQuery("select address from users where id ="+update.getCallbackQuery().getMessage().getChatId(), "address");
                         if (address!=null) {
@@ -400,26 +394,6 @@ public class Bot extends TelegramLongPollingBot {
 
 
 
-
-
-
-    private String getAddressCoordinates(String lat, String lng) throws MalformedURLException, IOException {
-
-        URL url = new URL("https://geocode-maps.yandex.ru/1.x/?geocode="+ lat + "," + lng);
-        HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-        try {
-            InputStream in = url.openStream();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-            String result, line = reader.readLine();
-            result = line;
-            while ((line = reader.readLine()) != null) {
-                result += line;
-            }
-            return result;
-        } finally {
-            urlConnection.disconnect();
-        }
-    }
 
 
 
