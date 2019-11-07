@@ -56,6 +56,13 @@ class Lan {
         else if (lan.equals("English")) r = ":truck: Place an order";
         return r;
     }
+    public static String alreadyHaveLocation(String lan){
+        String r="";
+        if (lan.equals("Uzbek")) r = "Oldin yuborilgan geolokatsiyani tanlaysizmi?";
+        else if (lan.equals("Russian")) r = "Ранее была отправленную геолакацию?";
+        else if (lan.equals("English")) r = "Would you like to use previously sent location?";
+        return r;
+    }
     public static String tooLate(String lan){
         String r="";
         if (lan.equals("Uzbek")) r = "\n<b>Yetkazish xizmati 9:00 dan 18:30 gacha ishlaydi</b>";
