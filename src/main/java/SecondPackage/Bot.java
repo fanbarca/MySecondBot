@@ -895,10 +895,10 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
 
 
     private void confirm(Message message) throws SQLException, TelegramApiException {
-            String time = DataBase.sqlQuery("select time from zakaz where id ="+message.getChatId(), "longitude");
-            String address = DataBase.sqlQuery("select address from users where id ="+message.getChatId(), "address");
-            String latitude = DataBase.sqlQuery("select latitude from users where id ="+message.getChatId(), "latitude");
-            String longitude = DataBase.sqlQuery("select longitude from users where id ="+message.getChatId(), "longitude");
+            String time = DataBase.sqlQuery("select time from zakaz where userid ="+message.getChatId(), "longitude");
+            String address = DataBase.sqlQuery("select address from users where userid ="+message.getChatId(), "address");
+            String latitude = DataBase.sqlQuery("select latitude from users where userid ="+message.getChatId(), "latitude");
+            String longitude = DataBase.sqlQuery("select longitude from users where userid ="+message.getChatId(), "longitude");
         List<String> list = new ArrayList<>();
             list.add(Lan.mainMenu(a.getLanguage()).get(1));
             list.add(Lan.backToMenu(a.getLanguage()));
