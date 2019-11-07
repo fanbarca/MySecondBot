@@ -344,15 +344,14 @@ public class Bot extends TelegramLongPollingBot {
                         String latitude = DataBase.sqlQuery("select latitude from users where id ="+update.getCallbackQuery().getMessage().getChatId(), "latitude");
                         String longitude = DataBase.sqlQuery("select longitude from users where id ="+update.getCallbackQuery().getMessage().getChatId(), "longitude");
                         addressByLocation = getAddressCoordinates(latitude, longitude);
-                    }
-                    if (hasAddress) {
+                        if (addressByLocation!=null) {
+                        editCaption("location: "+addressByLocation, update.getCallbackQuery().getMessage(), null);
+                        }
+                    } else if (hasAddress) {
                         address = DataBase.sqlQuery("select address from users where ="+update.getCallbackQuery().getMessage().getChatId(), "address");
-                    }
-                    if (addressByLocation!=null) {
-                        editCaption(addressByLocation, update.getCallbackQuery().getMessage(), null);
-                    }
-                    if (address!=null) {
-                        editCaption(address, update.getCallbackQuery().getMessage(), null);
+                        if (address!=null) {
+                        editCaption("address: "+address, update.getCallbackQuery().getMessage(), null);
+                        }
                     }
                     //sendMeLocation(update.getCallbackQuery().getMessage());
                 }
