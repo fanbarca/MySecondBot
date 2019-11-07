@@ -4,6 +4,7 @@ import com.ibm.icu.text.Transliterator;
 import com.vdurmont.emoji.EmojiParser;
 import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
 import org.telegram.telegrambots.meta.api.methods.ForwardMessage;
+import org.telegram.telegrambots.meta.api.methods.send.SendLocation;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
@@ -348,6 +349,14 @@ public class Bot extends TelegramLongPollingBot {
         if (cb.contains("Отмена")) {
             showCart(update, true);
         }
+        if (cb.contains("OrderTime")) {
+            String time = cb.substring(9);
+            DataBase.sql("update zakaz set time ='"+time);
+            String address = DataBase.sqlQuery("select address from users where id ="+update.getCallbackQuery().getMessage().getChatId(), "address");
+            Float latitude = Float.parseFloat(DataBase.sqlQuery("select latitude from users where id ="+update.getCallbackQuery().getMessage().getChatId(), "latitude"));
+            Float longitude = Float.parseFloat(DataBase.sqlQuery("select longitude from users where id ="+update.getCallbackQuery().getMessage().getChatId(), "longitude"));
+            confirm(update.getCallbackQuery().getMessage(), address, latitude, longitude);
+        }
     }
 
 
@@ -370,10 +379,13 @@ public class Bot extends TelegramLongPollingBot {
 
 
 
-    private void clearOrders(Update update){
+    private void clearOrders(Update update) throws SQLException{
+        boolean confirmed = Boolean.getBoolean(DataBase.sqlQuery("select confirmed from zakaz where userid = "+ update.getCallbackQuery().getMessage().getChatId(), "confirmed"));
         DataBase.sql("delete from zakaz where userid =" + update.getCallbackQuery().getMessage().getChatId());
-        Adminbot order = new Adminbot();
-        order.sendMe("Заказ от " + update.getCallbackQuery().getFrom().getFirstName()+" отменён");
+        if (confirmed) {
+            Adminbot order = new Adminbot();
+            order.sendMe("Заказ от " + update.getCallbackQuery().getFrom().getFirstName()+" отменён");
+        }
     }
 
 
@@ -578,6 +590,25 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
 
 
 
+    public void editCaption(String text, String chatId, int messageid, InlineKeyboardMarkup markup) throws TelegramApiException, SQLException {
+        //Integer messageId= Integer.parseInt(DataBase.sqlQuery("select image from users where id="+message.getChatId(), "image"));
+        EditMessageCaption ec = new EditMessageCaption();
+        ec.setChatId(chatId);
+        ec.setMessageId(messageid);
+        ec.setCaption(EmojiParser.parseToUnicode(text)).setParseMode("HTML");
+        ec.setReplyMarkup(markup);
+        execute(ec);
+    }
+
+
+
+
+
+
+
+
+
+
 
 
     public void editCaption(String text, Message message, InlineKeyboardMarkup markup) throws TelegramApiException, SQLException {
@@ -718,9 +749,12 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
             }
             else DataBase.sql("update users set address = '"+update.getMessage().getText()+"'");
             // confirm(update.getMessage(), address, location);
-            editPic(Lan.orderTime(a.getLanguage()) + Lan.tooLate(a.getLanguage()), update.getMessage().getChatId(),
+            // editPic(Lan.orderTime(a.getLanguage()) + Lan.tooLate(a.getLanguage()), update.getMessage().getChatId(),
+            //     Integer.parseInt(DataBase.sqlQuery("SELECT image from users where id=" + update.getMessage().getChatId(), "image")),
+            //     timeKeys(), "Лого", 3);
+            editCaption(Lan.orderTime(a.getLanguage()) + Lan.tooLate(a.getLanguage()), update.getMessage().getChatId().toString(),
                 Integer.parseInt(DataBase.sqlQuery("SELECT image from users where id=" + update.getMessage().getChatId(), "image")),
-                timeKeys(), "Лого", 3);
+                timeKeys());
             }
             deleteMessage(update.getMessage());
     }
@@ -732,7 +766,7 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
 
 
 
-    private List<String> timeKeys() {
+    private InlineKeyboardMarkup timeKeys() {
         List<String> menu = new ArrayList<String>();
         ZoneId z = ZoneId.of("Asia/Tashkent");
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm");
@@ -740,8 +774,8 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
         int hours = LocalTime.now(z).getHour();
         if (hours<8) {
             menu.add(dtf.format(LocalTime.now(z).withHour(9).withMinute(0)));
-            for (int i = 30; i<370; i+=30) {
-            menu.add(dtf.format(LocalTime.now(z).withHour(9).withMinute(0).plusMinutes(i)));
+            for (int i = 30; i<(19-LocalTime.now(z).getHour())*60; i+=30) {
+                menu.add(dtf.format(LocalTime.now(z).withHour(9).withMinute(0).plusMinutes(i)));
             }
         } else {
             int last=90;
@@ -763,9 +797,31 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
             for (int i = last; i<(19-LocalTime.now(z).getHour())*60; i+=30) {
                 menu.add(dtf.format(LocalTime.now(z).truncatedTo(ChronoUnit.HOURS).plusMinutes(i)));
             }
-            menu.add(Lan.clearOrders(a.getLanguage()));
+        }
+
+        InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
+            List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
+            for (int i = 0; i<menu.size(); i++) {
+                List<InlineKeyboardButton> row1 = new ArrayList<InlineKeyboardButton>();
+                row1.add(new InlineKeyboardButton()
+                                .setText(EmojiParser.parseToUnicode(menu.get(i)))
+                                .setCallbackData("OrderTime"+menu.get(i)));
+                if((i+1)<menu.size()) row1.add(new InlineKeyboardButton()
+                                .setText(EmojiParser.parseToUnicode(menu.get(i+1)))
+                                .setCallbackData("OrderTime"+menu.get(i+1)));
+                if((i+2)<menu.size()) row1.add(new InlineKeyboardButton()
+                                .setText(EmojiParser.parseToUnicode(menu.get(i+2)))
+                                .setCallbackData("OrderTime"+menu.get(i+2)));
+                rows.add(row1);
             }
-        return menu;
+            List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
+            row.add(new InlineKeyboardButton()
+                                .setText(EmojiParser.parseToUnicode(Lan.clearOrders(a.getLanguage())))
+                                .setCallbackData(Lan.clearOrders(a.getLanguage())));
+            rows.add(row);
+            markup.setKeyboard(rows);
+
+        return markup;
     }
 
 
@@ -790,7 +846,7 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
 
 
 
-    private void confirm(Message message, String address, Location location) throws SQLException, TelegramApiException {
+    private void confirm(Message message, String address, Float latitude, Float longitude) throws SQLException, TelegramApiException {
         List<String> list = new ArrayList<>();
             list.add(Lan.clearOrders(a.getLanguage()));
             list.add(Lan.backToMenu(a.getLanguage()));
@@ -799,7 +855,7 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
                 list, "Лого", 2);
         Adminbot order = new Adminbot();
         order.sendMe("Новый заказ пользователя: "+ message.getFrom().getFirstName()+"\n\n" +curretCart(message.getChatId().toString()));
-        if (location!=null) order.sendLocation(location);
+        if (latitude!=null&&longitude!=null) order.sendLocation(latitude, longitude);
         if (address!=null) order.sendMe(address);
         order.sendContact(message, a.getNumber());
         DataBase.sql("insert into zakaz (userid, product) values ("

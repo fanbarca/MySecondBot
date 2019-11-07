@@ -363,10 +363,10 @@ public List<String> listOrders(String column){
         }
         catch (TelegramApiException e) {e.printStackTrace();}
     }
-    public void sendLocation(Location location) {
+    public void sendLocation(Float latitude, Float longitude) {
         SendLocation sendMessage = new SendLocation()
-                .setLatitude(location.getLatitude())
-                .setLongitude(location.getLongitude())
+                .setLatitude(latitude)
+                .setLongitude(longitude)
                 .setChatId(myID);
         try {
             execute(sendMessage);
