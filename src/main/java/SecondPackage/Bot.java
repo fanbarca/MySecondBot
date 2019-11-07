@@ -338,8 +338,8 @@ public class Bot extends TelegramLongPollingBot {
                 if (LocalTime.now(z).getHour()<19&&LocalTime.now(z).getHour()>4) {
                     String addressByLocation = null;
                     String address = null;
-                    boolean hasLocation = !DataBase.sqlQuery("select latitude from users where ="+update.getCallbackQuery().getMessage().getChatId(), "latitude").equals("null");
-                    boolean hasAddress = !DataBase.sqlQuery("select address from users where ="+update.getCallbackQuery().getMessage().getChatId(), "address").equals("null");
+                    boolean hasLocation = !DataBase.sqlQuery("select latitude from users where id ="+update.getCallbackQuery().getMessage().getChatId(), "latitude").equals("null");
+                    boolean hasAddress = !DataBase.sqlQuery("select address from users where id ="+update.getCallbackQuery().getMessage().getChatId(), "address").equals("null");
                     if (hasLocation) {
                         String latitude = DataBase.sqlQuery("select latitude from users where id ="+update.getCallbackQuery().getMessage().getChatId(), "latitude");
                         String longitude = DataBase.sqlQuery("select longitude from users where id ="+update.getCallbackQuery().getMessage().getChatId(), "longitude");
