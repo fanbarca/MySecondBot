@@ -333,6 +333,9 @@ public class Bot extends TelegramLongPollingBot {
             } else {
                 ZoneId z = ZoneId.of("Asia/Tashkent");
                 if (LocalTime.now(z).getHour()<19&&LocalTime.now(z).getHour()>4) {
+                    DataBase.sql("insert into zakaz (userid, product) values ("
+                        +update.getCallbackQuery().getMessage().getChatId()+", '"
+                        +curretCart(update.getCallbackQuery().getMessage().getChatId().toString())+"' )");
                     String address = null;
                     boolean hasLocation = DataBase.sqlQuery("select latitude from users where id ="+update.getCallbackQuery().getMessage().getChatId(), "latitude")!=null;
                     boolean hasAddress = DataBase.sqlQuery("select address from users where id ="+update.getCallbackQuery().getMessage().getChatId(), "address")!=null;
@@ -355,9 +358,6 @@ public class Bot extends TelegramLongPollingBot {
                         editCaption("**Хотите использовать предыдущий адрес?\n\n"+address, update.getCallbackQuery().getMessage(), markup);
                         }
                     } else {
-                        DataBase.sql("insert into zakaz (userid, product) values ("
-                        +update.getCallbackQuery().getMessage().getChatId()+", '"
-                        +curretCart(update.getCallbackQuery().getMessage().getChatId().toString())+"' )");
                         sendMeLocation(update.getCallbackQuery().getMessage());
                     }
                 }
