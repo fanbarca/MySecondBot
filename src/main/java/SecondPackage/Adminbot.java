@@ -373,10 +373,9 @@ public List<String> listOrders(String column){
         }
         catch (TelegramApiException e) {e.printStackTrace();}
     }
-    public void sendContact(Message message, String number) {
+    public void sendContact(String name, String number) {
         SendContact sendMessage = new SendContact()
-                .setFirstName(message.getFrom().getFirstName())
-                .setLastName(message.getFrom().getLastName())
+                .setFirstName(name)
                 .setPhoneNumber(number)
                 .setChatId(myID);
         try {
