@@ -29,6 +29,13 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.logging.BotLogger;
 
 import java.net.URISyntaxException;
+import java.net.URL;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.time.LocalTime;
@@ -39,6 +46,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.sql.*;
 import java.sql.Date;
+
 
 public class Bot extends TelegramLongPollingBot {
     private String botName = "DeliverySuperBot";
@@ -200,7 +208,7 @@ public class Bot extends TelegramLongPollingBot {
 
 
 
-    private void handleCallback(Update update) throws TelegramApiException, SQLException {
+    private void handleCallback(Update update) throws TelegramApiException, SQLException, MalformedURLException, IOException {
         AnswerCallbackQuery answer = new AnswerCallbackQuery()
                 .setCallbackQueryId(update.getCallbackQuery().getId()).setShowAlert(false);
         execute(answer);
@@ -327,7 +335,27 @@ public class Bot extends TelegramLongPollingBot {
                 editPic(Lan.orderExists(a.getLanguage()), update.getCallbackQuery().getMessage(), Lan.YesNo(a.getLanguage()), "Лого", 2);
             } else {
                 ZoneId z = ZoneId.of("Asia/Tashkent");
-                if (LocalTime.now(z).getHour()<19&&LocalTime.now(z).getHour()>4) sendMeLocation(update.getCallbackQuery().getMessage());
+                if (LocalTime.now(z).getHour()<19&&LocalTime.now(z).getHour()>4) {
+                    String addressByLocation = null;
+                    String address = null;
+                    boolean hasLocation = !DataBase.sqlQuery("select latitude from users where ="+update.getCallbackQuery().getMessage().getChatId(), "latitude").equals("null");
+                    boolean hasAddress = !DataBase.sqlQuery("select address from users where ="+update.getCallbackQuery().getMessage().getChatId(), "address").equals("null");
+                    if (hasLocation) {
+                        String latitude = DataBase.sqlQuery("select latitude from users where id ="+update.getCallbackQuery().getMessage().getChatId(), "latitude");
+                        String longitude = DataBase.sqlQuery("select longitude from users where id ="+update.getCallbackQuery().getMessage().getChatId(), "longitude");
+                        addressByLocation = getAddressCoordinates(latitude, longitude);
+                    }
+                    if (hasAddress) {
+                        address = DataBase.sqlQuery("select address from users where ="+update.getCallbackQuery().getMessage().getChatId(), "address");
+                    }
+                    if (addressByLocation!=null) {
+                        editCaption(addressByLocation, update.getCallbackQuery().getMessage(), null);
+                    }
+                    if (address!=null) {
+                        editCaption(address, update.getCallbackQuery().getMessage(), null);
+                    }
+                    //sendMeLocation(update.getCallbackQuery().getMessage());
+                }
                 else editPic(Lan.tooLate(a.getLanguage()), update.getCallbackQuery().getMessage(), Lan.keyBoard(a.getLanguage()), "Лого", 2);;
             }
         }
@@ -359,6 +387,33 @@ public class Bot extends TelegramLongPollingBot {
             confirm(update.getCallbackQuery().getMessage(), address, latitude, longitude, time);
         }
     }
+
+
+
+
+
+
+
+
+    private String getAddressCoordinates(String lat, String lng) throws MalformedURLException, IOException {
+
+        URL url = new URL("http://maps.googleapis.com/maps/api/geocode/json?latlng="
+                + lat + "," + lng + "&sensor=true");
+        HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+        try {
+            InputStream in = url.openStream();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+            String result, line = reader.readLine();
+            result = line;
+            while ((line = reader.readLine()) != null) {
+                result += line;
+            }
+            return result;
+        } finally {
+            urlConnection.disconnect();
+        }
+    }
+
 
 
 
@@ -480,6 +535,7 @@ public class Bot extends TelegramLongPollingBot {
 
 
 public void sendMeLocation(Message message) throws TelegramApiException, SQLException {
+
         InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
         List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
@@ -599,7 +655,7 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
         ec.setChatId(chatId);
         ec.setMessageId(messageid);
         ec.setCaption(EmojiParser.parseToUnicode(text)).setParseMode("HTML");
-        ec.setReplyMarkup(markup);
+        if (markup!=null) ec.setReplyMarkup(markup);
         execute(ec);
     }
 
@@ -620,7 +676,7 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
         ec.setChatId(message.getChatId().toString());
         ec.setMessageId(message.getMessageId());
         ec.setCaption(EmojiParser.parseToUnicode(text)).setParseMode("HTML");
-        ec.setReplyMarkup(markup);
+        if (markup!=null) ec.setReplyMarkup(markup);
         execute(ec);
     }
 
@@ -745,12 +801,13 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
 
 
     private void handleLocation(Update update) throws SQLException, TelegramApiException {
-            if (waitingForLocation(update.getMessage())) {
+        if (waitingForLocation(update.getMessage())) {
+
             if (update.getMessage().hasLocation()) {
                 Location location = update.getMessage().getLocation();
-                DataBase.sql("update users set latitude = '"+location.getLatitude()+"', longitude = '"+location.getLongitude()+"'");
+                DataBase.sql("update users set latitude = '"+location.getLatitude()+"', longitude = '"+location.getLongitude()+"', address = null where id ="+ update.getMessage().getChatId());
             }
-            else DataBase.sql("update users set address = '"+update.getMessage().getText()+"'");
+            else DataBase.sql("update users set latitude = null, longitude = null, address = '"+update.getMessage().getText()+"' where id ="+ update.getMessage().getChatId());
             // confirm(update.getMessage(), address, location);
             // editPic(Lan.orderTime(a.getLanguage()) + Lan.tooLate(a.getLanguage()), update.getMessage().getChatId(),
             //     Integer.parseInt(DataBase.sqlQuery("SELECT image from users where id=" + update.getMessage().getChatId(), "image")),
@@ -857,7 +914,7 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
                 Integer.parseInt(DataBase.sqlQuery("SELECT image from users where id=" + message.getChatId(), "image")),
                 list, "Лого", 2);
         Adminbot order = new Adminbot();
-        order.sendMe("Новый заказ пользователя: "+ message.getFrom().getFirstName()+"\n" +"Время доставки: "+time+"\n\n" +curretCart(message.getChatId().toString()));
+        order.sendMe("Новый заказ пользователя: "+ a.getFirstName()+"\n" +"Время доставки: "+time+"\n\n" +curretCart(message.getChatId().toString()));
         if (latitude!=null&&longitude!=null) order.sendLocation(latitude, longitude);
         if (address!=null) order.sendMe(address);
         order.sendContact(message, a.getNumber());
@@ -865,8 +922,8 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
                 +message.getChatId()+", '"
                 +curretCart(message.getChatId().toString())+"' )");
         clearCart(message.getFrom().getId().toString());
-        deleteMessage(message);
-        DataBase.sql("update users set confirmed = true where id = " + message.getChatId());
+        //deleteMessage(message);
+        DataBase.sql("update zakaz set confirmed = true where id = " + message.getChatId());
         DataBase.sql("update users set rmid = 1 where id = " + message.getChatId());
     }
 
@@ -1254,6 +1311,11 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
         if (list.size()>1) cart += "\n" + Lan.total(a.getLanguage()) + result + Lan.currency(a.getLanguage());
         return cart;
     }
+
+
+
+
+
 
 
 
