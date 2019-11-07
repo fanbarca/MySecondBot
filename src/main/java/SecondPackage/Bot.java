@@ -386,7 +386,7 @@ public class Bot extends TelegramLongPollingBot {
             String time = cb.substring(9);
             long userid = update.getCallbackQuery().getMessage().getChatId();
             DataBase.sql("update zakaz set time ='"+time+"' where userid = "+userid);
-            confirm(update.getCallbackQuery().getMessage());
+            confirm(update.getCallbackQuery().getMessage(), time);
         }
         if (cb.contains("UseNewLocation")) {
             sendMeLocation(update.getCallbackQuery().getMessage());
@@ -885,15 +885,28 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
 
 
 
+
     private void confirm(Message message) throws SQLException, TelegramApiException {
         String time = DataBase.sqlQuery("select time from zakaz where userid ="+message.getChatId(), "time");
+        confirm(message, time);
+    }
+
+
+
+
+
+
+
+
+    private void confirm(Message message, String time) throws SQLException, TelegramApiException {
         String address = DataBase.sqlQuery("select address from users where id ="+message.getChatId(), "address");
         String latitude = DataBase.sqlQuery("select latitude from users where id ="+message.getChatId(), "latitude");
         String longitude = DataBase.sqlQuery("select longitude from users where id ="+message.getChatId(), "longitude");
         if (address!=null) address= "<b>Адрес:</b> "+address+"\n";
         else address="";
         Adminbot order = new Adminbot();
-        order.sendMe("<b>Новый заказ пользователя:</b> "+ a.getFirstName()+"\n"
+        order.sendMe("<b>Новый заказ</b>\n\n"
+                    +"<b>Имя клиента:</b> "+ a.getFirstName()+"\n"
                     +"<b>Время доставки:</b> "+time+"\n"
                     +address
                     +"<b>Заказ:</b> "+curretCart(message.getChatId().toString()));
