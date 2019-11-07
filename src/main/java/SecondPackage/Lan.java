@@ -230,11 +230,25 @@ class Lan {
         else if (lan.equals("English")) r = ":heavy_plus_sign: Add to cart";
         return r;
     }
+        public static String addMore(String lan) {
+        String r="";
+        if (lan.equals("Uzbek")) r = ":heavy_plus_sign: Yana qo'shish";
+        else if (lan.equals("Russian")) r = ":heavy_plus_sign: Добавить ещё";
+        else if (lan.equals("English")) r = ":heavy_plus_sign: Add more";
+        return r;
+    }
     public static String removeFromCart(String lan) {
         String r="";
-        if (lan.equals("Uzbek")) r = ":heavy_minus_sign: Savatchadan olish";
+        if (lan.equals("Uzbek")) r = ":heavy_minus_sign: Savatchadan olib tashlash";
         else if (lan.equals("Russian")) r = ":heavy_minus_sign: Убрать из корзины";
         else if (lan.equals("English")) r = ":heavy_minus_sign: Remove from cart";
+        return r;
+    }
+    public static String removeSelectively(String lan) {
+        String r="";
+        if (lan.equals("Uzbek")) r = ":heavy_minus_sign: Tanlab olib tashlash";
+        else if (lan.equals("Russian")) r = ":heavy_minus_sign: Убрать выборочно";
+        else if (lan.equals("English")) r = ":heavy_minus_sign: Remove one by one";
         return r;
     }
     public static String inCart(String lan, int items) {

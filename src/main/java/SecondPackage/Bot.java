@@ -267,62 +267,53 @@ public class Bot extends TelegramLongPollingBot {
                 editPicItems(String.valueOf(i), update.getCallbackQuery().getMessage(), "Лого");
             }
         }
-        if (cb.contains(Lan.removeFromCart(a.getLanguage())) || cb.contains(Lan.addToCart(a.getLanguage()))) {
-            String prodId = cb.substring(0, 4);
-            if (cb.contains(Lan.removeFromCart(a.getLanguage()))) {
-                DataBase.sql("delete from cart where userid =" + update.getCallbackQuery().getFrom().getId()
-                        + " and item = '" + prodId + "'");
-            } else if (cb.contains(Lan.addToCart(a.getLanguage()))) {
-                DataBase.sql("insert into cart (userid, item) values (" + update.getCallbackQuery().getFrom().getId()
-                        + ",'" + prodId + "')");
-            }
-            String name = DataBase.sqlQuery("select " + a.getLanguage() + " from table0 where id =" + prodId, a.getLanguage());
-            int occurrences = 0;
-            String total = "";
-            List<String> items = DataBase.sqlQueryList("select item from cart where userid =" + update.getCallbackQuery().getFrom().getId(), "item");
-            if (items.contains(prodId)) {
-                occurrences = Collections.frequency(items, prodId);
-                total = Lan.inCart(a.getLanguage(), occurrences);
-            }
-            String description = "\n<i>"+DataBase.sqlQuery("select "+a.getLanguage()+"description from table0 where id =" +prodId, a.getLanguage()+"description")+"</i>\n";
-            String text = "<b>" + name + "</b>"+description+"\n" +
-                    Lan.cost(a.getLanguage()) +
-                    DataBase.sqlQuery("SELECT cost from table0 where id = " + prodId, "cost") +
-                    Lan.currency(a.getLanguage()) +
-                    ".    " + total;
-            editCaption(text, update.getCallbackQuery().getMessage(), markUp(text, prodId, keyb(occurrences, name), 3));
-        }
+
+
+
         for (String name : DataBase.showAllProducts(a.getLanguage(), false)) {
             String prodId = DataBase.sqlQuery("select id from table0 where " + a.getLanguage() + " ='" + name + "'", "id");
             String type = DataBase.sqlQuery("select type from table0 where " + a.getLanguage() + " ='" + name + "'", "type");
-            if (cb.contains(name)&&!cb.contains(":heavy_multiplication_x:")) {
-                List<String> cart = DataBase.sqlQueryList("select item from cart where userid =" + update.getCallbackQuery().getFrom().getId(), "item");
-                int occurrences = 0;
-                String total = "";
-                if (cart.contains(prodId)) {
-                    occurrences = Collections.frequency(cart, prodId);
-                    total = Lan.inCart(a.getLanguage(), occurrences);
-                }
-
-                String description = "\n<i>"+DataBase.sqlQuery("select "+a.getLanguage()+"description from table0 where id =" +prodId, a.getLanguage()+"description")+"</i>\n";
-                editPic("<b>" + name + "</b>"+description+"\n" + Lan.cost(a.getLanguage()) + DataBase.sqlQuery("SELECT cost from table0 where " + a.getLanguage() + " = '" + name + "'", "cost") + Lan.currency(a.getLanguage()) + ".    " + total,
-                        update.getCallbackQuery().getMessage(), keyb(occurrences, name), prodId, 3);
-            } else if (cb.contains(":heavy_multiplication_x: "+name)){
-                DataBase.sql("delete from cart where userid =" + update.getCallbackQuery().getFrom().getId()
-                        + " and item = '" + prodId + "'");
-                showCart(update, true);
-            } else if (cb.contains("+++")||cb.contains("---")) {
-                if (cb.contains("+++"+prodId)){
-                DataBase.sql("insert into cart (userid, item) values (" + update.getCallbackQuery().getFrom().getId()
-                        + ",'" + prodId + "')");
-                editPicItems(type, update.getCallbackQuery().getMessage(), "Лого");
-                } else if (cb.contains("---"+prodId)){
-                DataBase.sql("delete from cart where userid =" + update.getCallbackQuery().getFrom().getId()
-                        + " and item = '" + prodId + "'");
-                editPicItems(type, update.getCallbackQuery().getMessage(), "Лого");
+            int occurrences = 0;
+            String total = "";
+            String text="";
+            if (cb.contains(prodId)&&cb.contains(name)) {
+                if (cb.contains("+++")||cb.contains("---")) {
+                    if (cb.contains("+++"+prodId)){
+                    DataBase.sql("insert into cart (userid, item) values (" + update.getCallbackQuery().getFrom().getId()
+                            + ",'" + prodId + "')");
+                    editPicItems(type, update.getCallbackQuery().getMessage(), "Лого");
+                    } else if (cb.contains("---"+prodId)){
+                    DataBase.sql("delete from cart where userid =" + update.getCallbackQuery().getFrom().getId()
+                            + " and item = '" + prodId + "'");
+                    editPicItems(type, update.getCallbackQuery().getMessage(), "Лого");
+                    }
+                } else if (cb.contains(Lan.removeFromCart(a.getLanguage()))
+                        || cb.contains(Lan.addToCart(a.getLanguage()))
+                        || cb.contains(Lan.addMore(a.getLanguage()))) {
+                    if (cb.contains(Lan.removeFromCart(a.getLanguage()))) {
+                        DataBase.sql("delete from cart where userid =" + update.getCallbackQuery().getFrom().getId()
+                                + " and item = '" + prodId + "'");
+                    } else if (cb.contains(Lan.addToCart(a.getLanguage()))|| cb.contains(Lan.addMore(a.getLanguage()))) {
+                            DataBase.sql("insert into cart (userid, item) values (" + update.getCallbackQuery().getFrom().getId()
+                                    + ",'" + prodId + "')");
+                    }
+                    List<String> items = DataBase.sqlQueryList("select item from cart where userid =" + update.getCallbackQuery().getFrom().getId(), "item");
+                    if (items.contains(prodId)) {
+                        occurrences = Collections.frequency(items, prodId);
+                        total = Lan.inCart(a.getLanguage(), occurrences);
+                    }
+                    text  = "<b>" + name + "</b>\n"+
+                            "<i>"+DataBase.sqlQuery("select "+a.getLanguage()+"description from table0 where id =" +prodId, a.getLanguage()+"description")+"</i>\n\n"
+                            +Lan.cost(a.getLanguage())+DataBase.sqlQuery("SELECT cost from table0 where id = " + prodId, "cost")
+                            +Lan.currency(a.getLanguage()) +".    " + total;
+                    editCaption(text, update.getCallbackQuery().getMessage(), markUp(text, prodId, (occurrences>0)?keybAddMore(name):keybAdd(name), 3));
+                } else if (cb.contains(":heavy_multiplication_x: "+name)){
+                    DataBase.sql("delete from cart where userid =" + update.getCallbackQuery().getFrom().getId()
+                    + " and item = '" + prodId + "'");
+                    showCart(update, true);
                 }
             }
-        }
+    }
         if (cb.contains(Lan.clearCart(a.getLanguage()))) {
             clearCart(update.getCallbackQuery().getFrom().getId().toString());
             showCart(update, true);
@@ -443,17 +434,21 @@ public class Bot extends TelegramLongPollingBot {
 
 
 
-    private List<String> keyb(Integer occurances, String name) throws SQLException {
+    private List<String> keybAdd(String name) throws SQLException {
         List<String> keyb = new ArrayList<>();
-
         keyb.add(Lan.addToCart(a.getLanguage()));
-//                keyb.add(":point_left: "+prevName);
-//                keyb.add(nextName+" :point_right:");
         keyb.add(Lan.listTypes(a.getLanguage()).get(Integer.parseInt(DataBase.sqlQuery("SELECT type from table0 where " + a.getLanguage() + " = '" + name + "'", "type"))));
-        if (occurances > 0) keyb.add(Lan.removeFromCart(a.getLanguage()));
         return keyb;
     }
 
+
+    private List<String> keybAddMore(String name) throws SQLException {
+        List<String> keyb = new ArrayList<>();
+        keyb.add(Lan.addMore(a.getLanguage()));
+        keyb.add(Lan.listTypes(a.getLanguage()).get(Integer.parseInt(DataBase.sqlQuery("SELECT type from table0 where " + a.getLanguage() + " = '" + name + "'", "type"))));
+        keyb.add(Lan.removeFromCart(a.getLanguage()));
+        return keyb;
+    }
 
 
 
@@ -997,7 +992,7 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
                     List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
                     row.add(new InlineKeyboardButton()
                             .setText(EmojiParser.parseToUnicode(name))
-                            .setCallbackData(name));
+                            .setCallbackData(prodID));
                     if (!DataBase.sqlQueryList("select item from cart where userid = "+id, "item").contains(prodID)) {
                         row.add(new InlineKeyboardButton()
                                 .setText(EmojiParser.parseToUnicode(":heavy_plus_sign:🛒"))
