@@ -340,17 +340,26 @@ public class Bot extends TelegramLongPollingBot {
                     String address = null;
                     boolean hasLocation = !DataBase.sqlQuery("select latitude from users where id ="+update.getCallbackQuery().getMessage().getChatId(), "latitude").equals("null");
                     boolean hasAddress = !DataBase.sqlQuery("select address from users where id ="+update.getCallbackQuery().getMessage().getChatId(), "address").equals("null");
+                        InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
+                        List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
+                        List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
+                                    row.add(new InlineKeyboardButton()
+                                            .setText(EmojiParser.parseToUnicode(Lan.clearOrders(a.getLanguage())))
+                                            .setCallbackData("Отмена"));
+                        rows.add(row);
+                        markup.setKeyboard(rows);
+
                     if (hasLocation) {
                         String latitude = DataBase.sqlQuery("select latitude from users where id ="+update.getCallbackQuery().getMessage().getChatId(), "latitude");
                         String longitude = DataBase.sqlQuery("select longitude from users where id ="+update.getCallbackQuery().getMessage().getChatId(), "longitude");
                         addressByLocation = getAddressCoordinates(latitude, longitude);
                         if (addressByLocation!=null) {
-                        editCaption("location: "+addressByLocation, update.getCallbackQuery().getMessage(), null);
+                        editCaption("location: "+addressByLocation, update.getCallbackQuery().getMessage(), markup);
                         }
                     } else if (hasAddress) {
                         address = DataBase.sqlQuery("select address from users where id ="+update.getCallbackQuery().getMessage().getChatId(), "address");
                         if (address!=null) {
-                        editCaption("address: "+address, update.getCallbackQuery().getMessage(), null);
+                        editCaption("address: "+address, update.getCallbackQuery().getMessage(), markup);
                         }
                     }
                     //sendMeLocation(update.getCallbackQuery().getMessage());
@@ -396,8 +405,7 @@ public class Bot extends TelegramLongPollingBot {
 
     private String getAddressCoordinates(String lat, String lng) throws MalformedURLException, IOException {
 
-        URL url = new URL("http://maps.googleapis.com/maps/api/geocode/json?latlng="
-                + lat + "," + lng + "&sensor=true");
+        URL url = new URL("https://geocode-maps.yandex.ru/1.x/?geocode="+ lat + "," + lng);
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
         try {
             InputStream in = url.openStream();
