@@ -267,22 +267,17 @@ public class Bot extends TelegramLongPollingBot {
                 editPicItems(String.valueOf(i), update.getCallbackQuery().getMessage(), "Лого");
             }
         }
-
-
-
         for (String name : DataBase.showAllProducts(a.getLanguage(), false)) {
+            String userid = update.getCallbackQuery().getMessage().getChatId().toString();
             String prodId = DataBase.sqlQuery("select id from table0 where " + a.getLanguage() + " ='" + name + "'", "id");
             String type = DataBase.sqlQuery("select type from table0 where " + a.getLanguage() + " ='" + name + "'", "type");
-            int occurrences = 0;
-            String total = "";
-            String text="";
             if (cb.contains(prodId)||cb.contains(name)) {
                 if (cb.contains("+++")||cb.contains("---")) {
                     if (cb.contains("+++"+prodId)){
-                    DataBase.sql("insert into cart (userid, item) values (" + update.getCallbackQuery().getFrom().getId()
+                    DataBase.sql("insert into cart (userid, item) values (" + userid
                             + ",'" + prodId + "')");
                     } else if (cb.contains("---"+prodId)){
-                    DataBase.sql("delete from cart where userid =" + update.getCallbackQuery().getFrom().getId()
+                    DataBase.sql("delete from cart where userid =" + userid
                             + " and item = '" + prodId + "'");
                     }
                     editPicItems(type, update.getCallbackQuery().getMessage(), "Лого");
@@ -290,29 +285,22 @@ public class Bot extends TelegramLongPollingBot {
                         || cb.contains(Lan.addToCart(a.getLanguage()))
                         || cb.contains(Lan.addMore(a.getLanguage()))) {
                     if (cb.contains(Lan.removeFromCart(a.getLanguage()))) {
-                        DataBase.sql("delete from cart where userid =" + update.getCallbackQuery().getFrom().getId()
+                        DataBase.sql("delete from cart where userid =" + userid
                                 + " and item = '" + prodId + "'");
                     } else if (cb.contains(Lan.addToCart(a.getLanguage()))|| cb.contains(Lan.addMore(a.getLanguage()))) {
-                            DataBase.sql("insert into cart (userid, item) values (" + update.getCallbackQuery().getFrom().getId()
+                        DataBase.sql("insert into cart (userid, item) values (" + userid
                                     + ",'" + prodId + "')");
                     }
-                    List<String> items = DataBase.sqlQueryList("select item from cart where userid =" + update.getCallbackQuery().getFrom().getId(), "item");
-                    if (items.contains(prodId)) {
-                        occurrences = Collections.frequency(items, prodId);
-                        total = Lan.inCart(a.getLanguage(), occurrences);
-                    }
-                    text  = "<b>" + name + "</b>\n"+
-                            "<i>"+DataBase.sqlQuery("select "+a.getLanguage()+"description from table0 where id =" +prodId, a.getLanguage()+"description")+"</i>\n\n"
-                            +Lan.cost(a.getLanguage())+DataBase.sqlQuery("SELECT cost from table0 where id = " + prodId, "cost")
-                            +Lan.currency(a.getLanguage()) +".    " + total;
-                    editCaption(text, update.getCallbackQuery().getMessage(), markUp(text, prodId, (occurrences>0)?keybAddMore(name):keybAdd(name), 3));
-                } else if (cb.contains(":heavy_multiplication_x: "+name)){
+                    editCaption(productText(prodId, userid), update.getCallbackQuery().getMessage(), markUp(productText(prodId, userid), prodId, (occurrences(prodId, userid)>0)?keybAddMore(name):keybAdd(name), 3));
+                } else if (cb.equals(prodId)) {
+                    editCaption(productText(prodId, userid), update.getCallbackQuery().getMessage(), markUp(productText(prodId, userid), prodId, (occurrences(prodId, userid)>0)?keybAddMore(name):keybAdd(name), 3));
+                }
+            } else if (cb.contains(":heavy_multiplication_x: "+name)){
                     DataBase.sql("delete from cart where userid =" + update.getCallbackQuery().getFrom().getId()
                     + " and item = '" + prodId + "'");
                     showCart(update, true);
-                }
             }
-    }
+        }
         if (cb.contains(Lan.clearCart(a.getLanguage()))) {
             clearCart(update.getCallbackQuery().getFrom().getId().toString());
             showCart(update, true);
@@ -341,7 +329,7 @@ public class Bot extends TelegramLongPollingBot {
                         rows.add(row);
                         markup.setKeyboard(rows);
                     if (hasLocation) {
-                        editCaption("&&&", update.getCallbackQuery().getMessage(), markup);
+                        editCaption("&*Хотите использовать предыдущий локейшн?", update.getCallbackQuery().getMessage(), markup);
                     } else if (hasAddress) {
                         address = DataBase.sqlQuery("select address from users where id ="+update.getCallbackQuery().getMessage().getChatId(), "address");
                         if (address!=null) {
@@ -396,6 +384,27 @@ public class Bot extends TelegramLongPollingBot {
 
 
 
+
+    private String productText(String prodId, String userid) throws SQLException {
+        int occurrences = occurrences(prodId, userid);
+        String total = "";
+            if (occurrences>0) {
+                total = Lan.inCart(a.getLanguage(), occurrences);
+            }
+        return "<b>" + DataBase.sqlQuery("select "+ a.getLanguage() + " from table0 where id=" + prodId + "", a.getLanguage()) + "</b>\n"+
+                            "<i>"+DataBase.sqlQuery("select "+a.getLanguage()+"description from table0 where id =" +prodId, a.getLanguage()+"description")+"</i>\n\n"
+                            +Lan.cost(a.getLanguage())+DataBase.sqlQuery("SELECT cost from table0 where id = " + prodId, "cost")
+                            +Lan.currency(a.getLanguage()) +".    " + total;
+        }
+
+
+
+
+
+    private int occurrences(String prodId, String userid) throws SQLException {
+        List<String> items = DataBase.sqlQueryList("select item from cart where userid =" + userid, "item");
+        return Collections.frequency(items, prodId);
+    }
 
 
 
@@ -1033,11 +1042,11 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
             List<InlineKeyboardButton> row0 = new ArrayList<InlineKeyboardButton>();
             row0.add(new InlineKeyboardButton()
                     .setText(EmojiParser.parseToUnicode(list.get(0)))
-                    .setCallbackData(productId + list.get(0)));
+                    .setCallbackData(list.get(0)+productId));
             if (list.size() == 3) {
                 row0.add(new InlineKeyboardButton()
                         .setText(EmojiParser.parseToUnicode(list.get(2)))
-                        .setCallbackData(productId + list.get(2)));
+                        .setCallbackData(list.get(2)+productId));
             }
             List<InlineKeyboardButton> row2 = new ArrayList<InlineKeyboardButton>();
             row2.add(new InlineKeyboardButton()
