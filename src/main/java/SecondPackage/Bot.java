@@ -903,7 +903,7 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
             String latitude = DataBase.sqlQuery("select latitude from users where id ="+message.getChatId(), "latitude");
             String longitude = DataBase.sqlQuery("select longitude from users where id ="+message.getChatId(), "longitude");
         List<String> list = new ArrayList<>();
-            list.add(Lan.clearOrders(a.getLanguage()));
+            list.add(Lan.mainMenu(a.getLanguage()).get(1));
             list.add(Lan.backToMenu(a.getLanguage()));
         editPic(Lan.orderPlaced(a.getLanguage()), message.getChatId(),
                 Integer.parseInt(DataBase.sqlQuery("SELECT image from users where id=" + message.getChatId(), "image")),
@@ -915,7 +915,7 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
         order.sendContact(a.getFirstName(), a.getNumber());
         clearCart(message.getChatId().toString());
         //deleteMessage(message);
-        DataBase.sql("update zakaz set conformed = true where id = " + message.getChatId());
+        DataBase.sql("update zakaz set conformed = true where userid = " + message.getChatId());
         DataBase.sql("update users set rmid = 1 where id = " + message.getChatId());
     }
 
