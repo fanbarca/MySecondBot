@@ -1199,7 +1199,17 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
         if (items.size() == 0) {
             editPic(Lan.mainMenu(a.getLanguage()).get(1) + "\n" + Lan.emptyOrders(a.getLanguage()), update.getCallbackQuery().getMessage(), null, "Лого", 2);
         } else {
-            editPic(Lan.mainMenu(a.getLanguage()).get(1) + "\n" + items.get(0), update.getCallbackQuery().getMessage(), null, "Лого", 2);
+            String time = DataBase.sqlQuery("select time from zakaz where userid ="+update.getCallbackQuery().getMessage().getChatId(), "time");
+            String address = DataBase.sqlQuery("select address from users where id ="+update.getCallbackQuery().getMessage().getChatId(), "address");
+            String latitude = DataBase.sqlQuery("select latitude from users where id ="+update.getCallbackQuery().getMessage().getChatId(), "latitude");
+            if (address!=null) address= "<b>Адрес:</b> "+address+"\n";
+            else if (latitude!=null) {
+                address="<b>Геолокация получена</b> \n";
+            }
+                editPic(Lan.mainMenu(a.getLanguage()).get(1)+"\n"
+                    +"<b>Время доставки:</b> "+time+"\n"
+                    +address
+                    +items.get(0)+"\n", update.getCallbackQuery().getMessage(), null, "Лого", 2);
         }
     }
 
