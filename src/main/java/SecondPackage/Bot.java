@@ -348,7 +348,7 @@ public class Bot extends TelegramLongPollingBot {
                         editCaption("location: "+addressByLocation, update.getCallbackQuery().getMessage(), null);
                         }
                     } else if (hasAddress) {
-                        address = DataBase.sqlQuery("select address from users where ="+update.getCallbackQuery().getMessage().getChatId(), "address");
+                        address = DataBase.sqlQuery("select address from users where id ="+update.getCallbackQuery().getMessage().getChatId(), "address");
                         if (address!=null) {
                         editCaption("address: "+address, update.getCallbackQuery().getMessage(), null);
                         }
