@@ -276,17 +276,16 @@ public class Bot extends TelegramLongPollingBot {
             int occurrences = 0;
             String total = "";
             String text="";
-            if (cb.contains(prodId)&&cb.contains(name)) {
+            if (cb.contains(prodId)||cb.contains(name)) {
                 if (cb.contains("+++")||cb.contains("---")) {
                     if (cb.contains("+++"+prodId)){
                     DataBase.sql("insert into cart (userid, item) values (" + update.getCallbackQuery().getFrom().getId()
                             + ",'" + prodId + "')");
-                    editPicItems(type, update.getCallbackQuery().getMessage(), "Лого");
                     } else if (cb.contains("---"+prodId)){
                     DataBase.sql("delete from cart where userid =" + update.getCallbackQuery().getFrom().getId()
                             + " and item = '" + prodId + "'");
-                    editPicItems(type, update.getCallbackQuery().getMessage(), "Лого");
                     }
+                    editPicItems(type, update.getCallbackQuery().getMessage(), "Лого");
                 } else if (cb.contains(Lan.removeFromCart(a.getLanguage()))
                         || cb.contains(Lan.addToCart(a.getLanguage()))
                         || cb.contains(Lan.addMore(a.getLanguage()))) {
