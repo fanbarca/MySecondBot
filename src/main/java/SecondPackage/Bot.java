@@ -351,13 +351,16 @@ public class Bot extends TelegramLongPollingBot {
         }
         if (cb.contains("OrderTime")) {
             String time = cb.substring(9);
-            DataBase.sql("update zakaz set time ='"+time);
-            String address = DataBase.sqlQuery("select address from users where id ="+update.getCallbackQuery().getMessage().getChatId(), "address");
-            Float latitude = Float.parseFloat(DataBase.sqlQuery("select latitude from users where id ="+update.getCallbackQuery().getMessage().getChatId(), "latitude"));
-            Float longitude = Float.parseFloat(DataBase.sqlQuery("select longitude from users where id ="+update.getCallbackQuery().getMessage().getChatId(), "longitude"));
-            confirm(update.getCallbackQuery().getMessage(), address, latitude, longitude);
+            long userid = update.getCallbackQuery().getMessage().getChatId();
+            DataBase.sql("update zakaz set time ='"+time+"' where id = "+userid);
+            String address = DataBase.sqlQuery("select address from users where id ="+userid, "address");
+            Float latitude = Float.parseFloat(DataBase.sqlQuery("select latitude from users where id ="+userid, "latitude"));
+            Float longitude = Float.parseFloat(DataBase.sqlQuery("select longitude from users where id ="+userid, "longitude"));
+            confirm(update.getCallbackQuery().getMessage(), address, latitude, longitude, time);
         }
     }
+
+
 
 
 
@@ -801,7 +804,7 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
 
         InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
             List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
-            for (int i = 0; i<menu.size(); i++) {
+            for (int i = 0; i<menu.size(); i+=3) {
                 List<InlineKeyboardButton> row1 = new ArrayList<InlineKeyboardButton>();
                 row1.add(new InlineKeyboardButton()
                                 .setText(EmojiParser.parseToUnicode(menu.get(i)))
@@ -846,7 +849,7 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
 
 
 
-    private void confirm(Message message, String address, Float latitude, Float longitude) throws SQLException, TelegramApiException {
+    private void confirm(Message message, String address, Float latitude, Float longitude, String time) throws SQLException, TelegramApiException {
         List<String> list = new ArrayList<>();
             list.add(Lan.clearOrders(a.getLanguage()));
             list.add(Lan.backToMenu(a.getLanguage()));
@@ -854,7 +857,7 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
                 Integer.parseInt(DataBase.sqlQuery("SELECT image from users where id=" + message.getChatId(), "image")),
                 list, "Лого", 2);
         Adminbot order = new Adminbot();
-        order.sendMe("Новый заказ пользователя: "+ message.getFrom().getFirstName()+"\n\n" +curretCart(message.getChatId().toString()));
+        order.sendMe("Новый заказ пользователя: "+ message.getFrom().getFirstName()+"\n" +"Время доставки: "+time+"\n\n" +curretCart(message.getChatId().toString()));
         if (latitude!=null&&longitude!=null) order.sendLocation(latitude, longitude);
         if (address!=null) order.sendMe(address);
         order.sendContact(message, a.getNumber());
@@ -863,6 +866,7 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
                 +curretCart(message.getChatId().toString())+"' )");
         clearCart(message.getFrom().getId().toString());
         deleteMessage(message);
+        DataBase.sql("update users set confirmed = true where id = " + message.getChatId());
         DataBase.sql("update users set rmid = 1 where id = " + message.getChatId());
     }
 
