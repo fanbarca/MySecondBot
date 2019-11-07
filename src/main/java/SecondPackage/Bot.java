@@ -364,7 +364,7 @@ public class Bot extends TelegramLongPollingBot {
                 else editPic(Lan.tooLate(a.getLanguage()), update.getCallbackQuery().getMessage(), Lan.keyBoard(a.getLanguage()), "Лого", 2);;
             }
         }
-        if (Lan.YesNo(a.getLanguage()).contains(cb)) {
+        if (cb.equals(Lan.YesNo(a.getLanguage()).get(0))||(cb.equals(Lan.YesNo(a.getLanguage()).get(1)))) {
             if (cb.equals(Lan.YesNo(a.getLanguage()).get(0))) {
                 clearOrders(update);
                 showCart(update, true);
