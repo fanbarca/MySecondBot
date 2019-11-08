@@ -112,9 +112,9 @@ public class Bot extends TelegramLongPollingBot {
                 String chatId = update.getCallbackQuery().getMessage().getChatId().toString();
                 if (DataBase.sqlIdList().contains(chatId)) {
                     a = new Order(DataBase.sqlGetUserData(chatId).get(0),
-                            DataBase.sqlGetUserData(chatId).get(1),
-                            DataBase.sqlGetUserData(chatId).get(2),
-                            DataBase.sqlGetUserData(chatId).get(3)
+                                DataBase.sqlGetUserData(chatId).get(1),
+                                DataBase.sqlGetUserData(chatId).get(2),
+                                DataBase.sqlGetUserData(chatId).get(3)
                     );
                 } else {
                     DataBase.sql("INSERT INTO users (id, firstname, lastname, username) VALUES ('" +
@@ -208,7 +208,7 @@ public class Bot extends TelegramLongPollingBot {
     private void handleCallback(Update update) throws TelegramApiException, SQLException, MalformedURLException, IOException {
 
         AnswerCallbackQuery answer = new AnswerCallbackQuery()
-                .setCallbackQueryId(update.getCallbackQuery().getId()).setShowAlert(true);
+                .setCallbackQueryId(update.getCallbackQuery().getId());
 
         String cb = update.getCallbackQuery().getData();
         if (cb.equals("O'zbek") || cb.equals("Русский") || cb.equals("English")) {
@@ -275,11 +275,15 @@ public class Bot extends TelegramLongPollingBot {
             if (cb.contains(prodId)||cb.contains(name)) {
                 if (cb.contains("+++")||cb.contains("---")) {
                     if (cb.contains("+++"+prodId)){
-                    DataBase.sql("insert into cart (userid, item) values (" + userid
-                            + ",'" + prodId + "')");
+                        DataBase.sql("insert into cart (userid, item) values (" + userid
+                                + ",'" + prodId + "')");
+                        a.setAddress(Lan.added(a.getLanguage()));
+                        a.setAlert(false);
                     } else if (cb.contains("---"+prodId)){
-                    DataBase.sql("delete from cart where userid =" + userid
+                        DataBase.sql("delete from cart where userid =" + userid
                             + " and item = '" + prodId + "'");
+                        a.setAddress(Lan.removed(a.getLanguage()));
+                        a.setAlert(false);
                     }
                     editPicItems(type, update.getCallbackQuery().getMessage(), "Лого");
                 } else if (cb.contains(Lan.removeFromCart(a.getLanguage()))
@@ -288,9 +292,13 @@ public class Bot extends TelegramLongPollingBot {
                     if (cb.contains(Lan.removeFromCart(a.getLanguage()))) {
                         DataBase.sql("delete from cart where userid =" + userid
                                 + " and item = '" + prodId + "'");
+                        a.setAddress(Lan.removed(a.getLanguage()));
+                        a.setAlert(false);
                     } else if (cb.contains(Lan.addToCart(a.getLanguage()))|| cb.contains(Lan.addMore(a.getLanguage()))) {
                         DataBase.sql("insert into cart (userid, item) values (" + userid
                                     + ",'" + prodId + "')");
+                        a.setAddress(Lan.added(a.getLanguage()));
+                        a.setAlert(false);
                     }
                     editCaption(productText(prodId, userid), update.getCallbackQuery().getMessage(), markUp(productText(prodId, userid), prodId, (occurrences(prodId, userid)>0)?keybAddMore(name):keybAdd(name), 3));
                 } else if (cb.equals(prodId)) {
@@ -299,11 +307,15 @@ public class Bot extends TelegramLongPollingBot {
             } else if (cb.contains(":heavy_multiplication_x: "+name)){
                     DataBase.sql("delete from cart where userid =" + update.getCallbackQuery().getFrom().getId()
                     + " and item = '" + prodId + "'");
+                        a.setAddress(Lan.removed(a.getLanguage()));
+                        a.setAlert(false);
                     showCart(update, true);
             }
         }
         if (cb.contains(Lan.clearCart(a.getLanguage()))) {
             clearCart(update);
+            a.setAddress(Lan.orderCancelled(a.getLanguage()));
+            a.setAlert(true);
             showCart(update, true);
         }
         if (cb.contains(Lan.delivery(a.getLanguage()))) {
@@ -341,7 +353,9 @@ public class Bot extends TelegramLongPollingBot {
                     }
                 }
             } else {
-                editPic(Lan.tooLate(a.getLanguage()), update.getCallbackQuery().getMessage(), Lan.keyBoard(a.getLanguage()), "Лого", 2);;
+                editPic(Lan.welcome(a.getLanguage(), a.getFirstName()), update.getCallbackQuery().getMessage(), Lan.mainMenu(a.getLanguage()), "Лого", 2);;
+                a.setAddress(Lan.tooLate(a.getLanguage()));
+                a.setAlert(true);
             }
         }
         if (cb.equals(Lan.YesNo(a.getLanguage()).get(0))||(cb.equals(Lan.YesNo(a.getLanguage()).get(1)))) {
@@ -354,9 +368,9 @@ public class Bot extends TelegramLongPollingBot {
         }
         if (cb.contains(Lan.clearOrders(a.getLanguage()))) {
             clearOrders(update);
-            List<String> list = new ArrayList<>();
-            list.add(Lan.backToMenu(a.getLanguage()));
-                        editPic(Lan.welcome(a.getLanguage(), a.getFirstName()), update.getCallbackQuery().getMessage(),
+                List<String> list = new ArrayList<>();
+                list.add(Lan.backToMenu(a.getLanguage()));
+            editPic(Lan.welcome(a.getLanguage(), a.getFirstName()), update.getCallbackQuery().getMessage(),
                     Lan.mainMenu(a.getLanguage()), "Лого", 2);
         }
         if (cb.contains("Отмена")) {
@@ -376,7 +390,7 @@ public class Bot extends TelegramLongPollingBot {
                 Integer.parseInt(DataBase.sqlQuery("SELECT image from users where id=" + update.getCallbackQuery().getMessage().getChatId(), "image")),
                 timeKeys());
         }
-        answer.setText(a.getReceivedMes());
+        if (a.getAddress()!=null) answer.setShowAlert(a.getAlert()).setText(a.getAddress());
         execute(answer);
     }
 
@@ -424,7 +438,6 @@ public class Bot extends TelegramLongPollingBot {
 
     private void clearCart(Update update) throws TelegramApiException{
         DataBase.sql("delete from cart where userid =" + update.getCallbackQuery().getMessage().getChatId());
-
     }
 
 
@@ -444,7 +457,8 @@ public class Bot extends TelegramLongPollingBot {
             Adminbot order = new Adminbot();
             order.sendMe("Заказ от " + a.getFirstName()+" отменён");
         }
-        a.setReceivedMes(Lan.orderCancelled(a.getLanguage()));
+        a.setAddress(Lan.orderCancelled(a.getLanguage()));
+        a.setAlert(true);
     }
 
 
@@ -946,10 +960,11 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
         List<String> list = new ArrayList<>();
             list.add(Lan.mainMenu(a.getLanguage()).get(1));
             list.add(Lan.backToMenu(a.getLanguage()));
-        editPic(Lan.orderPlaced(a.getLanguage()), update.getCallbackQuery().getMessage().getChatId(),
+        editPic(Lan.welcome(a.getLanguage(), a.getFirstName()), update.getCallbackQuery().getMessage().getChatId(),
             Integer.parseInt(DataBase.sqlQuery("SELECT image from users where id=" + update.getCallbackQuery().getMessage().getChatId(), "image")),
             list, "Лого", 2);
-        a.setReceivedMes(Lan.orderPlaced(a.getLanguage()));
+        a.setAddress(Lan.orderPlaced(a.getLanguage()));
+        a.setAlert(true);
     }
 
 

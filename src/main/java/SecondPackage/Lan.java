@@ -307,6 +307,20 @@ class Lan {
         else if (lan.equals("English")) r = "Choose delivery time";
         return r;
     }
+    public static String added(String lan) {
+        String r="";
+        if (lan.equals("Uzbek")) r = "Qo'shildi";
+        else if (lan.equals("Russian")) r = "Добавлено";
+        else if (lan.equals("English")) r = "Added";
+        return r;
+    }
+    public static String removed(String lan) {
+        String r="";
+        if (lan.equals("Uzbek")) r = "Savatchadan olib tashlandi";
+        else if (lan.equals("Russian")) r = "Убрано с корзины";
+        else if (lan.equals("English")) r = "Removed from cart";
+        return r;
+    }
     public static String orderExists(String lan) {
         String r="";
         if (lan.equals("Uzbek")) r = "Sizda buyurtma mavjud. Uni bekor qilasizmi?";

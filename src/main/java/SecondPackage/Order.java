@@ -11,6 +11,8 @@ public class Order {
     private String number;
     private String firstName;
     private String address;
+    private boolean alert;
+
 
 
 
@@ -66,7 +68,14 @@ public class Order {
 	public void setAddress(String address) {
 		this.address = address;
 	}
+	public boolean getAlert() {
+		return alert;
+	}
 
+
+	public void setAlert(boolean alert) {
+		this.alert = alert;
+	}
 
 	public String getLanguage() {
 		return language;
