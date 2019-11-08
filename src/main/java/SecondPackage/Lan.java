@@ -208,7 +208,13 @@ class Lan {
         else if (lan.equals("English")) r = "Order cancelled";
         return r;
     }
-
+    public static String cartCleared(String lan) {
+        String r="";
+        if (lan.equals("Uzbek")) r = "Savatcha bo'shatildi";
+        else if (lan.equals("Russian")) r = "Корзина очищена";
+        else if (lan.equals("English")) r = "Cart is emptied";
+        return r;
+    }
 //    public static String orderComplete(String lan) {
 //        String r="";
 //        if (lan.equals("Uzbek")) r = "";

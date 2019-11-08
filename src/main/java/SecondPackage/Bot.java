@@ -206,9 +206,10 @@ public class Bot extends TelegramLongPollingBot {
 
 
     private void handleCallback(Update update) throws TelegramApiException, SQLException, MalformedURLException, IOException {
-        // AnswerCallbackQuery answer = new AnswerCallbackQuery()
-        //         .setCallbackQueryId(update.getCallbackQuery().getId()).setShowAlert(false);
-        // execute(answer);
+
+        AnswerCallbackQuery answer = new AnswerCallbackQuery()
+                .setCallbackQueryId(update.getCallbackQuery().getId()).setShowAlert(true);
+
         String cb = update.getCallbackQuery().getData();
         if (cb.equals("O'zbek") || cb.equals("Русский") || cb.equals("English")) {
             if (cb.equals("O'zbek")) {
@@ -375,6 +376,8 @@ public class Bot extends TelegramLongPollingBot {
                 Integer.parseInt(DataBase.sqlQuery("SELECT image from users where id=" + update.getCallbackQuery().getMessage().getChatId(), "image")),
                 timeKeys());
         }
+        answer.setText(a.getReceivedMes());
+        execute(answer);
     }
 
 
@@ -421,9 +424,7 @@ public class Bot extends TelegramLongPollingBot {
 
     private void clearCart(Update update) throws TelegramApiException{
         DataBase.sql("delete from cart where userid =" + update.getCallbackQuery().getMessage().getChatId());
-        AnswerCallbackQuery answer = new AnswerCallbackQuery()
-                .setCallbackQueryId(update.getCallbackQuery().getId()).setShowAlert(true).setText(Lan.orderCancelled(a.getLanguage()));
-                execute(answer);
+
     }
 
 
@@ -439,13 +440,11 @@ public class Bot extends TelegramLongPollingBot {
     private void clearOrders(Update update) throws SQLException, TelegramApiException{
         String confirmed = DataBase.sqlQuery("select conformed from zakaz where userid = "+ update.getCallbackQuery().getMessage().getChatId(), "conformed");
         DataBase.sql("delete from zakaz where userid =" + update.getCallbackQuery().getMessage().getChatId());
-        AnswerCallbackQuery answer = new AnswerCallbackQuery()
-                .setCallbackQueryId(update.getCallbackQuery().getId()).setShowAlert(true).setText(Lan.orderCancelled(a.getLanguage()));
-        execute(answer);
         if (confirmed.equals("true")) {
             Adminbot order = new Adminbot();
             order.sendMe("Заказ от " + a.getFirstName()+" отменён");
         }
+        a.setReceivedMes(Lan.orderCancelled(a.getLanguage()));
     }
 
 
@@ -950,6 +949,7 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
         editPic(Lan.orderPlaced(a.getLanguage()), update.getCallbackQuery().getMessage().getChatId(),
             Integer.parseInt(DataBase.sqlQuery("SELECT image from users where id=" + update.getCallbackQuery().getMessage().getChatId(), "image")),
             list, "Лого", 2);
+        a.setReceivedMes(Lan.orderPlaced(a.getLanguage()));
     }
 
 
