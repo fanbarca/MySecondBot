@@ -401,7 +401,6 @@ public class Bot extends TelegramLongPollingBot {
                 Integer.parseInt(DataBase.sqlQuery("SELECT image from users where id=" + update.getCallbackQuery().getMessage().getChatId(), "image")),
                 deleteItemsKey(a.getId()));
         }
-
         if (a.getAddress()!=null) answer.setShowAlert(a.getAlert()).setText(a.getAddress());
         execute(answer);
     }
@@ -596,27 +595,28 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
 
 
     public void editPicItems(String typeID, Message message,String productId) throws TelegramApiException, SQLException {
-        //String language = a.getLanguage();
-        //List<String> list = DataBase.showProducts(language, language, String.valueOf(Lan.listTypes(language).indexOf(type)));
         List<String> listID = DataBase.sqlQueryList("select id from table0 where instock = true and type = '"+typeID +"'", "id");
-                String nothing = "";
-                if (listID.size() < 1) nothing = Lan.emptyOrders(a.getLanguage());
-        String file_id;
-        if (productId.equals("Лого"))
-            file_id = DataBase.sqlQuery("SELECT imageid from table0 where Russian = 'Лого'", "imageid");
-        else file_id = DataBase.sqlQuery("SELECT imageid from table0 where id = " + productId, "imageid");
-        //Integer messageId= Integer.parseInt(DataBase.sqlQuery("select image from users where id="+message.getChatId(), "image"));
-        InputMediaPhoto imp = new InputMediaPhoto();
-        imp.setMedia(file_id);
-        String typename = Lan.listTypes(a.getLanguage()).get(Integer.parseInt(typeID));
-        imp.setCaption(EmojiParser.parseToUnicode(Lan.mainMenu(a.getLanguage()).get(0)+"    "+typename + "\n" + nothing)).setParseMode("HTML");
-        EditMessageMedia em = new EditMessageMedia();
-        em.setChatId(message.getChatId());
-        em.setMessageId(message.getMessageId());
-        em.setMedia(imp);
-        InlineKeyboardMarkup markup = listMarkup(listID, message.getChatId());
-        em.setReplyMarkup(markup);
-        execute(em);
+        if (listID.size() != 0) {
+            String file_id;
+            if (productId.equals("Лого"))
+                file_id = DataBase.sqlQuery("SELECT imageid from table0 where Russian = 'Лого'", "imageid");
+            else file_id = DataBase.sqlQuery("SELECT imageid from table0 where id = " + productId, "imageid");
+            InputMediaPhoto imp = new InputMediaPhoto();
+            imp.setMedia(file_id);
+            String typename = Lan.listTypes(a.getLanguage()).get(Integer.parseInt(typeID));
+            imp.setCaption(EmojiParser.parseToUnicode(Lan.mainMenu(a.getLanguage()).get(0)+"    "+typename)).setParseMode("HTML");
+            EditMessageMedia em = new EditMessageMedia();
+            em.setChatId(message.getChatId());
+            em.setMessageId(message.getMessageId());
+            em.setMedia(imp);
+            InlineKeyboardMarkup markup = listMarkup(listID, message.getChatId());
+            em.setReplyMarkup(markup);
+            execute(em);
+        } else {
+            a.setAddress(Lan.emptyOrders(a.getLanguage()));
+            a.setAlert(true);
+        }
+
     }
 
 
@@ -1297,11 +1297,9 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
                     + curretCart(a.getId()) +"\n"
                     + Lan.deliveryCost(a.getLanguage())+"\n"
                     +"<b>"+Lan.tooLate(a.getLanguage())+"</b>";
-        String empty = Lan.mainMenu(a.getLanguage()).get(3) + "\n"
-                    + Lan.emptyOrders(a.getLanguage());
             if (items.size() == 0) {
-                if (edit) editPic(empty, update.getCallbackQuery().getMessage(), null, "Лого", 2);
-                else sendPic(empty, update.getCallbackQuery().getMessage(), null, "Лого", 2);
+                a.setAddress(Lan.cartIsEmpty(a.getLanguage()));
+                a.setAlert(true);
             } else {
                 if (edit) editPic(text, update.getCallbackQuery().getMessage(), null, "Лого", 2);
                 else sendPic(text, update.getCallbackQuery().getMessage(), null, "Лого", 2);
@@ -1320,7 +1318,8 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
     private void showOrders(Update update) throws TelegramApiException, SQLException {
         List<String> items = DataBase.sqlQueryList("select product from zakaz where userid =" + a.getId()+" and conformed = true", "product");
         if (items.size() == 0) {
-            editPic(Lan.mainMenu(a.getLanguage()).get(1) + "\n" + Lan.emptyOrders(a.getLanguage()), update.getCallbackQuery().getMessage(), null, "Лого", 2);
+                a.setAddress(Lan.noOrderYet(a.getLanguage()));
+                a.setAlert(true);
         } else {
             String time = DataBase.sqlQuery("select time from zakaz where userid ="+a.getId(), "time");
             String address = DataBase.sqlQuery("select address from users where id ="+a.getId(), "address");

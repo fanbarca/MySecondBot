@@ -97,9 +97,23 @@ class Lan {
     }
     public static String emptyOrders(String lan) {
         String r="";
-        if (lan.equals("Uzbek")) r = ":o: Hali hech narsa yo'q";
-        else if (lan.equals("Russian")) r = ":o: Тут пока ничего нет";
-        else if (lan.equals("English")) r = ":o: There's nothing yet";
+        if (lan.equals("Uzbek")) r = "Hali hech narsa yo'q";
+        else if (lan.equals("Russian")) r = "Тут пока ничего нет";
+        else if (lan.equals("English")) r = "There's nothing yet";
+        return r;
+    }
+    public static String cartIsEmpty(String lan) {
+        String r="";
+        if (lan.equals("Uzbek")) r = "Savatcha bo'sh";
+        else if (lan.equals("Russian")) r = "Корзина пуста";
+        else if (lan.equals("English")) r = "Cart is empty";
+        return r;
+    }
+    public static String noOrderYet(String lan) {
+        String r="";
+        if (lan.equals("Uzbek")) r = "Hali buyurtma qilinmagan";
+        else if (lan.equals("Russian")) r = "Ещё нет заказа";
+        else if (lan.equals("English")) r = "There's no order yet";
         return r;
     }
     public static String myOrders(String lan) {
