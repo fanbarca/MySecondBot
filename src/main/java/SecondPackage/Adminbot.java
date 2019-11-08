@@ -105,7 +105,6 @@ public class Adminbot extends TelegramLongPollingBot {
                             } catch (SQLException e) {
                                 e.printStackTrace();
                             }
-
                     } else {
                         if (listener.equals("Russian")) {
                             Random rand = new Random();

@@ -306,7 +306,7 @@ public class Bot extends TelegramLongPollingBot {
             showCart(update, true);
         }
         if (cb.contains(Lan.delivery(a.getLanguage()))) {
-            if (DataBase.sqlQueryList("select product from zakaz where userid =" + update.getCallbackQuery().getMessage().getChatId(), "product").size() > 0) {
+            if (DataBase.sqlQueryList("select product from zakaz where userid =" + update.getCallbackQuery().getMessage().getChatId()+" and conformed = true", "product").size() > 0) {
                 editPic(Lan.orderExists(a.getLanguage()), update.getCallbackQuery().getMessage(), Lan.YesNo(a.getLanguage()), "Лого", 2);
             } else {
                 ZoneId z = ZoneId.of("Asia/Tashkent");
@@ -356,7 +356,8 @@ public class Bot extends TelegramLongPollingBot {
             list.add(Lan.backToMenu(a.getLanguage()));
             editPic(Lan.orderCancelled(a.getLanguage()), update.getCallbackQuery().getMessage().getChatId(),
                 update.getCallbackQuery().getMessage().getMessageId(),
-                list, "Лого", 1);        }
+                list, "Лого", 1);
+        }
         if (cb.contains("Отмена")) {
             showCart(update, true);
         }
@@ -387,15 +388,20 @@ public class Bot extends TelegramLongPollingBot {
 
     private String productText(String prodId, String userid) throws SQLException {
         int occurrences = occurrences(prodId, userid);
-        String total = "";
-            if (occurrences>0) {
-                total = Lan.inCart(a.getLanguage(), occurrences);
-            }
+        String balls = "";
+        for (int i = 0; i<occurrences; i++){
+            balls += ":large_blue_circle:";
+        }
         return "<b>" + DataBase.sqlQuery("select "+ a.getLanguage() + " from table0 where id=" + prodId + "", a.getLanguage()) + "</b>\n"+
                             "<i>"+DataBase.sqlQuery("select "+a.getLanguage()+"description from table0 where id =" +prodId, a.getLanguage()+"description")+"</i>\n\n"
-                            +Lan.cost(a.getLanguage())+DataBase.sqlQuery("SELECT cost from table0 where id = " + prodId, "cost")
-                            +Lan.currency(a.getLanguage()) +".    " + total;
+                            +Lan.cost(a.getLanguage())+DataBase.sqlQuery("SELECT cost from table0 where id = " + prodId, "cost")+Lan.currency(a.getLanguage()) +".\n"
+                            +Lan.inCart(a.getLanguage(), occurrences) + balls;
         }
+
+
+
+
+
 
 
 
@@ -405,6 +411,8 @@ public class Bot extends TelegramLongPollingBot {
         List<String> items = DataBase.sqlQueryList("select item from cart where userid =" + userid, "item");
         return Collections.frequency(items, prodId);
     }
+
+
 
 
 
@@ -426,11 +434,11 @@ public class Bot extends TelegramLongPollingBot {
 
 
     private void clearOrders(Update update) throws SQLException{
-        boolean confirmed = Boolean.getBoolean(DataBase.sqlQuery("select conformed from zakaz where userid = "+ update.getCallbackQuery().getMessage().getChatId(), "conformed"));
+        String confirmed = DataBase.sqlQuery("select conformed from zakaz where userid = "+ update.getCallbackQuery().getMessage().getChatId(), "conformed");
         DataBase.sql("delete from zakaz where userid =" + update.getCallbackQuery().getMessage().getChatId());
-        if (confirmed) {
+        if (confirmed.equals("true")) {
             Adminbot order = new Adminbot();
-            order.sendMe("Заказ от " + update.getCallbackQuery().getFrom().getFirstName()+" отменён");
+            order.sendMe("Заказ от " + a.getFirstName()+" отменён");
         }
     }
 
