@@ -300,7 +300,7 @@ public class Bot extends TelegramLongPollingBot {
                         a.setAddress(Lan.added(a.getLanguage()));
                         a.setAlert(false);
                     }
-                    editPic(productText(prodId, userid), prodId, update.getCallbackQuery().getMessage(), markUp(productText(prodId, userid), prodId, (occurrences(prodId, userid)>0)?keybAddMore(name):keybAdd(name), 3));
+                    editCaption(productText(prodId, userid), update.getCallbackQuery().getMessage(), markUp(productText(prodId, userid), prodId, (occurrences(prodId, userid)>0)?keybAddMore(name):keybAdd(name), 3));
                 } else if (cb.contains("delete"+prodId)){
                     DataBase.sql("delete from cart where userid =" + a.getId()
                     + " and item = '" + prodId + "'");
@@ -318,7 +318,7 @@ public class Bot extends TelegramLongPollingBot {
                         a.setAlert(false);
                     }
                 } else if (cb.equals(prodId)) {
-                    editCaption(productText(prodId, userid), update.getCallbackQuery().getMessage(), markUp(productText(prodId, userid), prodId, (occurrences(prodId, userid)>0)?keybAddMore(name):keybAdd(name), 3));
+                    editPic(productText(prodId, userid), prodId, update.getCallbackQuery().getMessage(), markUp(productText(prodId, userid), prodId, (occurrences(prodId, userid)>0)?keybAddMore(name):keybAdd(name), 3));
                 }
             }
         }
@@ -363,7 +363,6 @@ public class Bot extends TelegramLongPollingBot {
                     }
                 }
             } else {
-                editPic(Lan.welcome(a.getLanguage(), a.getFirstName()), update.getCallbackQuery().getMessage(), Lan.mainMenu(a.getLanguage()), "Лого", 2);;
                 a.setAddress(Lan.tooLate(a.getLanguage()));
                 a.setAlert(true);
             }
