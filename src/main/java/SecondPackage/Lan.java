@@ -178,7 +178,7 @@ class Lan {
         String r="";
         if (lan.equals("Uzbek")) r = "\nYetkazish narxi:\n3km gacha - 8000 so'm\nundan keyin - 1000 so'm/km ";
         else if (lan.equals("Russian")) r = "\nСтоимость доставки:\nдо 3 км - 8000 сум\nдалее - 1000 сум/км";
-        else if (lan.equals("English")) r = "\nDelivery cost:\nup to 3 km - 8000 sum\nfarther - 1000 sum per km";
+        else if (lan.equals("English")) r = "\nDelivery cost:\nup to 3 km - 8000 sum\nafter that - 1000 sum per km";
         return r;
     }
     public static String cost(String lan) {

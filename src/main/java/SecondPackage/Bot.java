@@ -301,20 +301,20 @@ public class Bot extends TelegramLongPollingBot {
                         a.setAlert(false);
                     }
                     editCaption(productText(prodId, userid), update.getCallbackQuery().getMessage(), markUp(productText(prodId, userid), prodId, (occurrences(prodId, userid)>0)?keybAddMore(name):keybAdd(name), 3));
-                } else if (cb.equals(prodId)) {
-                    editCaption(productText(prodId, userid), update.getCallbackQuery().getMessage(), markUp(productText(prodId, userid), prodId, (occurrences(prodId, userid)>0)?keybAddMore(name):keybAdd(name), 3));
-                }
-            } else if (cb.contains(":heavy_multiplication_x: "+name)){
+                } else if (cb.contains("delete"+name)){
                     DataBase.sql("delete from cart where userid =" + update.getCallbackQuery().getFrom().getId()
                     + " and item = '" + prodId + "'");
                         a.setAddress(Lan.removed(a.getLanguage()));
                         a.setAlert(false);
                     showCart(update, true);
+                } else if (cb.equals(prodId)) {
+                    editCaption(productText(prodId, userid), update.getCallbackQuery().getMessage(), markUp(productText(prodId, userid), prodId, (occurrences(prodId, userid)>0)?keybAddMore(name):keybAdd(name), 3));
+                }
             }
         }
         if (cb.contains(Lan.clearCart(a.getLanguage()))) {
             clearCart(update);
-            a.setAddress(Lan.orderCancelled(a.getLanguage()));
+            a.setAddress(Lan.cartCleared(a.getLanguage()));
             a.setAlert(true);
             showCart(update, true);
         }
@@ -388,6 +388,12 @@ public class Bot extends TelegramLongPollingBot {
                 Integer.parseInt(DataBase.sqlQuery("SELECT image from users where id=" + update.getCallbackQuery().getMessage().getChatId(), "image")),
                 timeKeys());
         }
+        if (cb.contains(Lan.removeSelectively(a.getLanguage()))) {
+            editCaption(Lan.mainMenu(a.getLanguage()).get(3) + "\n" + curretCart(update.getCallbackQuery().getMessage().getChatId().toString()), update.getCallbackQuery().getMessage().getChatId().toString(),
+                Integer.parseInt(DataBase.sqlQuery("SELECT image from users where id=" + update.getCallbackQuery().getMessage().getChatId(), "image")),
+                deleteItemsKey(update.getCallbackQuery().getMessage().getChatId().toString()));
+        }
+
         if (a.getAddress()!=null) answer.setShowAlert(a.getAlert()).setText(a.getAddress());
         execute(answer);
     }
@@ -843,6 +849,38 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
 
 
 
+
+
+
+    private InlineKeyboardMarkup deleteItemsKey(String id) throws SQLException {
+        List<String> menu = DataBase.sqlQueryList("select * from cart where userid ="+id, "item");
+        InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
+            List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
+            for (int i = 0; i<menu.size(); i+=3) {
+                List<InlineKeyboardButton> row1 = new ArrayList<InlineKeyboardButton>();
+                row1.add(new InlineKeyboardButton()
+                                .setText(EmojiParser.parseToUnicode(":heavy_multiplication_x:"+menu.get(i)))
+                                .setCallbackData("delete"+menu.get(i)));
+                if((i+1)<menu.size()) row1.add(new InlineKeyboardButton()
+                                .setText(EmojiParser.parseToUnicode(":heavy_multiplication_x:"+menu.get(i+1)))
+                                .setCallbackData("delete"+menu.get(i+1)));
+                if((i+2)<menu.size()) row1.add(new InlineKeyboardButton()
+                                .setText(EmojiParser.parseToUnicode(":heavy_multiplication_x:"+menu.get(i+2)))
+                                .setCallbackData("delete"+menu.get(i+2)));
+                rows.add(row1);
+            }
+            markup.setKeyboard(rows);
+        return markup;
+    }
+
+
+
+
+
+
+
+
+
     private InlineKeyboardMarkup timeKeys() {
         List<String> menu = new ArrayList<String>();
         ZoneId z = ZoneId.of("Asia/Tashkent");
@@ -883,7 +921,6 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
                 }
             }
         }
-
         InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
             List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
             for (int i = 0; i<menu.size(); i+=3) {
@@ -1148,7 +1185,6 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
                 }
             }
             if (a.getLanguage()!=null) {
-
                 if (text.contains(Lan.mainMenu(a.getLanguage()).get(0)) ||
                         text.contains(Lan.mainMenu(a.getLanguage()).get(1)) ||
                         text.contains(Lan.mainMenu(a.getLanguage()).get(3))) {
@@ -1158,6 +1194,9 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
                             lastRow.add(new InlineKeyboardButton()
                                     .setText(EmojiParser.parseToUnicode(Lan.clearCart(a.getLanguage())))
                                     .setCallbackData(Lan.clearCart(a.getLanguage())));
+                            lastRow.add(new InlineKeyboardButton()
+                                    .setText(EmojiParser.parseToUnicode(Lan.removeSelectively(a.getLanguage())))
+                                    .setCallbackData(Lan.removeSelectively(a.getLanguage())));
                             rows.add(lastRow);
                             List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
                             row.add(new InlineKeyboardButton()
