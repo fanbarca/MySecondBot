@@ -1003,7 +1003,7 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
 
 
     private boolean waitingForLocation(Message message) throws SQLException{
-        return DataBase.sqlQuery("SELECT rmid from users where id=" + message.getChatId(), "rmid").equals("0");
+        return DataBase.sqlQuery("SELECT rmid from users where id=" + a.getId(), "rmid").equals("0");
     }
 
 
