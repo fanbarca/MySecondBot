@@ -304,11 +304,19 @@ public class Bot extends TelegramLongPollingBot {
                 } else if (cb.contains("delete"+prodId)){
                     DataBase.sql("delete from cart where userid =" + update.getCallbackQuery().getFrom().getId()
                     + " and item = '" + prodId + "'");
-                        a.setAddress(Lan.removed(a.getLanguage()));
-                        a.setAlert(false);
-                    editCaption(Lan.mainMenu(a.getLanguage()).get(3) + "\n" + curretCart(update.getCallbackQuery().getMessage().getChatId().toString()), update.getCallbackQuery().getMessage().getChatId().toString(),
+                    List<String> items = DataBase.sqlQueryList("select item from cart where userid =" + update.getCallbackQuery().getMessage().getChatId(), "item");
+                    if (items.size()>0) {
+                        editCaption(Lan.mainMenu(a.getLanguage()).get(3) + "\n"
+                            + curretCart(update.getCallbackQuery().getMessage().getChatId().toString()), update.getCallbackQuery().getMessage().getChatId().toString(),
                         Integer.parseInt(DataBase.sqlQuery("SELECT image from users where id=" + update.getCallbackQuery().getMessage().getChatId(), "image")),
                         deleteItemsKey(update.getCallbackQuery().getMessage().getChatId().toString()));
+                        a.setAddress(Lan.removed(a.getLanguage()));
+                        a.setAlert(false);
+                    } else {
+                        showCart(update, true);
+                        a.setAddress(Lan.cartCleared(a.getLanguage()));
+                        a.setAlert(false);
+                    }
                 } else if (cb.equals(prodId)) {
                     editCaption(productText(prodId, userid), update.getCallbackQuery().getMessage(), markUp(productText(prodId, userid), prodId, (occurrences(prodId, userid)>0)?keybAddMore(name):keybAdd(name), 3));
                 }
@@ -1264,20 +1272,19 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
 
     private void showCart(Update update, boolean edit) throws TelegramApiException, SQLException {
         List<String> items = DataBase.sqlQueryList("select item from cart where userid =" + update.getCallbackQuery().getMessage().getChatId(), "item");
-        if (edit) {
+        String text = Lan.mainMenu(a.getLanguage()).get(3) + "\n"
+                    + curretCart(update.getCallbackQuery().getMessage().getChatId().toString()) +"\n"
+                    + Lan.deliveryCost(a.getLanguage())+"\n"
+                    +"<b>"+Lan.tooLate(a.getLanguage())+"</b>";
+        String empty = Lan.mainMenu(a.getLanguage()).get(3) + "\n"
+                    + Lan.emptyOrders(a.getLanguage());
             if (items.size() == 0) {
-                editPic(Lan.mainMenu(a.getLanguage()).get(3) + "\n" + Lan.emptyOrders(a.getLanguage()), update.getCallbackQuery().getMessage(), null, "Лого", 2);
+                if (edit) editPic(empty, update.getCallbackQuery().getMessage(), null, "Лого", 2);
+                else sendPic(empty, update.getCallbackQuery().getMessage(), null, "Лого", 2);
             } else {
-                editPic(Lan.mainMenu(a.getLanguage()).get(3) + "\n" + curretCart(update.getCallbackQuery().getMessage().getChatId().toString()) +"\n"+ Lan.deliveryCost(a.getLanguage())+"<b>"+Lan.tooLate(a.getLanguage())+"</b>", update.getCallbackQuery().getMessage(), null, "Лого", 2);
+                if (edit) editPic(text, update.getCallbackQuery().getMessage(), null, "Лого", 2);
+                else sendPic(text, update.getCallbackQuery().getMessage(), null, "Лого", 2);
             }
-        } else {
-            if (items.size() == 0) {
-                sendPic(Lan.mainMenu(a.getLanguage()).get(3) + "\n" + Lan.emptyOrders(a.getLanguage()), update.getCallbackQuery().getMessage(), null, "Лого", 2);
-            } else {
-                sendPic(Lan.mainMenu(a.getLanguage()).get(3) + "\n" + curretCart(update.getCallbackQuery().getMessage().getChatId().toString()) +"\n"+ Lan.deliveryCost(a.getLanguage())+"<b>"+Lan.tooLate(a.getLanguage())+"</b>", update.getCallbackQuery().getMessage(), null, "Лого", 2);
-            }
-        }
-
     }
 
 
