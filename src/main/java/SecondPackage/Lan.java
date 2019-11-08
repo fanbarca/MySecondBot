@@ -12,6 +12,7 @@ class Lan {
     public static Transliterator toLatinTrans = Transliterator.getInstance(AmabiliaBot.CYRILLIC_TO_LATIN);
     public static Transliterator toCyrilTrans = Transliterator.getInstance(AmabiliaBot.LATIN_TO_CYRILLIC);
 
+
     public static String welcome(String lan, String name){
         String r="";
         String emoji = "\n:red_car::pizza::poultry_leg::hamburger:";
@@ -111,38 +112,51 @@ class Lan {
     public static List<String> listTypes(String lan){
         List<String> list = new ArrayList<>();
         if (lan.equals("Uzbek")) {
-            list.add(":custard: Salatlar");
-            list.add(":stew: Suyuq ovqatlar");
-            list.add(":spaghetti: Asosiy taomlar");
-            list.add(":coffee: Ichimliklar");
-            list.add(":cake: Shirinliklar");
-            list.add(":hamburger: Fastfud");
-            list.add(":pizza: Pitsa");
-            list.add(":meat_on_bone: Shashlik");
-            list.add(":bread: Boshqa");
+            list.add(emogisList().get(0)+"Salatlar");
+            list.add(emogisList().get(1)+"Suyuq ovqatlar");
+            list.add(emogisList().get(2)+"Asosiy taomlar");
+            list.add(emogisList().get(3)+"Ichimliklar");
+            list.add(emogisList().get(4)+"Shirinliklar");
+            list.add(emogisList().get(5)+"Fastfud");
+            list.add(emogisList().get(6)+"Pitsa");
+            list.add(emogisList().get(7)+"Shashlik");
+            list.add(emogisList().get(8)+"Boshqa");
         }
         else if (lan.equals("Russian")) {
-            list.add(":custard: Салаты");
-            list.add(":stew: Первое");
-            list.add(":spaghetti: Второе");
-            list.add(":coffee: Напитки");
-            list.add(":cake: Десерт");
-            list.add(":hamburger: Фастфуд");
-            list.add(":pizza: Пицца");
-            list.add(":meat_on_bone: Шашлык");
-            list.add(":bread: Другое");
+            list.add(emogisList().get(0)+"Салаты");
+            list.add(emogisList().get(1)+"Первое");
+            list.add(emogisList().get(2)+"Второе");
+            list.add(emogisList().get(3)+"Напитки");
+            list.add(emogisList().get(4)+"Десерт");
+            list.add(emogisList().get(5)+"Фастфуд");
+            list.add(emogisList().get(6)+"Пицца");
+            list.add(emogisList().get(7)+"Шашлык");
+            list.add(emogisList().get(8)+"Другое");
         }
         else if (lan.equals("English")) {
-            list.add(":custard: Salads");
-            list.add(":stew: Entrees");
-            list.add(":spaghetti: Main courses");
-            list.add(":coffee: Beverages");
-            list.add(":cake: Dessert");
-            list.add(":hamburger: Fast food");
-            list.add(":pizza: Pizza");
-            list.add(":meat_on_bone: Barbecue");
-            list.add(":bread: Other");
+            list.add(emogisList().get(0)+"Salads");
+            list.add(emogisList().get(1)+"Entrees");
+            list.add(emogisList().get(2)+"Main courses");
+            list.add(emogisList().get(3)+"Beverages");
+            list.add(emogisList().get(4)+"Dessert");
+            list.add(emogisList().get(5)+"Fast food");
+            list.add(emogisList().get(6)+"Pizza");
+            list.add(emogisList().get(7)+"Barbecue");
+            list.add(emogisList().get(8)+"Other");
         }
+        return list;
+    }
+    public static List<String> emogisList(){
+        List<String> list = new ArrayList<>();
+                list.add(":custard:");
+                list.add(":stew:");
+                list.add(":spaghetti:");
+                list.add(":coffee:");
+                list.add(":cake:");
+                list.add(":hamburger:");
+                list.add(":pizza:");
+                list.add(":meat_on_bone:");
+                list.add(":bread:");
         return list;
     }
     public static String goBack(String lan) {
