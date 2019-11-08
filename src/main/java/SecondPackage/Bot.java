@@ -855,7 +855,7 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
 
 
     private InlineKeyboardMarkup deleteItemsKey(String id) throws SQLException {
-        List<String> menu = DataBase.sqlQueryList("select * from cart where userid ="+id, "item");
+        List<String> menu = DataBase.sqlQueryList("select DISTINCT item from cart where userid ="+id, "item");
         InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
             List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
             for (int i = 0; i<menu.size(); i+=3) {
