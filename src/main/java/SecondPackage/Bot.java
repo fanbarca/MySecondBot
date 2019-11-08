@@ -206,9 +206,9 @@ public class Bot extends TelegramLongPollingBot {
 
 
     private void handleCallback(Update update) throws TelegramApiException, SQLException, MalformedURLException, IOException {
-        AnswerCallbackQuery answer = new AnswerCallbackQuery()
-                .setCallbackQueryId(update.getCallbackQuery().getId()).setShowAlert(false);
-        execute(answer);
+        // AnswerCallbackQuery answer = new AnswerCallbackQuery()
+        //         .setCallbackQueryId(update.getCallbackQuery().getId()).setShowAlert(false);
+        // execute(answer);
         String cb = update.getCallbackQuery().getData();
         if (cb.equals("O'zbek") || cb.equals("Русский") || cb.equals("English")) {
             if (cb.equals("O'zbek")) {
@@ -423,7 +423,7 @@ public class Bot extends TelegramLongPollingBot {
         DataBase.sql("delete from cart where userid =" + update.getCallbackQuery().getMessage().getChatId());
         AnswerCallbackQuery answer = new AnswerCallbackQuery()
                 .setCallbackQueryId(update.getCallbackQuery().getId()).setShowAlert(true).setText(Lan.orderCancelled(a.getLanguage()));
-        execute(answer);
+                execute(answer);
     }
 
 
