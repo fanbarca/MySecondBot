@@ -859,13 +859,13 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
             for (int i = 0; i<menu.size(); i+=3) {
                 List<InlineKeyboardButton> row1 = new ArrayList<InlineKeyboardButton>();
                 row1.add(new InlineKeyboardButton()
-                                .setText(EmojiParser.parseToUnicode(":heavy_multiplication_x:"+menu.get(i)))
+                                .setText(EmojiParser.parseToUnicode(":heavy_multiplication_x:"+DataBase.sqlQuery("select "+a.getLanguage()+" from table0 where id ="+menu.get(i), a.getLanguage())))
                                 .setCallbackData("delete"+menu.get(i)));
                 if((i+1)<menu.size()) row1.add(new InlineKeyboardButton()
-                                .setText(EmojiParser.parseToUnicode(":heavy_multiplication_x:"+menu.get(i+1)))
+                                .setText(EmojiParser.parseToUnicode(":heavy_multiplication_x:"+DataBase.sqlQuery("select "+a.getLanguage()+" from table0 where id ="+menu.get(i+1), a.getLanguage())))
                                 .setCallbackData("delete"+menu.get(i+1)));
                 if((i+2)<menu.size()) row1.add(new InlineKeyboardButton()
-                                .setText(EmojiParser.parseToUnicode(":heavy_multiplication_x:"+menu.get(i+2)))
+                                .setText(EmojiParser.parseToUnicode(":heavy_multiplication_x:"+DataBase.sqlQuery("select "+a.getLanguage()+" from table0 where id ="+menu.get(i+2), a.getLanguage())))
                                 .setCallbackData("delete"+menu.get(i+2)));
                 rows.add(row1);
             }
