@@ -3,7 +3,7 @@ package SecondPackage;
 
 public class Order {
 
-
+    private String id;
     private String sentMessage;
     private String receivedMes;
     private String image;
@@ -31,14 +31,20 @@ public class Order {
 		this.receivedMes = receivedMes;
 		this.sentMessage = sentMessage;
 	}
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
 	public Order(String firstName,
 				 String number,
 				 String language,
-				 String receivedMes) {
+				 String id) {
 		this.firstName = firstName;
 		this.number = number;
 		this.language = language;
-		this.receivedMes = receivedMes;
+		this.id = id;
 		this.sentMessage = null;
 		this.image = null;
 	}
