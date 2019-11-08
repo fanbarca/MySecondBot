@@ -313,9 +313,10 @@ public class Bot extends TelegramLongPollingBot {
                         a.setAddress(Lan.removed(a.getLanguage()));
                         a.setAlert(false);
                     } else {
-                        showCart(update, true);
                         a.setAddress(Lan.cartCleared(a.getLanguage()));
                         a.setAlert(false);
+                        editPic(Lan.welcome(a.getLanguage(), a.getFirstName()), update.getCallbackQuery().getMessage(), Lan.mainMenu(a.getLanguage()), "Лого", 2);
+
                     }
                 } else if (cb.equals(prodId)) {
                     editPic(productText(prodId, userid), prodId, update.getCallbackQuery().getMessage(), markUp(productText(prodId, userid), prodId, (occurrences(prodId, userid)>0)?keybAddMore(name):keybAdd(name), 3));
@@ -326,7 +327,7 @@ public class Bot extends TelegramLongPollingBot {
             clearCart(update);
             a.setAddress(Lan.cartCleared(a.getLanguage()));
             a.setAlert(true);
-            showCart(update, true);
+            editPic(Lan.welcome(a.getLanguage(), a.getFirstName()), update.getCallbackQuery().getMessage(), Lan.mainMenu(a.getLanguage()), "Лого", 2);
         }
         if (cb.contains(Lan.delivery(a.getLanguage()))) {
             ZoneId z = ZoneId.of("Asia/Tashkent");
