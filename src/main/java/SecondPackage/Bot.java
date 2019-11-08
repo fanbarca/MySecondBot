@@ -1268,13 +1268,13 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
             if (items.size() == 0) {
                 editPic(Lan.mainMenu(a.getLanguage()).get(3) + "\n" + Lan.emptyOrders(a.getLanguage()), update.getCallbackQuery().getMessage(), null, "Лого", 2);
             } else {
-                editPic(Lan.mainMenu(a.getLanguage()).get(3) + "\n" + curretCart(update.getCallbackQuery().getMessage().getChatId().toString()) +"\n"+ Lan.deliveryCost(a.getLanguage())+Lan.tooLate(a.getLanguage()), update.getCallbackQuery().getMessage(), null, "Лого", 2);
+                editPic(Lan.mainMenu(a.getLanguage()).get(3) + "\n" + curretCart(update.getCallbackQuery().getMessage().getChatId().toString()) +"\n"+ Lan.deliveryCost(a.getLanguage())+"<b>"+Lan.tooLate(a.getLanguage())+"</b>", update.getCallbackQuery().getMessage(), null, "Лого", 2);
             }
         } else {
             if (items.size() == 0) {
                 sendPic(Lan.mainMenu(a.getLanguage()).get(3) + "\n" + Lan.emptyOrders(a.getLanguage()), update.getCallbackQuery().getMessage(), null, "Лого", 2);
             } else {
-                sendPic(Lan.mainMenu(a.getLanguage()).get(3) + "\n" + curretCart(update.getCallbackQuery().getMessage().getChatId().toString()) +"\n"+ Lan.deliveryCost(a.getLanguage())+Lan.tooLate(a.getLanguage()), update.getCallbackQuery().getMessage(), null, "Лого", 2);
+                sendPic(Lan.mainMenu(a.getLanguage()).get(3) + "\n" + curretCart(update.getCallbackQuery().getMessage().getChatId().toString()) +"\n"+ Lan.deliveryCost(a.getLanguage())+"<b>"+Lan.tooLate(a.getLanguage())+"</b>", update.getCallbackQuery().getMessage(), null, "Лого", 2);
             }
         }
 
