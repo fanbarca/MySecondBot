@@ -918,9 +918,10 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
         Adminbot order = new Adminbot();
         order.sendMe("<b>Новый заказ</b>\n\n"
                     +"<b>Имя клиента:</b> "+ a.getFirstName()+"\n"
+                    +"<b>Номер клиента:</b> "+ a.getNumber()+"\n"
                     +"<b>Время доставки:</b> "+time+"\n"
                     +address
-                    +"<b>Заказ:</b> "+curretCart(message.getChatId().toString()));
+                    +"<b>Заказ:</b> \n\n"+curretCart(message.getChatId().toString()));
         if (latitude!=null&&longitude!=null) order.sendLocation(Float.parseFloat(latitude), Float.parseFloat(longitude));
         order.sendContact(a.getFirstName(), a.getNumber());
         clearCart(message.getChatId().toString());
