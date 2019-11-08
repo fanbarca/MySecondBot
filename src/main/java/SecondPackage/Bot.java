@@ -301,12 +301,14 @@ public class Bot extends TelegramLongPollingBot {
                         a.setAlert(false);
                     }
                     editCaption(productText(prodId, userid), update.getCallbackQuery().getMessage(), markUp(productText(prodId, userid), prodId, (occurrences(prodId, userid)>0)?keybAddMore(name):keybAdd(name), 3));
-                } else if (cb.contains("delete"+name)){
+                } else if (cb.contains("delete"+prodId)){
                     DataBase.sql("delete from cart where userid =" + update.getCallbackQuery().getFrom().getId()
                     + " and item = '" + prodId + "'");
                         a.setAddress(Lan.removed(a.getLanguage()));
                         a.setAlert(false);
-                    showCart(update, true);
+                    editCaption(Lan.mainMenu(a.getLanguage()).get(3) + "\n" + curretCart(update.getCallbackQuery().getMessage().getChatId().toString()), update.getCallbackQuery().getMessage().getChatId().toString(),
+                        Integer.parseInt(DataBase.sqlQuery("SELECT image from users where id=" + update.getCallbackQuery().getMessage().getChatId(), "image")),
+                        deleteItemsKey(update.getCallbackQuery().getMessage().getChatId().toString()));
                 } else if (cb.equals(prodId)) {
                     editCaption(productText(prodId, userid), update.getCallbackQuery().getMessage(), markUp(productText(prodId, userid), prodId, (occurrences(prodId, userid)>0)?keybAddMore(name):keybAdd(name), 3));
                 }
@@ -869,6 +871,15 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
                                 .setCallbackData("delete"+menu.get(i+2)));
                 rows.add(row1);
             }
+            List<InlineKeyboardButton> row1 = new ArrayList<InlineKeyboardButton>();
+            row1.add(new InlineKeyboardButton()
+                                .setText(EmojiParser.parseToUnicode(Lan.mainMenu(a.getLanguage()).get(3)))
+                                .setCallbackData(Lan.mainMenu(a.getLanguage()).get(3)));
+            row1.add(new InlineKeyboardButton()
+                                .setText(EmojiParser.parseToUnicode(Lan.backToMenu(a.getLanguage())))
+                                .setCallbackData(Lan.backToMenu(a.getLanguage())));
+
+            rows.add(row1);
             markup.setKeyboard(rows);
         return markup;
     }
