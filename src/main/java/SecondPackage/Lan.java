@@ -258,6 +258,21 @@ class Lan {
         else if (lan.equals("English")) r = "In your cart: "+items;
         return r;
     }
+    public static String useOldLocation(String lan) {
+        String r="";
+        if (lan.equals("Uzbek")) r = "Oldin jo'natilgan geolokatsiyani tanlaysizmi?";
+        else if (lan.equals("Russian")) r = "Хотите использовать ранее отправленную геолокацию?";
+        else if (lan.equals("English")) r = "Would you like to use a previously sent location?";
+        return r;
+    }
+    public static String useOldAddress(String lan) {
+        String r="";
+        if (lan.equals("Uzbek")) r = "Oldin jo'natilgan manzilni tanlaysizmi?";
+        else if (lan.equals("Russian")) r = "Хотите использовать ранее отправленный адрес?";
+        else if (lan.equals("English")) r = "Would you like to use a previously sent address?";
+        return r;
+    }
+    
     public static String sendMeLocation(String lan) {
         String r="";
         if (lan.equals("Uzbek")) r = "Buyurtmani qayerga yetkazish kerak?\nJoyni lokatsiyasini yuboring, yoki manzilni yozing";
