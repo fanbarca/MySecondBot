@@ -1233,12 +1233,12 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
                             lastRow.add(new InlineKeyboardButton()
                                     .setText(EmojiParser.parseToUnicode(Lan.clearCart(a.getLanguage())))
                                     .setCallbackData(Lan.clearCart(a.getLanguage())));
-                            if (DataBase.sqlQueryList("select item from cart where userid ="+a.getId(), "item").size()!=1) {
+                            if (DataBase.sqlQueryList("select distinct item from cart where userid ="+a.getId(), "item").size()!=1) {
                                 lastRow.add(new InlineKeyboardButton()
                                         .setText(EmojiParser.parseToUnicode(Lan.removeSelectively(a.getLanguage())))
                                         .setCallbackData(Lan.removeSelectively(a.getLanguage())));
-                                rows.add(lastRow);
                             }
+                            rows.add(lastRow);
                             List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
                             row.add(new InlineKeyboardButton()
                                     .setText(EmojiParser.parseToUnicode(Lan.delivery(a.getLanguage())))
