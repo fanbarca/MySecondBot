@@ -278,7 +278,13 @@ class Lan {
         else if (lan.equals("English")) r = "Would you like to use a previously sent address?";
         return r;
     }
-    
+    public static String address(String lan) {
+        String r="";
+        if (lan.equals("Uzbek")) r = "Manzil: ";
+        else if (lan.equals("Russian")) r = "Адрес: ";
+        else if (lan.equals("English")) r = "Address: ";
+        return r;
+    }
     public static String sendMeLocation(String lan) {
         String r="";
         if (lan.equals("Uzbek")) r = "Buyurtmani qayerga yetkazish kerak?\nJoyni lokatsiyasini yuboring, yoki manzilni yozing";
@@ -305,6 +311,20 @@ class Lan {
         if (lan.equals("Uzbek")) r = "Buyurtmani yetkazish vaqtini tanlang";
         else if (lan.equals("Russian")) r = "Выберите время доставки";
         else if (lan.equals("English")) r = "Choose delivery time";
+        return r;
+    }
+    public static String deliveryTime(String lan) {
+        String r="";
+        if (lan.equals("Uzbek")) r = "Buyurtmani yetkazish vaqti: ";
+        else if (lan.equals("Russian")) r = "Время доставки: ";
+        else if (lan.equals("English")) r = "Delivery time: ";
+        return r;
+    }
+    public static String locationReceived(String lan) {
+        String r="";
+        if (lan.equals("Uzbek")) r = "<b>Lokatsiya qabul qilingan</b> \n";
+        else if (lan.equals("Russian")) r = "<b>Геолокация получена</b> \n";
+        else if (lan.equals("English")) r = "<b>Location received</b> \n";
         return r;
     }
     public static String added(String lan) {

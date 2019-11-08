@@ -368,8 +368,6 @@ public class Bot extends TelegramLongPollingBot {
         }
         if (cb.contains(Lan.clearOrders(a.getLanguage()))) {
             clearOrders(update);
-                List<String> list = new ArrayList<>();
-                list.add(Lan.backToMenu(a.getLanguage()));
             editPic(Lan.welcome(a.getLanguage(), a.getFirstName()), update.getCallbackQuery().getMessage(),
                     Lan.mainMenu(a.getLanguage()), "Лого", 2);
         }
@@ -451,15 +449,18 @@ public class Bot extends TelegramLongPollingBot {
 
 
     private void clearOrders(Update update) throws SQLException, TelegramApiException{
-        String confirmed = DataBase.sqlQuery("select conformed from zakaz where userid = "+ update.getCallbackQuery().getMessage().getChatId(), "conformed");
-        DataBase.sql("delete from zakaz where userid =" + update.getCallbackQuery().getMessage().getChatId());
-        if (confirmed.equals("true")) {
+        boolean confirmed = DataBase.sqlQueryBoolean("select conformed from zakaz where userid = "+ update.getCallbackQuery().getMessage().getChatId(), "conformed");
+        if (confirmed) {
             Adminbot order = new Adminbot();
-            order.sendMe("Заказ от " + a.getFirstName()+" отменён");
+            order.sendMe("Заказ от " + a.getFirstName()+" отменён\n"+
+                        DataBase.sqlQuery("select product from zakaz where userid = "+ update.getCallbackQuery().getMessage().getChatId(), "product"));
         }
         a.setAddress(Lan.orderCancelled(a.getLanguage()));
         a.setAlert(true);
+        DataBase.sql("delete from zakaz where userid =" + update.getCallbackQuery().getMessage().getChatId());
     }
+
+
 
 
 
@@ -1245,12 +1246,12 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
             String time = DataBase.sqlQuery("select time from zakaz where userid ="+update.getCallbackQuery().getMessage().getChatId(), "time");
             String address = DataBase.sqlQuery("select address from users where id ="+update.getCallbackQuery().getMessage().getChatId(), "address");
             String latitude = DataBase.sqlQuery("select latitude from users where id ="+update.getCallbackQuery().getMessage().getChatId(), "latitude");
-            if (address!=null) address= "<b>Адрес:</b> "+address+"\n";
+            if (address!=null) address= Lan.address(a.getLanguage())+address+"\n";
             else if (latitude!=null) {
-                address="<b>Геолокация получена</b> \n";
+                address=Lan.locationReceived(a.getLanguage());
             }
                 editPic(Lan.mainMenu(a.getLanguage()).get(1)+"\n"
-                    +"<b>Время доставки:</b> "+time+"\n"
+                    +Lan.deliveryTime(a.getLanguage())+time+"\n"
                     +address
                     +items.get(0)+"\n", update.getCallbackQuery().getMessage(), null, "Лого", 2);
         }

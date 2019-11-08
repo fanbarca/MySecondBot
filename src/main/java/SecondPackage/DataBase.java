@@ -69,6 +69,25 @@ public static Connection getConnection() throws URISyntaxException, SQLException
             }
         return lan;
     }
+    public static boolean sqlQueryBoolean(String command, String field) throws SQLException {
+            boolean lan = false;
+            try {
+                Connection conn = getConnection();
+                if (conn!=null) {
+                    Statement prst = conn.createStatement();
+                    ResultSet rs = prst.executeQuery(command);
+                    while (rs.next()){
+                        lan= rs.getBoolean(field);
+                    }
+                    prst.close();
+                    conn.close();
+                }
+            }
+            catch(Exception ex) {
+                System.err.println(ex);
+            }
+        return lan;
+    }
     public static void sql(String command) {
         try {
             Connection conn = getConnection();
