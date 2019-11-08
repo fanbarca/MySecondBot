@@ -360,7 +360,7 @@ public class Bot extends TelegramLongPollingBot {
         }
         if (cb.equals(Lan.YesNo(a.getLanguage()).get(0))||(cb.equals(Lan.YesNo(a.getLanguage()).get(1)))) {
             if (cb.equals(Lan.YesNo(a.getLanguage()).get(0))) {
-                clearOrders(update);
+                DataBase.sql("update zakaz set conformed = false, time = null where userid =" + update.getCallbackQuery().getMessage().getChatId());
                 sendMeLocation(update.getCallbackQuery().getMessage());
             } else if (cb.equals(Lan.YesNo(a.getLanguage()).get(1))) {
                 showOrders(update);
@@ -957,12 +957,10 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
         order.sendContact(a.getFirstName(), a.getNumber());
         clearCart(update);
         DataBase.sql("update zakaz set conformed = true where userid = " + update.getCallbackQuery().getMessage().getChatId());
-        List<String> list = new ArrayList<>();
-            list.add(Lan.mainMenu(a.getLanguage()).get(1));
-            list.add(Lan.backToMenu(a.getLanguage()));
+
         editPic(Lan.welcome(a.getLanguage(), a.getFirstName()), update.getCallbackQuery().getMessage().getChatId(),
             Integer.parseInt(DataBase.sqlQuery("SELECT image from users where id=" + update.getCallbackQuery().getMessage().getChatId(), "image")),
-            list, "Лого", 2);
+            Lan.mainMenu(a.getLanguage()), "Лого", 2);
         a.setAddress(Lan.orderPlaced(a.getLanguage()));
         a.setAlert(true);
     }
