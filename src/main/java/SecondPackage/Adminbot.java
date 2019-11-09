@@ -28,7 +28,7 @@ import java.util.*;
 
 public class Adminbot extends TelegramLongPollingBot {
 
-    String messageid;
+    String messageid = "";
     public static final long myID = 615351734;
     public static String password = "zzzz1111*";
     private String category = "";
@@ -88,20 +88,18 @@ public class Adminbot extends TelegramLongPollingBot {
         }
 	}
 
-	private void enterPassword(Update update) {
-        String userid = null;
+	private void enterPassword(Update update) throws SQLException {
         if (update.hasMessage()) {
-            userid = update.getMessage().getChatId().toString();
             deleteMessage(update.getMessage());
+            edit(update.getCallbackQuery().getMessage(), "Введите пароль", null, 1);
+            listener = "password";
         } else {
-            userid = update.getCallbackQuery().getMessage().getChatId().toString();
-            deleteMessage(update.getCallbackQuery().getMessage());
+            edit(update.getCallbackQuery().getMessage(), "Введите пароль", null, 1);
+            listener = "password";
         }
-        send("Введите пароль", userid, null, true, 1);
-        listener = "password";
 	}
 
-	private void allow(Update update, String id) {
+	private void allow(Update update, String id) throws SQLException {
         if (update.hasMessage()) {
                 if (update.getMessage().hasText()) {
                     if(update.getMessage().getText().equals(password)||update.getMessage().getText().equals("/start")){
@@ -111,28 +109,8 @@ public class Adminbot extends TelegramLongPollingBot {
                         if (update.getMessage().getText().length()>5) {
                             String command = update.getMessage().getText().substring(5);
                             DataBase.sql(command);
+                            deleteMessage(update.getMessage());
                         }
-                    } else if (update.getMessage().getText().contains("/broadcast")) {
-                        if (update.getMessage().getText().length()>11) {
-                            String command = update.getMessage().getText().substring(11);
-                            Bot toAll = new Bot();
-                            try {
-								for (int i=0; i<DataBase.sqlIdList().size(); i++) {
-                                    toAll.send(command, Long.parseLong(DataBase.sqlIdList().get(i)), null, null, 0);
-								}
-							} catch (SQLException e) {
-								e.printStackTrace();
-							}
-                        }
-                    } else if (update.getMessage().getText().contains("/deletebroadcast")) {
-                            Bot toAll = new Bot();
-                            try {
-                                for (int i=0; i<DataBase.sqlIdList().size(); i++) {
-                                    toAll.deleteMessage(DataBase.sqlQuery("select smid from users where userid ="+DataBase.sqlIdList().get(i), "smid"), DataBase.sqlIdList().get(i));
-                                }
-                            } catch (SQLException e) {
-                                e.printStackTrace();
-                            }
                     } else {
                         if (listener.equals("Russian")) {
                             Random rand = new Random();
@@ -351,14 +329,16 @@ public void send (String text, String chatId, List<String> list, boolean inline,
         else sendMessage.setReplyMarkup(replyMarkup);
         }
         try {
-            messageid = execute(sendMessage).getMessageId().toString();
+            String messageId = execute(sendMessage).getMessageId().toString();
+            DataBase.sql("update users set adminMessage ="+messageId+" where id = "+chatId);
         }
         catch (TelegramApiException e) {e.printStackTrace();}
     }
-public void edit (Message message, String newText, List<String> list, int flag) {
+public void edit (Message message, String newText, List<String> list, int flag) throws SQLException {
+    String adminMessage = DataBase.sqlQuery("select adminmessage from users where id ="+message.getChatId(), "adminmessage");
         EditMessageText sendMessage = new EditMessageText()
                 .setChatId(message.getChatId())
-                .setMessageId(Integer.parseInt(messageid))
+                .setMessageId(Integer.parseInt(adminMessage))
                 .setParseMode("HTML")
                 .setText(EmojiParser.parseToUnicode(newText));
         if (list!=null) {
