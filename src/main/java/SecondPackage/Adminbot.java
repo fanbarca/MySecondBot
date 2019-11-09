@@ -59,7 +59,6 @@ public class Adminbot extends TelegramLongPollingBot {
                     if (update.getMessage().getText().equals(password)){
                         DataBase.sql("update users set admin = true where id ="+id);
                         allow(update, id);
-                        deleteMessage(update.getMessage());
                     } else {
                         checkAdmin(update, id);
                     }
@@ -106,6 +105,11 @@ public class Adminbot extends TelegramLongPollingBot {
                 if (update.getMessage().hasText()) {
                     if(update.getMessage().getText().equals(password)||update.getMessage().getText().equals("/start")){
                         deleteMessage(update.getMessage());
+                        String adminmessage = DataBase.sqlQuery("select adminmessage from users where id="+update.getMessage().getChatId(), "adminmessage");
+                        if (adminmessage!=null) {
+                            deleteMessage(update.getMessage().getMessageId().toString(), adminmessage);
+                            DataBase.sql("update users set adminMessage = null where id = "+update.getMessage().getMessageId());
+                        }
                         send("Выберите действие", id, mainKeyboard() ,true, 1);
                     }  else if (update.getMessage().getText().contains("/sql")) {
                         if (update.getMessage().getText().length()>5) {
