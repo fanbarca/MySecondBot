@@ -53,7 +53,7 @@ public class Adminbot extends TelegramLongPollingBot {
             else if (update.hasMessage()) {
                 id = update.getMessage().getChatId().toString();
                 if (update.getMessage().hasText()){
-                    if (update.getMessage().getText().equals(password)&&listener.equals("password")){
+                    if (update.getMessage().getText().equals(password)){
                         DataBase.sql("update users set admin = true where id ="+id);
                         allow(update);
                         listener ="";
