@@ -139,37 +139,44 @@ public class Adminbot extends TelegramLongPollingBot {
                             DataBase.sql("insert into table0 (id, russian, type, instock) values ("+
                             String.format("%04d", rand.nextInt(8999)+1000)+", '"+russian+"', '"+category+"', true)");
                             listener = "Uzbek";
+                            deleteMessage(update.getMessage());
                             edit(update.getMessage(), "Введите название продукта на узбекском", list, 3);
                         } else if (listener.equals("Uzbek")) {
                             String Name = update.getMessage().getText();
                             DataBase.sql("UPDATE table0 SET uzbek = '"+Name+"' where russian = '"+russian+"'");
                             listener = "English";
+                            deleteMessage(update.getMessage());
                             edit(update.getMessage(), "Введите название продукта на английском", list, 3);
                         } else if (listener.equals("English")) {
                             String Name = update.getMessage().getText();
                             listener = "Cost";
                             DataBase.sql("UPDATE table0 SET english = '"+Name+"' where russian = '"+russian+"'");
+                            deleteMessage(update.getMessage());
                             edit(update.getMessage(), "Введите стоимость продукта", list, 3);
                         } else if (listener.equals("Cost")) {
                             String cost = update.getMessage().getText();
                             listener = "Russiandescription";
                             DataBase.sql("UPDATE table0 SET cost = "+cost+" where russian = '"+russian+"'");
+                            deleteMessage(update.getMessage());
                             edit(update.getMessage(), "Введите описание на русском", list, 3);
                         } else if (listener.equals("Russiandescription")) {
                             String Name = update.getMessage().getText();
                             DataBase.sql("UPDATE table0 SET Russiandescription = '"+Name+"' where russian = '"+russian+"'");
                             listener = "Uzbekdescription";
+                            deleteMessage(update.getMessage());
                             edit(update.getMessage(), "Введите описание на узбекском", list, 3);
                         } else if (listener.equals("Uzbekdescription")) {
                             String Name = update.getMessage().getText();
                             DataBase.sql("UPDATE table0 SET Uzbekdescription = '"+Name+"' where russian = '"+russian+"'");
                             listener = "Englishdescription";
+                            deleteMessage(update.getMessage());
                             edit(update.getMessage(), "Введите описание на английском", list, 3);
                         } else if (listener.equals("Englishdescription")) {
                             String Name = update.getMessage().getText();
                             listener = "";
                             DataBase.sql("UPDATE table0 SET Englishdescription = '"+Name+"' where russian = '"+russian+"'");
-                            edit(update.getMessage(), "Готово", mainKeyboard(), 3);
+                            deleteMessage(update.getMessage());
+                            edit(update.getMessage(), "Готово", mainKeyboard(), 1);
                         }
                     }
                 }
@@ -369,7 +376,9 @@ public void edit (Message message, String newText, List<String> list, int flag) 
                 rows.add(row);
             }
             List<InlineKeyboardButton> lastRow = new ArrayList<InlineKeyboardButton>();
-            if (!newText.contains("Заказ от")||!newText.contains("Выберите действие")) {
+            if (newText.contains(mainKeyboard().get(0))||
+                newText.contains(mainKeyboard().get(1))||
+                newText.contains(mainKeyboard().get(2))) {
                 lastRow.add(new InlineKeyboardButton()
                             .setText(EmojiParser.parseToUnicode("Назад"))
                             .setCallbackData("Назад"));
