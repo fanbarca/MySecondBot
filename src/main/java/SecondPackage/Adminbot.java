@@ -267,12 +267,14 @@ public void deleteMessage(Message message){
         try {execute(dm);}
         catch (TelegramApiException e) {e.printStackTrace();}
     }
+
 public void send (String text, long chatId, List<String> list, boolean inline, int flag) {
         SendMessage sendMessage = new SendMessage()
                 .setChatId(chatId)
                 .setText(EmojiParser.parseToUnicode(text))
                 .setParseMode("HTML");
-        InlineKeyboardMarkup inlineMarkup = new InlineKeyboardMarkup();
+        if (list!=null){
+            InlineKeyboardMarkup inlineMarkup = new InlineKeyboardMarkup();
         ReplyKeyboardMarkup replyMarkup = new ReplyKeyboardMarkup();
         List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
         List<KeyboardRow> rows2 = new ArrayList<KeyboardRow>();
@@ -315,6 +317,7 @@ public void send (String text, long chatId, List<String> list, boolean inline, i
         replyMarkup.setKeyboard(rows2).setResizeKeyboard(true).setOneTimeKeyboard(false);
         if (inline) sendMessage.setReplyMarkup(inlineMarkup);
         else sendMessage.setReplyMarkup(replyMarkup);
+        }
         try {
             execute(sendMessage);
         }
