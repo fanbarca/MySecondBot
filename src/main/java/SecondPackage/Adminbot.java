@@ -381,7 +381,8 @@ public void edit (Message message, String newText, List<String> list, int flag) 
             List<InlineKeyboardButton> lastRow = new ArrayList<InlineKeyboardButton>();
             if (newText.contains(mainKeyboard().get(0))||
                 newText.contains(mainKeyboard().get(1))||
-                newText.contains("В какой раздел?")) {
+                newText.contains("В какой раздел?")||
+                newText.contains("Введите")) {
                 lastRow.add(new InlineKeyboardButton()
                             .setText(EmojiParser.parseToUnicode("Назад"))
                             .setCallbackData("Назад"));
