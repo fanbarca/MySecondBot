@@ -105,6 +105,7 @@ public class Adminbot extends TelegramLongPollingBot {
         if (update.hasMessage()) {
                 if (update.getMessage().hasText()) {
                     if(update.getMessage().getText().equals(password)||update.getMessage().getText().equals("/start")){
+                        deleteMessage(update.getMessage());
                         send("Выберите действие", id, mainKeyboard() ,true, 1);
                     }  else if (update.getMessage().getText().contains("/sql")) {
                         if (update.getMessage().getText().length()>5) {
@@ -244,7 +245,9 @@ public class Adminbot extends TelegramLongPollingBot {
                             } catch (SQLException e) {
                                 e.printStackTrace();
                             }
-                            edit(update.getCallbackQuery().getMessage(), "Удалено!", null, 3);
+                            edit(update.getCallbackQuery().getMessage(), "Удалить продукт", DataBase.showAllProducts("Russian", false), 3);
+                            answer.setShowAlert(false).setText("Удалено!");
+
                         }
                     }
                 }
@@ -378,7 +381,7 @@ public void edit (Message message, String newText, List<String> list, int flag) 
             List<InlineKeyboardButton> lastRow = new ArrayList<InlineKeyboardButton>();
             if (newText.contains(mainKeyboard().get(0))||
                 newText.contains(mainKeyboard().get(1))||
-                newText.contains(mainKeyboard().get(2))) {
+                newText.contains("В какой раздел?")) {
                 lastRow.add(new InlineKeyboardButton()
                             .setText(EmojiParser.parseToUnicode("Назад"))
                             .setCallbackData("Назад"));
