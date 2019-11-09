@@ -49,21 +49,19 @@ public class Adminbot extends TelegramLongPollingBot {
     public void onUpdateReceived(Update update) {
         try {
             String id = null;
-            if (update.hasCallbackQuery()) id = update.getCallbackQuery().getMessage().getChatId().toString();
+            if (update.hasCallbackQuery()) {
+                id = update.getCallbackQuery().getMessage().getChatId().toString();
+                checkAdmin(update, id);
+            }
             else if (update.hasMessage()) {
                 id = update.getMessage().getChatId().toString();
                 if (update.getMessage().hasText()){
                     if (update.getMessage().getText().equals(password)){
                         DataBase.sql("update users set admin = true where id ="+id);
                         allow(update);
-                        listener ="";
+                        deleteMessage(update.getMessage());
                     } else {
-                        List<String> admins = DataBase.sqlQueryList("select id from users where admin = true", "id");
-                        if (admins.contains(id)) {
-                            allow(update);
-                        } else {
-                            enterPassword(update);
-                        }
+                        checkAdmin(update, id);
                     }
                 }
             }
@@ -81,7 +79,16 @@ public class Adminbot extends TelegramLongPollingBot {
 
     }
 
-    private void enterPassword(Update update) {
+    private void checkAdmin(Update update, String id) throws SQLException {
+        List<String> admins = DataBase.sqlQueryList("select id from users where admin = true", "id");
+        if (admins.contains(id)) {
+            allow(update);
+        } else {
+            enterPassword(update);
+        }
+	}
+
+	private void enterPassword(Update update) {
         long userid = 0;
         if (update.hasMessage()) {
             userid = update.getMessage().getChatId();
@@ -97,7 +104,7 @@ public class Adminbot extends TelegramLongPollingBot {
 	private void allow(Update update) {
         if (update.hasMessage()) {
                 if (update.getMessage().hasText()) {
-                    if(update.getMessage().getText().equals("/start")){
+                    if(update.getMessage().getText().equals(password)||update.getMessage().getText().equals("/start")){
                         List<String> a = new ArrayList<>();
                         a.add("Указать наличие");
                         a.add("Удалить продукт");
@@ -170,7 +177,6 @@ public class Adminbot extends TelegramLongPollingBot {
                             send("Готово", myID, list, false, 3);
                         }
                     }
-                    deleteMessage(update.getMessage());
                 }
 
 
@@ -203,10 +209,6 @@ public class Adminbot extends TelegramLongPollingBot {
                     e.printStackTrace();
                 }
                     }
-
-
-
-                if (update.getCallbackQuery().getMessage().getChatId().equals(myID)) {
                 for (String t:Lan.listTypes("Russian")) {
                     if (update.getCallbackQuery().getData().equals(t)) {
                         category = Lan.listTypes("Russian").indexOf(t)+"";
@@ -252,7 +254,7 @@ public class Adminbot extends TelegramLongPollingBot {
                 if (update.getCallbackQuery().getData().equals("Отмена")) {
                     deleteMessage(update.getCallbackQuery().getMessage());
                 }
-            }
+
             try {
 				execute(answer);
 			} catch (TelegramApiException e) {
