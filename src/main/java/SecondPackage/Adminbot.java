@@ -46,6 +46,43 @@ public class Adminbot extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
+        try {
+            String id = null;
+            if (update.hasCallbackQuery()) id = update.getCallbackQuery().getMessage().getChatId().toString();
+            else if (update.hasMessage()) id = update.getMessage().getChatId().toString();
+				List<String> admins = DataBase.sqlQueryList("select id from users where admin = true", "id");
+                if (admins.contains(id)) {
+                    allow(update);
+                } else {
+                    enterPassword(update);
+                }
+            } catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+
+
+
+
+
+
+
+
+
+    }
+
+    private void enterPassword(Update update) {
+        long userid = 0;
+        if (update.hasMessage()) {
+            userid = update.getMessage().getChatId();
+            deleteMessage(update.getMessage());
+        } else {
+            userid = update.getCallbackQuery().getMessage().getChatId();
+            deleteMessage(update.getCallbackQuery().getMessage());
+        }
+        send("Введите пароль", userid, null, true, 1);
+	}
+
+	private void allow(Update update) {
         if (update.hasMessage()) {
             if(update.getMessage().getChatId().equals(myID)){
                 if (update.getMessage().hasText()) {
@@ -55,27 +92,8 @@ public class Adminbot extends TelegramLongPollingBot {
                         a.add("Удалить продукт");
                         a.add("Добавить продукт");
                         a.add("Заказы");
-                        send("Выберите действие", myID, a,false, 1);
-                    } else if(update.getMessage().getText().equals("Указать наличие")){
-                        send("Указать наличие", myID, DataBase.productsAvailability("Russian"), true, 3);
-                    } else if(update.getMessage().getText().equals("Удалить продукт")){
-                        listener = "Delete";
-                        send("Удалить продукт", myID, DataBase.showAllProducts("Russian", false), true, 3);
-                    } else if(update.getMessage().getText().equals("Добавить продукт")){
-                        send("В какой раздел?", myID, Lan.listTypes("Russian"), true, 3);
-                    } else if(update.getMessage().getText().equals("Заказы")){
-                        try {
-                            for (String userID: DataBase.sqlQueryList("select userid from zakaz", "userid")) {
-                                String product = DataBase.sqlQuery("select product from zakaz where userid = '" +userID+"'", "product");
-                                String name = DataBase.sqlQuery("select firstname from users where id ="+userID,"firstname");
-                                ArrayList<String> list = new ArrayList<>();
-                                list.add("Готов от "+name);
-                                send("Заказ от "+name+"\n"+product, myID, list, true, 3);
-                            }
-                        } catch (SQLException e) {
-                            e.printStackTrace();
-                        }
-                    } else if (update.getMessage().getText().contains("/sql")) {
+                        send("Выберите действие", myID, a,true, 1);
+                    }  else if (update.getMessage().getText().contains("/sql")) {
                         if (update.getMessage().getText().length()>5) {
                             String command = update.getMessage().getText().substring(5);
                             DataBase.sql(command);
@@ -144,14 +162,39 @@ public class Adminbot extends TelegramLongPollingBot {
                     deleteMessage(update.getMessage());
                 }
             }
+
+
+
+
         } else if (update.hasCallbackQuery()) {
             AnswerCallbackQuery answer = new AnswerCallbackQuery()
                 .setCallbackQueryId(update.getCallbackQuery().getId()).setShowAlert(false);
-            try {
-				execute(answer);
-			} catch (TelegramApiException e) {
-				e.printStackTrace();
-			}
+            String cb = update.getCallbackQuery().getData();
+
+
+            if(cb.equals("Указать наличие")){
+                edit(update.getCallbackQuery().getMessage(), "Указать наличие", DataBase.productsAvailability("Russian"), 3);
+            } else if(cb.equals("Удалить продукт")){
+                listener = "Delete";
+                edit(update.getCallbackQuery().getMessage(), "Удалить продукт", DataBase.showAllProducts("Russian", false), 3);
+            } else if(cb.equals("Добавить продукт")){
+                edit(update.getCallbackQuery().getMessage(), "В какой раздел?", Lan.listTypes("Russian"), 3);
+            } else if(cb.equals("Заказы")){
+                try {
+                    for (String userID: DataBase.sqlQueryList("select userid from zakaz", "userid")) {
+                        String product = DataBase.sqlQuery("select product from zakaz where userid = '" +userID+"'", "product");
+                        String name = DataBase.sqlQuery("select firstname from users where id ="+userID,"firstname");
+                        ArrayList<String> list = new ArrayList<>();
+                        list.add("Готов от "+name);
+                        send("Заказ от "+name+"\n"+product, myID, list, true, 3);
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+                    }
+
+
+
                 if (update.getCallbackQuery().getMessage().getChatId().equals(myID)) {
                 for (String t:Lan.listTypes("Russian")) {
                     if (update.getCallbackQuery().getData().equals(t)) {
@@ -188,8 +231,8 @@ public class Adminbot extends TelegramLongPollingBot {
                 if (update.getCallbackQuery().getData().contains("Готов от")) {
                     String name = update.getCallbackQuery().getData().substring(9);
 					try {
-                        String id = DataBase.sqlQuery("select id from users where firstname = '"+name+"'", "id");
-                        DataBase.sql("delete from zakaz where userid = "+id);
+                        String userid = DataBase.sqlQuery("select id from users where firstname = '"+name+"'", "id");
+                        DataBase.sql("delete from zakaz where userid = "+userid);
 					} catch (SQLException e) {
 						e.printStackTrace();
 					}
@@ -199,10 +242,15 @@ public class Adminbot extends TelegramLongPollingBot {
                     deleteMessage(update.getCallbackQuery().getMessage());
                 }
             }
+            try {
+				execute(answer);
+			} catch (TelegramApiException e) {
+				e.printStackTrace();
+			}
         }
-    }
+	}
 
-    @Override
+	@Override
     public String getBotUsername() {
         return "AmabiliaBot";
     }

@@ -851,7 +851,7 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
         if (waitingForLocation(update.getMessage())) {
             if (update.getMessage().hasLocation()) DataBase.sql("update users set latitude = '"+update.getMessage().getLocation().getLatitude()+"', longitude = '"+update.getMessage().getLocation().getLongitude()+"', address = null where id ="+ a.getId());
             else DataBase.sql("update users set latitude = null, longitude = null, address = '"+update.getMessage().getText()+"' where id ="+ a.getId());
-            editCaption(Lan.orderTime(a.getLanguage()) + Lan.tooLate(a.getLanguage()), a.getId(),
+            editCaption(Lan.orderTime(a.getLanguage()), a.getId(),
                 Integer.parseInt(DataBase.sqlQuery("SELECT image from users where id=" + a.getId(), "image")),
                 timeKeys());
             DataBase.sql("update users set rmid = 1 where id = " + a.getId());
