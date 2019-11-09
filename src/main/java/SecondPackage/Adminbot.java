@@ -2,7 +2,6 @@ package SecondPackage;
 
 import com.vdurmont.emoji.EmojiParser;
 
-import org.postgresql.core.SqlCommand;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
 import org.telegram.telegrambots.meta.api.methods.ForwardMessage;
@@ -10,7 +9,6 @@ import org.telegram.telegrambots.meta.api.methods.send.SendContact;
 import org.telegram.telegrambots.meta.api.methods.send.SendLocation;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
-import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageReplyMarkup;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.*;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
@@ -27,7 +25,6 @@ import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-import static SecondPackage.DataBase.sqlQueryList;
 
 public class Adminbot extends TelegramLongPollingBot {
 
@@ -40,7 +37,6 @@ public class Adminbot extends TelegramLongPollingBot {
     static TimeZone zone = TimeZone.getTimeZone("Asia/Tashkent");
     static SimpleDateFormat date = new SimpleDateFormat("dd.MM.yyyy");
     static SimpleDateFormat time = new SimpleDateFormat("HH:mm");
-    private static final String DRIVER = "org.postgresql.Driver";
     List<String> list = new ArrayList<String>();
     String russian = "";
     {

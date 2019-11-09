@@ -1,23 +1,14 @@
 package SecondPackage;
 
-import com.ibm.icu.text.Transliterator;
 import com.vdurmont.emoji.EmojiParser;
 import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
-import org.telegram.telegrambots.meta.api.methods.ForwardMessage;
-import org.telegram.telegrambots.meta.api.methods.send.SendLocation;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageCaption;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageMedia;
-import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageReplyMarkup;
-import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
-import org.telegram.telegrambots.meta.api.objects.Contact;
-import org.telegram.telegrambots.meta.api.objects.Location;
 import org.telegram.telegrambots.meta.api.objects.Message;
-import org.telegram.telegrambots.meta.api.objects.PhotoSize;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.media.InputMedia;
 import org.telegram.telegrambots.meta.api.objects.media.InputMediaPhoto;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
@@ -28,24 +19,14 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.Keyboard
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.logging.BotLogger;
 
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
-import java.net.URI;
-import java.text.SimpleDateFormat;
 import java.time.LocalTime;
 import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.sql.*;
-import java.sql.Date;
 
 
 public class Bot extends TelegramLongPollingBot {
@@ -666,7 +647,6 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
             file_id = DataBase.sqlQuery("SELECT imageid from table0 where id = " + productId, "imageid");
             if (file_id == null) file_id = DataBase.sqlQuery("SELECT imageid from table0 where Russian = 'Лого'", "imageid");
         }
-        //Integer messageId= Integer.parseInt(DataBase.sqlQuery("select image from users where id="+message.getChatId(), "image"));
         InputMediaPhoto imp = new InputMediaPhoto();
         imp.setMedia(file_id);
         imp.setCaption(EmojiParser.parseToUnicode(text)).setParseMode("HTML");
@@ -1067,7 +1047,7 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
 
     private void handleAudio(Message message) {
         Adminbot ab = new Adminbot();
-        ab.forwardMessage(message, ab.myID);
+        ab.forwardMessage(message, Adminbot.myID);
     }
 
 
@@ -1080,7 +1060,7 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
 
     private void handleAnimation(Message message) {
         Adminbot ab = new Adminbot();
-        ab.forwardMessage(message, ab.myID);
+        ab.forwardMessage(message, Adminbot.myID);
     }
 
 

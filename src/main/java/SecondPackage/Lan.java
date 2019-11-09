@@ -1,16 +1,15 @@
 package SecondPackage;
 
-import java.time.ZonedDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.text.Transliterator;
 
 class Lan {
-    public static Transliterator toLatinTrans = Transliterator.getInstance(AmabiliaBot.CYRILLIC_TO_LATIN);
-    public static Transliterator toCyrilTrans = Transliterator.getInstance(AmabiliaBot.LATIN_TO_CYRILLIC);
+    static final String CYRILLIC_TO_LATIN = "Cyrillic-Latin";
+    static final String LATIN_TO_CYRILLIC = "Latin-Cyrillic";
+    public static Transliterator toLatinTrans = Transliterator.getInstance(CYRILLIC_TO_LATIN);
+    public static Transliterator toCyrilTrans = Transliterator.getInstance(LATIN_TO_CYRILLIC);
 
 
     public static String welcome(String lan, String name){
