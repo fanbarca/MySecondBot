@@ -91,7 +91,7 @@ public class Adminbot extends TelegramLongPollingBot {
 	private void enterPassword(Update update) throws SQLException {
         if (update.hasMessage()) {
             deleteMessage(update.getMessage());
-            send("Введите пароль", update.getCallbackQuery().getMessage().getChatId().toString(), null, true,  1);
+            send("Введите пароль", update.getMessage().getChatId().toString(), null, true,  1);
             listener = "password";
         } else {
             edit(update.getCallbackQuery().getMessage(), "Введите пароль", null, 1);
