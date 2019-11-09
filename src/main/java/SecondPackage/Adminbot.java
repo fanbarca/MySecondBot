@@ -58,7 +58,7 @@ public class Adminbot extends TelegramLongPollingBot {
                 if (update.getMessage().hasText()){
                     if (update.getMessage().getText().equals(password)){
                         DataBase.sql("update users set admin = true where id ="+id);
-                        allow(update);
+                        allow(update, id);
                         deleteMessage(update.getMessage());
                     } else {
                         checkAdmin(update, id);
@@ -82,35 +82,30 @@ public class Adminbot extends TelegramLongPollingBot {
     private void checkAdmin(Update update, String id) throws SQLException {
         List<String> admins = DataBase.sqlQueryList("select id from users where admin = true", "id");
         if (admins.contains(id)) {
-            allow(update);
+            allow(update, id);
         } else {
             enterPassword(update);
         }
 	}
 
 	private void enterPassword(Update update) {
-        long userid = 0;
+        String userid = null;
         if (update.hasMessage()) {
-            userid = update.getMessage().getChatId();
+            userid = update.getMessage().getChatId().toString();
             deleteMessage(update.getMessage());
         } else {
-            userid = update.getCallbackQuery().getMessage().getChatId();
+            userid = update.getCallbackQuery().getMessage().getChatId().toString();
             deleteMessage(update.getCallbackQuery().getMessage());
         }
         send("Введите пароль", userid, null, true, 1);
         listener = "password";
 	}
 
-	private void allow(Update update) {
+	private void allow(Update update, String id) {
         if (update.hasMessage()) {
                 if (update.getMessage().hasText()) {
                     if(update.getMessage().getText().equals(password)||update.getMessage().getText().equals("/start")){
-                        List<String> a = new ArrayList<>();
-                        a.add("Указать наличие");
-                        a.add("Удалить продукт");
-                        a.add("Добавить продукт");
-                        a.add("Заказы");
-                        send("Выберите действие", myID, a,true, 1);
+                        send("Выберите действие", id, mainKeyboard() ,true, 1);
                     }  else if (update.getMessage().getText().contains("/sql")) {
                         if (update.getMessage().getText().length()>5) {
                             String command = update.getMessage().getText().substring(5);
@@ -144,37 +139,37 @@ public class Adminbot extends TelegramLongPollingBot {
                             DataBase.sql("insert into table0 (id, russian, type, instock) values ("+
                             String.format("%04d", rand.nextInt(8999)+1000)+", '"+russian+"', '"+category+"', true)");
                             listener = "Uzbek";
-                            send("Введите название продукта на узбекском", myID, list, false, 3);
+                            send("Введите название продукта на узбекском", id, list, false, 3);
                         } else if (listener.equals("Uzbek")) {
                             String Name = update.getMessage().getText();
                             DataBase.sql("UPDATE table0 SET uzbek = '"+Name+"' where russian = '"+russian+"'");
                             listener = "English";
-                            send("Введите название продукта на английском", myID, list, false, 3);
+                            send("Введите название продукта на английском", id, list, false, 3);
                         } else if (listener.equals("English")) {
                             String Name = update.getMessage().getText();
                             listener = "Cost";
                             DataBase.sql("UPDATE table0 SET english = '"+Name+"' where russian = '"+russian+"'");
-                            send("Введите стоимость продукта", myID, list, false, 3);
+                            send("Введите стоимость продукта", id, list, false, 3);
                         } else if (listener.equals("Cost")) {
                             String cost = update.getMessage().getText();
                             listener = "Russiandescription";
                             DataBase.sql("UPDATE table0 SET cost = "+cost+" where russian = '"+russian+"'");
-                            send("Введите описание на русском", myID, list, false, 3);
+                            send("Введите описание на русском", id, list, false, 3);
                         } else if (listener.equals("Russiandescription")) {
                             String Name = update.getMessage().getText();
                             DataBase.sql("UPDATE table0 SET Russiandescription = '"+Name+"' where russian = '"+russian+"'");
                             listener = "Uzbekdescription";
-                            send("Введите описание на узбекском", myID, list, false, 3);
+                            send("Введите описание на узбекском", id, list, false, 3);
                         } else if (listener.equals("Uzbekdescription")) {
                             String Name = update.getMessage().getText();
                             DataBase.sql("UPDATE table0 SET Uzbekdescription = '"+Name+"' where russian = '"+russian+"'");
                             listener = "Englishdescription";
-                            send("Введите описание на английском", myID, list, false, 3);
+                            send("Введите описание на английском", id, list, false, 3);
                         } else if (listener.equals("Englishdescription")) {
                             String Name = update.getMessage().getText();
                             listener = "";
                             DataBase.sql("UPDATE table0 SET Englishdescription = '"+Name+"' where russian = '"+russian+"'");
-                            send("Готово", myID, list, false, 3);
+                            send("Готово", id, list, false, 3);
                         }
                     }
                 }
@@ -203,29 +198,28 @@ public class Adminbot extends TelegramLongPollingBot {
                         String name = DataBase.sqlQuery("select firstname from users where id ="+userID,"firstname");
                         ArrayList<String> list = new ArrayList<>();
                         list.add("Готов от "+name);
-                        send("Заказ от "+name+"\n"+product, myID, list, true, 3);
+                        send("Заказ от "+name+"\n"+product, id, list, true, 3);
                     }
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
                     }
                 for (String t:Lan.listTypes("Russian")) {
-                    if (update.getCallbackQuery().getData().equals(t)) {
+                    if (cb.equals(t)) {
                         category = Lan.listTypes("Russian").indexOf(t)+"";
                         listener = "Russian";
                         edit(update.getCallbackQuery().getMessage(), "Выбрана категория "+t+
                         "\nВведите название продукта на русском",  list, 1);
-                    } else if(update.getCallbackQuery().getData().equals("Назад")) {
-                        edit(update.getCallbackQuery().getMessage(), "Изменить Меню",
-                        Lan.listTypes("Russian"), 3);
+                    } else if(cb.equals("Назад")) {
+                        edit(update.getCallbackQuery().getMessage(), "Выберите действие", mainKeyboard(), 1);
                     }
                 }
                 for (String t:DataBase.showAllProducts("Russian", false)) {
-                    if (update.getCallbackQuery().getData().contains(t)) {
-                        if (update.getCallbackQuery().getData().contains(":white_check_mark:")) {
+                    if (cb.contains(t)) {
+                        if (cb.contains(":white_check_mark:")) {
                             DataBase.sql("UPDATE table0 SET instock = false where russian = '"+t+"'");
                             edit(update.getCallbackQuery().getMessage(), update.getCallbackQuery().getMessage().getText(), DataBase.productsAvailability("Russian"), 3);
-                        } else if (update.getCallbackQuery().getData().contains(":x:")) {
+                        } else if (cb.contains(":x:")) {
                             DataBase.sql("UPDATE table0 SET instock = true where russian = '"+t+"'");
                             edit(update.getCallbackQuery().getMessage(), update.getCallbackQuery().getMessage().getText(), DataBase.productsAvailability("Russian"), 3);
                         } else if (listener.equals("Delete")) {
@@ -241,8 +235,8 @@ public class Adminbot extends TelegramLongPollingBot {
                         }
                     }
                 }
-                if (update.getCallbackQuery().getData().contains("Готов от")) {
-                    String name = update.getCallbackQuery().getData().substring(9);
+                if (cb.contains("Готов от")) {
+                    String name = cb.substring(9);
 					try {
                         String userid = DataBase.sqlQuery("select id from users where firstname = '"+name+"'", "id");
                         DataBase.sql("delete from zakaz where userid = "+userid);
@@ -251,7 +245,7 @@ public class Adminbot extends TelegramLongPollingBot {
 					}
                     edit(update.getCallbackQuery().getMessage(), "Заказ завершён", null, 2);
                 }
-                if (update.getCallbackQuery().getData().equals("Отмена")) {
+                if (cb.equals("Отмена")) {
                     deleteMessage(update.getCallbackQuery().getMessage());
                 }
 
@@ -261,6 +255,15 @@ public class Adminbot extends TelegramLongPollingBot {
 				e.printStackTrace();
 			}
         }
+	}
+
+	private List<String> mainKeyboard() {
+        List<String> a = new ArrayList<>();
+            a.add("Указать наличие");
+            a.add("Удалить продукт");
+            a.add("Добавить продукт");
+            a.add("Заказы");
+        return a;
 	}
 
 	@Override
@@ -281,7 +284,7 @@ public void deleteMessage(Message message){
         catch (TelegramApiException e) {e.printStackTrace();}
     }
 
-public void send (String text, long chatId, List<String> list, boolean inline, int flag) {
+public void send (String text, String chatId, List<String> list, boolean inline, int flag) {
         SendMessage sendMessage = new SendMessage()
                 .setChatId(chatId)
                 .setText(EmojiParser.parseToUnicode(text))
@@ -362,8 +365,8 @@ public void edit (Message message, String newText, List<String> list, int flag) 
             List<InlineKeyboardButton> lastRow = new ArrayList<InlineKeyboardButton>();
             if (!newText.contains("Заказ от")) {
                 lastRow.add(new InlineKeyboardButton()
-                            .setText(EmojiParser.parseToUnicode("Отмена"))
-                            .setCallbackData("Отмена"));
+                            .setText(EmojiParser.parseToUnicode("Назад"))
+                            .setCallbackData("Назад"));
             }
             rows.add(lastRow);
             markup.setKeyboard(rows);
