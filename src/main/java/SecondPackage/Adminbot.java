@@ -107,10 +107,8 @@ public class Adminbot extends TelegramLongPollingBot {
                         deleteMessage(update.getMessage());
                         String adminmessage = DataBase.sqlQuery("select adminmessage from users where id="+update.getMessage().getChatId(), "adminmessage");
                         if (adminmessage!=null) {
-                            deleteMessage(update.getMessage().getMessageId().toString(), adminmessage);
-                            DataBase.sql("update users set adminMessage = null where id = "+update.getMessage().getMessageId());
+                            edit(update.getMessage(), "Выберите действие", mainKeyboard(), 1);
                         }
-                        send("Выберите действие", id, mainKeyboard() ,true, 1);
                     }  else if (update.getMessage().getText().contains("/sql")) {
                         if (update.getMessage().getText().length()>5) {
                             String command = update.getMessage().getText().substring(5);
@@ -185,16 +183,19 @@ public class Adminbot extends TelegramLongPollingBot {
                 edit(update.getCallbackQuery().getMessage(), "В какой раздел?", Lan.listTypes("Russian"), 3);
             } else if(cb.equals("Заказы")){
                 try {
-                    List<String> IdList = DataBase.sqlQueryList("select userid from zakaz", "userid");
+                    List<String> IdList = DataBase.sqlQueryList("select userid from zakaz where conformed = true", "userid");
                     if (IdList.isEmpty()){
                         answer.setShowAlert(false).setText("Заказов нет");
                     } else {
+                        String text = "Всего "+IdList.size()+" активных заказов.\n\n";
                         for (String userID: IdList) {
-                        String product = DataBase.sqlQuery("select product from zakaz where userid = '" +userID+"'", "product");
+                        String product = DataBase.sqlQuery("select product from zakaz where userid = ' and conformed = true" +userID+"'", "product");
+                        String time = DataBase.sqlQuery("select time from zakaz where userid = ' and conformed = true" +userID+"'", "time");
                         String name = DataBase.sqlQuery("select firstname from users where id ="+userID,"firstname");
-                        ArrayList<String> list = new ArrayList<>();
-                        list.add("Готов от "+name);
-                        send("Заказ от "+name+"\n"+product, id, list, true, 3);
+                        // "Имя: "+name+" Время: "+time+"\n"+product+"\n\n";
+                        List<String> orderButtons = new ArrayList<>();
+                        orderButtons.add(name+" : "+time);
+                        edit(update.getCallbackQuery().getMessage(), text, orderButtons, 3);
                         }
                     }
 
