@@ -91,7 +91,9 @@ public class Adminbot extends TelegramLongPollingBot {
 	private void enterPassword(Update update) throws SQLException {
         if (update.hasMessage()) {
             deleteMessage(update.getMessage());
-            send("Введите пароль", update.getMessage().getChatId().toString(), null, true,  1);
+            String adminmessage = DataBase.sqlQuery("select adminmessage from users where id="+update.getMessage().getChatId(), "adminmessage");
+            if (adminmessage!=null) edit(update.getMessage(), "Введите пароль", null, 1);
+            else send("Введите пароль", update.getMessage().getChatId().toString(), null, true, 1);
             listener = "password";
         } else {
             edit(update.getCallbackQuery().getMessage(), "Введите пароль", null, 1);
@@ -156,6 +158,8 @@ public class Adminbot extends TelegramLongPollingBot {
                             DataBase.sql("UPDATE table0 SET Englishdescription = '"+Name+"' where russian = '"+russian+"'");
                             deleteMessage(update.getMessage());
                             edit(update.getMessage(), "Готово", mainKeyboard(), 1);
+                        } else {
+                            deleteMessage(update.getMessage());
                         }
                     }
                 }
@@ -277,7 +281,16 @@ public void deleteMessage(Message message){
         try {execute(dm);}
         catch (TelegramApiException e) {e.printStackTrace();}
     }
-
+public void deleteMessage(String Messageid, String Chatid) {
+        DeleteMessage dm = new DeleteMessage()
+                .setMessageId(Integer.parseInt(Messageid))
+                .setChatId(Chatid);
+        try {
+            execute(dm);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
+}
 public void send (String text, String chatId, List<String> list, boolean inline, int flag) {
         SendMessage sendMessage = new SendMessage()
                 .setChatId(chatId)
