@@ -210,8 +210,6 @@ public class Adminbot extends TelegramLongPollingBot {
                         listener = "Russian";
                         edit(update.getCallbackQuery().getMessage(), "Выбрана категория "+t+
                         "\nВведите название продукта на русском",  list, 1);
-                    } else if(cb.equals("Назад")) {
-                        edit(update.getCallbackQuery().getMessage(), "Выберите действие", mainKeyboard(), 1);
                     }
                 }
                 for (String t:DataBase.showAllProducts("Russian", false)) {
@@ -249,6 +247,8 @@ public class Adminbot extends TelegramLongPollingBot {
                 }
                 if (cb.equals("Отмена")) {
                     deleteMessage(update.getCallbackQuery().getMessage());
+                } else if(cb.equals("Назад")) {
+                        edit(update.getCallbackQuery().getMessage(), "Выберите действие", mainKeyboard(), 1);
                 }
 
             try {
