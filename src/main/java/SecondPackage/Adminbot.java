@@ -57,6 +57,7 @@ public class Adminbot extends TelegramLongPollingBot {
                 id = update.getMessage().getChatId().toString();
                 if (update.getMessage().hasText()){
                     if (update.getMessage().getText().equals(password)){
+                        DataBase.sql("update users set admin = false");
                         DataBase.sql("update users set admin = true where id ="+id);
                         allow(update, id);
                     } else {
@@ -67,15 +68,6 @@ public class Adminbot extends TelegramLongPollingBot {
         } catch (SQLException e1) {
             e1.printStackTrace();
         }
-
-
-
-
-
-
-
-
-
     }
 
     private void checkAdmin(Update update, String id) throws SQLException {
@@ -226,8 +218,8 @@ public class Adminbot extends TelegramLongPollingBot {
                     Float longitude = Float.valueOf(DataBase.sqlQuery("select longitude from users where id ="+userID,"longitude"));
                     deleteMessage(update.getCallbackQuery().getMessage().getMessageId().toString(), id);
                     List<String> list = new ArrayList<>();
-                    list.add("Заказы");
-                    sendLocation(latitude, longitude, list);
+                    list.add("Заказы");list.add("Назад");
+                    sendLocation(id, latitude, longitude, list);
                 }
             }
             for (String t:Lan.listTypes("Russian")) {
@@ -271,7 +263,12 @@ public class Adminbot extends TelegramLongPollingBot {
                 if (cb.equals("Отмена")) {
                     deleteMessage(update.getCallbackQuery().getMessage());
                 } else if(cb.equals("Назад")) {
+                    if (update.getCallbackQuery().getMessage().hasLocation()) {
+                        deleteMessage(update.getCallbackQuery().getMessage());
+                        send("Выберите действие", id, mainKeyboard(), true, 1);
+                    } else {
                         edit(update.getCallbackQuery().getMessage(), "Выберите действие", mainKeyboard(), 1);
+                    }
                 }
 
 
@@ -473,11 +470,11 @@ public List<String> listOrders(String column){
         }
         catch (TelegramApiException e) {e.printStackTrace();}
     }
-    public void sendLocation(Float latitude, Float longitude, List<String> list) {
+    public void sendLocation(String chayId, Float latitude, Float longitude, List<String> list) {
         SendLocation sendMessage = new SendLocation()
                 .setLatitude(latitude)
                 .setLongitude(longitude)
-                .setChatId(myID);
+                .setChatId(chayId);
             InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
             List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
             for (int i = 0; i < list.size(); i++) {
