@@ -190,13 +190,13 @@ public class Adminbot extends TelegramLongPollingBot {
                     answer.setShowAlert(false).setText("Заказов нет");
                 } else {
                     String text = "Всего "+IdList.size()+" активных заказов.\n\n";
+                    List<String> orderButtons = new ArrayList<>();
                     for (String userID: IdList) {
                     String time = DataBase.sqlQuery("select time from zakaz where userid = '" +userID+"' and conformed = true", "time");
                     String name = DataBase.sqlQuery("select firstname from users where id ="+userID,"firstname");
-                    List<String> orderButtons = new ArrayList<>();
                     orderButtons.add(name+"  -  "+time);
-                    edit(update.getCallbackQuery().getMessage(), text, orderButtons, 3);
                     }
+                    edit(update.getCallbackQuery().getMessage(), text, orderButtons, 1);
                 }
             }
             List<String> idList = DataBase.sqlQueryList("select userid from zakaz where conformed = true","userid");
@@ -208,10 +208,18 @@ public class Adminbot extends TelegramLongPollingBot {
                     String product = DataBase.sqlQuery("select product from zakaz where userid = '" +userID+"' and conformed = true", "product");
                     String text= "Имя: "+name+"\nВремя: "+time+(address!=null?"\nАдрес: "+address+"\n":"\n")+product;
                     String latitude = DataBase.sqlQuery("select latitude from users where id ="+userID,"latitude");
-                    List<String> keys = new ArrayList<>();
-                    if (latitude!=null) keys.add("Локация"+userID);
-                    keys.add("Заказы");
-                    edit(update.getCallbackQuery().getMessage(), text, keys, 2);
+                    InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
+                    List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
+                    List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
+                    if (latitude!=null) row.add(new InlineKeyboardButton()
+                            .setText(EmojiParser.parseToUnicode("Локация"))
+                            .setCallbackData("Локация"+userID));
+                    row.add(new InlineKeyboardButton()
+                            .setText(EmojiParser.parseToUnicode("Заказы"))
+                            .setCallbackData("Заказы"));
+                    rows.add(row);
+                    markup.setKeyboard(rows);
+                    edit(update.getCallbackQuery().getMessage(), text, 2, markup);
                 }
                 if (cb.contains("Локация")) {
                     Float latitude = Float.valueOf(DataBase.sqlQuery("select latitude from users where id ="+userID,"latitude"));
@@ -368,12 +376,6 @@ public void send (String text, String chatId, List<String> list, boolean inline,
         catch (TelegramApiException e) {e.printStackTrace();}
     }
     public void edit (Message message, String newText, List<String> list, int flag) throws SQLException {
-    String adminMessage = DataBase.sqlQuery("select adminmessage from users where id ="+message.getChatId(), "adminmessage");
-        EditMessageText sendMessage = new EditMessageText()
-                .setChatId(message.getChatId())
-                .setMessageId(Integer.parseInt(adminMessage))
-                .setParseMode("HTML")
-                .setText(EmojiParser.parseToUnicode(newText));
         if (list!=null) {
             InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
             List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
@@ -403,6 +405,19 @@ public void send (String text, String chatId, List<String> list, boolean inline,
             }
             rows.add(lastRow);
             markup.setKeyboard(rows);
+            edit (message, newText, flag, markup);
+        } else {
+            edit(message, newText, flag, null);
+        }
+    }
+    public void edit (Message message, String newText, int flag, InlineKeyboardMarkup markup) throws SQLException {
+    String adminMessage = DataBase.sqlQuery("select adminmessage from users where id ="+message.getChatId(), "adminmessage");
+        EditMessageText sendMessage = new EditMessageText()
+                .setChatId(message.getChatId())
+                .setMessageId(Integer.parseInt(adminMessage))
+                .setParseMode("HTML")
+                .setText(EmojiParser.parseToUnicode(newText));
+        if (markup!=null) {
             sendMessage.setReplyMarkup(markup);
         }
         try { execute(sendMessage);}
