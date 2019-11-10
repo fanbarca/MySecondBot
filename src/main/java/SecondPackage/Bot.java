@@ -1012,7 +1012,7 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
                     +"<b>Время доставки:</b> "+time+"\n"
                     +address
                     +"<b>Заказ:</b> \n\n"+curretCart(a.getId()));
-        if (latitude!=null&&longitude!=null) order.sendLocation(Float.parseFloat(latitude), Float.parseFloat(longitude));
+        if (latitude!=null&&longitude!=null) order.sendLocation(Float.parseFloat(latitude), Float.parseFloat(longitude), null);
         order.sendContact(a.getFirstName(), a.getNumber());
         clearCart(update);
         DataBase.sql("update zakaz set conformed = true where userid = " + a.getId());

@@ -101,11 +101,11 @@ public class Adminbot extends TelegramLongPollingBot {
 	}
 
 	private void allow(Update update, String id) throws SQLException {
+        String adminmessage = DataBase.sqlQuery("select adminmessage from users where id="+update.getMessage().getChatId(), "adminmessage");
         if (update.hasMessage()) {
                 if (update.getMessage().hasText()) {
                     if(update.getMessage().getText().equals(password)||update.getMessage().getText().equals("/start")){
                         deleteMessage(update.getMessage());
-                        String adminmessage = DataBase.sqlQuery("select adminmessage from users where id="+update.getMessage().getChatId(), "adminmessage");
                         if (adminmessage!=null) {
                             deleteMessage(adminmessage, id);
                             send("Выберите действие", id, mainKeyboard(), true,  1);
@@ -201,11 +201,25 @@ public class Adminbot extends TelegramLongPollingBot {
             }
             List<String> idList = DataBase.sqlQueryList("select userid from zakaz where conformed = true","userid");
             for (String userID: idList) {
-                String name = DataBase.sqlQuery("select firstname from users where id ="+userID,"firstname");
-                String product = DataBase.sqlQuery("select product from zakaz where userid = '" +userID+"' and conformed = true", "product");
-                String text= "Имя: "+name+" Время: "+time+"\n"+product+"\n\n";
+                String name = DataBase.sqlQuery("select firstname from users where id ="+userID,"firstname");                
                 if (cb.contains(name)) {
-                    edit(update.getCallbackQuery().getMessage(), text, null, 3);
+                    String time = DataBase.sqlQuery("select time from zakaz where userid = '" +userID+"' and conformed = true", "time");
+                    String address = DataBase.sqlQuery("select address from users where id ="+userID,"address");
+                    String product = DataBase.sqlQuery("select product from zakaz where userid = '" +userID+"' and conformed = true", "product");
+                    String text= "Имя: "+name+"\nВремя: "+time+(address!=null?"\nАдрес: "+address+"\n":"\n")+product;
+                    String latitude = DataBase.sqlQuery("select latitude from users where id ="+userID,"latitude");
+                    List<String> keys = new ArrayList<>();
+                    if (latitude!=null) keys.add("Локация"+userID);
+                    keys.add("Заказы");
+                    edit(update.getCallbackQuery().getMessage(), text, keys, 2);
+                } 
+                if (cb.contains("Локация")) {
+                    Float latitude = Float.valueOf(DataBase.sqlQuery("select latitude from users where id ="+userID,"latitude"));
+                    Float longitude = Float.valueOf(DataBase.sqlQuery("select longitude from users where id ="+userID,"longitude"));
+                    deleteMessage(update.getCallbackQuery().getMessage().getMessageId().toString(), id);
+                    List<String> list = new ArrayList<>();
+                    list.add("Заказы");
+                    sendLocation(latitude, longitude, list);                    
                 }
             }
             for (String t:Lan.listTypes("Russian")) {
@@ -353,7 +367,7 @@ public void send (String text, String chatId, List<String> list, boolean inline,
         }
         catch (TelegramApiException e) {e.printStackTrace();}
     }
-public void edit (Message message, String newText, List<String> list, int flag) throws SQLException {
+    public void edit (Message message, String newText, List<String> list, int flag) throws SQLException {
     String adminMessage = DataBase.sqlQuery("select adminmessage from users where id ="+message.getChatId(), "adminmessage");
         EditMessageText sendMessage = new EditMessageText()
                 .setChatId(message.getChatId())
@@ -444,11 +458,23 @@ public List<String> listOrders(String column){
         }
         catch (TelegramApiException e) {e.printStackTrace();}
     }
-    public void sendLocation(Float latitude, Float longitude) {
+    public void sendLocation(Float latitude, Float longitude, List<String> list) {
         SendLocation sendMessage = new SendLocation()
                 .setLatitude(latitude)
                 .setLongitude(longitude)
                 .setChatId(myID);
+            InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
+            List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
+            for (int i = 0; i < list.size(); i++) {
+                List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
+                row.add(new InlineKeyboardButton()
+                        .setText(EmojiParser.parseToUnicode(list.get(i)))
+                        .setCallbackData(list.get(i)));
+                rows.add(row);
+	        }
+            markup.setKeyboard(rows);
+            sendMessage.setReplyMarkup(markup);
+        if (list!=null) sendMessage.setReplyMarkup(markup);
         try {
             execute(sendMessage);
         }
