@@ -195,14 +195,14 @@ public class Adminbot extends TelegramLongPollingBot {
                     String time = DataBase.sqlQuery("select time from zakaz where userid = '" +userID+"' and conformed = true", "time");
                     String name = DataBase.sqlQuery("select firstname from users where id ="+userID,"firstname");
                     orderButtons.add(name+"  -  "+time);
-                    }
+                    } orderButtons.add("Назад");
                     edit(update.getCallbackQuery().getMessage(), text, orderButtons, 1);
                 }
             }
             List<String> idList = DataBase.sqlQueryList("select userid from zakaz where conformed = true","userid");
             for (String userID: idList) {
                 String name = DataBase.sqlQuery("select firstname from users where id ="+userID,"firstname");
-                if (cb.contains(name)) {
+                if (cb.contains(name+"  -  ")) {
                     String time = DataBase.sqlQuery("select time from zakaz where userid = '" +userID+"' and conformed = true", "time");
                     String address = DataBase.sqlQuery("select address from users where id ="+userID,"address");
                     String product = DataBase.sqlQuery("select product from zakaz where userid = '" +userID+"' and conformed = true", "product");
