@@ -101,7 +101,7 @@ public class Adminbot extends TelegramLongPollingBot {
 	}
 
 	private void allow(Update update, String id) throws SQLException {
-        String adminmessage = DataBase.sqlQuery("select adminmessage from users where id="+update.getMessage().getChatId(), "adminmessage");
+        String adminmessage = DataBase.sqlQuery("select adminmessage from users where id="+id, "adminmessage");
         if (update.hasMessage()) {
                 if (update.getMessage().hasText()) {
                     if(update.getMessage().getText().equals(password)||update.getMessage().getText().equals("/start")){
@@ -201,7 +201,7 @@ public class Adminbot extends TelegramLongPollingBot {
             }
             List<String> idList = DataBase.sqlQueryList("select userid from zakaz where conformed = true","userid");
             for (String userID: idList) {
-                String name = DataBase.sqlQuery("select firstname from users where id ="+userID,"firstname");                
+                String name = DataBase.sqlQuery("select firstname from users where id ="+userID,"firstname");
                 if (cb.contains(name)) {
                     String time = DataBase.sqlQuery("select time from zakaz where userid = '" +userID+"' and conformed = true", "time");
                     String address = DataBase.sqlQuery("select address from users where id ="+userID,"address");
@@ -212,14 +212,14 @@ public class Adminbot extends TelegramLongPollingBot {
                     if (latitude!=null) keys.add("Локация"+userID);
                     keys.add("Заказы");
                     edit(update.getCallbackQuery().getMessage(), text, keys, 2);
-                } 
+                }
                 if (cb.contains("Локация")) {
                     Float latitude = Float.valueOf(DataBase.sqlQuery("select latitude from users where id ="+userID,"latitude"));
                     Float longitude = Float.valueOf(DataBase.sqlQuery("select longitude from users where id ="+userID,"longitude"));
                     deleteMessage(update.getCallbackQuery().getMessage().getMessageId().toString(), id);
                     List<String> list = new ArrayList<>();
                     list.add("Заказы");
-                    sendLocation(latitude, longitude, list);                    
+                    sendLocation(latitude, longitude, list);
                 }
             }
             for (String t:Lan.listTypes("Russian")) {
