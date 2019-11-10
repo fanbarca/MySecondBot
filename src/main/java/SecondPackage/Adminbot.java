@@ -185,68 +185,65 @@ public class Adminbot extends TelegramLongPollingBot {
             } else if(cb.equals("Добавить продукт")){
                 edit(update.getCallbackQuery().getMessage(), "В какой раздел?", Lan.listTypes("Russian"), 3);
             } else if(cb.equals("Заказы")){
-                try {
-                    List<String> IdList = DataBase.sqlQueryList("select userid from zakaz where conformed = true", "userid");
-                    if (IdList.isEmpty()){
-                        answer.setShowAlert(false).setText("Заказов нет");
-                    } else {
-                        String text = "Всего "+IdList.size()+" активных заказов.\n\n";
-                        for (String userID: IdList) {
-                        String product = DataBase.sqlQuery("select product from zakaz where userid = ' and conformed = true" +userID+"'", "product");
-                        String time = DataBase.sqlQuery("select time from zakaz where userid = ' and conformed = true" +userID+"'", "time");
-                        String name = DataBase.sqlQuery("select firstname from users where id ="+userID,"firstname");
-                        // "Имя: "+name+" Время: "+time+"\n"+product+"\n\n";
-                        List<String> orderButtons = new ArrayList<>();
-                        orderButtons.add(name+" : "+time);
-                        edit(update.getCallbackQuery().getMessage(), text, orderButtons, 3);
+                List<String> IdList = DataBase.sqlQueryList("select userid from zakaz where conformed = true", "userid");
+                if (IdList.isEmpty()){
+                    answer.setShowAlert(false).setText("Заказов нет");
+                } else {
+                    String text = "Всего "+IdList.size()+" активных заказов.\n\n";
+                    for (String userID: IdList) {
+                    String time = DataBase.sqlQuery("select time from zakaz where userid = '" +userID+"' and conformed = true", "time");
+                    String name = DataBase.sqlQuery("select firstname from users where id ="+userID,"firstname");
+                    List<String> orderButtons = new ArrayList<>();
+                    orderButtons.add(name+"  -  "+time);
+                    edit(update.getCallbackQuery().getMessage(), text, orderButtons, 3);
+                    }
+                }
+            }
+            List<String> idList = DataBase.sqlQueryList("select userid from zakaz where conformed = true","userid");
+            for (String userID: idList) {
+                String name = DataBase.sqlQuery("select firstname from users where id ="+userID,"firstname");
+                String product = DataBase.sqlQuery("select product from zakaz where userid = '" +userID+"' and conformed = true", "product");
+                String text= "Имя: "+name+" Время: "+time+"\n"+product+"\n\n";
+                if (cb.contains(name)) {
+                    edit(update.getCallbackQuery().getMessage(), text, null, 3);
+                }
+            }
+            for (String t:Lan.listTypes("Russian")) {
+                if (cb.equals(t)) {
+                    category = Lan.listTypes("Russian").indexOf(t)+"";
+                    listener = "Russian";
+                    edit(update.getCallbackQuery().getMessage(), "Выбрана категория "+t+
+                    "\nВведите название продукта на русском",  list, 1);
+                }
+            }
+            for (String t:DataBase.showAllProducts("Russian", false)) {
+                if (cb.contains(t)) {
+                    if (cb.contains(":white_check_mark:")) {
+                        DataBase.sql("UPDATE table0 SET instock = false where russian = '"+t+"'");
+                        edit(update.getCallbackQuery().getMessage(), update.getCallbackQuery().getMessage().getText(), DataBase.productsAvailability("Russian"), 3);
+                    } else if (cb.contains(":x:")) {
+                        DataBase.sql("UPDATE table0 SET instock = true where russian = '"+t+"'");
+                        edit(update.getCallbackQuery().getMessage(), update.getCallbackQuery().getMessage().getText(), DataBase.productsAvailability("Russian"), 3);
+                    } else if (listener.equals("Delete")) {
+                        listener = "";
+                        try {
+                            String prodId = DataBase.sqlQuery("select id from table0 where russian = '"+t+"'", "id");
+                            DataBase.sql("delete from cart where item = '"+prodId+"'");
+                            DataBase.sql("delete from table0 where russian = '"+t+"'");
+                        } catch (SQLException e) {
+                            e.printStackTrace();
                         }
-                    }
+                        edit(update.getCallbackQuery().getMessage(), "Удалить продукт", DataBase.showAllProducts("Russian", false), 3);
+                        answer.setShowAlert(false).setText("Удалено!");
 
-
-
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-                    }
-                for (String t:Lan.listTypes("Russian")) {
-                    if (cb.equals(t)) {
-                        category = Lan.listTypes("Russian").indexOf(t)+"";
-                        listener = "Russian";
-                        edit(update.getCallbackQuery().getMessage(), "Выбрана категория "+t+
-                        "\nВведите название продукта на русском",  list, 1);
                     }
                 }
-                for (String t:DataBase.showAllProducts("Russian", false)) {
-                    if (cb.contains(t)) {
-                        if (cb.contains(":white_check_mark:")) {
-                            DataBase.sql("UPDATE table0 SET instock = false where russian = '"+t+"'");
-                            edit(update.getCallbackQuery().getMessage(), update.getCallbackQuery().getMessage().getText(), DataBase.productsAvailability("Russian"), 3);
-                        } else if (cb.contains(":x:")) {
-                            DataBase.sql("UPDATE table0 SET instock = true where russian = '"+t+"'");
-                            edit(update.getCallbackQuery().getMessage(), update.getCallbackQuery().getMessage().getText(), DataBase.productsAvailability("Russian"), 3);
-                        } else if (listener.equals("Delete")) {
-                            listener = "";
-                            try {
-                                String prodId = DataBase.sqlQuery("select id from table0 where russian = '"+t+"'", "id");
-                                DataBase.sql("delete from cart where item = '"+prodId+"'");
-                                DataBase.sql("delete from table0 where russian = '"+t+"'");
-                            } catch (SQLException e) {
-                                e.printStackTrace();
-                            }
-                            edit(update.getCallbackQuery().getMessage(), "Удалить продукт", DataBase.showAllProducts("Russian", false), 3);
-                            answer.setShowAlert(false).setText("Удалено!");
-
-                        }
-                    }
-                }
+            }
                 if (cb.contains("Готов от")) {
                     String name = cb.substring(9);
-					try {
                         String userid = DataBase.sqlQuery("select id from users where firstname = '"+name+"'", "id");
                         DataBase.sql("delete from zakaz where userid = "+userid);
-					} catch (SQLException e) {
-						e.printStackTrace();
-					}
+
                     edit(update.getCallbackQuery().getMessage(), "Заказ завершён", null, 2);
                 }
                 if (cb.equals("Отмена")) {
@@ -254,6 +251,7 @@ public class Adminbot extends TelegramLongPollingBot {
                 } else if(cb.equals("Назад")) {
                         edit(update.getCallbackQuery().getMessage(), "Выберите действие", mainKeyboard(), 1);
                 }
+
 
             try {
 				execute(answer);
@@ -383,7 +381,8 @@ public void edit (Message message, String newText, List<String> list, int flag) 
             if (newText.contains(mainKeyboard().get(0))||
                 newText.contains(mainKeyboard().get(1))||
                 newText.contains("В какой раздел?")||
-                newText.contains("Введите")) {
+                newText.contains("Введите")||
+                newText.contains("Время:")) {
                 lastRow.add(new InlineKeyboardButton()
                             .setText(EmojiParser.parseToUnicode("Назад"))
                             .setCallbackData("Назад"));
