@@ -181,7 +181,7 @@ public class Adminbot extends TelegramLongPollingBot {
                 if (IdList.isEmpty()){
                     answer.setShowAlert(false).setText("Заказов нет");
                 } else {
-                    String text = "Всего "+IdList.size()+" активных заказов.\n\n";
+                    String text = "Всего активных заказов: "+IdList.size();
                     List<String> orderButtons = new ArrayList<>();
                     for (String userID: IdList) {
                     String time = DataBase.sqlQuery("select time from zakaz where userid = '" +userID+"' and conformed = true", "time");
@@ -218,7 +218,7 @@ public class Adminbot extends TelegramLongPollingBot {
                     Float longitude = Float.valueOf(DataBase.sqlQuery("select longitude from users where id ="+userID,"longitude"));
                     deleteMessage(update.getCallbackQuery().getMessage().getMessageId().toString(), id);
                     List<String> list = new ArrayList<>();
-                    list.add("Заказы");list.add("Назад");
+                    list.add("Назад");
                     sendLocation(id, latitude, longitude, list);
                 }
             }
@@ -460,15 +460,12 @@ public List<String> listOrders(String column){
         }
         return lan;
     }
-    public void sendMe(String text) {
+    public String sendMe(String text) throws TelegramApiException {
         SendMessage sendMessage = new SendMessage()
                 .setChatId(myID)
                 .setText(EmojiParser.parseToUnicode(text))
                 .setParseMode("HTML");
-        try {
-            execute(sendMessage);
-        }
-        catch (TelegramApiException e) {e.printStackTrace();}
+        return execute(sendMessage).getMessageId().toString();
     }
     public void sendLocation(String chayId, Float latitude, Float longitude, List<String> list) {
         SendLocation sendMessage = new SendLocation()

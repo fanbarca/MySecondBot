@@ -450,6 +450,7 @@ public class Bot extends TelegramLongPollingBot {
             Adminbot order = new Adminbot();
             order.sendMe("Заказ от " + a.getFirstName()+" отменён\n"+
                         DataBase.sqlQuery("select product from zakaz where userid = "+ a.getId(), "product"));
+
         }
         a.setAddress(Lan.orderCancelled(a.getLanguage()));
         a.setAlert(true);
@@ -1001,20 +1002,21 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
 
     private void confirm(Update update, String time) throws SQLException, TelegramApiException {
         String address = DataBase.sqlQuery("select address from users where id ="+a.getId(), "address");
-        String latitude = DataBase.sqlQuery("select latitude from users where id ="+a.getId(), "latitude");
-        String longitude = DataBase.sqlQuery("select longitude from users where id ="+a.getId(), "longitude");
+        // String latitude = DataBase.sqlQuery("select latitude from users where id ="+a.getId(), "latitude");
+        // String longitude = DataBase.sqlQuery("select longitude from users where id ="+a.getId(), "longitude");
         if (address!=null) address= "<b>Адрес:</b> "+address+"\n";
-        else address="";
+        else address="<b>Локация получена</b>\n";
         Adminbot order = new Adminbot();
-        order.sendMe("<b>Новый заказ</b>\n\n"
+        String messageId = order.sendMe("<b>Новый заказ</b>\n\n"
                     +"<b>Имя клиента:</b> "+ a.getFirstName()+"\n"
                     +"<b>Номер клиента:</b> "+ a.getNumber()+"\n"
                     +"<b>Время доставки:</b> "+time+"\n"
                     +address
                     +"<b>Заказ:</b> \n\n"+curretCart(a.getId()));
-        String adminId = DataBase.sqlQuery("select id from users where admin = true", "id");
-        if (latitude!=null&&longitude!=null) order.sendLocation(adminId,Float.parseFloat(latitude), Float.parseFloat(longitude), null);
-        order.sendContact(a.getFirstName(), a.getNumber());
+        //String adminId = DataBase.sqlQuery("select id from users where admin = true", "id");
+        DataBase.sql("update zakaz set messageId = "+messageId+" where admin = true");
+        //if (latitude!=null&&longitude!=null) order.sendLocation(adminId,Float.parseFloat(latitude), Float.parseFloat(longitude), null);
+        //order.sendContact(a.getFirstName(), a.getNumber());
         clearCart(update);
         DataBase.sql("update zakaz set conformed = true where userid = " + a.getId());
         editPic(Lan.welcome(a.getLanguage(), a.getFirstName()), a.getId(),
