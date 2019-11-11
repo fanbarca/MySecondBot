@@ -177,7 +177,7 @@ public class Adminbot extends TelegramLongPollingBot {
             } else if(cb.equals("Добавить продукт")){
                 edit(update.getCallbackQuery().getMessage(), "В какой раздел?", Lan.listTypes("Russian"), 3);
             } else if(cb.equals("Заказы")){
-                List<String> IdList = DataBase.sqlQueryList("select userid from zakaz where conformed = true", "userid");
+                List<String> IdList = DataBase.sqlQueryList("select userid from zakaz where conformed = true ORDER BY time ASC", "userid");
                 if (IdList.isEmpty()){
                     answer.setShowAlert(false).setText("Заказов нет");
                 } else {
