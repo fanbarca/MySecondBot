@@ -176,14 +176,17 @@ public class Adminbot extends TelegramLongPollingBot {
             AnswerCallbackQuery answer = new AnswerCallbackQuery()
                 .setCallbackQueryId(update.getCallbackQuery().getId());
             String cb = update.getCallbackQuery().getData();
-            if(cb.equals("Указать наличие")){
+            if(cb.equals(mainKeyboard(null).get(0))){
                 edit(update.getCallbackQuery().getMessage(), "Указать наличие", DataBase.productsAvailability("Russian"), 3);
-            } else if(cb.equals("Удалить продукт")){
+            } else if(cb.equals(mainKeyboard(null).get(1))){
                 listener = "Delete";
                 edit(update.getCallbackQuery().getMessage(), "Удалить продукт", DataBase.showAllProducts("Russian", false), 3);
-            } else if(cb.equals("Добавить продукт")){
+            } else if(cb.equals(mainKeyboard(null).get(2))){
                 edit(update.getCallbackQuery().getMessage(), "В какой раздел?", Lan.listTypes("Russian"), 3);
-            } else if(cb.equals("Заказы")){
+            } else if(cb.equals(mainKeyboard(null).get(3))){
+                listener = "Change";
+                edit(update.getCallbackQuery().getMessage(), "Изменить продукт", DataBase.showAllProducts("Russian", false), 3);
+            } else if(cb.equals(mainKeyboard(null).get(4))){
                 List<String> IdList = DataBase.sqlQueryList("select userid from zakaz where conformed = true ORDER BY time ASC", "userid");
                 if (IdList.isEmpty()){
                     answer.setShowAlert(false).setText("Заказов нет");
@@ -246,6 +249,7 @@ public class Adminbot extends TelegramLongPollingBot {
                 }
             }
             for (String t:DataBase.showAllProducts("Russian", false)) {
+                String prodId = DataBase.sqlQuery("select id from table0 where russian = '"+t+"'", "id");
                 if (cb.contains(t)) {
                     if (cb.contains(":white_check_mark:")) {
                         DataBase.sql("UPDATE table0 SET instock = false where russian = '"+t+"'");
@@ -255,23 +259,27 @@ public class Adminbot extends TelegramLongPollingBot {
                         edit(update.getCallbackQuery().getMessage(), update.getCallbackQuery().getMessage().getText(), DataBase.productsAvailability("Russian"), 3);
                     } else if (listener.equals("Delete")) {
                         listener = "";
-                        try {
-                            String prodId = DataBase.sqlQuery("select id from table0 where russian = '"+t+"'", "id");
-                            DataBase.sql("delete from cart where item = '"+prodId+"'");
-                            DataBase.sql("delete from table0 where russian = '"+t+"'");
-                        } catch (SQLException e) {
-                            e.printStackTrace();
-                        }
+                        DataBase.sql("delete from cart where item = '"+prodId+"'");
+						DataBase.sql("delete from table0 where russian = '"+t+"'");
                         edit(update.getCallbackQuery().getMessage(), "Удалить продукт", DataBase.showAllProducts("Russian", false), 3);
                         answer.setShowAlert(false).setText("Удалено!");
-
+                    } else if (listener.equals("Change")) {
+                        listener = "";
+                        edit(update.getCallbackQuery().getMessage(), "Что именно изменить?", 1, fields(prodId));
+                    } else if (cb.contains(prodId)) {
+                         for(int i= 0; i<columnsList().size(); i++) {
+                            if (cb.equals(prodId+columnsListNames().get(i))){
+                                listener= columnsListNames().get(i);
+                                edit(update.getMessage(), "Введите поле: "+columnsList().get(i), list, 3);
+                            }
+                        }
                     }
                 }
             }
                 if (cb.contains("Готов")) {
                     String userid = cb.substring(5);
                     DataBase.sql("delete from zakaz where userid = "+userid);
-                    edit(update.getCallbackQuery().getMessage(), "Заказ завершён", null, 2);
+                    edit(update.getCallbackQuery().getMessage(), "Заказ завершён", mainKeyboard(null), 2);
                 }
                 if (cb.equals("Отмена")||cb.equals("Ok")) {
                     deleteMessage(update.getCallbackQuery().getMessage());
@@ -297,14 +305,59 @@ public class Adminbot extends TelegramLongPollingBot {
         }
 	}
 
+	private List<String> columnsList() {
+        List<String> a = new ArrayList<>();
+            a.add("Название на русском");
+            a.add("Название на узбекском");
+            a.add("Название на английском");
+            a.add("Описание на русском");
+            a.add("Описание на узбекском");
+            a.add("Описание на английском");
+            a.add("Цена");
+            a.add("Emoji");
+		return a;
+    }
+    private List<String> columnsListNames() {
+        List<String> a = new ArrayList<>();
+            a.add("Russian");
+            a.add("Uzbek");
+            a.add("English");
+            a.add("Russiandescription");
+            a.add("Uzbekdescription");
+            a.add("Englishdescription");
+            a.add("Cost");
+            a.add("Emoji");
+		return a;
+	}
+
 	private List<String> mainKeyboard(String lastbutton) {
         List<String> a = new ArrayList<>();
             a.add("Указать наличие");
             a.add("Удалить продукт");
             a.add("Добавить продукт");
+            a.add("Изменить продукт");
             a.add("Заказы");
             if (lastbutton!=null) a.add(lastbutton);
         return a;
+	}
+
+    private InlineKeyboardMarkup fields(String prodID) {
+        InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
+            List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
+        for(int i= 0; i<columnsList().size(); i++) {
+            List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
+                row.add(new InlineKeyboardButton()
+                        .setText(EmojiParser.parseToUnicode(columnsList().get(i)))
+                        .setCallbackData(prodID+columnsListNames().get(i)));
+                rows.add(row);
+        }
+        List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
+                row.add(new InlineKeyboardButton()
+                        .setText(EmojiParser.parseToUnicode("Назад"))
+                        .setCallbackData("Назад"));
+                rows.add(row);
+            markup.setKeyboard(rows);
+        return markup;
 	}
 
 	@Override
