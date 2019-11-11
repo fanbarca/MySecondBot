@@ -162,6 +162,11 @@ public class Adminbot extends TelegramLongPollingBot {
                             DataBase.sql("UPDATE table0 SET emoji = '"+Name+"' where russian = '"+russian+"'");
                             deleteMessage(update.getMessage());
                             edit(update.getMessage(), "Готово", mainKeyboard(null), 1);
+                        } else if (columnsListNames().contains(listener)) {
+                            String Name = update.getMessage().getText();
+                            DataBase.sql("UPDATE table0 SET "+listener.substring(8)+" = '"+Name+"' where id = "+listener.substring(0,4));
+                            edit(update.getMessage(), "Готово", mainKeyboard(null), 1);
+                            listener = "";
                         } else {
                             deleteMessage(update.getMessage());
                         }
@@ -267,11 +272,11 @@ public class Adminbot extends TelegramLongPollingBot {
                         listener = "";
                         edit(update.getCallbackQuery().getMessage(), "Что именно изменить?", 1, fields(prodId));
                     }
-                    for(int i= 0; i<columnsList().size(); i++) {
-                        if (cb.equals(prodId+columnsListNames().get(i))){
-                            listener = columnsListNames().get(i);
-                            edit(update.getMessage(), "Введите поле: "+columnsList().get(i), list, 1);
-                        }
+                }
+                for(int i= 0; i<columnsList().size(); i++) {
+                    if (cb.equals(prodId+columnsListNames().get(i))){
+                        listener = prodId+columnsListNames().get(i);
+                        edit(update.getMessage(), "Введите поле: "+columnsList().get(i), list, 1);
                     }
                 }
             }
@@ -316,14 +321,14 @@ public class Adminbot extends TelegramLongPollingBot {
     }
     private List<String> columnsListNames() {
         List<String> a = new ArrayList<>();
-            a.add("Russian");
-            a.add("Uzbek");
-            a.add("English");
-            a.add("Russiandescription");
-            a.add("Uzbekdescription");
-            a.add("Englishdescription");
-            a.add("Cost");
-            a.add("Emoji");
+            a.add("EditRussian");
+            a.add("EditUzbek");
+            a.add("EditEnglish");
+            a.add("EditRussiandescription");
+            a.add("EditUzbekdescription");
+            a.add("EditEnglishdescription");
+            a.add("EditCost");
+            a.add("EditEmoji");
 		return a;
 	}
 
