@@ -482,10 +482,10 @@ public void send (String text, String chatId, List<String> list, boolean inline,
         }
     }
     public void edit (Message message, String newText, int flag, InlineKeyboardMarkup markup) throws SQLException {
-    //String adminMessage = DataBase.sqlQuery("select adminmessage from users where id ="+message.getChatId(), "adminmessage");
+    String adminMessage = DataBase.sqlQuery("select adminmessage from users where id ="+message.getChatId(), "adminmessage");
         EditMessageText sendMessage = new EditMessageText()
                 .setChatId(message.getChatId())
-                .setMessageId(message.getMessageId())
+                .setMessageId(Integer.parseInt(adminMessage))
                 .setParseMode("HTML")
                 .setText(EmojiParser.parseToUnicode(newText));
         if (markup!=null) {
