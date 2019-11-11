@@ -101,9 +101,9 @@ public class Adminbot extends TelegramLongPollingBot {
                         deleteMessage(update.getMessage());
                         if (adminmessage!=null) {
                             deleteMessage(adminmessage, id);
-                            send("Выберите действие", id, mainKeyboard(), true,  1);
+                            send("Выберите действие", id, mainKeyboard(null), true,  1);
                         } else {
-                            send("Выберите действие", id, mainKeyboard(), true,  1);
+                            send("Выберите действие", id, mainKeyboard(null), true,  1);
                         }
                     }  else if (update.getMessage().getText().contains("/sql")) {
                         if (update.getMessage().getText().length()>5) {
@@ -152,10 +152,16 @@ public class Adminbot extends TelegramLongPollingBot {
                             edit(update.getMessage(), "Введите описание на английском", list, 3);
                         } else if (listener.equals("Englishdescription")) {
                             String Name = update.getMessage().getText();
-                            listener = "";
+                            listener = "emoji";
                             DataBase.sql("UPDATE table0 SET Englishdescription = '"+Name+"' where russian = '"+russian+"'");
                             deleteMessage(update.getMessage());
-                            edit(update.getMessage(), "Готово", mainKeyboard(), 1);
+                            edit(update.getMessage(), "Введите emoji", 1, simpleMarkUp("Пропустить"));
+                        } else if (listener.equals("emoji")) {
+                            String Name = update.getMessage().getText();
+                            listener = "";
+                            DataBase.sql("UPDATE table0 SET emoji = '"+Name+"' where russian = '"+russian+"'");
+                            deleteMessage(update.getMessage());
+                            edit(update.getMessage(), "Готово", mainKeyboard(null), 1);
                         } else {
                             deleteMessage(update.getMessage());
                         }
@@ -271,10 +277,14 @@ public class Adminbot extends TelegramLongPollingBot {
                 } else if(cb.equals("Назад")) {
                     if (update.getCallbackQuery().getMessage().hasLocation()) {
                         deleteMessage(update.getCallbackQuery().getMessage());
-                        send("Выберите действие", id, mainKeyboard(), true, 1);
+                        send("Выберите действие", id, mainKeyboard(null), true, 1);
                     } else {
-                        edit(update.getCallbackQuery().getMessage(), "Выберите действие", mainKeyboard(), 1);
+                        edit(update.getCallbackQuery().getMessage(), "Выберите действие", mainKeyboard(null), 1);
                     }
+                }
+                if (cb.equals("Пропустить")) {
+                        listener = "";
+                        edit(update.getMessage(), "Готово", mainKeyboard(null), 1);
                 }
 
 
@@ -286,12 +296,13 @@ public class Adminbot extends TelegramLongPollingBot {
         }
 	}
 
-	private List<String> mainKeyboard() {
+	private List<String> mainKeyboard(String lastbutton) {
         List<String> a = new ArrayList<>();
             a.add("Указать наличие");
             a.add("Удалить продукт");
             a.add("Добавить продукт");
             a.add("Заказы");
+            if (lastbutton!=null) a.add(lastbutton);
         return a;
 	}
 
@@ -397,8 +408,8 @@ public void send (String text, String chatId, List<String> list, boolean inline,
                 rows.add(row);
             }
             List<InlineKeyboardButton> lastRow = new ArrayList<InlineKeyboardButton>();
-            if (newText.contains(mainKeyboard().get(0))||
-                newText.contains(mainKeyboard().get(1))||
+            if (newText.contains(mainKeyboard(null).get(0))||
+                newText.contains(mainKeyboard(null).get(1))||
                 newText.contains("В какой раздел?")||
                 newText.contains("Введите")||
                 newText.contains("Время:")) {
@@ -475,7 +486,7 @@ public List<String> listOrders(String column){
 
         return execute(sendMessage).getMessageId().toString();
     }
-    private ReplyKeyboard simpleMarkUp(String button) {
+    private InlineKeyboardMarkup simpleMarkUp(String button) {
         InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
             List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();

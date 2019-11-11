@@ -399,9 +399,10 @@ public class Bot extends TelegramLongPollingBot {
     private String productText(String prodId, String userid) throws SQLException {
         int occurrences = occurrences(prodId, userid);
         String balls = "";
+        String emoji = DataBase.sqlQuery("select emoji from table0 where id = "+prodId, "emoji");
         int type = Integer.parseInt(DataBase.sqlQuery("select type from table0 where id =" + prodId + "", "type"));
         for (int i = 0; i<occurrences; i++){
-            balls += Lan.emogisList().get(type);
+            balls += emoji==null?Lan.emogisList().get(type):emoji;
         }
         return "<b>" + DataBase.sqlQuery("select "+ a.getLanguage() + " from table0 where id=" + prodId + "", a.getLanguage()) + "</b>\n"+
                             "<i>"+DataBase.sqlQuery("select "+a.getLanguage()+"description from table0 where id =" +prodId, a.getLanguage()+"description")+"</i>\n\n"
