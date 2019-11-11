@@ -195,10 +195,15 @@ public class Adminbot extends TelegramLongPollingBot {
             for (String userID: idList) {
                 String name = DataBase.sqlQuery("select firstname from users where id ="+userID,"firstname");
                 if (cb.contains(name+"  -  ")) {
+                    String number = DataBase.sqlQuery("select phone from users where id ="+userID,"phone");
                     String time = DataBase.sqlQuery("select time from zakaz where userid = '" +userID+"' and conformed = true", "time");
                     String address = DataBase.sqlQuery("select address from users where id ="+userID,"address");
                     String product = DataBase.sqlQuery("select product from zakaz where userid = '" +userID+"' and conformed = true", "product");
-                    String text= "Имя: "+name+"\nВремя: "+time+(address!=null?"\nАдрес: "+address+"\n":"\n")+product;
+                    String text= "Имя: "+name+
+                            "\nНомер: "+ number+
+                            "\nВремя: "+time+
+                            (address!=null?"\nАдрес: "+address+"\n":"\n")+
+                            product;
                     String latitude = DataBase.sqlQuery("select latitude from users where id ="+userID,"latitude");
                     InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
                     List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
@@ -213,7 +218,7 @@ public class Adminbot extends TelegramLongPollingBot {
                     markup.setKeyboard(rows);
                     edit(update.getCallbackQuery().getMessage(), text, 2, markup);
                 }
-                if (cb.contains("Локация")) {
+                if (cb.contains("Локация"+userID)) {
                     Float latitude = Float.valueOf(DataBase.sqlQuery("select latitude from users where id ="+userID,"latitude"));
                     Float longitude = Float.valueOf(DataBase.sqlQuery("select longitude from users where id ="+userID,"longitude"));
                     deleteMessage(update.getCallbackQuery().getMessage().getMessageId().toString(), id);
