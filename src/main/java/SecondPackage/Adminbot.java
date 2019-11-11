@@ -215,6 +215,9 @@ public class Adminbot extends TelegramLongPollingBot {
                     InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
                     List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
                     List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
+                    row.add(new InlineKeyboardButton()
+                            .setText(EmojiParser.parseToUnicode("Готов"))
+                            .setCallbackData("Готов"+userID));
                     if (latitude!=null) row.add(new InlineKeyboardButton()
                             .setText(EmojiParser.parseToUnicode("Локация"))
                             .setCallbackData("Локация"+userID));
@@ -265,11 +268,9 @@ public class Adminbot extends TelegramLongPollingBot {
                     }
                 }
             }
-                if (cb.contains("Готов от")) {
-                    String name = cb.substring(9);
-                        String userid = DataBase.sqlQuery("select id from users where firstname = '"+name+"'", "id");
-                        DataBase.sql("delete from zakaz where userid = "+userid);
-
+                if (cb.contains("Готов")) {
+                    String userid = cb.substring(5);
+                    DataBase.sql("delete from zakaz where userid = "+userid);
                     edit(update.getCallbackQuery().getMessage(), "Заказ завершён", null, 2);
                 }
                 if (cb.equals("Отмена")||cb.equals("Ok")) {

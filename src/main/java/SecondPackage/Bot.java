@@ -351,7 +351,8 @@ public class Bot extends TelegramLongPollingBot {
         }
         if (cb.equals(Lan.YesNo(a.getLanguage()).get(0))||(cb.equals(Lan.YesNo(a.getLanguage()).get(1)))) {
             if (cb.equals(Lan.YesNo(a.getLanguage()).get(0))) {
-                DataBase.sql("update zakaz set conformed = false, time = null where userid =" + a.getId());
+                DataBase.sql("update zakaz set conformed = false, time = null, product = '"
+                    +curretCart(a.getId())+"' where userid =" + a.getId());
                 sendMeLocation(update.getCallbackQuery().getMessage());
             } else if (cb.equals(Lan.YesNo(a.getLanguage()).get(1))) {
                 showOrders(update);
