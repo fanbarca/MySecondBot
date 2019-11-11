@@ -167,6 +167,7 @@ public class Adminbot extends TelegramLongPollingBot {
                             DataBase.sql("UPDATE table0 SET "+listener.substring(8)+" = '"+Name+"' where id = "+listener.substring(0,4));
                             edit(update.getMessage(), "Готово", mainKeyboard(null), 1);
                             listener = "";
+                            deleteMessage(update.getMessage());
                         } else {
                             deleteMessage(update.getMessage());
                         }
