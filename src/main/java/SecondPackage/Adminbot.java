@@ -276,7 +276,7 @@ public class Adminbot extends TelegramLongPollingBot {
                 for(int i= 0; i<columnsList().size(); i++) {
                     if (cb.equals(prodId+columnsListNames().get(i))){
                         listener = prodId+columnsListNames().get(i);
-                        edit(update.getMessage(), "Введите поле: "+columnsList().get(i), null, 1);
+                        edit(update.getCallbackQuery().getMessage(), "Введите поле: "+columnsList().get(i), 1, simpleMarkUp("Назад"));
                     }
                 }
             }
