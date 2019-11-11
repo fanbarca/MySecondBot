@@ -18,6 +18,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -68,10 +69,12 @@ public class Adminbot extends TelegramLongPollingBot {
             }
         } catch (SQLException e1) {
             e1.printStackTrace();
-        }
+        } catch (TelegramApiRequestException e) {
+			e.printStackTrace();
+		}
     }
 
-    private void checkAdmin(Update update, String id) throws SQLException {
+    private void checkAdmin(Update update, String id) throws SQLException, TelegramApiRequestException {
         List<String> admins = DataBase.sqlQueryList("select id from users where admin = true", "id");
         if (admins.contains(id)) {
             allow(update, id);
@@ -80,11 +83,14 @@ public class Adminbot extends TelegramLongPollingBot {
         }
 	}
 
-	private void enterPassword(Update update) throws SQLException {
+	private void enterPassword(Update update) throws SQLException, TelegramApiRequestException {
         if (update.hasMessage()) {
             deleteMessage(update.getMessage());
             String adminmessage = DataBase.sqlQuery("select adminmessage from users where id="+update.getMessage().getChatId(), "adminmessage");
-            if (adminmessage!=null) edit(update.getMessage(), update.getMessage().getText()+" - это неправильный пароль.\nПопробуйте ещё раз", null, 1);
+            if (adminmessage!=null) {
+            deleteMessage(adminmessage, update.getMessage().getChatId().toString());
+            send("Введите пароль", update.getMessage().getChatId().toString(), null, true, 1);
+            }
             else send("Введите пароль", update.getMessage().getChatId().toString(), null, true, 1);
             listener = "password";
         } else {
