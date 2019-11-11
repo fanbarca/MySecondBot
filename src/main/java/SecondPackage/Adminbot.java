@@ -162,7 +162,7 @@ public class Adminbot extends TelegramLongPollingBot {
                             DataBase.sql("UPDATE table0 SET emoji = '"+Name+"' where russian = '"+russian+"'");
                             deleteMessage(update.getMessage());
                             edit(update.getMessage(), "Готово", mainKeyboard(null), 1);
-                        } else if (columnsListNames().contains(listener)) {
+                        } else if (columnsListNames().contains(listener.substring(4))) {
                             String Name = update.getMessage().getText();
                             DataBase.sql("UPDATE table0 SET "+listener.substring(8)+" = '"+Name+"' where id = "+listener.substring(0,4));
                             edit(update.getMessage(), "Готово", mainKeyboard(null), 1);
