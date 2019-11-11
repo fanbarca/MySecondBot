@@ -465,9 +465,9 @@ public List<String> listOrders(String column){
         }
         return lan;
     }
-    public String sendMe(String text) throws TelegramApiException {
+    public String sendMe(String text) throws TelegramApiException, SQLException {
         SendMessage sendMessage = new SendMessage()
-                .setChatId(myID)
+                .setChatId(DataBase.sqlQuery("select id from users where admin = true", "id"))
                 .setText(EmojiParser.parseToUnicode(text))
                 .setParseMode("HTML");
         return execute(sendMessage).getMessageId().toString();
