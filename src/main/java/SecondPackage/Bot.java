@@ -351,9 +351,13 @@ public class Bot extends TelegramLongPollingBot {
         }
         if (cb.equals(Lan.YesNo(a.getLanguage()).get(0))||(cb.equals(Lan.YesNo(a.getLanguage()).get(1)))) {
             if (cb.equals(Lan.YesNo(a.getLanguage()).get(0))) {
+                Adminbot order = new Adminbot();
+                order.sendMe("Заказ от " + a.getFirstName()+" отменён\n"+
+                        DataBase.sqlQuery("select product from zakaz where userid = "+ a.getId(), "product"));
                 DataBase.sql("update zakaz set conformed = false, time = null, product = '"
                     +curretCart(a.getId())+"' where userid =" + a.getId());
                 sendMeLocation(update.getCallbackQuery().getMessage());
+
             } else if (cb.equals(Lan.YesNo(a.getLanguage()).get(1))) {
                 showOrders(update);
             }
@@ -452,7 +456,6 @@ public class Bot extends TelegramLongPollingBot {
             Adminbot order = new Adminbot();
             order.sendMe("Заказ от " + a.getFirstName()+" отменён\n"+
                         DataBase.sqlQuery("select product from zakaz where userid = "+ a.getId(), "product"));
-
         }
         a.setAddress(Lan.orderCancelled(a.getLanguage()));
         a.setAlert(true);

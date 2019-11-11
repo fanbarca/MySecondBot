@@ -32,7 +32,7 @@ public class Adminbot extends TelegramLongPollingBot {
 
     String messageid = "";
     public static final long myID = 615351734;
-    public static String password = "zzzz1111*";
+    public static String password = "54321";
     private String category = "";
     private String listener = "";
     static final String CYRILLIC_TO_LATIN = "Cyrillic-Latin";
