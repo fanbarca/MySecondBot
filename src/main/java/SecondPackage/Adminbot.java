@@ -119,43 +119,43 @@ public class Adminbot extends TelegramLongPollingBot {
                             String.format("%04d", rand.nextInt(8999)+1000)+", '"+russian+"', '"+category+"', true)");
                             listener = "Uzbek";
                             deleteMessage(update.getMessage());
-                            edit(update.getMessage(), "Введите название продукта на узбекском", list, 3);
+                            edit(update.getMessage(), russian+"\nВведите название продукта на узбекском", list, 3);
                         } else if (listener.equals("Uzbek")) {
                             String Name = update.getMessage().getText();
                             DataBase.sql("UPDATE table0 SET uzbek = '"+Name+"' where russian = '"+russian+"'");
                             listener = "English";
                             deleteMessage(update.getMessage());
-                            edit(update.getMessage(), "Введите название продукта на английском", list, 3);
+                            edit(update.getMessage(), russian+"\nВведите название продукта на английском", list, 3);
                         } else if (listener.equals("English")) {
                             String Name = update.getMessage().getText();
                             listener = "Cost";
                             DataBase.sql("UPDATE table0 SET english = '"+Name+"' where russian = '"+russian+"'");
                             deleteMessage(update.getMessage());
-                            edit(update.getMessage(), "Введите стоимость продукта", list, 3);
+                            edit(update.getMessage(), russian+"\nВведите стоимость продукта", list, 3);
                         } else if (listener.equals("Cost")) {
                             String cost = update.getMessage().getText();
                             listener = "Russiandescription";
                             DataBase.sql("UPDATE table0 SET cost = "+cost+" where russian = '"+russian+"'");
                             deleteMessage(update.getMessage());
-                            edit(update.getMessage(), "Введите описание на русском", list, 3);
+                            edit(update.getMessage(), russian+"\nВведите описание на русском", list, 3);
                         } else if (listener.equals("Russiandescription")) {
                             String Name = update.getMessage().getText();
                             DataBase.sql("UPDATE table0 SET Russiandescription = '"+Name+"' where russian = '"+russian+"'");
                             listener = "Uzbekdescription";
                             deleteMessage(update.getMessage());
-                            edit(update.getMessage(), "Введите описание на узбекском", list, 3);
+                            edit(update.getMessage(), russian+"\nВведите описание на узбекском", list, 3);
                         } else if (listener.equals("Uzbekdescription")) {
                             String Name = update.getMessage().getText();
                             DataBase.sql("UPDATE table0 SET Uzbekdescription = '"+Name+"' where russian = '"+russian+"'");
                             listener = "Englishdescription";
                             deleteMessage(update.getMessage());
-                            edit(update.getMessage(), "Введите описание на английском", list, 3);
+                            edit(update.getMessage(), russian+"\nВведите описание на английском", list, 3);
                         } else if (listener.equals("Englishdescription")) {
                             String Name = update.getMessage().getText();
                             listener = "emoji";
                             DataBase.sql("UPDATE table0 SET Englishdescription = '"+Name+"' where russian = '"+russian+"'");
                             deleteMessage(update.getMessage());
-                            edit(update.getMessage(), "Введите emoji", 1, simpleMarkUp("Пропустить"));
+                            edit(update.getMessage(), russian+"\nВведите emoji", 1, simpleMarkUp("Пропустить"));
                         } else if (listener.equals("emoji")) {
                             String Name = update.getMessage().getText();
                             listener = "";
@@ -270,7 +270,7 @@ public class Adminbot extends TelegramLongPollingBot {
                          for(int i= 0; i<columnsList().size(); i++) {
                             if (cb.equals(prodId+columnsListNames().get(i))){
                                 listener= columnsListNames().get(i);
-                                edit(update.getMessage(), "Введите поле: "+columnsList().get(i), list, 3);
+                                edit(update.getMessage(), "Введите поле: "+columnsList().get(i), list, 1);
                             }
                         }
                     }
@@ -279,7 +279,7 @@ public class Adminbot extends TelegramLongPollingBot {
                 if (cb.contains("Готов")) {
                     String userid = cb.substring(5);
                     DataBase.sql("delete from zakaz where userid = "+userid);
-                    edit(update.getCallbackQuery().getMessage(), "Заказ завершён", mainKeyboard(null), 2);
+                    edit(update.getCallbackQuery().getMessage(), "Заказ завершён", mainKeyboard(null), 1);
                 }
                 if (cb.equals("Отмена")||cb.equals("Ok")) {
                     deleteMessage(update.getCallbackQuery().getMessage());
@@ -295,8 +295,6 @@ public class Adminbot extends TelegramLongPollingBot {
                         listener = "";
                         edit(update.getMessage(), "Готово", mainKeyboard(null), 1);
                 }
-
-
             try {
 				execute(answer);
 			} catch (TelegramApiException e) {
@@ -464,6 +462,7 @@ public void send (String text, String chatId, List<String> list, boolean inline,
             List<InlineKeyboardButton> lastRow = new ArrayList<InlineKeyboardButton>();
             if (newText.contains(mainKeyboard(null).get(0))||
                 newText.contains(mainKeyboard(null).get(1))||
+                newText.contains(mainKeyboard(null).get(3))||
                 newText.contains("В какой раздел?")||
                 newText.contains("Введите")||
                 newText.contains("Время:")) {
