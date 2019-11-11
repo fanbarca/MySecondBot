@@ -1412,7 +1412,9 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
             List<Integer> aa = new ArrayList<>();
             aa.add(number);
             aa.add(cost);
-            itemNames.put(DataBase.sqlQuery("select "+a.getLanguage()+" from table0 where id =" + s, a.getLanguage()),
+            String emoji = DataBase.sqlQuery("select emoji from table0 where id =" + s, "emoji");
+            int type = Integer.parseInt(DataBase.sqlQuery("select type from table0 where id =" + s, "type"));
+            itemNames.put((emoji==null?Lan.emogisList().get(type):(emoji+" "))+DataBase.sqlQuery("select "+a.getLanguage()+" from table0 where id =" + s, a.getLanguage()),
                     aa);
         }
         List<String> list = new ArrayList<>();
