@@ -266,12 +266,11 @@ public class Adminbot extends TelegramLongPollingBot {
                     } else if (listener.equals("Change")) {
                         listener = "";
                         edit(update.getCallbackQuery().getMessage(), "Что именно изменить?", 1, fields(prodId));
-                    } else if (cb.contains(prodId)) {
-                         for(int i= 0; i<columnsList().size(); i++) {
-                            if (cb.equals(prodId+columnsListNames().get(i))){
-                                listener= columnsListNames().get(i);
-                                edit(update.getMessage(), "Введите поле: "+columnsList().get(i), list, 1);
-                            }
+                    }
+                    for(int i= 0; i<columnsList().size(); i++) {
+                        if (cb.equals(prodId+columnsListNames().get(i))){
+                            listener = columnsListNames().get(i);
+                            edit(update.getMessage(), "Введите поле: "+columnsList().get(i), list, 1);
                         }
                     }
                 }
