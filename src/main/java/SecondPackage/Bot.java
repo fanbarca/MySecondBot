@@ -1008,14 +1008,15 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
         if (address!=null) address= "<b>Адрес:</b> "+address+"\n";
         else address="<b>Локация получена</b>\n";
         Adminbot order = new Adminbot();
-        String messageId = order.sendMe("<b>Новый заказ</b>\n\n"
+        //String messageId =
+        order.sendMe("<b>Новый заказ</b>\n\n"
                     +"<b>Имя клиента:</b> "+ a.getFirstName()+"\n"
                     +"<b>Номер клиента:</b> "+ a.getNumber()+"\n"
                     +"<b>Время доставки:</b> "+time+"\n"
                     +address
                     +"<b>Заказ:</b> \n\n"+curretCart(a.getId()));
         //String adminId = DataBase.sqlQuery("select id from users where admin = true", "id");
-        DataBase.sql("update zakaz set messageId = "+messageId+" where admin = true");
+        //DataBase.sql("update zakaz set messageId = "+messageId+" where admin = true");
         //if (latitude!=null&&longitude!=null) order.sendLocation(adminId,Float.parseFloat(latitude), Float.parseFloat(longitude), null);
         //order.sendContact(a.getFirstName(), a.getNumber());
         clearCart(update);
@@ -1414,7 +1415,7 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
             aa.add(cost);
             String emoji = DataBase.sqlQuery("select emoji from table0 where id =" + s, "emoji");
             int type = Integer.parseInt(DataBase.sqlQuery("select type from table0 where id =" + s, "type"));
-            itemNames.put((emoji==null?Lan.emogisList().get(type):(emoji+" "))+DataBase.sqlQuery("select "+a.getLanguage()+" from table0 where id =" + s, a.getLanguage()),
+            itemNames.put((emoji==null?Lan.emogisList().get(type):emoji)+DataBase.sqlQuery("select "+a.getLanguage()+" from table0 where id =" + s, a.getLanguage()),
                     aa);
         }
         List<String> list = new ArrayList<>();
