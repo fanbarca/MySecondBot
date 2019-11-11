@@ -161,7 +161,7 @@ class Lan {
     }
     public static List<String> emogisList(){
         List<String> list = new ArrayList<>();
-                list.add(":custard:");
+                list.add("🥗");
                 list.add(":stew:");
                 list.add(":spaghetti:");
                 list.add(":coffee:");
