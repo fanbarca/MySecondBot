@@ -12,6 +12,7 @@ import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.*;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
@@ -265,7 +266,7 @@ public class Adminbot extends TelegramLongPollingBot {
 
                     edit(update.getCallbackQuery().getMessage(), "Заказ завершён", null, 2);
                 }
-                if (cb.equals("Отмена")) {
+                if (cb.equals("Отмена")||cb.equals("Ok")) {
                     deleteMessage(update.getCallbackQuery().getMessage());
                 } else if(cb.equals("Назад")) {
                     if (update.getCallbackQuery().getMessage().hasLocation()) {
@@ -469,14 +470,28 @@ public List<String> listOrders(String column){
         SendMessage sendMessage = new SendMessage()
                 .setChatId(DataBase.sqlQuery("select id from users where admin = true", "id"))
                 .setText(EmojiParser.parseToUnicode(text))
-                .setParseMode("HTML");
+                .setParseMode("HTML")
+                .setReplyMarkup(simpleMarkUp("Ok"));
+
         return execute(sendMessage).getMessageId().toString();
     }
-    public void sendLocation(String chayId, Float latitude, Float longitude, List<String> list) {
+    private ReplyKeyboard simpleMarkUp(String button) {
+        InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
+        List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
+            List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
+            row.add(new InlineKeyboardButton()
+                    .setText(EmojiParser.parseToUnicode(button))
+                    .setCallbackData(button));
+            rows.add(row);
+        markup.setKeyboard(rows);
+		return markup;
+	}
+
+	public void sendLocation(String chatId, Float latitude, Float longitude, List<String> list) {
         SendLocation sendMessage = new SendLocation()
                 .setLatitude(latitude)
                 .setLongitude(longitude)
-                .setChatId(chayId);
+                .setChatId(chatId);
             InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
             List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
             for (int i = 0; i < list.size(); i++) {
@@ -494,11 +509,11 @@ public List<String> listOrders(String column){
         }
         catch (TelegramApiException e) {e.printStackTrace();}
     }
-    public void sendContact(String name, String number) {
+    public void sendContact(String chatId, String name, String number) {
         SendContact sendMessage = new SendContact()
                 .setFirstName(name)
                 .setPhoneNumber(number)
-                .setChatId(myID);
+                .setChatId(chatId);
         try {
             execute(sendMessage);
         }
