@@ -1046,7 +1046,7 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
 
 
     private boolean waitingForComment() throws SQLException{
-        return DataBase.sqlQuery("SELECT comment from zakaz where id=" + a.getId(), "comment").equals("*waiting*");
+        return DataBase.sqlQuery("SELECT comment from zakaz where userid=" + a.getId(), "comment").equals("*waiting*");
     }
 
 
