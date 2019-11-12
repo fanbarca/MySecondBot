@@ -164,6 +164,8 @@ public class Bot extends TelegramLongPollingBot {
             if (a.getLanguage() == null) {
                 chooseLanguage(update.getMessage(), false);
             } else {
+                deleteMessage(DataBase.sqlQuery("SELECT image from users where id=" + a.getId(), "image"), a.getId());
+                deleteMessage(update.getMessage());
                 sendPic(Lan.welcome(a.getLanguage(), a.getFirstName()), update.getMessage(), Lan.mainMenu(a.getLanguage()), "Лого", 2);
             }
         } else if (update.getMessage().getText().startsWith("+998")) {
@@ -395,7 +397,7 @@ public class Bot extends TelegramLongPollingBot {
         if (cb.contains(Lan.removeSelectively(a.getLanguage()))) {
             editCaption(Lan.mainMenu(a.getLanguage()).get(3) + "\n" + curretCart(a.getId()), a.getId(),
                 Integer.parseInt(DataBase.sqlQuery("SELECT image from users where id=" + a.getId(), "image")),
-                null);
+                deleteItemsKey(a.getId()));
         }
         if (cb.contains(Lan.addComment(a.getLanguage()))) {
             editCaption(Lan.enterComment(a.getLanguage()), a.getId(),
@@ -486,7 +488,7 @@ public class Bot extends TelegramLongPollingBot {
 
 
 
-    
+
     private void clearCart(Update update) throws TelegramApiException{
         DataBase.sql("delete from cart where userid =" + a.getId());
         DataBase.sql("update users set comment = null where id = " + a.getId());
