@@ -1064,16 +1064,18 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
     private void confirm(Update update, String time) throws SQLException, TelegramApiException {
         String address = DataBase.sqlQuery("select address from users where id ="+a.getId(), "address");
         // String latitude = DataBase.sqlQuery("select latitude from users where id ="+a.getId(), "latitude");
-        // String longitude = DataBase.sqlQuery("select longitude from users where id ="+a.getId(), "longitude");
         if (address!=null) address= "<b>Адрес:</b> "+address+"\n";
         else address="<b>Локация получена</b>\n";
+        String comment = DataBase.sqlQuery("select comment from zakaz where id ="+a.getId(), "comment");
+        if (comment!=null) comment= "<b>Комментарий:</b> "+comment+"\n";
+        else comment = "";
         Adminbot order = new Adminbot();
         //String messageId =
         order.sendMe("<b>Новый заказ</b>\n\n"
                     +"<b>Имя клиента:</b> "+ a.getFirstName()+"\n"
                     +"<b>Номер клиента:</b> "+ a.getNumber()+"\n"
                     +"<b>Время доставки:</b> "+time+"\n"
-                    +address
+                    +address+comment
                     +"<b>Заказ:</b> \n\n"+curretCart(a.getId()));
         //String adminId = DataBase.sqlQuery("select id from users where admin = true", "id");
         //DataBase.sql("update zakaz set messageId = "+messageId+" where admin = true");
@@ -1279,7 +1281,8 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
                             rowOne.add(new InlineKeyboardButton()
                                     .setText(EmojiParser.parseToUnicode(Lan.addComment(a.getLanguage())))
                                     .setCallbackData(Lan.addComment(a.getLanguage())));
-                            if (!comment.equals("*waiting*")&&comment!=null) {
+                            if (comment!=null) {
+                                if(!comment.equals("*waiting*")) 
                             rowOne.add(new InlineKeyboardButton()
                                     .setText(EmojiParser.parseToUnicode(Lan.deleteComment(a.getLanguage())))
                                     .setCallbackData(Lan.deleteComment(a.getLanguage())));
