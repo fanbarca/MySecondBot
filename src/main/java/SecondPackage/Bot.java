@@ -485,9 +485,11 @@ public class Bot extends TelegramLongPollingBot {
 
 
 
+
+    
     private void clearCart(Update update) throws TelegramApiException{
         DataBase.sql("delete from cart where userid =" + a.getId());
-        DataBase.sql("update users set comment = null where userid = " + a.getId());
+        DataBase.sql("update users set comment = null where id = " + a.getId());
     }
 
 
@@ -1087,6 +1089,7 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
         //if (latitude!=null&&longitude!=null) order.sendLocation(adminId,Float.parseFloat(latitude), Float.parseFloat(longitude), null);
         //order.sendContact(a.getFirstName(), a.getNumber());
         clearCart(update);
+        
         DataBase.sql("update zakaz set conformed = true where userid = " + a.getId());
         editPic(Lan.welcome(a.getLanguage(), a.getFirstName()), a.getId(),
             Integer.parseInt(DataBase.sqlQuery("SELECT image from users where id=" + a.getId(), "image")),
