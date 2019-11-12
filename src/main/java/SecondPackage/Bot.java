@@ -1281,7 +1281,7 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
                         text.contains(Lan.mainMenu(a.getLanguage()).get(3))) {
                     if (text.contains(Lan.mainMenu(a.getLanguage()).get(3))) {
                         if (text.contains(Lan.currency(a.getLanguage()))) {
-                            String comment = DataBase.sqlQuery("select comment from zakaz where userid ="+a.getId(), "comment");
+                            String comment = DataBase.sqlQuery("select comment from users where id ="+a.getId(), "comment");
                             List<InlineKeyboardButton> rowOne = new ArrayList<InlineKeyboardButton>();
                             rowOne.add(new InlineKeyboardButton()
                                     .setText(EmojiParser.parseToUnicode(Lan.addComment(a.getLanguage())))
@@ -1397,7 +1397,6 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
             else if (latitude!=null) {
                 address=Lan.locationReceived(a.getLanguage());
             }
-
             String comment = DataBase.sqlQuery("select comment from zakaz where userid ="+a.getId(), "comment");
             if (comment!=null) comment= "<b>Комментарий:</b> "+comment+"\n";
             else comment = "";
