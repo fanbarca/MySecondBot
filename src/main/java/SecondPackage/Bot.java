@@ -189,7 +189,7 @@ public class Bot extends TelegramLongPollingBot {
 
 
     private void handleComment(Update update) throws TelegramApiException, SQLException {
-        DataBase.sql("update zakaz set comment = '"+update.getMessage().getText()+"' where userid ="+a.getId());
+        DataBase.sql("update users set comment = '"+update.getMessage().getText()+"' where id ="+a.getId());
         deleteMessage(update.getMessage());
         showCart(update, true);
     }
@@ -401,16 +401,16 @@ public class Bot extends TelegramLongPollingBot {
             editCaption(Lan.enterComment(a.getLanguage()), a.getId(),
                 Integer.parseInt(DataBase.sqlQuery("SELECT image from users where id=" + a.getId(), "image")),
                 simpleMarkUp(Lan.cancelComment(a.getLanguage())));
-                DataBase.sql("update zakaz set comment ='*waiting*' where userid = "+a.getId());
+                DataBase.sql("update users set comment ='*waiting*' where id = "+a.getId());
         }
         if (cb.contains(Lan.cancelComment(a.getLanguage()))) {
-            DataBase.sql("update zakaz set comment = null where userid = "+a.getId());
+            DataBase.sql("update users set comment = null where id = "+a.getId());
             a.setAddress(Lan.commentCancelled(a.getLanguage()));
             a.setAlert(false);
             showCart(update, true);
         } 
         if (cb.contains(Lan.deleteComment(a.getLanguage()))) {
-            DataBase.sql("update zakaz set comment = null where userid = "+a.getId());
+            DataBase.sql("update users set comment = null where id = "+a.getId());
             a.setAddress(Lan.commentDeleted(a.getLanguage()));
             a.setAlert(false);
             showCart(update, true);
@@ -487,6 +487,7 @@ public class Bot extends TelegramLongPollingBot {
 
     private void clearCart(Update update) throws TelegramApiException{
         DataBase.sql("delete from cart where userid =" + a.getId());
+        DataBase.sql("update users set comment = null where userid = " + a.getId());
     }
 
 
@@ -1047,7 +1048,7 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
 
 
     private boolean waitingForComment() throws SQLException{
-        return DataBase.sqlQuery("SELECT comment from zakaz where userid=" + a.getId(), "comment").equals("*waiting*");
+        return DataBase.sqlQuery("SELECT comment from users where id=" + a.getId(), "comment").equals("*waiting*");
     }
 
 
@@ -1067,8 +1068,11 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
         // String latitude = DataBase.sqlQuery("select latitude from users where id ="+a.getId(), "latitude");
         if (address!=null) address= "<b>Адрес:</b> "+address+"\n";
         else address="<b>Локация получена</b>\n";
-        String comment = DataBase.sqlQuery("select comment from zakaz where id ="+a.getId(), "comment");
-        if (comment!=null) comment= "<b>Комментарий:</b> "+comment+"\n";
+        String comment = DataBase.sqlQuery("select comment from users where id ="+a.getId(), "comment");
+        if (comment!=null) {
+            DataBase.sql("update zakaz set comment = '"+comment+"' where userid = " + a.getId());
+            comment= "<b>Комментарий:</b> "+comment+"\n";
+        }
         else comment = "";
         Adminbot order = new Adminbot();
         //String messageId =
@@ -1354,8 +1358,12 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
 
     private void showCart(Update update, boolean edit) throws TelegramApiException, SQLException {
         List<String> items = DataBase.sqlQueryList("select item from cart where userid =" + a.getId(), "item");
+        String comment = DataBase.sqlQuery("select comment from users where id ="+a.getId(), "comment");
+        if (comment!=null) comment= "<b>Комментарий:</b> "+comment+"\n";
+        else comment = "";
         String text = Lan.mainMenu(a.getLanguage()).get(3) + "\n"
-                    + curretCart(a.getId()) +"\n"
+                    + curretCart(a.getId()) +"\n\n"
+                    + comment
                     + Lan.deliveryCost(a.getLanguage())+"\n"
                     +"<b>"+Lan.tooLate(a.getLanguage())+"</b>";
             if (items.size() == 0) {
@@ -1389,9 +1397,13 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
             else if (latitude!=null) {
                 address=Lan.locationReceived(a.getLanguage());
             }
+
+            String comment = DataBase.sqlQuery("select comment from zakaz where userid ="+a.getId(), "comment");
+            if (comment!=null) comment= "<b>Комментарий:</b> "+comment+"\n";
+            else comment = "";
                 editPic(Lan.mainMenu(a.getLanguage()).get(1)+"\n"
                     +Lan.deliveryTime(a.getLanguage())+time+"\n"
-                    +address
+                    +address+comment
                     +items.get(0)+"\n", update.getCallbackQuery().getMessage(), null, "Лого", 2);
         }
     }
