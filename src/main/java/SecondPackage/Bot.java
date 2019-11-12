@@ -695,6 +695,7 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
 
 
     public void editPic(String text, Message message, List<String> list, String productId, int flag) throws TelegramApiException, SQLException {
+        Integer messageId= Integer.parseInt(DataBase.sqlQuery("select image from users where id="+message.getChatId(), "image"));
         String file_id;
         if (productId.equals("Лого"))
             file_id = DataBase.sqlQuery("SELECT imageid from table0 where Russian = 'Лого'", "imageid");
@@ -707,7 +708,7 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
         imp.setCaption(EmojiParser.parseToUnicode(text)).setParseMode("HTML");
         EditMessageMedia em = new EditMessageMedia();
         em.setChatId(message.getChatId());
-        em.setMessageId(message.getMessageId());
+        em.setMessageId(messageId);
         em.setMedia(imp);
         InlineKeyboardMarkup markup = markUp(text, productId,list, flag);
         em.setReplyMarkup(markup);
