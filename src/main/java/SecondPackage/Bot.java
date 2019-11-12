@@ -191,7 +191,7 @@ public class Bot extends TelegramLongPollingBot {
     private void handleComment(Update update) throws TelegramApiException, SQLException {
         DataBase.sql("update zakaz set comment = '"+update.getMessage().getText()+"' where userid ="+a.getId());
         deleteMessage(update.getMessage());
-        showCart(update, false);
+        showCart(update, true);
     }
 
     private void handleCallback(Update update)
@@ -404,16 +404,16 @@ public class Bot extends TelegramLongPollingBot {
                 DataBase.sql("update zakaz set comment ='*waiting*' where userid = "+a.getId());
         }
         if (cb.contains(Lan.cancelComment(a.getLanguage()))) {
+            DataBase.sql("update zakaz set comment = null where userid = "+a.getId());
             a.setAddress(Lan.commentCancelled(a.getLanguage()));
             a.setAlert(false);
             showCart(update, true);
-            DataBase.sql("update zakaz set comment = null where userid = "+a.getId());
         } 
         if (cb.contains(Lan.deleteComment(a.getLanguage()))) {
+            DataBase.sql("update zakaz set comment = null where userid = "+a.getId());
             a.setAddress(Lan.commentDeleted(a.getLanguage()));
             a.setAlert(false);
             showCart(update, true);
-            DataBase.sql("update zakaz set comment = null where userid = "+a.getId());
         }
         if (a.getAddress()!=null) answer.setShowAlert(a.getAlert()).setText(a.getAddress());
         execute(answer);
