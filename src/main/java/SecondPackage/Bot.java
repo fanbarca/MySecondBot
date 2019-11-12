@@ -384,8 +384,13 @@ public class Bot extends TelegramLongPollingBot {
                 timeKeys());
         }
         if (cb.contains(Lan.removeSelectively(a.getLanguage()))) {
-            editCaption(Lan.mainMenu(a.getLanguage()).get(3) + "\n" + curretCart(a.getId()), update.getCallbackQuery().getMessage().getChatId().toString(),
-                Integer.parseInt(DataBase.sqlQuery("SELECT image from users where id=" + update.getCallbackQuery().getMessage().getChatId(), "image")),
+            editCaption(Lan.mainMenu(a.getLanguage()).get(3) + "\n" + curretCart(a.getId()), a.getId(),
+                Integer.parseInt(DataBase.sqlQuery("SELECT image from users where id=" + a.getId(), "image")),
+                null);
+        }
+        if (cb.contains(Lan.addComment(a.getLanguage()))) {
+            editCaption("Добавить коммент----", a.getId(),
+                Integer.parseInt(DataBase.sqlQuery("SELECT image from users where id=" + a.getId(), "image")),
                 deleteItemsKey(a.getId()));
         }
         if (a.getAddress()!=null) answer.setShowAlert(a.getAlert()).setText(a.getAddress());
@@ -1218,6 +1223,10 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
                         text.contains(Lan.mainMenu(a.getLanguage()).get(3))) {
                     if (text.contains(Lan.mainMenu(a.getLanguage()).get(3))) {
                         if (text.contains(Lan.currency(a.getLanguage()))) {
+                            List<InlineKeyboardButton> rowOne = new ArrayList<InlineKeyboardButton>();
+                            rowOne.add(new InlineKeyboardButton()
+                                    .setText(EmojiParser.parseToUnicode(Lan.addComment(a.getLanguage())))
+                                    .setCallbackData(Lan.addComment(a.getLanguage())));
                             List<InlineKeyboardButton> lastRow = new ArrayList<InlineKeyboardButton>();
                             lastRow.add(new InlineKeyboardButton()
                                     .setText(EmojiParser.parseToUnicode(Lan.clearCart(a.getLanguage())))
@@ -1227,6 +1236,7 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
                                         .setText(EmojiParser.parseToUnicode(Lan.removeSelectively(a.getLanguage())))
                                         .setCallbackData(Lan.removeSelectively(a.getLanguage())));
                             }
+                            rows.add(rowOne);
                             rows.add(lastRow);
                             List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
                             row.add(new InlineKeyboardButton()

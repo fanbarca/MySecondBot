@@ -391,4 +391,12 @@ class Lan {
         }
         return menu;
     }
+
+    public static String addComment(String lan) {
+        String r="";
+        if (lan.equals("Uzbek")) r = ":pencil2: Izoh qo'shish";
+        else if (lan.equals("Russian")) r = ":pencil2: Добавить комментарий";
+        else if (lan.equals("English")) r = ":pencil2: Add comment";
+        return r;
+    }
 }
