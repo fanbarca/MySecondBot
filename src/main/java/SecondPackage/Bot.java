@@ -171,8 +171,10 @@ public class Bot extends TelegramLongPollingBot {
                 handleContact(update.getMessage());
             }
         } else {
-            if (waitingForLocation(update.getMessage())) {
-                handleLocation(update);;
+            if (waitingForLocation()) {
+                handleLocation(update);
+            } else if (waitingForComment()) {
+                handleComment(update);
             } else {
                 deleteMessage(update.getMessage());
             }
@@ -186,7 +188,14 @@ public class Bot extends TelegramLongPollingBot {
 
 
 
-    private void handleCallback(Update update) throws TelegramApiException, SQLException, MalformedURLException, IOException {
+    private void handleComment(Update update) throws TelegramApiException, SQLException {
+        DataBase.sql("update zakaz set comment = '"+update.getMessage().getText()+"' where userid ="+a.getId());
+        deleteMessage(update.getMessage());
+        showCart(update, false);
+    }
+
+    private void handleCallback(Update update)
+            throws TelegramApiException, SQLException, MalformedURLException, IOException {
 
         AnswerCallbackQuery answer = new AnswerCallbackQuery()
                 .setCallbackQueryId(update.getCallbackQuery().getId());
@@ -389,13 +398,48 @@ public class Bot extends TelegramLongPollingBot {
                 null);
         }
         if (cb.contains(Lan.addComment(a.getLanguage()))) {
-            editCaption("Добавить коммент----", a.getId(),
+            editCaption(Lan.enterComment(a.getLanguage()), a.getId(),
                 Integer.parseInt(DataBase.sqlQuery("SELECT image from users where id=" + a.getId(), "image")),
-                deleteItemsKey(a.getId()));
+                simpleMarkUp(Lan.cancelComment(a.getLanguage())));
+                DataBase.sql("update zakaz set comment ='*waiting*' where userid = "+a.getId());
+        }
+        if (cb.contains(Lan.cancelComment(a.getLanguage()))) {
+            a.setAddress(Lan.commentCancelled(a.getLanguage()));
+            a.setAlert(false);
+            showCart(update, true);
+            DataBase.sql("update zakaz set comment = null where userid = "+a.getId());
+        } 
+        if (cb.contains(Lan.deleteComment(a.getLanguage()))) {
+            a.setAddress(Lan.commentDeleted(a.getLanguage()));
+            a.setAlert(false);
+            showCart(update, true);
+            DataBase.sql("update zakaz set comment = null where userid = "+a.getId());
         }
         if (a.getAddress()!=null) answer.setShowAlert(a.getAlert()).setText(a.getAddress());
         execute(answer);
     }
+
+    
+
+
+
+
+
+
+
+    private InlineKeyboardMarkup simpleMarkUp(String button) {
+        InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
+        List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
+            List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
+            row.add(new InlineKeyboardButton()
+                    .setText(EmojiParser.parseToUnicode(button))
+                    .setCallbackData(button));
+            rows.add(row);
+        markup.setKeyboard(rows);
+		return markup;
+	}
+
+
 
 
 
@@ -859,7 +903,7 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
 
 
     private void handleLocation(Update update) throws SQLException, TelegramApiException {
-        if (waitingForLocation(update.getMessage())) {
+        if (waitingForLocation()) {
             if (update.getMessage().hasLocation()) DataBase.sql("update users set latitude = '"+update.getMessage().getLocation().getLatitude()+"', longitude = '"+update.getMessage().getLocation().getLongitude()+"', address = null where id ="+ a.getId());
             else DataBase.sql("update users set latitude = null, longitude = null, address = '"+update.getMessage().getText()+"' where id ="+ a.getId());
             editCaption(Lan.orderTime(a.getLanguage()), a.getId(),
@@ -993,10 +1037,17 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
 
 
 
-    private boolean waitingForLocation(Message message) throws SQLException{
+    private boolean waitingForLocation() throws SQLException{
         return DataBase.sqlQuery("SELECT rmid from users where id=" + a.getId(), "rmid").equals("0");
     }
+    
 
+
+
+
+    private boolean waitingForComment() throws SQLException{
+        return DataBase.sqlQuery("SELECT comment from zakaz where id=" + a.getId(), "comment").equals("*waiting*");
+    }
 
 
 
@@ -1223,10 +1274,16 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
                         text.contains(Lan.mainMenu(a.getLanguage()).get(3))) {
                     if (text.contains(Lan.mainMenu(a.getLanguage()).get(3))) {
                         if (text.contains(Lan.currency(a.getLanguage()))) {
+                            String comment = DataBase.sqlQuery("select comment from zakaz where userid ="+a.getId(), "comment");
                             List<InlineKeyboardButton> rowOne = new ArrayList<InlineKeyboardButton>();
                             rowOne.add(new InlineKeyboardButton()
                                     .setText(EmojiParser.parseToUnicode(Lan.addComment(a.getLanguage())))
                                     .setCallbackData(Lan.addComment(a.getLanguage())));
+                            if (!comment.equals("*waiting*")&&comment!=null) {
+                            rowOne.add(new InlineKeyboardButton()
+                                    .setText(EmojiParser.parseToUnicode(Lan.deleteComment(a.getLanguage())))
+                                    .setCallbackData(Lan.deleteComment(a.getLanguage())));
+                            }
                             List<InlineKeyboardButton> lastRow = new ArrayList<InlineKeyboardButton>();
                             lastRow.add(new InlineKeyboardButton()
                                     .setText(EmojiParser.parseToUnicode(Lan.clearCart(a.getLanguage())))

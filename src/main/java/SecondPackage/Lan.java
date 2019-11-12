@@ -242,13 +242,13 @@ class Lan {
         else if (lan.equals("English")) r = "Cart is emptied";
         return r;
     }
-//    public static String orderComplete(String lan) {
-//        String r="";
-//        if (lan.equals("Uzbek")) r = "";
-//        else if (lan.equals("Russian")) r = ":x: Отменить заказ";
-//        else if (lan.equals("English")) r = ":x: Cancel order";
-//        return r;
-//    }
+    public static String cancelComment(String lan) {
+        String r="";
+        if (lan.equals("Uzbek")) r = ":x: Izoh shart emas";
+        else if (lan.equals("Russian")) r = ":x: Отменить ввод комментария";
+        else if (lan.equals("English")) r = ":x: Cancel commenting";
+        return r;
+    }
     public static String total(String lan) {
         String r="";
         if (lan.equals("Uzbek")) r = "Umumiy: ";
@@ -394,9 +394,41 @@ class Lan {
 
     public static String addComment(String lan) {
         String r="";
-        if (lan.equals("Uzbek")) r = ":pencil2: Izoh qo'shish";
-        else if (lan.equals("Russian")) r = ":pencil2: Добавить комментарий";
-        else if (lan.equals("English")) r = ":pencil2: Add comment";
+        if (lan.equals("Uzbek")) r = ":memo: Izoh qo'shish";
+        else if (lan.equals("Russian")) r = ":memo: Добавить комментарий";
+        else if (lan.equals("English")) r = ":memo: Add comment";
+        return r;
+    }
+
+    public static String enterComment(String lan) {
+        String r="";
+        if (lan.equals("Uzbek")) r = "Izohni yozib, yuboring";
+        else if (lan.equals("Russian")) r = "Введите комментарий";
+        else if (lan.equals("English")) r = "Text me your comment";
+        return r;
+    }
+
+    public static String deleteComment(String lan) {
+        String r="";
+        if (lan.equals("Uzbek")) r = "Izohni o'chirish";
+        else if (lan.equals("Russian")) r = "Удалить комментарий";
+        else if (lan.equals("English")) r = "Delete comment";
+        return r;
+    }
+
+    public static String commentCancelled(String lan) {
+        String r="";
+        if (lan.equals("Uzbek")) r = "Izoh berish bekor qilindi";
+        else if (lan.equals("Russian")) r = "Комментарий отменён";
+        else if (lan.equals("English")) r = "Comment cancelled";
+        return r;
+    }
+
+    public static String commentDeleted(String lan) {
+        String r="";
+        if (lan.equals("Uzbek")) r = "Izoh o'chirildi";
+        else if (lan.equals("Russian")) r = "Комментарий удалён";
+        else if (lan.equals("English")) r = "Comment deleted";
         return r;
     }
 }
