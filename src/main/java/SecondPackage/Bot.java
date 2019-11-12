@@ -1370,7 +1370,8 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
                 a.setAddress(Lan.cartIsEmpty(a.getLanguage()));
                 a.setAlert(true);
             } else {
-                if (edit) editPic(text, update.getCallbackQuery().getMessage(), null, "Лого", 2);
+                Integer messageId= Integer.parseInt(DataBase.sqlQuery("select image from users where id="+a.getId(), "image"));
+                if (edit) editPic(text, a.getId(), messageId, null, "Лого", 2);
                 else sendPic(text, update.getCallbackQuery().getMessage(), null, "Лого", 2);
             }
     }
