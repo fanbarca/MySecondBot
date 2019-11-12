@@ -221,7 +221,7 @@ public class Adminbot extends TelegramLongPollingBot {
                     String time = DataBase.sqlQuery("select time from zakaz where userid = '" +userID+"' and conformed = true", "time");
                     String address = DataBase.sqlQuery("select address from users where id ="+userID,"address");
                     String product = DataBase.sqlQuery("select product from zakaz where userid = '" +userID+"' and conformed = true", "product");
-                    String comment = DataBase.sqlQuery("select comment from zakaz where id ="+userID, "comment");
+                    String comment = DataBase.sqlQuery("select comment from zakaz where userid ="+userID, "comment");
                     if (comment!=null) comment= "<b>Комментарий:</b> "+comment+"\n";
                     else comment = "";
                     if (address!=null) address= "<b>Адрес:</b> "+address+"\n";
