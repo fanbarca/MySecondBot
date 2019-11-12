@@ -1283,14 +1283,15 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
                         if (text.contains(Lan.currency(a.getLanguage()))) {
                             String comment = DataBase.sqlQuery("select comment from users where id ="+a.getId(), "comment");
                             List<InlineKeyboardButton> rowOne = new ArrayList<InlineKeyboardButton>();
-                            rowOne.add(new InlineKeyboardButton()
-                                    .setText(EmojiParser.parseToUnicode(Lan.addComment(a.getLanguage())))
-                                    .setCallbackData(Lan.addComment(a.getLanguage())));
                             if (comment!=null) {
                                 if(!comment.equals("*waiting*")) 
                             rowOne.add(new InlineKeyboardButton()
                                     .setText(EmojiParser.parseToUnicode(Lan.deleteComment(a.getLanguage())))
                                     .setCallbackData(Lan.deleteComment(a.getLanguage())));
+                            } else {
+                                rowOne.add(new InlineKeyboardButton()
+                                    .setText(EmojiParser.parseToUnicode(Lan.addComment(a.getLanguage())))
+                                    .setCallbackData(Lan.addComment(a.getLanguage())));
                             }
                             List<InlineKeyboardButton> lastRow = new ArrayList<InlineKeyboardButton>();
                             lastRow.add(new InlineKeyboardButton()
