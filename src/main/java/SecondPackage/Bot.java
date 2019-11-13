@@ -678,8 +678,8 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
         //Integer messageId= Integer.parseInt(DataBase.sqlQuery("select image from users where id="+message.getChatId(), "image"));
         InputMediaPhoto imp = new InputMediaPhoto();
         imp.setMedia(file_id);
-        if (text.length()<200) imp.setCaption(EmojiParser.parseToUnicode(text)).setParseMode("HTML");
-        else imp.setCaption(EmojiParser.parseToUnicode(text.substring(0, 197)+"...")).setParseMode("HTML");
+        if (text.length()<1024) imp.setCaption(EmojiParser.parseToUnicode(text)).setParseMode("HTML");
+        else imp.setCaption(EmojiParser.parseToUnicode(text.substring(0, 1020)+"...")).setParseMode("HTML");
         EditMessageMedia em = new EditMessageMedia();
         em.setChatId(chatid);
         em.setMessageId(messageid);
@@ -711,8 +711,8 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
         }
         InputMediaPhoto imp = new InputMediaPhoto();
         imp.setMedia(file_id);
-        if (text.length()<200) imp.setCaption(EmojiParser.parseToUnicode(text)).setParseMode("HTML");
-        else imp.setCaption(EmojiParser.parseToUnicode(text.substring(0, 197)+"...")).setParseMode("HTML");
+        if (text.length()<1024) imp.setCaption(EmojiParser.parseToUnicode(text)).setParseMode("HTML");
+        else imp.setCaption(EmojiParser.parseToUnicode(text.substring(0, 1020)+"...")).setParseMode("HTML");
         EditMessageMedia em = new EditMessageMedia();
         em.setChatId(message.getChatId());
         em.setMessageId(messageId);
@@ -741,8 +741,8 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
         }
         InputMediaPhoto imp = new InputMediaPhoto();
         imp.setMedia(file_id);
-        if (text.length()<200) imp.setCaption(EmojiParser.parseToUnicode(text)).setParseMode("HTML");
-        else imp.setCaption(EmojiParser.parseToUnicode(text.substring(0, 197)+"...")).setParseMode("HTML");
+        if (text.length()<1024) imp.setCaption(EmojiParser.parseToUnicode(text)).setParseMode("HTML");
+        else imp.setCaption(EmojiParser.parseToUnicode(text.substring(0, 1020)+"...")).setParseMode("HTML");
         EditMessageMedia em = new EditMessageMedia();
         em.setChatId(message.getChatId());
         em.setMessageId(message.getMessageId());
@@ -766,8 +766,8 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
         EditMessageCaption ec = new EditMessageCaption();
         ec.setChatId(chatId);
         ec.setMessageId(messageid);
-        if (text.length()<200) ec.setCaption(EmojiParser.parseToUnicode(text)).setParseMode("HTML");
-        else ec.setCaption(EmojiParser.parseToUnicode(text.substring(0, 197)+"...")).setParseMode("HTML");
+        if (text.length()<1024) ec.setCaption(EmojiParser.parseToUnicode(text)).setParseMode("HTML");
+        else ec.setCaption(EmojiParser.parseToUnicode(text.substring(0, 1020)+"...")).setParseMode("HTML");
         if (markup!=null) ec.setReplyMarkup(markup);
         execute(ec);
     }
@@ -788,7 +788,8 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
         EditMessageCaption ec = new EditMessageCaption();
         ec.setChatId(message.getChatId().toString());
         ec.setMessageId(message.getMessageId());
-        ec.setCaption(EmojiParser.parseToUnicode(text)).setParseMode("HTML");
+        if (text.length()<1024) ec.setCaption(EmojiParser.parseToUnicode(text)).setParseMode("HTML");
+        else ec.setCaption(EmojiParser.parseToUnicode(text.substring(0, 1020)+"...")).setParseMode("HTML");
         if (markup!=null) ec.setReplyMarkup(markup);
         execute(ec);
     }
@@ -812,8 +813,9 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
         SendPhoto aa = new SendPhoto();
         aa.setChatId(message.getChatId());
         aa.setPhoto(file_id);
-        aa.setCaption(EmojiParser.parseToUnicode(text)).setParseMode("HTML");
-        InlineKeyboardMarkup inlineMarkup = markUp(text, "Лого",inline, flag);
+        if (text.length()<1024) aa.setCaption(EmojiParser.parseToUnicode(text)).setParseMode("HTML");
+        else aa.setCaption(EmojiParser.parseToUnicode(text.substring(0, 1020)+"...")).setParseMode("HTML");
+                InlineKeyboardMarkup inlineMarkup = markUp(text, "Лого",inline, flag);
         aa.setReplyMarkup(inlineMarkup);
 
         try {
