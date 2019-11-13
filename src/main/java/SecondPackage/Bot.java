@@ -678,7 +678,8 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
         //Integer messageId= Integer.parseInt(DataBase.sqlQuery("select image from users where id="+message.getChatId(), "image"));
         InputMediaPhoto imp = new InputMediaPhoto();
         imp.setMedia(file_id);
-        imp.setCaption(EmojiParser.parseToUnicode(text)).setParseMode("HTML");
+        if (text.length()<200) imp.setCaption(EmojiParser.parseToUnicode(text)).setParseMode("HTML");
+        else imp.setCaption(EmojiParser.parseToUnicode(text.substring(0, 197)+"...")).setParseMode("HTML");
         EditMessageMedia em = new EditMessageMedia();
         em.setChatId(chatid);
         em.setMessageId(messageid);
@@ -710,7 +711,8 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
         }
         InputMediaPhoto imp = new InputMediaPhoto();
         imp.setMedia(file_id);
-        imp.setCaption(EmojiParser.parseToUnicode(text)).setParseMode("HTML");
+        if (text.length()<200) imp.setCaption(EmojiParser.parseToUnicode(text)).setParseMode("HTML");
+        else imp.setCaption(EmojiParser.parseToUnicode(text.substring(0, 197)+"...")).setParseMode("HTML");
         EditMessageMedia em = new EditMessageMedia();
         em.setChatId(message.getChatId());
         em.setMessageId(messageId);
@@ -739,7 +741,8 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
         }
         InputMediaPhoto imp = new InputMediaPhoto();
         imp.setMedia(file_id);
-        imp.setCaption(EmojiParser.parseToUnicode(text)).setParseMode("HTML");
+        if (text.length()<200) imp.setCaption(EmojiParser.parseToUnicode(text)).setParseMode("HTML");
+        else imp.setCaption(EmojiParser.parseToUnicode(text.substring(0, 197)+"...")).setParseMode("HTML");
         EditMessageMedia em = new EditMessageMedia();
         em.setChatId(message.getChatId());
         em.setMessageId(message.getMessageId());
@@ -759,10 +762,12 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
 
     public void editCaption(String text, String chatId, int messageid, InlineKeyboardMarkup markup) throws TelegramApiException, SQLException {
         //Integer messageId= Integer.parseInt(DataBase.sqlQuery("select image from users where id="+message.getChatId(), "image"));
+        
         EditMessageCaption ec = new EditMessageCaption();
         ec.setChatId(chatId);
         ec.setMessageId(messageid);
-        ec.setCaption(EmojiParser.parseToUnicode(text)).setParseMode("HTML");
+        if (text.length()<200) ec.setCaption(EmojiParser.parseToUnicode(text)).setParseMode("HTML");
+        else ec.setCaption(EmojiParser.parseToUnicode(text.substring(0, 197)+"...")).setParseMode("HTML");
         if (markup!=null) ec.setReplyMarkup(markup);
         execute(ec);
     }
