@@ -253,7 +253,7 @@ public class Adminbot extends TelegramLongPollingBot {
                     Float longitude = Float.valueOf(DataBase.sqlQuery("select longitude from users where id ="+userID,"longitude"));
                     deleteMessage(update.getCallbackQuery().getMessage().getMessageId().toString(), id);
                     List<String> list = new ArrayList<>();
-                    list.add("Назад");
+                    list.add("Заказы");
                     sendLocation(id, latitude, longitude, list);
                 }
             }
