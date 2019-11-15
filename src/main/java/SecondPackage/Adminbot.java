@@ -200,12 +200,7 @@ public class Adminbot extends TelegramLongPollingBot {
                 edit(update.getCallbackQuery().getMessage(), "Изменить продукт", DataBase.showAllProducts("Russian", false), 3);
             } else if(cb.equals(mainKeyboard(null).get(4))){
                 List<String> IdList = DataBase.sqlQueryList("select userid from zakaz where conformed = true ORDER BY time ASC", "userid");
-                
-
-                
                
-                
-                
                 if (IdList.isEmpty()){
                     answer.setShowAlert(false).setText("Заказов нет");
                 } else {
@@ -216,13 +211,21 @@ public class Adminbot extends TelegramLongPollingBot {
                     String name = DataBase.sqlQuery("select firstname from users where id ="+userID,"firstname");
                     orderButtons.add(name+"  -  "+time);
                     } orderButtons.add("Назад");
-                    edit(update.getCallbackQuery().getMessage(), text, orderButtons, 1);
+                    if (update.getCallbackQuery().getMessage().hasLocation()) {
+                        deleteMessage(update.getCallbackQuery().getMessage());
+                        send(text, id, orderButtons, true, 1);
+                    } else {
+                        edit(update.getCallbackQuery().getMessage(), text, orderButtons, 1);
+                    }
+
+                    
                 }
             }
             List<String> idList = DataBase.sqlQueryList("select userid from zakaz where conformed = true","userid");
             for (String userID: idList) {
                 String name = DataBase.sqlQuery("select firstname from users where id ="+userID,"firstname");
                 if (cb.contains(name+"  -  ")) {
+
                     String number = DataBase.sqlQuery("select phone from users where id ="+userID,"phone");
                     String time = DataBase.sqlQuery("select time from zakaz where userid = '" +userID+"' and conformed = true", "time");
                     String address = DataBase.sqlQuery("select address from users where id ="+userID,"address");
