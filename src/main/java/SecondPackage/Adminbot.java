@@ -200,6 +200,12 @@ public class Adminbot extends TelegramLongPollingBot {
                 edit(update.getCallbackQuery().getMessage(), "Изменить продукт", DataBase.showAllProducts("Russian", false), 3);
             } else if(cb.equals(mainKeyboard(null).get(4))){
                 List<String> IdList = DataBase.sqlQueryList("select userid from zakaz where conformed = true ORDER BY time ASC", "userid");
+                
+
+                
+               
+                
+                
                 if (IdList.isEmpty()){
                     answer.setShowAlert(false).setText("Заказов нет");
                 } else {
@@ -252,9 +258,7 @@ public class Adminbot extends TelegramLongPollingBot {
                     Float latitude = Float.valueOf(DataBase.sqlQuery("select latitude from users where id ="+userID,"latitude"));
                     Float longitude = Float.valueOf(DataBase.sqlQuery("select longitude from users where id ="+userID,"longitude"));
                     deleteMessage(update.getCallbackQuery().getMessage().getMessageId().toString(), id);
-                    List<String> list = new ArrayList<>();
-                    list.add("Заказы");
-                    sendLocation(id, latitude, longitude, list);
+                    sendLocation(id, latitude, longitude, "Назад", userID);
                 }
             }
             for (String t:Lan.listTypes("Russian")) {
@@ -299,7 +303,7 @@ public class Adminbot extends TelegramLongPollingBot {
                 }
                 if (cb.equals("Отмена")||cb.equals("Ok")) {
                     deleteMessage(update.getCallbackQuery().getMessage());
-                } else if(cb.equals("Назад")) {
+                } else if (cb.equals("Назад")) {
                     if (update.getCallbackQuery().getMessage().hasLocation()) {
                         deleteMessage(update.getCallbackQuery().getMessage());
                         send("Выберите действие", id, mainKeyboard(null), true, 1);
@@ -567,20 +571,23 @@ public List<String> listOrders(String column){
 		return markup;
 	}
 
-	public void sendLocation(String chatId, Float latitude, Float longitude, List<String> list) {
+	public void sendLocation(String chatId, Float latitude, Float longitude, String button, String userid)
+            throws SQLException {
+            String time = DataBase.sqlQuery("select time from zakaz where userid = '" +userid+"' and conformed = true", "time");
+            String name = DataBase.sqlQuery("select firstname from users where id = " +userid, "firstname");
         SendLocation sendMessage = new SendLocation()
                 .setLatitude(latitude)
                 .setLongitude(longitude)
                 .setChatId(chatId);
             InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
             List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
-            for (int i = 0; i < list.size(); i++) {
+            
                 List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
                 row.add(new InlineKeyboardButton()
-                        .setText(EmojiParser.parseToUnicode(list.get(i)))
-                        .setCallbackData(list.get(i)));
+                        .setText(EmojiParser.parseToUnicode(button))
+                        .setCallbackData(name+"  -  "+time));
                 rows.add(row);
-	        }
+	        
             markup.setKeyboard(rows);
             sendMessage.setReplyMarkup(markup);
         if (list!=null) sendMessage.setReplyMarkup(markup);
