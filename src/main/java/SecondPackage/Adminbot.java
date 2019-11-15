@@ -294,7 +294,12 @@ public class Adminbot extends TelegramLongPollingBot {
                 for(int i= 0; i<columnsList().size(); i++) {
                     if (cb.equals(prodId+columnsListNames().get(i))){
                         listener = prodId+columnsListNames().get(i);
-                        edit(update.getCallbackQuery().getMessage(), "Введите поле: "+columnsList().get(i), 1, simpleMarkUp("Назад"));
+                        String now = DataBase.sqlQuery("select "+columnsListNames().get(i).substring(4)+" from table0 where id ="+prodId, columnsListNames().get(i).substring(4));
+                        edit(update.getCallbackQuery().getMessage(), "<b>"+columnsList().get(i)+"</b>"+
+                        "\n\nТекущее значение = "+now+
+                        "\n\nВведите новое значение: ", 1, simpleMarkUp("Назад"));
+                        answer.setShowAlert(false).setText("Введите новое значение");
+
                     }
                 }
             }
