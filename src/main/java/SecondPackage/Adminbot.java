@@ -211,14 +211,7 @@ public class Adminbot extends TelegramLongPollingBot {
                     String name = DataBase.sqlQuery("select firstname from users where id ="+userID,"firstname");
                     orderButtons.add(name+"  -  "+time);
                     } orderButtons.add("Назад");
-                    if (update.getCallbackQuery().getMessage().hasLocation()) {
-                        deleteMessage(update.getCallbackQuery().getMessage());
-                        send(text, id, orderButtons, true, 1);
-                    } else {
-                        edit(update.getCallbackQuery().getMessage(), text, orderButtons, 1);
-                    }
-
-                    
+                    edit(update.getCallbackQuery().getMessage(), text, orderButtons, 1);
                 }
             }
             List<String> idList = DataBase.sqlQueryList("select userid from zakaz where conformed = true","userid");
@@ -255,7 +248,13 @@ public class Adminbot extends TelegramLongPollingBot {
                             .setCallbackData("Заказы"));
                     rows.add(row);
                     markup.setKeyboard(rows);
-                    edit(update.getCallbackQuery().getMessage(), text, 2, markup);
+                    if (update.getCallbackQuery().getMessage().hasLocation()) {
+                        deleteMessage(update.getCallbackQuery().getMessage());
+                        send(text, id, markup);
+                    } else {
+                        edit(update.getCallbackQuery().getMessage(), text, 2, markup);
+                    }
+                    
                 }
                 if (cb.contains("Локация"+userID)) {
                     Float latitude = Float.valueOf(DataBase.sqlQuery("select latitude from users where id ="+userID,"latitude"));
@@ -464,6 +463,23 @@ public void send (String text, String chatId, List<String> list, boolean inline,
         }
         catch (TelegramApiException e) {e.printStackTrace();}
     }
+
+
+    public void send (String text, String chatId, InlineKeyboardMarkup inlineMarkup) {
+        SendMessage sendMessage = new SendMessage()
+                .setChatId(chatId)
+                .setText(EmojiParser.parseToUnicode(text))
+                .setParseMode("HTML");
+        sendMessage.setReplyMarkup(inlineMarkup);
+        try {
+            String messageId = execute(sendMessage).getMessageId().toString();
+            DataBase.sql("update users set adminMessage ="+messageId+" where id = "+chatId);
+        }
+        catch (TelegramApiException e) {e.printStackTrace();}
+    }
+
+
+
     public void edit (Message message, String newText, List<String> list, int flag) throws SQLException {
         if (list!=null) {
             InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
