@@ -403,6 +403,8 @@ public class Bot extends TelegramLongPollingBot {
             editCaption(Lan.enterComment(a.getLanguage()), a.getId(),
                 Integer.parseInt(DataBase.sqlQuery("SELECT image from users where id=" + a.getId(), "image")),
                 simpleMarkUp(Lan.cancelComment(a.getLanguage())));
+                a.setAddress(Lan.addComment(a.getLanguage()));
+                a.setAlert(true);
                 DataBase.sql("update users set comment ='*waiting*' where id = "+a.getId());
         }
         if (cb.contains(Lan.cancelComment(a.getLanguage()))) {
