@@ -62,7 +62,7 @@ public class Bot extends TelegramLongPollingBot {
                     if (m.hasText()) handleIncomingText(update);
                     else if (m.hasAnimation()) handleAnimation(m);
                     else if (m.hasAudio()) handleAudio(m);
-                    else if (m.hasContact()) handleContact(m);
+                    else if (m.hasContact()) handleContact(m, update);
                     else if (m.hasDocument()) handleDocument(m);
                     else if (m.hasPhoto()) handlePhoto(m);
                     else if (m.hasLocation()) handleLocation(update);
@@ -129,7 +129,7 @@ public class Bot extends TelegramLongPollingBot {
 
 
 
-    private void handleContact(Message message) throws SQLException, TelegramApiException {
+    private void handleContact(Message message, Update update) throws SQLException, TelegramApiException {
         if (message.hasText() && !message.hasContact() && message.getText().startsWith("+998")) {
             DataBase.sql("UPDATE users SET phone = " +
                     message.getText() + " WHERE id =" + a.getId());
@@ -171,7 +171,7 @@ public class Bot extends TelegramLongPollingBot {
             }
         } else if (update.getMessage().getText().startsWith("+998")) {
             if (a.getNumber() == null) {
-                handleContact(update.getMessage());
+                handleContact(update.getMessage(), update);
             }
         } else {
             if (waitingForLocation()) {
@@ -1101,8 +1101,8 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
         clearCart(update);
         
         DataBase.sql("update zakaz set conformed = true where userid = " + a.getId());
-        if (update.hasMessage) {
-            sendPic(Lan.welcome(a.getLanguage(), a.getFirstName()),a.getId(),Lan.mainMenu(a.getLanguage()), "Лого", 2);
+        if (update.hasMessage()) {
+            sendPic(Lan.welcome(a.getLanguage(), a.getFirstName()),update.getMessage(),Lan.mainMenu(a.getLanguage()), "Лого", 2);
         }
         editPic(Lan.welcome(a.getLanguage(), a.getFirstName()), a.getId(),
             Integer.parseInt(DataBase.sqlQuery("SELECT image from users where id=" + a.getId(), "image")),
