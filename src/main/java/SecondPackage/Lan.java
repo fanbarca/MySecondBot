@@ -142,7 +142,7 @@ class Lan {
             list.add(emogisList.get(3)+"Erkaklar poyabzali");
             list.add(emogisList.get(4)+"Ayollar aksessuarlari");
             list.add(emogisList.get(5)+"Erkaklar aksessuarlari");
-            list.add(emogisList.get(6)+"Ayollar kosmetikasi");
+            list.add(emogisList.get(6)+"Kosmetika");
             list.add(emogisList.get(7)+"Go'daklar uchun");
             list.add(emogisList.get(8)+"Qizlar uchun");
             list.add(emogisList.get(9)+"O'g'illar uchun");
@@ -154,7 +154,7 @@ class Lan {
             list.add(emogisList.get(3)+"Мужская обувь");
             list.add(emogisList.get(4)+"Женские аксессуары");
             list.add(emogisList.get(5)+"Мужские аксессуары");
-            list.add(emogisList.get(6)+"Женская косметика");
+            list.add(emogisList.get(6)+"Косметика");
             list.add(emogisList.get(7)+"Для малышей");
             list.add(emogisList.get(8)+"Для девочек");
             list.add(emogisList.get(9)+"Для мальчиков");
@@ -166,7 +166,7 @@ class Lan {
             list.add(emogisList.get(3)+"Men's shoes");
             list.add(emogisList.get(4)+"Women's accessories");
             list.add(emogisList.get(5)+"Men's accessories");
-            list.add(emogisList.get(6)+"Women's cosmetics");
+            list.add(emogisList.get(6)+"Cosmetics");
             list.add(emogisList.get(7)+"For toddlers");
             list.add(emogisList.get(8)+"For girls");
             list.add(emogisList.get(9)+"For boys");
