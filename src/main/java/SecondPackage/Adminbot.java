@@ -575,13 +575,16 @@ public List<String> listOrders(String column){
         return lan;
     }
     public String sendMe(String text) throws TelegramApiException, SQLException {
-        SendMessage sendMessage = new SendMessage()
-                .setChatId(DataBase.sqlQuery("select id from users where admin = true", "id"))
+        String chatId = DataBase.sqlQuery("select id from users where admin = true", "id");
+        if (chatId!=null) {
+            SendMessage sendMessage = new SendMessage()
+                .setChatId(chatId)
                 .setText(EmojiParser.parseToUnicode(text))
                 .setParseMode("HTML")
                 .setReplyMarkup(simpleMarkUp("Ok"));
-
-        return execute(sendMessage).getMessageId().toString();
+            return execute(sendMessage).getMessageId().toString();
+        }
+        else return null;
     }
     private InlineKeyboardMarkup simpleMarkUp(String button) {
         InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
