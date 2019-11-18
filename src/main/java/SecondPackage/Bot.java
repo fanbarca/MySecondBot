@@ -140,8 +140,9 @@ public class Bot extends TelegramLongPollingBot {
         a.setNumber(DataBase.sqlGetUserData(message.getChatId().toString()).get(1));
         deleteMessage(DataBase.sqlQuery("SELECT smid from users where id=" + message.getChatId(), "smid"), message.getChatId().toString());
         deleteMessage(message);
-        if (a.getNumber() != null) sendPic(Lan.welcome(a.getLanguage(), message.getFrom().getFirstName()),
-                message, Lan.mainMenu(a.getLanguage()), "Лого", 2);
+        String time = DataBase.sqlQuery("select time from zakaz where userid =" + a.getId(), "time");
+        if (a.getNumber() != null&&time!=null) confirm(update, time); 
+        else sendPic(Lan.welcome(a.getLanguage(), message.getFrom().getFirstName()), message, Lan.mainMenu(a.getLanguage()), "Лого", 2);
     }
 
 
@@ -214,12 +215,7 @@ public class Bot extends TelegramLongPollingBot {
                 DataBase.sql("UPDATE users SET language = 'English' WHERE id =" + a.getId());
                 a.setLanguage("English");
             }
-            if (a.getNumber() == null) {
-                deleteMessage(update.getCallbackQuery().getMessage());
-                sendMeNumber(a.getId());
-            } else {
-                editPic(Lan.welcome(a.getLanguage(), a.getFirstName()), update.getCallbackQuery().getMessage(), Lan.mainMenu(a.getLanguage()), "Лого", 2);
-            }
+            editPic(Lan.welcome(a.getLanguage(), a.getFirstName()), update.getCallbackQuery().getMessage(), Lan.mainMenu(a.getLanguage()), "Лого", 2);
         }
         if (cb.equals(Lan.backToMenu(a.getLanguage()))) {
             editPic(Lan.welcome(a.getLanguage(), a.getFirstName()), update.getCallbackQuery().getMessage(),
@@ -384,7 +380,10 @@ public class Bot extends TelegramLongPollingBot {
         if (cb.contains("OrderTime")) {
             String time = cb.substring(9);
             DataBase.sql("update zakaz set time ='"+time+"' where userid = "+a.getId());
-            confirm(update, time);
+            if (a.getNumber() == null) {
+                deleteMessage(update.getCallbackQuery().getMessage());
+                sendMeNumber(a.getId());
+            } else confirm(update, time);
         }
         if (cb.contains("UseNewLocation")) {
             sendMeLocation(update.getCallbackQuery().getMessage());
@@ -1102,6 +1101,9 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
         clearCart(update);
         
         DataBase.sql("update zakaz set conformed = true where userid = " + a.getId());
+        if (update.hasMessage) {
+            sendPic(Lan.welcome(a.getLanguage(), a.getFirstName()),a.getId(),Lan.mainMenu(a.getLanguage()), "Лого", 2);
+        }
         editPic(Lan.welcome(a.getLanguage(), a.getFirstName()), a.getId(),
             Integer.parseInt(DataBase.sqlQuery("SELECT image from users where id=" + a.getId(), "image")),
             Lan.mainMenu(a.getLanguage()), "Лого", 2);
