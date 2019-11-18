@@ -440,25 +440,16 @@ public class Bot extends TelegramLongPollingBot {
     private void showCatalog(Update update) throws TelegramApiException, SQLException {
         InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
-            List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
-            row.add(new InlineKeyboardButton()
-                    .setText(EmojiParser.parseToUnicode(Lan.listTypes(a.getLanguage()).get(0)))
-                    .setCallbackData(Lan.listTypes(a.getLanguage()).get(0)));
-            row.add(new InlineKeyboardButton()
-                    .setText(EmojiParser.parseToUnicode(Lan.listTypes(a.getLanguage()).get(1)))
-                    .setCallbackData(Lan.listTypes(a.getLanguage()).get(1)));
-            rows.add(row);
-            List<InlineKeyboardButton> row2 = new ArrayList<InlineKeyboardButton>();
-            row2.add(new InlineKeyboardButton()
-                    .setText(EmojiParser.parseToUnicode(Lan.listTypes(a.getLanguage()).get(2)))
-                    .setCallbackData(Lan.listTypes(a.getLanguage()).get(2)));
-            row2.add(new InlineKeyboardButton()
-                    .setText(EmojiParser.parseToUnicode(Lan.listTypes(a.getLanguage()).get(3)))
-                    .setCallbackData(Lan.listTypes(a.getLanguage()).get(3)));
-            row2.add(new InlineKeyboardButton()
-                    .setText(EmojiParser.parseToUnicode(Lan.listTypes(a.getLanguage()).get(4)))
-                    .setCallbackData(Lan.listTypes(a.getLanguage()).get(4)));
-            rows.add(row2);
+            for (int i = 0 ; i<Lan.listTypes(a.getLanguage()).size(); i++) {
+                List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
+                row.add(new InlineKeyboardButton()
+                        .setText(EmojiParser.parseToUnicode(Lan.listTypes(a.getLanguage()).get(i)))
+                        .setCallbackData(Lan.listTypes(a.getLanguage()).get(i)));
+                if (i+1<Lan.listTypes(a.getLanguage()).size()) row.add(new InlineKeyboardButton()
+                        .setText(EmojiParser.parseToUnicode(Lan.listTypes(a.getLanguage()).get(i+1)))
+                        .setCallbackData(Lan.listTypes(a.getLanguage()).get(i+1)));
+                rows.add(row);
+            }
             
         markup.setKeyboard(rows);
          
