@@ -253,12 +253,13 @@ public class Bot extends TelegramLongPollingBot {
         }
         for (int i=0; i<Lan.listTypes(a.getLanguage()).size(); i++) {
             if (cb.equals(Lan.listTypes(a.getLanguage()).get(i))) {
-                editPic(Lan.listTypes(a.getLanguage()).get(i), update.getCallbackQuery().getMessage(), Lan.listSubTypes(a.getLanguage()),"Лого", 1);            
+                showSubCat(update, i, Lan.listSubTypes(a.getLanguage()));
             }
         }
         for (int i=0; i<Lan.listSubTypes(a.getLanguage()).size(); i++) {
-            if (cb.equals(Lan.listSubTypes(a.getLanguage()).get(i))&&!cb.equals(Lan.goBack(a.getLanguage()))) {
-                editPicItems(String.valueOf(Lan.listTypes(a.getLanguage()).indexOf(update.getCallbackQuery().getMessage().getCaption())), String.valueOf(i), update.getCallbackQuery().getMessage(), "Лого");
+            if (cb.contains(Lan.listSubTypes(a.getLanguage()).get(i))&&!cb.contains(Lan.goBack(a.getLanguage()))) {
+                editPicItems(cb.substring(0,1), 
+                String.valueOf(i), update.getCallbackQuery().getMessage(), "Лого");
             }
         }
         for (String name : DataBase.showAllProducts(a.getLanguage(), false)) {
@@ -429,6 +430,30 @@ public class Bot extends TelegramLongPollingBot {
     }
 
     
+
+
+
+
+
+
+
+    private void showSubCat(Update update, int i, List<String> list) throws TelegramApiException, SQLException {
+        InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
+        List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
+            List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
+            for (String sub:list) {
+            row.add(new InlineKeyboardButton()
+                    .setText(EmojiParser.parseToUnicode(sub))
+                    .setCallbackData(i+"category"+sub));
+            rows.add(row);
+            }
+        markup.setKeyboard(rows);
+        editPic(Lan.listTypes(a.getLanguage()).get(i), "Лого", 
+        update.getCallbackQuery().getMessage(), markup);
+    }
+
+
+
 
 
 
