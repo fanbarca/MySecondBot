@@ -14,15 +14,15 @@ class Lan {
 
     public static String welcome(String lan, String name){
         String r="";
-        String emoji = "\n:red_car::pizza::poultry_leg::hamburger:";
+        String emoji = "\n:bowtie:";
         if (lan.equals("Uzbek")) r = toLatinTrans.transliterate(name)+", \n" +
-                "tayyor ovqat yetkazib berish xizmatiga xush kelibsiz!" +
+                "Xush kelibsiz!" +
                 emoji;
         else if (lan.equals("Russian")) r = toCyrilTrans.transliterate(name)+", \n" +
-                "Добро пожаловать в службу доставки готовых блюд!" +
+                "Добро пожаловать!" +
                 emoji;
         else if (lan.equals("English")) r = toLatinTrans.transliterate(name)+", \n" +
-                "Welcome to ready meal delivery service!"+
+                "Welcome!"+
                 emoji;
         return r;
     }
@@ -123,6 +123,46 @@ class Lan {
         return r;
     }
     public static List<String> listTypes(String lan){
+        List<String> list = new ArrayList<>();
+        if (lan.equals("Uzbek")) {
+            list.add(emogisList().get(0)+"Liboslar");
+            list.add(emogisList().get(1)+"Ustki kiyim");
+            list.add(emogisList().get(2)+"Bluzkalar va tunikalar");
+            list.add(emogisList().get(3)+"Shimlar va jinsilar");
+            list.add(emogisList().get(4)+"Kardiganlar va sviterlar");
+            list.add(emogisList().get(5)+"Pidjaklar va kostyumlar");
+            list.add(emogisList().get(6)+"Suzish va cho'milish kiyimi");
+            list.add(emogisList().get(7)+"Futbolkalar va toplar");
+            list.add(emogisList().get(8)+"Yubkalar va shortilar");
+            list.add(emogisList().get(9)+"Ichki kiyim");
+        }
+        else if (lan.equals("Russian")) {
+            list.add(emogisList().get(0)+"Платья");
+            list.add(emogisList().get(1)+"Верхняя одежда");
+            list.add(emogisList().get(2)+"Блузки и туники");
+            list.add(emogisList().get(3)+"Брюки и джинсы");
+            list.add(emogisList().get(4)+"Кардиганы и свитеры");
+            list.add(emogisList().get(5)+"Жакеты и костюмы");
+            list.add(emogisList().get(6)+"Купальники и пляжная одежда");
+            list.add(emogisList().get(7)+"Футболки и топы");
+            list.add(emogisList().get(8)+"Юбки и шорты");
+            list.add(emogisList().get(9)+"Белье");
+        }
+        else if (lan.equals("English")) {
+            list.add(emogisList().get(0)+"Dresses");
+            list.add(emogisList().get(1)+"Outerwear");
+            list.add(emogisList().get(2)+"Blouses and tunics");
+            list.add(emogisList().get(3)+"Pants and jeans");
+            list.add(emogisList().get(4)+"Cardigans and sweaters");
+            list.add(emogisList().get(5)+"Jackets and suits");
+            list.add(emogisList().get(6)+"Swimwear and beachwear");
+            list.add(emogisList().get(7)+"T-shirts and tops");
+            list.add(emogisList().get(8)+"Skirts and shorts");
+            list.add(emogisList().get(9)+"Lingerie");
+        }
+        return list;
+    }
+    public static List<String> listShoes(String lan){
         List<String> list = new ArrayList<>();
         if (lan.equals("Uzbek")) {
             list.add(emogisList().get(0)+"Liboslar");
