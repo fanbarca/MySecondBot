@@ -440,7 +440,7 @@ public class Bot extends TelegramLongPollingBot {
     private void showCatalog(Update update) throws TelegramApiException, SQLException {
         InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
-            for (int i = 0 ; i<Lan.listTypes(a.getLanguage()).size(); i++) {
+            for (int i = 0 ; i<Lan.listTypes(a.getLanguage()).size(); i+=2) {
                 List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
                 row.add(new InlineKeyboardButton()
                         .setText(EmojiParser.parseToUnicode(Lan.listTypes(a.getLanguage()).get(i)))

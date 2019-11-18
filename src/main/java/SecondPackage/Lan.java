@@ -128,7 +128,7 @@ class Lan {
                 emogisList.add(":necktie:");
                 emogisList.add(":high_heel:");
                 emogisList.add(":mans_shoe:");
-                emogisList.add(":womans_hat:");
+                emogisList.add(":purse:");
                 emogisList.add(":briefcase:");
                 emogisList.add(":lipstick:");
                 emogisList.add(":baby_bottle:");
