@@ -299,7 +299,6 @@ public class Adminbot extends TelegramLongPollingBot {
                         "\n\nТекущее значение = "+now+
                         "\n\nВведите новое значение: ", 1, simpleMarkUp("Назад"));
                         answer.setShowAlert(false).setText("Введите новое значение");
-
                     }
                 }
             }
@@ -312,6 +311,7 @@ public class Adminbot extends TelegramLongPollingBot {
                     deleteMessage(update.getCallbackQuery().getMessage());
                 } else if (cb.equals("Назад")) {
                     if (update.getCallbackQuery().getMessage().hasLocation()) {
+                        listener = "";
                         deleteMessage(update.getCallbackQuery().getMessage());
                         send("Выберите действие", id, mainKeyboard(null), true, 1);
                     } else {

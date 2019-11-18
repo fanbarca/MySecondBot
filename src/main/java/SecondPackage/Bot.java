@@ -232,7 +232,7 @@ public class Bot extends TelegramLongPollingBot {
             if ((a.getLanguage() == null) || (a.getLanguage().equals(""))) {
                 chooseLanguage(update.getCallbackQuery().getMessage(), true);
             } else {
-                editPic(Lan.chooseDish(a.getLanguage()), update.getCallbackQuery().getMessage(), Lan.listTypes(a.getLanguage()), "Лого", 3);
+                editPic(Lan.chooseDish(a.getLanguage()), update.getCallbackQuery().getMessage(), Lan.listTypes(a.getLanguage()), "Лого", 2);
             }
         } else if (cb.equals(Lan.mainMenu("Uzbek").get(1)) ||
                 cb.equals(Lan.mainMenu("Russian").get(1)) ||

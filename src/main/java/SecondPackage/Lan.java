@@ -29,19 +29,19 @@ class Lan {
     public static List<String> mainMenu(String lan){
         List<String> menu = new ArrayList<String>();
             if (lan.equals("Uzbek")) {
-                menu.add(":notebook_with_decorative_cover: Menyu");
+                menu.add(":notebook_with_decorative_cover: Katalog");
                 menu.add(":truck: Buyurtma");
                 menu.add(":uz: Til");
                 menu.add("🛒 Savatcha");
             }
             else if (lan.equals("Russian")) {
-                menu.add(":notebook_with_decorative_cover: Меню");
+                menu.add(":notebook_with_decorative_cover: Каталог");
                 menu.add(":truck: Мой заказ");
                 menu.add(":ru: Язык");
                 menu.add("🛒 Корзина");
             }
             else if (lan.equals("English")) {
-                menu.add(":notebook_with_decorative_cover: Menu");
+                menu.add(":notebook_with_decorative_cover: Catalog");
                 menu.add(":truck: My order");
                 menu.add(":gb: Language");
                 menu.add("🛒 Shopping cart");
@@ -125,58 +125,62 @@ class Lan {
     public static List<String> listTypes(String lan){
         List<String> list = new ArrayList<>();
         if (lan.equals("Uzbek")) {
-            list.add(emogisList().get(0)+"Salatlar");
-            list.add(emogisList().get(1)+"Suyuq ovqatlar");
-            list.add(emogisList().get(2)+"Asosiy taomlar");
-            list.add(emogisList().get(3)+"Ichimliklar");
-            list.add(emogisList().get(4)+"Shirinliklar");
-            list.add(emogisList().get(5)+"Fastfud");
-            list.add(emogisList().get(6)+"Pitsa");
-            list.add(emogisList().get(7)+"Shashlik");
-            list.add(emogisList().get(8)+"Boshqa");
+            list.add(emogisList().get(0)+"Liboslar");
+            list.add(emogisList().get(1)+"Ustki kiyim");
+            list.add(emogisList().get(2)+"Bluzkalar va tunikalar");
+            list.add(emogisList().get(3)+"Shimlar va jinsilar");
+            list.add(emogisList().get(4)+"Kardiganlar va sviterlar");
+            list.add(emogisList().get(5)+"Pidjaklar va kostyumlar");
+            list.add(emogisList().get(6)+"Suzish va cho'milish kiyimi");
+            list.add(emogisList().get(7)+"Futbolkalar va toplar");
+            list.add(emogisList().get(8)+"Yubkalar va shortilar");
+            list.add(emogisList().get(9)+"Ichki kiyim");
         }
         else if (lan.equals("Russian")) {
-            list.add(emogisList().get(0)+"Салаты");
-            list.add(emogisList().get(1)+"Первое");
-            list.add(emogisList().get(2)+"Второе");
-            list.add(emogisList().get(3)+"Напитки");
-            list.add(emogisList().get(4)+"Десерт");
-            list.add(emogisList().get(5)+"Фастфуд");
-            list.add(emogisList().get(6)+"Пицца");
-            list.add(emogisList().get(7)+"Шашлык");
-            list.add(emogisList().get(8)+"Другое");
+            list.add(emogisList().get(0)+"Платья");
+            list.add(emogisList().get(1)+"Верхняя одежда");
+            list.add(emogisList().get(2)+"Блузки и туники");
+            list.add(emogisList().get(3)+"Брюки и джинсы");
+            list.add(emogisList().get(4)+"Кардиганы и свитеры");
+            list.add(emogisList().get(5)+"Жакеты и костюмы");
+            list.add(emogisList().get(6)+"Купальники и пляжная одежда");
+            list.add(emogisList().get(7)+"Футболки и топы");
+            list.add(emogisList().get(8)+"Юбки и шорты");
+            list.add(emogisList().get(9)+"Белье");
         }
         else if (lan.equals("English")) {
-            list.add(emogisList().get(0)+"Salads");
-            list.add(emogisList().get(1)+"Entrees");
-            list.add(emogisList().get(2)+"Main courses");
-            list.add(emogisList().get(3)+"Beverages");
-            list.add(emogisList().get(4)+"Dessert");
-            list.add(emogisList().get(5)+"Fast food");
-            list.add(emogisList().get(6)+"Pizza");
-            list.add(emogisList().get(7)+"Barbecue");
-            list.add(emogisList().get(8)+"Other");
+            list.add(emogisList().get(0)+"Dresses");
+            list.add(emogisList().get(1)+"Outerwear");
+            list.add(emogisList().get(2)+"Blouses and tunics");
+            list.add(emogisList().get(3)+"Pants and jeans");
+            list.add(emogisList().get(4)+"Cardigans and sweaters");
+            list.add(emogisList().get(5)+"Jackets and suits");
+            list.add(emogisList().get(6)+"Swimwear and beachwear");
+            list.add(emogisList().get(7)+"T-shirts and tops");
+            list.add(emogisList().get(8)+"Skirts and shorts");
+            list.add(emogisList().get(9)+"Lingerie");
         }
         return list;
     }
     public static List<String> emogisList(){
         List<String> list = new ArrayList<>();
-                list.add("🥗");
-                list.add(":stew:");
-                list.add(":spaghetti:");
-                list.add(":coffee:");
-                list.add(":cake:");
-                list.add(":hamburger:");
-                list.add(":pizza:");
-                list.add(":meat_on_bone:");
-                list.add(":bread:");
+                list.add("👗");
+                list.add("🧥");
+                list.add("👚");
+                list.add("👖");
+                list.add(":womans_clothes:");
+                list.add(":necktie:");
+                list.add(":bikini:");
+                list.add("👕");
+                list.add("🩳");
+                list.add("🩲");
         return list;
     }
     public static String goBack(String lan) {
         String r="";
-        if (lan.equals("Uzbek")) r = ":book: Menyuga qaytish";
-        else if (lan.equals("Russian")) r = ":book: Назад в меню";
-        else if (lan.equals("English")) r = ":book: Back to menu";
+        if (lan.equals("Uzbek")) r = ":book: Katalogga qaytish";
+        else if (lan.equals("Russian")) r = ":book: Назад в каталог";
+        else if (lan.equals("English")) r = ":book: Back to catalog";
         return r;
         }
         public static String backToMenu(String lan) {
