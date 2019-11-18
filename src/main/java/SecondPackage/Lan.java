@@ -124,67 +124,59 @@ class Lan {
     }
     public static List<String> listTypes(String lan){
         List<String> emogisList = new ArrayList<>();
-                emogisList.add(":woman:");
-                emogisList.add(":man:");
-                emogisList.add(":girl:");
-                emogisList.add(":boy:");
-                emogisList.add(":baby:");
-        List<String> list = new ArrayList<>();
-        if (lan.equals("Uzbek")) {
-            list.add(emogisList.get(0)+"Ayollarga");
-            list.add(emogisList.get(1)+"Erkaklarga");
-            list.add(emogisList.get(2)+"Qizlarga");
-            list.add(emogisList.get(3)+"O'g'illarga");
-            list.add(emogisList.get(4)+"Go'daklarga");
-        }
-        else if (lan.equals("Russian")) {
-            list.add(emogisList.get(0)+"Женщинам");
-            list.add(emogisList.get(1)+"Мужчинам");
-            list.add(emogisList.get(2)+"Девочкам");
-            list.add(emogisList.get(3)+"Мальчикам");
-            list.add(emogisList.get(4)+"Малышам");
-        }
-        else if (lan.equals("English")) {
-            list.add(emogisList.get(0)+"For women");
-            list.add(emogisList.get(1)+"For men");
-            list.add(emogisList.get(2)+"For girls");
-            list.add(emogisList.get(3)+"For boys");
-            list.add(emogisList.get(4)+"For toddlers");
-        }
-        return list;
-    }
-
-
-public static List<String> listSubTypes(String lan){
-        List<String> emogisList = new ArrayList<>();
-                emogisList.add(":tshirt:");
-                emogisList.add(":shoe:");
-                emogisList.add(":handbag:");
+                emogisList.add(":dress:");
+                emogisList.add(":necktie:");
+                emogisList.add(":high_heel:");
+                emogisList.add(":mans_shoe:");
+                emogisList.add(":womans_hat:");
+                emogisList.add(":briefcase:");
                 emogisList.add(":lipstick:");
+                emogisList.add(":baby_bottle:");
+                emogisList.add(":ribbon:");
+                emogisList.add(":tshirt:");
         List<String> list = new ArrayList<>();
         if (lan.equals("Uzbek")) {
-            list.add(emogisList.get(0)+"Kiyim-kechak");
-            list.add(emogisList.get(1)+"Poyabzal");
-            list.add(emogisList.get(2)+"Aksessuarlar");
-            list.add(emogisList.get(3)+"Kosmetika");
+            list.add(emogisList.get(0)+"Ayollar kiyimi");
+            list.add(emogisList.get(1)+"Erkaklar kiyimi");
+            list.add(emogisList.get(2)+"Ayollar poyabzali");
+            list.add(emogisList.get(3)+"Erkaklar poyabzali");
+            list.add(emogisList.get(4)+"Ayollar aksessuarlari");
+            list.add(emogisList.get(5)+"Erkaklar aksessuarlari");
+            list.add(emogisList.get(6)+"Ayollar kosmetikasi");
+            list.add(emogisList.get(7)+"Go'daklar uchun");
+            list.add(emogisList.get(8)+"Qizlar uchun");
+            list.add(emogisList.get(9)+"O'g'illar uchun");
         }
         else if (lan.equals("Russian")) {
-            list.add(emogisList.get(0)+"Одежда");
-            list.add(emogisList.get(1)+"Обувь");
-            list.add(emogisList.get(2)+"Аксессуары");
-            list.add(emogisList.get(3)+"Косметика");
+            list.add(emogisList.get(0)+"Женская одежда");
+            list.add(emogisList.get(1)+"Мужская одежда");
+            list.add(emogisList.get(2)+"Женская обувь");
+            list.add(emogisList.get(3)+"Мужская обувь");
+            list.add(emogisList.get(4)+"Женские аксессуары");
+            list.add(emogisList.get(5)+"Мужские аксессуары");
+            list.add(emogisList.get(6)+"Женская косметика");
+            list.add(emogisList.get(7)+"Для малышей");
+            list.add(emogisList.get(8)+"Для девочек");
+            list.add(emogisList.get(9)+"Для мальчиков");
         }
         else if (lan.equals("English")) {
-            list.add(emogisList.get(0)+"Clothes");
-            list.add(emogisList.get(1)+"Footwear");
-            list.add(emogisList.get(2)+"Accessories");
-            list.add(emogisList.get(3)+"Cosmetics");
+            list.add(emogisList.get(0)+"Women's clothes");
+            list.add(emogisList.get(1)+"Men's clothes");
+            list.add(emogisList.get(2)+"Women's shoes");
+            list.add(emogisList.get(3)+"Men's shoes");
+            list.add(emogisList.get(4)+"Women's accessories");
+            list.add(emogisList.get(5)+"Men's accessories");
+            list.add(emogisList.get(6)+"Women's cosmetics");
+            list.add(emogisList.get(7)+"For toddlers");
+            list.add(emogisList.get(8)+"For girls");
+            list.add(emogisList.get(9)+"For boys");
         }
-        list.add(goBack(lan));
         return list;
     }
 
-    public static List<String> listShoes(String lan){
+
+
+    public static List<String> listSubTypes(String lan){
         List<String> list = new ArrayList<>();
         if (lan.equals("Uzbek")) {
             list.add("Liboslar");
