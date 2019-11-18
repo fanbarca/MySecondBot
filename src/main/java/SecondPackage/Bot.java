@@ -142,7 +142,7 @@ public class Bot extends TelegramLongPollingBot {
         deleteMessage(message);
         String time = DataBase.sqlQuery("select time from zakaz where userid =" + a.getId(), "time");
         if (a.getNumber() != null&&time!=null) confirm(update, time); 
-        else sendPic(Lan.welcome(a.getLanguage(), message.getFrom().getFirstName()), message, Lan.mainMenu(a.getLanguage()), "Лого", 2);
+        else sendPic(Lan.orderPlaced(a.getLanguage()), message, Lan.mainMenu(a.getLanguage()), "Лого", 2);
     }
 
 
@@ -252,9 +252,12 @@ public class Bot extends TelegramLongPollingBot {
             }
         }
         for (int i=0; i<Lan.listTypes(a.getLanguage()).size(); i++) {
-            if (cb.equals(Lan.listTypes(a.getLanguage()).get(i)) && !cb.equals(Lan.backToMenu(a.getLanguage()))) {
-                editPicItems(String.valueOf(i), update.getCallbackQuery().getMessage(), "Лого");
+            if (cb.equals(Lan.listTypes(a.getLanguage()).get(i))) {
+                editPic(Lan.listTypes(a.getLanguage()).get(i), update.getCallbackQuery().getMessage(), Lan.listSubTypes(a.getLanguage()),"Лого", 1);            
             }
+            // if (cb.equals(Lan.listTypes(a.getLanguage()).get(i))) {
+            //     editPicItems(String.valueOf(i), update.getCallbackQuery().getMessage(), "Лого");
+            // }
         }
         for (String name : DataBase.showAllProducts(a.getLanguage(), false)) {
             String userid = a.getId();
@@ -457,9 +460,8 @@ public class Bot extends TelegramLongPollingBot {
         int occurrences = occurrences(prodId, userid);
         String balls = "";
         String emoji = DataBase.sqlQuery("select emoji from table0 where id = "+prodId, "emoji");
-        int type = Integer.parseInt(DataBase.sqlQuery("select type from table0 where id =" + prodId + "", "type"));
         for (int i = 0; i<occurrences; i++){
-            balls += emoji==null?Lan.emogisList().get(type):emoji;
+            balls += emoji==null?":large_blue_circle:":emoji;
         }
         return "<b>" + DataBase.sqlQuery("select "+ a.getLanguage() + " from table0 where id=" + prodId + "", a.getLanguage()) + "</b>\n"+
                             "<i>"+DataBase.sqlQuery("select "+a.getLanguage()+"description from table0 where id =" +prodId, a.getLanguage()+"description")+"</i>\n\n"
@@ -1517,9 +1519,7 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
             List<Integer> aa = new ArrayList<>();
             aa.add(number);
             aa.add(cost);
-            String emoji = DataBase.sqlQuery("select emoji from table0 where id =" + s, "emoji");
-            int type = Integer.parseInt(DataBase.sqlQuery("select type from table0 where id =" + s, "type"));
-            itemNames.put((emoji==null?Lan.emogisList().get(type):emoji)+DataBase.sqlQuery("select "+a.getLanguage()+" from table0 where id =" + s, a.getLanguage()),
+            itemNames.put(DataBase.sqlQuery("select "+a.getLanguage()+" from table0 where id =" + s, a.getLanguage()),
                     aa);
         }
         List<String> list = new ArrayList<>();
