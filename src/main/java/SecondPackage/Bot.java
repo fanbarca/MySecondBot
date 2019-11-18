@@ -228,7 +228,7 @@ public class Bot extends TelegramLongPollingBot {
             if ((a.getLanguage() == null) || (a.getLanguage().equals(""))) {
                 chooseLanguage(update.getCallbackQuery().getMessage(), true);
             } else {
-                editPic(Lan.chooseDish(a.getLanguage()), update.getCallbackQuery().getMessage(), Lan.listTypes(a.getLanguage()), "Лого", 2);
+                showCatalog(update);
             }
         } else if (cb.equals(Lan.mainMenu("Uzbek").get(1)) ||
                 cb.equals(Lan.mainMenu("Russian").get(1)) ||
@@ -253,7 +253,7 @@ public class Bot extends TelegramLongPollingBot {
         }
         for (int i=0; i<Lan.listTypes(a.getLanguage()).size(); i++) {
             if (cb.equals(Lan.listTypes(a.getLanguage()).get(i))) {
-                showSubCat(update, i, Lan.listSubTypes(a.getLanguage()));
+                showSubCat(update, i);
             }
         }
         for (int i=0; i<Lan.listSubTypes(a.getLanguage()).size(); i++) {
@@ -437,15 +437,53 @@ public class Bot extends TelegramLongPollingBot {
 
 
 
-    private void showSubCat(Update update, int i, List<String> list) throws TelegramApiException, SQLException {
+    private void showCatalog(Update update) throws TelegramApiException, SQLException {
         InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
             List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
-            for (String sub:list) {
+            row.add(new InlineKeyboardButton()
+                    .setText(EmojiParser.parseToUnicode(Lan.listTypes(a.getLanguage()).get(0)))
+                    .setCallbackData(Lan.listTypes(a.getLanguage()).get(0)));
+            row.add(new InlineKeyboardButton()
+                    .setText(EmojiParser.parseToUnicode(Lan.listTypes(a.getLanguage()).get(1)))
+                    .setCallbackData(Lan.listTypes(a.getLanguage()).get(1)));
+            rows.add(row);
+            List<InlineKeyboardButton> row2 = new ArrayList<InlineKeyboardButton>();
+            row2.add(new InlineKeyboardButton()
+                    .setText(EmojiParser.parseToUnicode(Lan.listTypes(a.getLanguage()).get(2)))
+                    .setCallbackData(Lan.listTypes(a.getLanguage()).get(2)));
+            row2.add(new InlineKeyboardButton()
+                    .setText(EmojiParser.parseToUnicode(Lan.listTypes(a.getLanguage()).get(3)))
+                    .setCallbackData(Lan.listTypes(a.getLanguage()).get(3)));
+            row2.add(new InlineKeyboardButton()
+                    .setText(EmojiParser.parseToUnicode(Lan.listTypes(a.getLanguage()).get(4)))
+                    .setCallbackData(Lan.listTypes(a.getLanguage()).get(4)));
+            rows.add(row2);
+            
+        markup.setKeyboard(rows);
+         
+        editPic(Lan.chooseDish(a.getLanguage()),"Лого", update.getCallbackQuery().getMessage(), markup);
+    }
+
+
+
+
+
+
+
+
+
+
+
+    private void showSubCat(Update update, int i) throws TelegramApiException, SQLException {
+        InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
+        List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
+            for (String sub:Lan.listSubTypes(a.getLanguage())) {
+            List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
             row.add(new InlineKeyboardButton()
                     .setText(EmojiParser.parseToUnicode(sub))
                     .setCallbackData(i+"category"+sub));
-            rows.add(row);
+                    rows.add(row);
             }
         markup.setKeyboard(rows);
         editPic(Lan.listTypes(a.getLanguage()).get(i), "Лого", 
