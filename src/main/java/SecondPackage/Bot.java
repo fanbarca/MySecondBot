@@ -255,12 +255,15 @@ public class Bot extends TelegramLongPollingBot {
             if (cb.equals(Lan.listTypes(a.getLanguage()).get(i))) {
                 editPic(Lan.listTypes(a.getLanguage()).get(i), update.getCallbackQuery().getMessage(), Lan.listSubTypes(a.getLanguage()),"Лого", 1);            
             }
-            // if (cb.equals(Lan.listTypes(a.getLanguage()).get(i))) {
-            //     editPicItems(String.valueOf(i), update.getCallbackQuery().getMessage(), "Лого");
-            // }
+        }
+        for (int i=0; i<Lan.listSubTypes(a.getLanguage()).size(); i++) {
+            if (cb.equals(Lan.listSubTypes(a.getLanguage()).get(i))) {
+                editPicItems(String.valueOf(Lan.listTypes(a.getLanguage()).indexOf(update.getCallbackQuery().getMessage().getCaption())), String.valueOf(i), update.getCallbackQuery().getMessage(), "Лого");
+            }
         }
         for (String name : DataBase.showAllProducts(a.getLanguage(), false)) {
             String userid = a.getId();
+            String subType = "";
             String prodId = DataBase.sqlQuery("select id from table0 where " + a.getLanguage() + " ='" + name + "'", "id");
             String type = DataBase.sqlQuery("select type from table0 where " + a.getLanguage() + " ='" + name + "'", "type");
             if (cb.contains(prodId)||cb.contains(name)) {
@@ -276,7 +279,7 @@ public class Bot extends TelegramLongPollingBot {
                         a.setAddress(Lan.removed(a.getLanguage()));
                         a.setAlert(false);
                     }
-                    editPicItems(type, update.getCallbackQuery().getMessage(), "Лого");
+                    editPicItems(type, subType, update.getCallbackQuery().getMessage(), "Лого");
                 } else if (cb.contains(Lan.removeFromCart(a.getLanguage()))
                         || cb.contains(Lan.addToCart(a.getLanguage()))
                         || cb.contains(Lan.addMore(a.getLanguage()))) {
@@ -639,8 +642,8 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
 
 
 
-    public void editPicItems(String typeID, Message message,String productId) throws TelegramApiException, SQLException {
-        List<String> listID = DataBase.sqlQueryList("select id from table0 where instock = true and type = '"+typeID +"'", "id");
+    public void editPicItems(String typeID, String subTypeID, Message message,String productId) throws TelegramApiException, SQLException {
+        List<String> listID = DataBase.sqlQueryList("select id from table0 where instock = true and type = '"+typeID +"' and subtype = '"+subTypeID +"'", "id");
         if (listID.size() != 0) {
             String file_id;
             if (productId.equals("Лого"))

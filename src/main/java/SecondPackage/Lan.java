@@ -14,7 +14,7 @@ class Lan {
 
     public static String welcome(String lan, String name){
         String r="";
-        String emoji = "\n:bowtie:";
+        String emoji = "\n:handbag:";
         if (lan.equals("Uzbek")) r = toLatinTrans.transliterate(name)+", \n" +
                 "Xush kelibsiz!" +
                 emoji;
@@ -89,9 +89,9 @@ class Lan {
     }
     public static String chooseDish(String lan){
         String r="";
-        if (lan.equals("Uzbek")) r = "Nima buyurtma berishni istaysiz? ";
-        else if (lan.equals("Russian")) r = "Что желаете заказать?";
-        else if (lan.equals("English")) r = "What would you like to order?";
+        if (lan.equals("Uzbek")) r = "Bo'limni tanlang";
+        else if (lan.equals("Russian")) r = "Выберите раздел";
+        else if (lan.equals("English")) r = "Select a section";
         return r;
     }
     public static String emptyOrders(String lan) {
@@ -180,6 +180,7 @@ public static List<String> listSubTypes(String lan){
             list.add(emogisList.get(2)+"Accessories");
             list.add(emogisList.get(3)+"Cosmetics");
         }
+        list.add(goBack(lan));
         return list;
     }
 
