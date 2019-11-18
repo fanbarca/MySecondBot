@@ -576,7 +576,7 @@ public List<String> listOrders(String column){
     }
     public String sendMe(String text) throws TelegramApiException, SQLException {
         String chatId = DataBase.sqlQuery("select id from users where admin = true", "id");
-        if (chatId!=null) {
+        if (chatId!=null&&!chatId.equals("")) {
             SendMessage sendMessage = new SendMessage()
                 .setChatId(chatId)
                 .setText(EmojiParser.parseToUnicode(text))
