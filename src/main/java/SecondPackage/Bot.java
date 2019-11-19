@@ -474,19 +474,19 @@ public class Bot extends TelegramLongPollingBot {
         String condition = "";
         switch (i) {
             case 0:
-            condition = "clothes = true";
+            condition = "clothes = true and female = true";
             break;
             case 1:
             condition = "clothes = true and male = true";
             break;
             case 2:
-            condition = "shoes = true";
+            condition = "shoes = true and female = true";
             break;
             case 3:
             condition = "shoes = true and male = true";
             break;
             case 4:
-            condition = "accessories = true";
+            condition = "accessories = true and female = true";
             break;
             case 5:
             condition = "accessories = true and male = true";
@@ -498,7 +498,7 @@ public class Bot extends TelegramLongPollingBot {
             condition = "toddlers = true";
             break;
             case 8:
-            condition = "kids = true";
+            condition = "kids = true and female = true";
             break;
             case 9:
             condition = "kids = true and male = true";

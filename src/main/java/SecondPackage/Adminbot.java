@@ -110,6 +110,7 @@ public class Adminbot extends TelegramLongPollingBot {
                             columns.add("Kids");
                             columns.add("Cosmetics");
                             columns.add("Toddlers");
+                            columns.add("Female");
         return columns;
     }
 
