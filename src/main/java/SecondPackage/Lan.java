@@ -179,40 +179,70 @@ class Lan {
     public static List<String> listSubTypes(String lan){
         List<String> list = new ArrayList<>();
         if (lan.equals("Uzbek")) {
-            list.add("Liboslar");
-            list.add("Ustki kiyim");
-            list.add("Bluzkalar va tunikalar");
-            list.add("Shimlar va jinsilar");
-            list.add("Kardiganlar va sviterlar");
-            list.add("Pidjaklar va kostyumlar");
-            list.add("Suzish va cho'milish kiyimi");
-            list.add("Futbolkalar va toplar");
-            list.add("Yubkalar va shortilar");
-            list.add("Ichki kiyim");
+            list.add("Верхняя одежда");
+            list.add("Пуловеры");
+            list.add("Брюки и джинсы");
+            list.add("Пиджаки");
+            list.add("Рубашки");
+            list.add("Футболки");
+            list.add("Белье");
+            list.add("Майки");
+            list.add("Шорты");
+            list.add("Джемперы");
+            list.add("Платья");
+            list.add("Блузки");
+            list.add("Кардиганы");
+            list.add("Жакеты");
+            list.add("Купальники и пляжная одежда");
+            list.add("Юбки");
+            list.add("Свитеры");
+            list.add("Туники");
+            list.add("Костюмы");
+            list.add("Топы");
         }
         else if (lan.equals("Russian")) {
-            list.add("Платья");
             list.add("Верхняя одежда");
-            list.add("Блузки и туники");
+            list.add("Пуловеры");
             list.add("Брюки и джинсы");
-            list.add("Кардиганы и свитеры");
-            list.add("Жакеты и костюмы");
-            list.add("Купальники и пляжная одежда");
-            list.add("Футболки и топы");
-            list.add("Юбки и шорты");
+            list.add("Пиджаки");
+            list.add("Рубашки");
+            list.add("Футболки");
             list.add("Белье");
+            list.add("Майки");
+            list.add("Шорты");
+            list.add("Джемперы");
+            list.add("Платья");
+            list.add("Блузки");
+            list.add("Кардиганы");
+            list.add("Жакеты");
+            list.add("Купальники и пляжная одежда");
+            list.add("Юбки");
+            list.add("Свитеры");
+            list.add("Туники");
+            list.add("Костюмы");
+            list.add("Топы");
         }
         else if (lan.equals("English")) {
-            list.add("Dresses");
-            list.add("Outerwear");
-            list.add("Blouses and tunics");
-            list.add("Pants and jeans");
-            list.add("Cardigans and sweaters");
-            list.add("Jackets and suits");
-            list.add("Swimwear and beachwear");
-            list.add("T-shirts and tops");
-            list.add("Skirts and shorts");
-            list.add("Lingerie");
+            list.add("Верхняя одежда");
+            list.add("Пуловеры");
+            list.add("Брюки и джинсы");
+            list.add("Пиджаки");
+            list.add("Рубашки");
+            list.add("Футболки");
+            list.add("Белье");
+            list.add("Майки");
+            list.add("Шорты");
+            list.add("Джемперы");
+            list.add("Платья");
+            list.add("Блузки");
+            list.add("Кардиганы");
+            list.add("Жакеты");
+            list.add("Купальники и пляжная одежда");
+            list.add("Юбки");
+            list.add("Свитеры");
+            list.add("Туники");
+            list.add("Костюмы");
+            list.add("Топы");
         }
         return list;
     }
