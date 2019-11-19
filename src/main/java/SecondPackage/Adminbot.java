@@ -232,8 +232,25 @@ public class Adminbot extends TelegramLongPollingBot {
                         DataBase.sql("UPDATE types SET "+column+" = not "+column+" where russian = '"+russian+"'");
                     edit(update.getCallbackQuery().getMessage(), russian+"\nУкажите критерии", updateMarkup());
                 }
+                if (cb.contains("category")) {
+                    russian = cb.substring(8);
+                    edit(update.getCallbackQuery().getMessage(), russian+"\nУкажите критерии", updateMarkup());
+                }
             
-
+            if(cb.equals("Обновить категорию")) {
+                InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
+                    List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
+                    for (String s:DataBase.sqlQueryList("select russian from types", "russian")) {
+                        List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
+                        row.add(new InlineKeyboardButton()
+                                .setText(EmojiParser.parseToUnicode(s))
+                                .setCallbackData("category"+s));
+                        rows.add(row);
+                    }
+                    markup.setKeyboard(rows);
+                edit(update.getCallbackQuery().getMessage(), "Обновить категорию", markup);
+            }
+        
 
             if(cb.equals(mainKeyboard(null).get(0))){
                 edit(update.getCallbackQuery().getMessage(), "Указать наличие", DataBase.productsAvailability("Russian"), 3);
@@ -438,6 +455,7 @@ public class Adminbot extends TelegramLongPollingBot {
             a.add("Изменить продукт");
             a.add("Заказы");
             a.add("Добавить категорию");
+            a.add("Обновить категорию");
             if (lastbutton!=null) a.add(lastbutton);
         return a;
 	}
