@@ -471,9 +471,44 @@ public class Bot extends TelegramLongPollingBot {
 
 
     private void showSubCat(Update update, int i) throws TelegramApiException, SQLException {
+        String condition = "";
+        switch (i) {
+            case 0:
+            condition = "clothes = true";
+            break;
+            case 1:
+            condition = "clothes = true and male = true";
+            break;
+            case 2:
+            condition = "shoes = true";
+            break;
+            case 3:
+            condition = "shoes = true and male = true";
+            break;
+            case 4:
+            condition = "accessories = true";
+            break;
+            case 5:
+            condition = "accessories = true and male = true";
+            break;
+            case 6:
+            condition = "cosmetics = true";
+            break;
+            case 7:
+            condition = "toddlers = true";
+            break;
+            case 8:
+            condition = "kids = true";
+            break;
+            case 9:
+            condition = "kids = true and male = true";
+            break;
+        }
+
+        List<String> listSubTypes = DataBase.sqlQueryList("select "+a.getLanguage()+" from types where "+ condition, a.getLanguage());
         InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
-            for (String sub:Lan.listSubTypes(a.getLanguage())) {
+            for (String sub:listSubTypes) {
             List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
             row.add(new InlineKeyboardButton()
                     .setText(EmojiParser.parseToUnicode(sub))

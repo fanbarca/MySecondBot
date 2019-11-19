@@ -190,7 +190,7 @@ public class Adminbot extends TelegramLongPollingBot {
                             deleteMessage(update.getMessage());
                         } else if (listener.equals("RussianCategory")) {
                             russian = update.getMessage().getText();
-                            DataBase.sql("insert into types (typeid, russian) values ("+0+", '"+russian+"')");
+                            DataBase.sql("insert into types (russian) values ('"+russian+"')");
                             listener = "UzbekCategory";
                             deleteMessage(update.getMessage());
                             edit(update.getMessage(), russian+"\nВведите название категории на узбекском", list, 3);
@@ -244,18 +244,6 @@ public class Adminbot extends TelegramLongPollingBot {
             } else if(cb.equals(mainKeyboard(null).get(3))){
                 listener = "Change";
                 edit(update.getCallbackQuery().getMessage(), "Изменить продукт", DataBase.showAllProducts("Russian", false), 3);
-            } else if(cb.equals("Добавить категорию")){
-                InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
-                    List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
-                    for (String s:Lan.listTypes("Russian")){
-                        List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
-                        row.add(new InlineKeyboardButton()
-                                .setText(EmojiParser.parseToUnicode(s))
-                                .setCallbackData("AddCategory"+s));
-                        rows.add(row);
-                    }
-                    markup.setKeyboard(rows);
-                edit(update.getCallbackQuery().getMessage(), "В какой раздел?", markup );
             } else if(cb.equals(mainKeyboard(null).get(4))){
                 List<String> IdList = DataBase.sqlQueryList("select userid from zakaz where conformed = true ORDER BY time ASC", "userid");
                
@@ -328,13 +316,12 @@ public class Adminbot extends TelegramLongPollingBot {
                     edit(update.getCallbackQuery().getMessage(), "Выбрана категория "+t+
                     "\nВведите название продукта на русском",  list, 1);
                 }
-                if (cb.contains("AddCategory")) {
-                    category = Lan.listTypes("Russian").indexOf(t)+"";
-                    listener = "RussianCategory";
-                    edit(update.getCallbackQuery().getMessage(), "Выбрана категория "+t+
-                    "\nВведите название категории на русском",  list, 1);
-                }
+                
             }
+            if (cb.contains("Добавить категорию")) {
+                    listener = "RussianCategory";
+                    edit(update.getCallbackQuery().getMessage(), "Введите название категории на русском",  list, 1);
+                }
             for (String t:DataBase.showAllProducts("Russian", false)) {
                 String prodId = DataBase.sqlQuery("select id from table0 where russian = '"+t+"'", "id");
                 if (cb.contains(t)) {
