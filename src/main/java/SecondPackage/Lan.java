@@ -19,7 +19,7 @@ class Lan {
                 "Xush kelibsiz!" +
                 emoji;
         else if (lan.equals("Russian")) r = toCyrilTrans.transliterate(name)+", \n" +
-                "Добро пожаловать!*" +
+                "Добро пожаловать!" +
                 emoji;
         else if (lan.equals("English")) r = toLatinTrans.transliterate(name)+", \n" +
                 "Welcome!"+
