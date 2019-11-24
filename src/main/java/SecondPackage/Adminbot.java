@@ -239,9 +239,13 @@ public class Adminbot extends TelegramLongPollingBot {
                 }
 
             if(cb.equals("Обновить категорию")) {
-                InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
+                List<String> ll = DataBase.sqlQueryList("select russian from types", "russian");
+                if (ll.isEmpty()){
+                    answer.setShowAlert(false).setText("Категорий нет");
+                } else {
+                    InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
                     List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
-                    for (String s:DataBase.sqlQueryList("select russian from types", "russian")) {
+                    for (String s:ll) {
                         List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
                         row.add(new InlineKeyboardButton()
                                 .setText(EmojiParser.parseToUnicode(s))
@@ -249,7 +253,8 @@ public class Adminbot extends TelegramLongPollingBot {
                         rows.add(row);
                     }
                     markup.setKeyboard(rows);
-                edit(update.getCallbackQuery().getMessage(), "Обновить категорию", markup);
+                    edit(update.getCallbackQuery().getMessage(), "Обновить категорию", markup);
+                }
             }
 
 
