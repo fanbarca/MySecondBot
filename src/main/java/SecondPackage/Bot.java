@@ -32,6 +32,7 @@ import java.sql.*;
 public class Bot extends TelegramLongPollingBot {
     private String botName = "DeliverySuperBot";
     private String botToken = "780864630:AAHpUc01UagThYH7wRi15zJQjwu06A6NaWM";
+    Map<String, List<String>> images;
     Order a;
 
 
@@ -222,12 +223,12 @@ public class Bot extends TelegramLongPollingBot {
                     Lan.mainMenu(a.getLanguage()), "Лого", 2);
         }
         if (cb.equals(Lan.select(a.getLanguage()).get(1))) {
-            for (String id: a.getImages()) {
+            for (String id: images.get(a.getId())) {
                 deleteMessage(id, a.getId());
             }
             a.setImages(null);
-            sendPic(Lan.welcome(a.getLanguage(), a.getFirstName()), a.getId(),Lan.mainMenu(a.getLanguage()), "Лого",1 );
-
+            sendPic(Lan.welcome(a.getLanguage(), a.getFirstName()),
+                    a.getId(),Lan.mainMenu(a.getLanguage()), "Лого",2 );
         }
 
         if (cb.equals(Lan.mainMenu("Uzbek").get(0)) ||
@@ -775,6 +776,7 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
                         DataBase.sqlQuery("select "+a.getLanguage()+" from table0 where id ="+id,a.getLanguage()),
                         2));
             }
+            images.put(a.getId(), a.getImages());
 
 //            InputMediaPhoto imp = new InputMediaPhoto();
 //            imp.setMedia(file_id);
