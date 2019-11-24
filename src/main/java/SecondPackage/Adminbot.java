@@ -350,16 +350,16 @@ public class Adminbot extends TelegramLongPollingBot {
                     edit(update.getCallbackQuery().getMessage(), "Выбрана категория "+t+
                     "\nВыберите тип",  Bot.listSubTypes(Lan.listTypes("Russian").indexOf(t), "Russian"), 1);
                 }
-                for (String tt:Bot.listSubTypes(Lan.listTypes("Russian").indexOf(t), "Russian")) {
-                    if (cb.equals(tt)) {
-                        subcategory = DataBase.sqlQuery("select typeid from types where Russian = '"+tt+"'", "typeid");
-                        listener = "Russian";
-                        edit(update.getCallbackQuery().getMessage(), "Выбрана категория "+t+
-                                "\nВыбран тип <b>"+tt+"</b>" +
-                                "\nВведите название продукта на русском",  list, 1);
-                    }
+            }
+            for (String tt:DataBase.sqlQueryList("select russian from types","russian")) {
+                if (cb.equals(tt)) {
+                    subcategory = DataBase.sqlQuery("select typeid from types where Russian = '"+tt+"'", "typeid");
+                    listener = "Russian";
+                    edit(update.getCallbackQuery().getMessage(),
+                            "Выбрана категория "+Lan.listTypes("Russian").indexOf(category)+
+                            "\nВыбран тип <b>"+tt+"</b>" +
+                            "\nВведите название продукта на русском",  list, 1);
                 }
-
             }
 
             if (cb.contains("Добавить категорию")) {
