@@ -252,6 +252,11 @@ public class Adminbot extends TelegramLongPollingBot {
                                 .setCallbackData("category"+s));
                         rows.add(row);
                     }
+                    List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
+                    row.add(new InlineKeyboardButton()
+                            .setText(EmojiParser.parseToUnicode("Назад"))
+                            .setCallbackData("Назад"));
+                    rows.add(row);
                     markup.setKeyboard(rows);
                     edit(update.getCallbackQuery().getMessage(), "Обновить категорию", markup);
                 }
@@ -259,12 +264,17 @@ public class Adminbot extends TelegramLongPollingBot {
 
 
             if(cb.equals(mainKeyboard(null).get(0))){
-                edit(update.getCallbackQuery().getMessage(), "Указать наличие", DataBase.productsAvailability("Russian"), 3);
+                List<String> l = DataBase.productsAvailability("Russian");
+                if (!l.isEmpty()) edit(update.getCallbackQuery().getMessage(), "Указать наличие", l, 3);
+                else answer.setShowAlert(false).setText("Продуктов нет");
             } else if(cb.equals(mainKeyboard(null).get(1))){
-                listener = "Delete";
-                edit(update.getCallbackQuery().getMessage(), "Удалить продукт", DataBase.showAllProducts("Russian", false), 3);
+                List<String> l = DataBase.showAllProducts("Russian", false);
+                if (!l.isEmpty()) {
+                    listener = "Delete";
+                    edit(update.getCallbackQuery().getMessage(), "Удалить продукт", l, 3);
+                } else answer.setShowAlert(false).setText("Продуктов нет");
             } else if(cb.equals(mainKeyboard(null).get(2))){
-                edit(update.getCallbackQuery().getMessage(), "В какой раздел?", Lan.listTypes("Russian"), 3);
+                edit(update.getCallbackQuery().getMessage(), "В какой раздел?", Lan.listTypes("Russian"), 2);
             } else if(cb.equals(mainKeyboard(null).get(3))){
                 listener = "Change";
                 edit(update.getCallbackQuery().getMessage(), "Изменить продукт", DataBase.showAllProducts("Russian", false), 3);

@@ -257,10 +257,9 @@ public class Bot extends TelegramLongPollingBot {
             }
         }
         if (cb.contains("category")) {
-            List<String> listSubTypes = DataBase.sqlQueryList("select "+a.getLanguage()+" from types", a.getLanguage());
-            for (int i = 0; i < listSubTypes.size(); i++) {
-                if (cb.contains(listSubTypes.get(i))) {
-                    String subtype = cb.substring(9);
+            List<String> listSubTypes = DataBase.sqlQueryList("select typeid from types", "typeid");
+            for (String subtype : listSubTypes) {
+                if (cb.contains(subtype)) {
                     editPicItems(cb.substring(0, 1),
                             subtype, update.getCallbackQuery().getMessage(), "Лого");
                 }
