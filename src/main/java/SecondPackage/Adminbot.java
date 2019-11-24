@@ -356,7 +356,7 @@ public class Adminbot extends TelegramLongPollingBot {
                     subcategory = DataBase.sqlQuery("select typeid from types where Russian = '"+tt+"'", "typeid");
                     listener = "Russian";
                     edit(update.getCallbackQuery().getMessage(),
-                            "Выбрана категория "+Lan.listTypes("Russian").indexOf(category)+
+                            "Выбрана категория "+Lan.listTypes("Russian").get(Integer.parseInt(category))+
                             "\nВыбран тип <b>"+tt+"</b>" +
                             "\nВведите название продукта на русском",  list, 1);
                 }

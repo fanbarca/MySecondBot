@@ -765,13 +765,18 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
             imp.setMedia(file_id);
             String typename = Lan.listTypes(a.getLanguage()).get(Integer.parseInt(typeID));
             imp.setCaption(EmojiParser.parseToUnicode(Lan.mainMenu(a.getLanguage()).get(0)+"    "+typename)).setParseMode("HTML");
-            EditMessageMedia em = new EditMessageMedia();
-            em.setChatId(message.getChatId());
-            em.setMessageId(message.getMessageId());
-            em.setMedia(imp);
-            InlineKeyboardMarkup markup = listMarkup(listID, message.getChatId());
-            em.setReplyMarkup(markup);
-            execute(em);
+
+            sendPic(Lan.mainMenu(a.getLanguage()).get(0)+"    "+typename,
+                    message, Lan.keyBoard(a.getLanguage()), "Лого", 2);
+
+
+//                EditMessageMedia em = new EditMessageMedia();
+//                em.setChatId(message.getChatId());
+//                em.setMessageId(message.getMessageId());
+//                em.setMedia(imp);
+//                InlineKeyboardMarkup markup = listMarkup(listID, message.getChatId());
+//                em.setReplyMarkup(markup);
+//                execute(em);
         } else {
             a.setAddress(Lan.emptyOrders(a.getLanguage()));
             a.setAlert(true);
