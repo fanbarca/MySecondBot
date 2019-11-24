@@ -142,7 +142,7 @@ public class Bot extends TelegramLongPollingBot {
         deleteMessage(message);
         String time = DataBase.sqlQuery("select time from zakaz where userid =" + a.getId(), "time");
         if (a.getNumber() != null&&time!=null) confirm(update, time);
-        else sendPic(Lan.orderPlaced(a.getLanguage()), message, Lan.mainMenu(a.getLanguage()), "Лого", 2);
+        else sendPic(Lan.orderPlaced(a.getLanguage()), a.getId(), Lan.mainMenu(a.getLanguage()), "Лого", 2);
     }
 
 
@@ -167,7 +167,7 @@ public class Bot extends TelegramLongPollingBot {
             } else {
                 deleteMessage(DataBase.sqlQuery("SELECT image from users where id=" + a.getId(), "image"), a.getId());
                 deleteMessage(update.getMessage());
-                sendPic(Lan.welcome(a.getLanguage(), a.getFirstName()), update.getMessage(), Lan.mainMenu(a.getLanguage()), "Лого", 2);
+                sendPic(Lan.welcome(a.getLanguage(), a.getFirstName()), a.getId(), Lan.mainMenu(a.getLanguage()), "Лого", 2);
             }
         } else if (update.getMessage().getText().startsWith("+998")) {
             if (a.getNumber() == null) {
@@ -221,6 +221,15 @@ public class Bot extends TelegramLongPollingBot {
             editPic(Lan.welcome(a.getLanguage(), a.getFirstName()), update.getCallbackQuery().getMessage(),
                     Lan.mainMenu(a.getLanguage()), "Лого", 2);
         }
+        if (cb.equals(Lan.select(a.getLanguage()).get(1))) {
+            for (String id: a.getImages()) {
+                deleteMessage(id, a.getId());
+            }
+            a.setImages(null);
+            sendPic(Lan.welcome(a.getLanguage(), a.getFirstName()), a.getId(),Lan.mainMenu(a.getLanguage()), "Лого",1 );
+
+        }
+
         if (cb.equals(Lan.mainMenu("Uzbek").get(0)) ||
                 cb.equals(Lan.mainMenu("Russian").get(0)) ||
                 cb.equals(Lan.mainMenu("English").get(0)) ||
@@ -261,7 +270,7 @@ public class Bot extends TelegramLongPollingBot {
             for (String subtype : listSubTypes) {
                 if (cb.contains(subtype)) {
                     editPicItems(cb.substring(0, 1),
-                            subtype, update.getCallbackQuery().getMessage(), "Лого");
+                            subtype, update.getCallbackQuery().getMessage());
                 }
             }
         }
@@ -283,7 +292,7 @@ public class Bot extends TelegramLongPollingBot {
                         a.setAddress(Lan.removed(a.getLanguage()));
                         a.setAlert(false);
                     }
-                    editPicItems(type, subType, update.getCallbackQuery().getMessage(), "Лого");
+                    editPicItems(type, subType, update.getCallbackQuery().getMessage());
                 } else if (cb.contains(Lan.removeFromCart(a.getLanguage()))
                         || cb.contains(Lan.addToCart(a.getLanguage()))
                         || cb.contains(Lan.addMore(a.getLanguage()))) {
@@ -684,7 +693,7 @@ public class Bot extends TelegramLongPollingBot {
         else {
             sendPic(":uz: Tilni tanlang\n" +
                     ":ru: Выберите язык\n" +
-                    ":gb: Choose language", message, list, "Лого", 3);
+                    ":gb: Choose language", a.getId(), list, "Лого", 3);
             deleteMessage(message);
         }
     }
@@ -754,24 +763,23 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
 
 
 
-    public void editPicItems(String typeID, String subTypeID, Message message,String productId) throws TelegramApiException, SQLException {
+    public void editPicItems(String typeID, String subTypeID, Message message) throws TelegramApiException, SQLException {
         List<String> listID = DataBase.sqlQueryList("select id from table0 where instock = true and type = '"+typeID +"' and subtype = '"+subTypeID +"'", "id");
         if (listID.size() != 0) {
-            String file_id;
-            if (productId.equals("Лого"))
-                file_id = DataBase.sqlQuery("SELECT imageid from table0 where Russian = 'Лого'", "imageid");
-            else file_id = DataBase.sqlQuery("SELECT imageid from table0 where id = " + productId, "imageid");
+            deleteMessage(message);
+            for (String id : listID){
+                a.getImages().add(
+                        sendPic(productText(id, a.getId()),
+                        a.getId(),
+                        Lan.select(a.getLanguage()),
+                        DataBase.sqlQuery("select "+a.getLanguage()+" from table0 where id ="+id,a.getLanguage()),
+                        2));
+            }
+
 //            InputMediaPhoto imp = new InputMediaPhoto();
 //            imp.setMedia(file_id);
 //            String typename = Lan.listTypes(a.getLanguage()).get(Integer.parseInt(typeID));
 //            imp.setCaption(EmojiParser.parseToUnicode(Lan.mainMenu(a.getLanguage()).get(0)+"    "+typename)).setParseMode("HTML");
-            for (String id : listID){
-                String name = DataBase.sqlQuery("select "+a.getLanguage()+" from table0 where id ="+id,a.getLanguage());
-                sendPic(name, message, Lan.keyBoard(a.getLanguage()), name, 2);
-            }
-
-
-
 //                EditMessageMedia em = new EditMessageMedia();
 //                em.setChatId(message.getChatId());
 //                em.setMessageId(message.getMessageId());
@@ -927,7 +935,7 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
 
 
 
-    public void sendPic(String text, Message message, List<String> inline, String productName, int flag) throws SQLException, TelegramApiException {
+    public String sendPic(String text, String chatId, List<String> inline, String productName, int flag) throws SQLException, TelegramApiException {
         String file_id = "";
         if (productName.equals("Лого"))
             file_id = DataBase.sqlQuery("SELECT imageid from table0 where Russian = 'Лого'", "imageid");
@@ -936,19 +944,16 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
             if (file_id == null) file_id = DataBase.sqlQuery("SELECT imageid from table0 where Russian = 'Лого'", "imageid");
         }
         SendPhoto aa = new SendPhoto();
-        aa.setChatId(message.getChatId());
+        aa.setChatId(chatId);
         aa.setPhoto(file_id);
         if (text.length()<1024) aa.setCaption(EmojiParser.parseToUnicode(text)).setParseMode("HTML");
         else aa.setCaption(EmojiParser.parseToUnicode(text.substring(0, 1020)+"...")).setParseMode("HTML");
                 InlineKeyboardMarkup inlineMarkup = markUp(text, "Лого",inline, flag);
         aa.setReplyMarkup(inlineMarkup);
 
-        try {
             String image = execute(aa).getMessageId().toString();
-            DataBase.sql("update users set image =" + image + " where id =" + message.getChatId());
-        } catch (TelegramApiException e) {
-            e.printStackTrace();
-        }
+            DataBase.sql("update users set image =" + image + " where id =" + chatId);
+            return image;
     }
 
 
@@ -1226,7 +1231,7 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
 
         DataBase.sql("update zakaz set conformed = true where userid = " + a.getId());
         if (update.hasMessage()) {
-            sendPic(Lan.welcome(a.getLanguage(), a.getFirstName()),update.getMessage(),Lan.mainMenu(a.getLanguage()), "Лого", 2);
+            sendPic(Lan.welcome(a.getLanguage(), a.getFirstName()),a.getId(),Lan.mainMenu(a.getLanguage()), "Лого", 2);
         }
         editPic(Lan.welcome(a.getLanguage(), a.getFirstName()), a.getId(),
             Integer.parseInt(DataBase.sqlQuery("SELECT image from users where id=" + a.getId(), "image")),
@@ -1513,7 +1518,7 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
             } else {
                 Integer messageId= Integer.parseInt(DataBase.sqlQuery("select image from users where id="+a.getId(), "image"));
                 if (edit) editPic(text, a.getId(), messageId, null, "Лого", 2);
-                else sendPic(text, update.getCallbackQuery().getMessage(), null, "Лого", 2);
+                else sendPic(text, a.getId(), null, "Лого", 2);
             }
     }
 

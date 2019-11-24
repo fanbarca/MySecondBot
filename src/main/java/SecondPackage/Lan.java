@@ -219,6 +219,22 @@ class Lan {
             list.add(backToMenu(lan));
         return list;
     }
+    public static List<String> select(String lan){
+        List<String> list = new ArrayList<>();
+        if (lan.equals("Uzbek")) {
+            list.add("Orqaga");
+            list.add("Tanlash");
+        }
+        else if (lan.equals("Russian")) {
+            list.add("Назад");
+            list.add("Выбрать");
+        }
+        else if (lan.equals("English")) {
+            list.add("Back");
+            list.add("Select");
+        }
+        return list;
+    }
     public static String clearCart(String lan) {
         String r="";
         if (lan.equals("Uzbek")) r = ":x: Bo'shatish";

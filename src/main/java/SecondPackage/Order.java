@@ -1,6 +1,9 @@
 package SecondPackage;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Order {
 
     private String id;
@@ -13,10 +16,17 @@ public class Order {
     private String address;
     private boolean alert;
 
+	public List<String> getImages() {
+		return images;
+	}
 
+	public void setImages(List<String> images) {
+		this.images = images;
+	}
 
-
+	private List<String> images;
 	private String listener;
+
 
     public Order(String firstName,
 				 String number,
@@ -24,6 +34,8 @@ public class Order {
 				 String receivedMes,
 				 String sentMessage,
 				 String image) {
+		images = new ArrayList<>();
+
 		this.firstName = firstName;
 		this.number = number;
 		this.language = language;
@@ -41,6 +53,8 @@ public class Order {
 				 String number,
 				 String language,
 				 String id) {
+		images = new ArrayList<>();
+
 		this.firstName = firstName;
 		this.number = number;
 		this.language = language;
@@ -49,6 +63,8 @@ public class Order {
 		this.image = null;
 	}
 	public Order() {
+		images = new ArrayList<>();
+
 		this.firstName = null;
 		this.number = null;
 		this.language = null;
