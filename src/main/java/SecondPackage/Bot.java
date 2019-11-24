@@ -761,13 +761,15 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
             if (productId.equals("Лого"))
                 file_id = DataBase.sqlQuery("SELECT imageid from table0 where Russian = 'Лого'", "imageid");
             else file_id = DataBase.sqlQuery("SELECT imageid from table0 where id = " + productId, "imageid");
-            InputMediaPhoto imp = new InputMediaPhoto();
-            imp.setMedia(file_id);
-            String typename = Lan.listTypes(a.getLanguage()).get(Integer.parseInt(typeID));
-            imp.setCaption(EmojiParser.parseToUnicode(Lan.mainMenu(a.getLanguage()).get(0)+"    "+typename)).setParseMode("HTML");
+//            InputMediaPhoto imp = new InputMediaPhoto();
+//            imp.setMedia(file_id);
+//            String typename = Lan.listTypes(a.getLanguage()).get(Integer.parseInt(typeID));
+//            imp.setCaption(EmojiParser.parseToUnicode(Lan.mainMenu(a.getLanguage()).get(0)+"    "+typename)).setParseMode("HTML");
+            for (String id : listID){
+                String name = DataBase.sqlQuery("select "+a.getLanguage()+" from table0 where id ="+id,a.getLanguage());
+                sendPic(name, message, Lan.keyBoard(a.getLanguage()), name, 2);
+            }
 
-            sendPic(Lan.mainMenu(a.getLanguage()).get(0)+"    "+typename,
-                    message, Lan.keyBoard(a.getLanguage()), "Лого", 2);
 
 
 //                EditMessageMedia em = new EditMessageMedia();
