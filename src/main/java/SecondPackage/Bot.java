@@ -480,7 +480,7 @@ public class Bot extends TelegramLongPollingBot {
             for (String sub:listSubTypes(i)) {
             List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
             row.add(new InlineKeyboardButton()
-                    .setText(EmojiParser.parseToUnicode(sub))
+                    .setText(EmojiParser.parseToUnicode(DataBase.sqlQuery("select "+a.getLanguage()+" from types where typeid ="+sub, a.getLanguage())))
                     .setCallbackData(i+"category"+sub));
                     rows.add(row);
             }

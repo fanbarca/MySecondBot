@@ -7,18 +7,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7fdc6f42-80e3-436b-99c6-634d7f7f8939" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/Bot.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/SecondPackage/Essaybot.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/SecondPackage/Adminbot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/SecondPackage/Adminbot.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/SecondPackage/Bot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/SecondPackage/Bot.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/SecondPackage/DataBase.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/SecondPackage/DataBase.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/SecondPackage/Lan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/SecondPackage/Lan.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/SecondPackage/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/SecondPackage/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/SecondPackage/Order.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/SecondPackage/Order.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -99,13 +89,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1560590336061</updated>
-    </task>
-    <task id="LOCAL-00073" summary="new">
-      <created>1565496842023</created>
-      <option name="number" value="00073" />
-      <option name="presentableId" value="LOCAL-00073" />
-      <option name="project" value="LOCAL" />
-      <updated>1565496842023</updated>
     </task>
     <task id="LOCAL-00074" summary="new">
       <created>1565497557600</created>
@@ -443,7 +426,14 @@
       <option name="project" value="LOCAL" />
       <updated>1572970687346</updated>
     </task>
-    <option name="localTasksCounter" value="122" />
+    <task id="LOCAL-00122" summary="new">
+      <created>1574580944181</created>
+      <option name="number" value="00122" />
+      <option name="presentableId" value="LOCAL-00122" />
+      <option name="project" value="LOCAL" />
+      <updated>1574580944183</updated>
+    </task>
+    <option name="localTasksCounter" value="123" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
