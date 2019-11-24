@@ -19,7 +19,7 @@ class Lan {
                 "Xush kelibsiz!" +
                 emoji;
         else if (lan.equals("Russian")) r = toCyrilTrans.transliterate(name)+", \n" +
-                "Добро пожаловать!--" +
+                "Добро пожаловать!" +
                 emoji;
         else if (lan.equals("English")) r = toLatinTrans.transliterate(name)+", \n" +
                 "Welcome!"+
@@ -176,76 +176,6 @@ class Lan {
 
 
 
-    public static List<String> listSubTypes(String lan){
-        List<String> list = new ArrayList<>();
-        if (lan.equals("Uzbek")) {
-            list.add("Верхняя одежда");
-            list.add("Пуловеры");
-            list.add("Брюки и джинсы");
-            list.add("Пиджаки");
-            list.add("Рубашки");
-            list.add("Футболки");
-            list.add("Белье");
-            list.add("Майки");
-            list.add("Шорты");
-            list.add("Джемперы");
-            list.add("Платья");
-            list.add("Блузки");
-            list.add("Кардиганы");
-            list.add("Жакеты");
-            list.add("Купальники и пляжная одежда");
-            list.add("Юбки");
-            list.add("Свитеры");
-            list.add("Туники");
-            list.add("Костюмы");
-            list.add("Топы");
-        }
-        else if (lan.equals("Russian")) {
-            list.add("Верхняя одежда");
-            list.add("Пуловеры");
-            list.add("Брюки и джинсы");
-            list.add("Пиджаки");
-            list.add("Рубашки");
-            list.add("Футболки");
-            list.add("Белье");
-            list.add("Майки");
-            list.add("Шорты");
-            list.add("Джемперы");
-            list.add("Платья");
-            list.add("Блузки");
-            list.add("Кардиганы");
-            list.add("Жакеты");
-            list.add("Купальники и пляжная одежда");
-            list.add("Юбки");
-            list.add("Свитеры");
-            list.add("Туники");
-            list.add("Костюмы");
-            list.add("Топы");
-        }
-        else if (lan.equals("English")) {
-            list.add("Верхняя одежда");
-            list.add("Пуловеры");
-            list.add("Брюки и джинсы");
-            list.add("Пиджаки");
-            list.add("Рубашки");
-            list.add("Футболки");
-            list.add("Белье");
-            list.add("Майки");
-            list.add("Шорты");
-            list.add("Джемперы");
-            list.add("Платья");
-            list.add("Блузки");
-            list.add("Кардиганы");
-            list.add("Жакеты");
-            list.add("Купальники и пляжная одежда");
-            list.add("Юбки");
-            list.add("Свитеры");
-            list.add("Туники");
-            list.add("Костюмы");
-            list.add("Топы");
-        }
-        return list;
-    }
 
     public static String goBack(String lan) {
         String r="";

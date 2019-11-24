@@ -224,7 +224,7 @@ public static Connection getConnection() throws URISyntaxException, SQLException
         return lan;
     }
 
-    
+
     public static List<String> productsAvailability(String column){
         List<String> lan = new ArrayList<>();
         try {

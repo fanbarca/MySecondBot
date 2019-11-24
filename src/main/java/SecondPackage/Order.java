@@ -65,7 +65,7 @@ public class Order {
 	public void setNumber(String number) {
 		this.number = number;
     }
-    
+
 	public String getAddress() {
 		return address;
 	}

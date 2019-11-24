@@ -141,7 +141,7 @@ public class Bot extends TelegramLongPollingBot {
         deleteMessage(DataBase.sqlQuery("SELECT smid from users where id=" + message.getChatId(), "smid"), message.getChatId().toString());
         deleteMessage(message);
         String time = DataBase.sqlQuery("select time from zakaz where userid =" + a.getId(), "time");
-        if (a.getNumber() != null&&time!=null) confirm(update, time); 
+        if (a.getNumber() != null&&time!=null) confirm(update, time);
         else sendPic(Lan.orderPlaced(a.getLanguage()), message, Lan.mainMenu(a.getLanguage()), "Лого", 2);
     }
 
@@ -256,10 +256,14 @@ public class Bot extends TelegramLongPollingBot {
                 showSubCat(update, i);
             }
         }
-        for (int i=0; i<Lan.listSubTypes(a.getLanguage()).size(); i++) {
-            if (cb.contains(Lan.listSubTypes(a.getLanguage()).get(i))&&!cb.contains(Lan.goBack(a.getLanguage()))) {
-                editPicItems(cb.substring(0,1), 
-                String.valueOf(i), update.getCallbackQuery().getMessage(), "Лого");
+        if (cb.contains("category")) {
+            List<String> listSubTypes = DataBase.sqlQueryList("select "+a.getLanguage()+" from types", a.getLanguage());
+            for (int i = 0; i < listSubTypes.size(); i++) {
+                if (cb.contains(listSubTypes.get(i))) {
+                    String subtype = cb.substring(9);
+                    editPicItems(cb.substring(0, 1),
+                            subtype, update.getCallbackQuery().getMessage(), "Лого");
+                }
             }
         }
         for (String name : DataBase.showAllProducts(a.getLanguage(), false)) {
@@ -418,7 +422,7 @@ public class Bot extends TelegramLongPollingBot {
             a.setAddress(Lan.commentCancelled(a.getLanguage()));
             a.setAlert(false);
             showCart(update, true);
-        } 
+        }
         if (cb.contains(Lan.deleteComment(a.getLanguage()))) {
             DataBase.sql("update users set comment = null where id = "+a.getId());
             a.setAddress(Lan.commentDeleted(a.getLanguage()));
@@ -429,7 +433,7 @@ public class Bot extends TelegramLongPollingBot {
         execute(answer);
     }
 
-    
+
 
 
 
@@ -456,7 +460,7 @@ public class Bot extends TelegramLongPollingBot {
                     .setCallbackData(Lan.backToMenu(a.getLanguage())));
                     rows.add(row2);
         markup.setKeyboard(rows);
-         
+
         editPic(Lan.chooseDish(a.getLanguage()),"Лого", update.getCallbackQuery().getMessage(), markup);
     }
 
@@ -471,44 +475,9 @@ public class Bot extends TelegramLongPollingBot {
 
 
     private void showSubCat(Update update, int i) throws TelegramApiException, SQLException {
-        String condition = "";
-        switch (i) {
-            case 0:
-            condition = "clothes = true and female = true";
-            break;
-            case 1:
-            condition = "clothes = true and male = true";
-            break;
-            case 2:
-            condition = "shoes = true and female = true";
-            break;
-            case 3:
-            condition = "shoes = true and male = true";
-            break;
-            case 4:
-            condition = "accessories = true and female = true";
-            break;
-            case 5:
-            condition = "accessories = true and male = true";
-            break;
-            case 6:
-            condition = "cosmetics = true";
-            break;
-            case 7:
-            condition = "toddlers = true";
-            break;
-            case 8:
-            condition = "kids = true and female = true";
-            break;
-            case 9:
-            condition = "kids = true and male = true";
-            break;
-        }
-
-        List<String> listSubTypes = DataBase.sqlQueryList("select "+a.getLanguage()+" from types where "+ condition, a.getLanguage());
         InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
-            for (String sub:listSubTypes) {
+            for (String sub:listSubTypes(i)) {
             List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
             row.add(new InlineKeyboardButton()
                     .setText(EmojiParser.parseToUnicode(sub))
@@ -521,17 +490,57 @@ public class Bot extends TelegramLongPollingBot {
                     .setCallbackData(Lan.goBack(a.getLanguage())));
                     rows.add(row2);
         markup.setKeyboard(rows);
-        editPic(Lan.listTypes(a.getLanguage()).get(i), "Лого", 
+        editPic(Lan.listTypes(a.getLanguage()).get(i), "Лого",
         update.getCallbackQuery().getMessage(), markup);
     }
 
 
 
 
+    public static List<String> listSubTypes(int i) throws SQLException{
+        return listSubTypes(i, "typeid");
+    }
 
 
 
 
+    public static List<String> listSubTypes(int i, String column) throws SQLException {
+        String condition = "";
+        switch (i) {
+            case 0:
+                condition = "clothes = true and female = true";
+                break;
+            case 1:
+                condition = "clothes = true and male = true";
+                break;
+            case 2:
+                condition = "shoes = true and female = true";
+                break;
+            case 3:
+                condition = "shoes = true and male = true";
+                break;
+            case 4:
+                condition = "accessories = true and female = true";
+                break;
+            case 5:
+                condition = "accessories = true and male = true";
+                break;
+            case 6:
+                condition = "cosmetics = true";
+                break;
+            case 7:
+                condition = "toddlers = true";
+                break;
+            case 8:
+                condition = "kids = true and female = true";
+                break;
+            case 9:
+                condition = "kids = true and male = true";
+                break;
+        }
+
+        return DataBase.sqlQueryList("select "+column+" from types where "+ condition, column);
+    }
 
 
     private InlineKeyboardMarkup simpleMarkUp(String button) {
@@ -866,7 +875,7 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
 
     public void editCaption(String text, String chatId, int messageid, InlineKeyboardMarkup markup) throws TelegramApiException, SQLException {
         //Integer messageId= Integer.parseInt(DataBase.sqlQuery("select image from users where id="+message.getChatId(), "image"));
-        
+
         EditMessageCaption ec = new EditMessageCaption();
         ec.setChatId(chatId);
         ec.setMessageId(messageid);
@@ -1157,7 +1166,7 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
     private boolean waitingForLocation() throws SQLException{
         return DataBase.sqlQuery("SELECT rmid from users where id=" + a.getId(), "rmid").equals("0");
     }
-    
+
 
 
 
@@ -1202,7 +1211,7 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
         //if (latitude!=null&&longitude!=null) order.sendLocation(adminId,Float.parseFloat(latitude), Float.parseFloat(longitude), null);
         //order.sendContact(a.getFirstName(), a.getNumber());
         clearCart(update);
-        
+
         DataBase.sql("update zakaz set conformed = true where userid = " + a.getId());
         if (update.hasMessage()) {
             sendPic(Lan.welcome(a.getLanguage(), a.getFirstName()),update.getMessage(),Lan.mainMenu(a.getLanguage()), "Лого", 2);
@@ -1403,7 +1412,7 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
                             String comment = DataBase.sqlQuery("select comment from users where id ="+a.getId(), "comment");
                             List<InlineKeyboardButton> rowOne = new ArrayList<InlineKeyboardButton>();
                             if (comment!=null) {
-                                if(!comment.equals("*waiting*")) 
+                                if(!comment.equals("*waiting*"))
                             rowOne.add(new InlineKeyboardButton()
                                     .setText(EmojiParser.parseToUnicode(Lan.deleteComment(a.getLanguage())))
                                     .setCallbackData(Lan.deleteComment(a.getLanguage())));

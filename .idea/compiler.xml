@@ -6,8 +6,9 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="Amabilia" />
         <module name="MySecondBot" />
+        <module name="Amabilia" />
+        <module name="Bot" />
       </profile>
     </annotationProcessing>
   </component>

@@ -14,7 +14,7 @@ public class Main {
 
         TelegramBotsApi botsApi = new TelegramBotsApi();
         try {
-//            botsApi.registerBot(new AmabiliaBot());
+            //botsApi.registerBot(new Essaybot());
             botsApi.registerBot(new Adminbot());
             botsApi.registerBot(new Bot());
 
