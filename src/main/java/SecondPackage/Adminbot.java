@@ -192,7 +192,7 @@ public class Adminbot extends TelegramLongPollingBot {
                         } else if (listener.equals("RussianCategory")) {
                             russian = update.getMessage().getText();
                             Random rand = new Random();
-                            DataBase.sql("insert into types (typeid, russian) values ("+String.format("%04d", rand.nextInt(8999)+1000)+"'"+russian+"')");
+                            DataBase.sql("insert into types (typeid, russian) values ("+String.format("%04d", rand.nextInt(8999)+1000)+", '"+russian+"')");
                             listener = "UzbekCategory";
                             deleteMessage(update.getMessage());
                             edit(update.getMessage(), russian+"\nВведите название категории на узбекском", list, 3);
