@@ -1400,7 +1400,7 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
 
 
 
-	private InlineKeyboardMarkup productsMarkup(String productId) {
+	private InlineKeyboardMarkup productsMarkup(String productId) throws SQLException {
         	int occ = occurrences(productId, a.getId());
 		InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
             List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
