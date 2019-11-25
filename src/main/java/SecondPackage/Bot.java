@@ -32,7 +32,7 @@ import java.sql.*;
 public class Bot extends TelegramLongPollingBot {
     private String botName = "DeliverySuperBot";
     private String botToken = "780864630:AAHpUc01UagThYH7wRi15zJQjwu06A6NaWM";
-    Map<String, List<String>> images;
+    Map<String, List<String>> images = new HashMap<>();
     Order a;
 
 
@@ -226,7 +226,6 @@ public class Bot extends TelegramLongPollingBot {
             for (String id: images.get(a.getId())) {
                 deleteMessage(id, a.getId());
             }
-            a.setImages(null);
             sendPic(Lan.welcome(a.getLanguage(), a.getFirstName()),
                     a.getId(),Lan.mainMenu(a.getLanguage()), "Лого",2 );
         }
