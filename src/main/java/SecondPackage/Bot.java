@@ -297,7 +297,7 @@ public class Bot extends TelegramLongPollingBot {
                         a.setAddress(Lan.removed(a.getLanguage()));
                         a.setAlert(false);
                     }
-                    editCaption(productText(prodId, a.getId()), update.getCallbackQuery().getMessage(), productsMarkup(id));
+                    editCaption(productText(prodId, a.getId()), update.getCallbackQuery().getMessage(), productsMarkup(prodId));
                     }
                 if (cb.contains("+++")||cb.contains("---")) {
                     if (cb.contains("+++"+prodId)){
