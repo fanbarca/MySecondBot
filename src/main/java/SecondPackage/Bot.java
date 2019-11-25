@@ -284,6 +284,21 @@ public class Bot extends TelegramLongPollingBot {
 					images.remove(a.getId());
 					showCart(update, false);
                     }
+				if (cb.contains("+plus")||cb.contains("-minus")) {
+                        
+					if (cb.contains("+plus"+prodId)){
+                        DataBase.sql("insert into cart (userid, item) values (" + userid
+                                + ",'" + prodId + "')");
+                        a.setAddress(Lan.added(a.getLanguage()));
+                        a.setAlert(false);
+                    } else if (cb.contains("-minus"+prodId)){
+                        DataBase.sql("delete from cart where userid =" + userid
+                            + " and item = '" + prodId + "'");
+                        a.setAddress(Lan.removed(a.getLanguage()));
+                        a.setAlert(false);
+                    }
+                    editCaption(productText(prodId, a.getId()), update.getCallbackQuery().getMessage(), productsMarkup(id));
+                    }
                 if (cb.contains("+++")||cb.contains("---")) {
                     if (cb.contains("+++"+prodId)){
                         DataBase.sql("insert into cart (userid, item) values (" + userid
@@ -777,7 +792,7 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
                 	sentArray.add(
                         sendPic(productText(id, a.getId()),
                         a.getId(),
-                        productsMarkup(id, Lan.select(a.getLanguage())),
+                        productsMarkup(id),
                         DataBase.sqlQuery("select "+a.getLanguage()+" from table0 where id ="+id,a.getLanguage())));
             }
             images.put(a.getId(), sentArray);
@@ -1385,13 +1400,24 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
 
 
 
-	private InlineKeyboardMarkup productsMarkup(String productId, List<String> list) {
-        InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
+	private InlineKeyboardMarkup productsMarkup(String productId) {
+        	int occ = occurrences(productId, a.getId());
+		InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
             List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
+		
+			List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
+				row.add(new InlineKeyboardButton()
+                    .setText(EmojiParser.parseToUnicode((occ>0)?Lan.addMore(a.getLanguage()):Lan.addToCart(a.getLanguage())))
+                    .setCallbackData("+plus"+productId));
+			if (occ>0) row.add(new InlineKeyboardButton()
+                    .setText(EmojiParser.parseToUnicode(Lan.removeFromCart(a.getLanguage())))
+                    .setCallbackData("-minus"+productId)); 
+            rows.add(row);
+		
             List<InlineKeyboardButton> row0 = new ArrayList<InlineKeyboardButton>();
-            row0.add(new InlineKeyboardButton()
-                    .setText(EmojiParser.parseToUnicode(list.get(1)))
-                    .setCallbackData("selected"+productId));
+        	row0.add(new InlineKeyboardButton()
+                    .setText(EmojiParser.parseToUnicode(Lan.delivery(a.getLanguage())))
+                    .setCallbackData("selected"+productId));    
             rows.add(row0);
             
             markup.setKeyboard(rows);

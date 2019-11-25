@@ -267,6 +267,7 @@ class Lan {
         else if (lan.equals("English")) r = "Total: ";
         return r;
     }
+
     public static String addToCart(String lan) {
         String r="";
         if (lan.equals("Uzbek")) r = ":heavy_plus_sign: Savatchaga qo'shish";
