@@ -777,8 +777,8 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
                 	sentArray.add(
                         sendPic(productText(id, a.getId()),
                         a.getId(),
-                        productsMarkup(id, Lan.select(a.getLanguage()))),
-                        DataBase.sqlQuery("select "+a.getLanguage()+" from table0 where id ="+id,a.getLanguage()));
+                        productsMarkup(id, Lan.select(a.getLanguage())),
+                        DataBase.sqlQuery("select "+a.getLanguage()+" from table0 where id ="+id,a.getLanguage())));
             }
             images.put(a.getId(), sentArray);
 
