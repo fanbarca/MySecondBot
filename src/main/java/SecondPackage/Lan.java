@@ -221,18 +221,8 @@ class Lan {
     }
     public static List<String> select(String lan){
         List<String> list = new ArrayList<>();
-        if (lan.equals("Uzbek")) {
-            list.add("Orqaga");
-            list.add("Tanlash");
-        }
-        else if (lan.equals("Russian")) {
-            list.add("Назад");
-            list.add("Выбрать");
-        }
-        else if (lan.equals("English")) {
-            list.add("Back");
-            list.add("Select");
-        }
+        list.add(goBack(lan));     
+		list.add(addToCart(lan));
         return list;
     }
     public static String clearCart(String lan) {

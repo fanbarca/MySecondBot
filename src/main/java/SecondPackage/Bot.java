@@ -222,13 +222,6 @@ public class Bot extends TelegramLongPollingBot {
             editPic(Lan.welcome(a.getLanguage(), a.getFirstName()), update.getCallbackQuery().getMessage(),
                     Lan.mainMenu(a.getLanguage()), "Лого", 2);
         }
-        if (cb.equals(Lan.select(a.getLanguage()).get(1))) {
-            for (String id: images.get(a.getId())) {
-                deleteMessage(id, a.getId());
-            }
-            sendPic(Lan.welcome(a.getLanguage(), a.getFirstName()),
-                    a.getId(),Lan.mainMenu(a.getLanguage()), "Лого",2 );
-        }
 
         if (cb.equals(Lan.mainMenu("Uzbek").get(0)) ||
                 cb.equals(Lan.mainMenu("Russian").get(0)) ||
@@ -280,6 +273,17 @@ public class Bot extends TelegramLongPollingBot {
             String prodId = DataBase.sqlQuery("select id from table0 where " + a.getLanguage() + " ='" + name + "'", "id");
             String type = DataBase.sqlQuery("select type from table0 where " + a.getLanguage() + " ='" + name + "'", "type");
             if (cb.contains(prodId)||cb.contains(name)) {
+				if (cb.contains("selected")) {
+                        DataBase.sql("insert into cart (userid, item) values (" + userid
+                                    + ",'" + prodId + "')");
+                        a.setAddress(Lan.added(a.getLanguage()));
+                        a.setAlert(false);
+					for (String id: images.get(a.getId())) {
+							deleteMessage(id, a.getId());
+						}
+					images.remove(a.getId());
+					showCart(update, false);
+                    }
                 if (cb.contains("+++")||cb.contains("---")) {
                     if (cb.contains("+++"+prodId)){
                         DataBase.sql("insert into cart (userid, item) values (" + userid
@@ -437,6 +441,7 @@ public class Bot extends TelegramLongPollingBot {
             a.setAlert(false);
             showCart(update, true);
         }
+		
         if (a.getAddress()!=null) answer.setShowAlert(a.getAlert()).setText(a.getAddress());
         execute(answer);
     }
@@ -772,9 +777,8 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
                 	sentArray.add(
                         sendPic(productText(id, a.getId()),
                         a.getId(),
-                        Lan.select(a.getLanguage()),
-                        DataBase.sqlQuery("select "+a.getLanguage()+" from table0 where id ="+id,a.getLanguage()),
-                        2));
+                        productsMarkup(id, Lan.select(a.getLanguage()))),
+                        DataBase.sqlQuery("select "+a.getLanguage()+" from table0 where id ="+id,a.getLanguage())));
             }
             images.put(a.getId(), sentArray);
 
@@ -959,6 +963,35 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
     }
 
 
+	
+	
+	
+	
+	
+	
+	public String sendPic(String text, String chatId, InlineKeyboardMarkup inlineMarkup, String productName) throws SQLException, TelegramApiException {
+        String file_id = "";
+        if (productName.equals("Лого"))
+            file_id = DataBase.sqlQuery("SELECT imageid from table0 where Russian = 'Лого'", "imageid");
+        else {
+            file_id = DataBase.sqlQuery("SELECT imageid from table0 where " + a.getLanguage() + " = '" + productName + "'", "imageid");
+            if (file_id == null) file_id = DataBase.sqlQuery("SELECT imageid from table0 where Russian = 'Лого'", "imageid");
+        }
+        SendPhoto aa = new SendPhoto();
+        aa.setChatId(chatId);
+        aa.setPhoto(file_id);
+        if (text.length()<1024) aa.setCaption(EmojiParser.parseToUnicode(text)).setParseMode("HTML");
+        else aa.setCaption(EmojiParser.parseToUnicode(text.substring(0, 1020)+"...")).setParseMode("HTML");
+        aa.setReplyMarkup(inlineMarkup);
+
+            String image = execute(aa).getMessageId().toString();
+            DataBase.sql("update users set image =" + image + " where id =" + chatId);
+            return image;
+    }
+	
+	
+	
+	
 
 
 
@@ -1352,6 +1385,29 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
 
 
 
+	private InlineKeyboardMarkup productsMarkup(String productId, List<String> list) {
+        InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
+            List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
+            List<InlineKeyboardButton> row0 = new ArrayList<InlineKeyboardButton>();
+            row0.add(new InlineKeyboardButton()
+                    .setText(EmojiParser.parseToUnicode(list.get(1)))
+                    .setCallbackData("selected"+productId));
+            rows.add(row0);
+            
+            markup.setKeyboard(rows);
+        return markup;
+    }
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
     private InlineKeyboardMarkup productMarkup(String productId, List<String> list) {
         InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
