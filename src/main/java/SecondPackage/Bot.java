@@ -768,15 +768,16 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
         List<String> listID = DataBase.sqlQueryList("select id from table0 where instock = true and type = '"+typeID +"' and subtype = '"+subTypeID +"'", "id");
         if (listID.size() != 0) {
             deleteMessage(message);
+			List<String> sentArray = new ArrayList<>();
             for (String id : listID){
-                a.getImages().add(
+                	sentArray.add(
                         sendPic(productText(id, a.getId()),
                         a.getId(),
                         Lan.select(a.getLanguage()),
                         DataBase.sqlQuery("select "+a.getLanguage()+" from table0 where id ="+id,a.getLanguage()),
                         2));
             }
-            images.put(a.getId(), a.getImages());
+            images.put(a.getId(), sentArray);
 
 //            InputMediaPhoto imp = new InputMediaPhoto();
 //            imp.setMedia(file_id);
