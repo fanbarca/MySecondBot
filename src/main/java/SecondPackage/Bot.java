@@ -230,7 +230,7 @@ public class Bot extends TelegramLongPollingBot {
             if ((a.getLanguage() == null) || (a.getLanguage().equals(""))) {
                 chooseLanguage(update.getCallbackQuery().getMessage(), true);
             } else {
-                showCatalog(update);
+                showCatalog(update, true);
             }
         } else if (cb.equals(Lan.mainMenu("Uzbek").get(1)) ||
                 cb.equals(Lan.mainMenu("Russian").get(1)) ||
@@ -267,6 +267,13 @@ public class Bot extends TelegramLongPollingBot {
                 }
             }
         }
+		if (cb.equals("toCatalog")) {
+					for (String id: images.get(a.getId())) {
+							deleteMessage(id, a.getId());
+						}
+					images.remove(a.getId());
+					showCatalog(update, false);
+        }
         for (String name : DataBase.showAllProducts(a.getLanguage(), false)) {
             String userid = a.getId();
             String subType = "";
@@ -274,10 +281,11 @@ public class Bot extends TelegramLongPollingBot {
             String type = DataBase.sqlQuery("select type from table0 where " + a.getLanguage() + " ='" + name + "'", "type");
             if (cb.contains(prodId)||cb.contains(name)) {
 				if (cb.contains("selected")) {
-                        DataBase.sql("insert into cart (userid, item) values (" + userid
+                        if (occurrences(prodId, userid)==0) { DataBase.sql("insert into cart (userid, item) values (" + userid
                                     + ",'" + prodId + "')");
                         a.setAddress(Lan.added(a.getLanguage()));
                         a.setAlert(false);
+						}
 					for (String id: images.get(a.getId())) {
 							deleteMessage(id, a.getId());
 						}
@@ -469,7 +477,7 @@ public class Bot extends TelegramLongPollingBot {
 
 
 
-    private void showCatalog(Update update) throws TelegramApiException, SQLException {
+    private void showCatalog(Update update, boolean edit) throws TelegramApiException, SQLException {
         InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
             for (int i = 0 ; i<Lan.listTypes(a.getLanguage()).size(); i+=2) {
@@ -489,7 +497,8 @@ public class Bot extends TelegramLongPollingBot {
                     rows.add(row2);
         markup.setKeyboard(rows);
 
-        editPic(Lan.chooseDish(a.getLanguage()),"Лого", update.getCallbackQuery().getMessage(), markup);
+        if (edit) editPic(Lan.chooseDish(a.getLanguage()),"Лого", update.getCallbackQuery().getMessage(), markup);
+		else sendPic(Lan.chooseDish(a.getLanguage()), a.getId(), markup, "Лого");
     }
 
 
@@ -1416,6 +1425,9 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
 		
             List<InlineKeyboardButton> row0 = new ArrayList<InlineKeyboardButton>();
         	row0.add(new InlineKeyboardButton()
+                    .setText(EmojiParser.parseToUnicode(Lan.goBack(a.getLanguage())))
+                    .setCallbackData("toCatalog"));
+			row0.add(new InlineKeyboardButton()
                     .setText(EmojiParser.parseToUnicode(Lan.delivery(a.getLanguage())))
                     .setCallbackData("selected"+productId));    
             rows.add(row0);
