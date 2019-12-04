@@ -233,11 +233,11 @@ public class Adminbot extends TelegramLongPollingBot {
                         DataBase.sql("UPDATE types SET "+column+" = not "+column+" where russian = '"+russian+"'");
                     edit(update.getCallbackQuery().getMessage(), russian+"\nУкажите критерии", updateMarkup());
                 }
-                if (cb.contains("editCategory")) {
+                if (cb.contains("editCat")) {
                     russian = cb.substring(12);
                     edit(update.getCallbackQuery().getMessage(), russian+"\nУкажите критерии", updateMarkup());
                 }
-				if (cb.contains("deleteCategory")) {
+				if (cb.contains("delCat")) {
                     russian = cb.substring(14);
 					DataBase.sql("delete from types where russian = '"+russian+"'");
                     edit(update.getCallbackQuery().getMessage(), "Выберите действие", mainKeyboard(null), 1);
@@ -255,7 +255,7 @@ public class Adminbot extends TelegramLongPollingBot {
                         List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
                         row.add(new InlineKeyboardButton()
                                 .setText(EmojiParser.parseToUnicode(s))
-                                .setCallbackData("editCategory"+s));
+                                .setCallbackData("editCat"+s));
                         rows.add(row);
                     }
                     List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
@@ -279,7 +279,7 @@ public class Adminbot extends TelegramLongPollingBot {
                         List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
                         row.add(new InlineKeyboardButton()
                                 .setText(EmojiParser.parseToUnicode(s))
-                                .setCallbackData("deleteCategory"+s));
+                                .setCallbackData("delCat"+s));
                         rows.add(row);
                     }
                     List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
