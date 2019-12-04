@@ -132,8 +132,12 @@ public class Bot extends TelegramLongPollingBot {
 
     private void handleInline(Update update) throws TelegramApiException {
         List<InlineQueryResult> list = new ArrayList<>();
-        list.add(new InlineQueryResultPhoto().setPhotoUrl("https://alltor.me/images/logo/logo_simple_me.png"));
-        list.add(new InlineQueryResultPhoto().setPhotoUrl("https://alltor.me/images/logo/logo_simple_me.png"));
+        InlineQueryResultPhoto aa = new InlineQueryResultPhoto()
+                .setId(update.getInlineQuery().getId())
+                .setPhotoUrl("https://alltor.me/images/logo/logo_simple_me.png");
+        list.add(aa);
+        list.add(aa);
+
 
         AnswerInlineQuery answerInlineQuery = new AnswerInlineQuery();
         answerInlineQuery
