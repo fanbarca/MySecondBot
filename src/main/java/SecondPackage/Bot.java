@@ -2,6 +2,7 @@ package SecondPackage;
 
 import com.vdurmont.emoji.EmojiParser;
 import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
+import org.telegram.telegrambots.meta.api.methods.AnswerInlineQuery;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
@@ -9,6 +10,8 @@ import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageCa
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageMedia;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.inlinequery.result.InlineQueryResult;
+import org.telegram.telegrambots.meta.api.objects.inlinequery.result.InlineQueryResultPhoto;
 import org.telegram.telegrambots.meta.api.objects.media.InputMediaPhoto;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
@@ -114,6 +117,8 @@ public class Bot extends TelegramLongPollingBot {
                 if (a.getLanguage() == null && !(cb.equals("O'zbek") || cb.equals("Русский") || cb.equals("English")))
                     chooseLanguage(update.getCallbackQuery().getMessage(), true);
                 else handleCallback(update);
+            } else if (update.hasInlineQuery()) {
+                handleInline(update);
             }
         } catch (Exception e) {
             BotLogger.error(Main.LOGTAG, e);
@@ -122,6 +127,20 @@ public class Bot extends TelegramLongPollingBot {
 
 
 
+
+
+
+    private void handleInline(Update update) throws TelegramApiException {
+        List<InlineQueryResult> list = new ArrayList<>();
+        list.add(new InlineQueryResultPhoto().setPhotoUrl("https://alltor.me/images/logo/logo_simple_me.png"));
+        list.add(new InlineQueryResultPhoto().setPhotoUrl("https://alltor.me/images/logo/logo_simple_me.png"));
+
+        AnswerInlineQuery answerInlineQuery = new AnswerInlineQuery();
+        answerInlineQuery
+                .setInlineQueryId(update.getInlineQuery().getId())
+                .setResults(list);
+        execute(answerInlineQuery);
+    }
 
 
 
@@ -1425,7 +1444,7 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
             List<InlineKeyboardButton> row1 = new ArrayList<InlineKeyboardButton>();
             row1.add(new InlineKeyboardButton()
                 .setText(EmojiParser.parseToUnicode(Lan.share(a.getLanguage())))
-                .setSwitchInlineQuery(""));
+                .setSwitchInlineQuery(productId));
             rows.add(row1);
         markup.setKeyboard(rows);
         return markup;
