@@ -134,6 +134,7 @@ public class Bot extends TelegramLongPollingBot {
         List<InlineQueryResult> list = new ArrayList<>();
         InlineQueryResultPhoto aa = new InlineQueryResultPhoto()
                 .setId(update.getInlineQuery().getId())
+                .setThumbUrl("https://alltor.me/images/logo/logo_simple_me.png")
                 .setPhotoUrl("https://alltor.me/images/logo/logo_simple_me.png");
         list.add(aa);
         list.add(aa);
