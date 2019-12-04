@@ -132,13 +132,14 @@ public class Bot extends TelegramLongPollingBot {
 
     private void handleInline(Update update) throws TelegramApiException {
         List<InlineQueryResult> list = new ArrayList<>();
-        InlineQueryResultPhoto aa = new InlineQueryResultPhoto()
-                .setId(update.getInlineQuery().getId())
-                .setThumbUrl("https://alltor.me/images/logo/logo_simple_me.png")
-                .setPhotoUrl("https://alltor.me/images/logo/logo_simple_me.png");
-        list.add(aa);
-        list.add(aa);
 
+        for (int i=0; i<3; i++) {
+            InlineQueryResultPhoto aa = new InlineQueryResultPhoto()
+                    .setId(i+"")
+                    .setThumbUrl("https://alltor.me/images/logo/logo_simple_me.png")
+                    .setPhotoUrl("https://alltor.me/images/logo/logo_simple_me.png");
+            list.add(aa);
+        }
 
         AnswerInlineQuery answerInlineQuery = new AnswerInlineQuery();
         answerInlineQuery
