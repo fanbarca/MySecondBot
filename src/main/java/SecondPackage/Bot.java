@@ -137,9 +137,11 @@ public class Bot extends TelegramLongPollingBot {
 
         for (int i=0; i<4; i++) {
             InputTextMessageContent ok = new InputTextMessageContent();
+
             ok.setMessageText("test"+i);
             InlineQueryResultArticle aa = new InlineQueryResultArticle()
                     .setId(i+"")
+                    .setTitle("test"+i)
                     .setInputMessageContent(ok);
             list.add(aa);
         }
