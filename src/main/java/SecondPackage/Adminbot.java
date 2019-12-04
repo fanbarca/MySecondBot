@@ -240,7 +240,7 @@ public class Adminbot extends TelegramLongPollingBot {
 				if (cb.contains("deleteCategory")) {
                     russian = cb.substring(14);
 					DataBase.sql("delete from types where russian = '"+russian+"'");
-                    edit(update.getCallbackQuery().getMessage(), "Выберите действие", mainKeyboard(null));
+                    edit(update.getCallbackQuery().getMessage(), "Выберите действие", mainKeyboard(null), 1);
 					answer.setShowAlert(false).setText("Удалено");
                 }
 
