@@ -234,11 +234,11 @@ public class Adminbot extends TelegramLongPollingBot {
                     edit(update.getCallbackQuery().getMessage(), russian+"\nУкажите критерии", updateMarkup());
                 }
                 if (cb.contains("editCat")) {
-                    russian = cb.substring(12);
+                    russian = cb.substring(7);
                     edit(update.getCallbackQuery().getMessage(), russian+"\nУкажите критерии", updateMarkup());
                 }
 				if (cb.contains("delCat")) {
-                    russian = cb.substring(14);
+                    russian = cb.substring(6);
 					DataBase.sql("delete from types where russian = '"+russian+"'");
                     edit(update.getCallbackQuery().getMessage(), "Выберите действие", mainKeyboard(null), 1);
 					answer.setShowAlert(false).setText("Удалено");
