@@ -10,7 +10,9 @@ import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageCa
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageMedia;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.inlinequery.inputmessagecontent.InputTextMessageContent;
 import org.telegram.telegrambots.meta.api.objects.inlinequery.result.InlineQueryResult;
+import org.telegram.telegrambots.meta.api.objects.inlinequery.result.InlineQueryResultArticle;
 import org.telegram.telegrambots.meta.api.objects.inlinequery.result.InlineQueryResultPhoto;
 import org.telegram.telegrambots.meta.api.objects.media.InputMediaPhoto;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
@@ -133,11 +135,12 @@ public class Bot extends TelegramLongPollingBot {
     private void handleInline(Update update) throws TelegramApiException {
         List<InlineQueryResult> list = new ArrayList<>();
 
-        for (int i=0; i<3; i++) {
-            InlineQueryResultPhoto aa = new InlineQueryResultPhoto()
+        for (int i=0; i<4; i++) {
+            InputTextMessageContent ok = new InputTextMessageContent();
+            ok.setMessageText("test"+i);
+            InlineQueryResultArticle aa = new InlineQueryResultArticle()
                     .setId(i+"")
-                    .setThumbUrl("https://alltor.me/images/logo/logo_simple_me.png")
-                    .setPhotoUrl("https://alltor.me/images/logo/logo_simple_me.png");
+                    .setInputMessageContent(ok);
             list.add(aa);
         }
 
