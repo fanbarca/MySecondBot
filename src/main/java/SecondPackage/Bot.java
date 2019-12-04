@@ -512,7 +512,6 @@ public class Bot extends TelegramLongPollingBot {
 
 
     private void showSubCat(Update update, int i) throws TelegramApiException, SQLException {
-        if (!listSubTypes(i).isEmpty()){
             InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
         	List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
             for (String sub:listSubTypes(i)) {
@@ -531,9 +530,10 @@ public class Bot extends TelegramLongPollingBot {
                     .setCallbackData(Lan.goBack(a.getLanguage())));
                     rows.add(row2);
         markup.setKeyboard(rows);
-
-        editPic(Lan.listTypes(a.getLanguage()).get(i), "Лого",
-        update.getCallbackQuery().getMessage(), markup);
+		
+		if (!rows.isEmpty()){
+        	editPic(Lan.listTypes(a.getLanguage()).get(i), "Лого",
+        		update.getCallbackQuery().getMessage(), markup);
         } else {
             a.setAddress(Lan.emptyOrders(a.getLanguage()));
             a.setAlert(true);
