@@ -291,7 +291,35 @@ public class Adminbot extends TelegramLongPollingBot {
                     edit(update.getCallbackQuery().getMessage(), "Удалить категорию", markup);
                 }
             }
-
+			if(cb.equals("Опубликовать товар")) {
+				List<String> l = DataBase.sqlQueryList("select Russian from table0","Russian");
+				InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
+                    List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
+				
+				for (String s:l) {
+                        List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
+                        row.add(new InlineKeyboardButton()
+                                .setText(EmojiParser.parseToUnicode(s))
+                                .setCallbackData("publish"+s));
+                        rows.add(row);
+                    }
+					List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
+                    row.add(new InlineKeyboardButton()
+                            .setText(EmojiParser.parseToUnicode("Назад"))
+                            .setCallbackData("Назад"));
+                    rows.add(row);
+                    markup.setKeyboard(rows);
+				
+                if (!l.isEmpty()) edit(update.getCallbackQuery().getMessage(), "Опубликовать товар", markup);
+                else answer.setShowAlert(false).setText("Товаров нет");
+			}
+			if(cb.contains("publish")) {
+				russian = cb.substring(7);
+				for (String tt:DataBase.sqlQueryList("select russian from types","russian")) {
+					if(cb.contains(tt)) answer.setShowAlert(false).setText("Опубликовать "+tt);
+				}
+			}
+			
 
             if(cb.equals(mainKeyboard(null).get(0))){
                 List<String> l = DataBase.productsAvailability("Russian");
@@ -512,6 +540,7 @@ public class Adminbot extends TelegramLongPollingBot {
             a.add("Добавить категорию");
             a.add("Обновить категорию");
 		    a.add("Удалить категорию");
+			a.add("Опубликовать товар");
             if (lastbutton!=null) a.add(lastbutton);
         return a;
 	}
