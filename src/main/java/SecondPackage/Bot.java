@@ -531,7 +531,7 @@ public class Bot extends TelegramLongPollingBot {
                     rows.add(row2);
         markup.setKeyboard(rows);
 		
-		if (!rows.isEmpty()){
+		if (rows.size()>1){
         	editPic(Lan.listTypes(a.getLanguage()).get(i), "Лого",
         		update.getCallbackQuery().getMessage(), markup);
         } else {
