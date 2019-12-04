@@ -515,7 +515,7 @@ public class Bot extends TelegramLongPollingBot {
             InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
         	List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
             for (String sub:listSubTypes(i)) {
-				if (!DataBase.sqlQueryList("select id from table0 where type = '"+i+"' and subtype = '"+sub+"'", "id").isEmpty()) {
+				if (!DataBase.sqlQueryList("select id from table0 where instock = true and type = '"+i+"' and subtype = '"+sub+"'", "id").isEmpty()) {
 					List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
 					row.add(new InlineKeyboardButton()
 						.setText(EmojiParser.parseToUnicode(
