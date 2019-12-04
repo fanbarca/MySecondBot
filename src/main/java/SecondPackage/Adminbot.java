@@ -233,9 +233,15 @@ public class Adminbot extends TelegramLongPollingBot {
                         DataBase.sql("UPDATE types SET "+column+" = not "+column+" where russian = '"+russian+"'");
                     edit(update.getCallbackQuery().getMessage(), russian+"\nУкажите критерии", updateMarkup());
                 }
-                if (cb.contains("category")) {
-                    russian = cb.substring(8);
+                if (cb.contains("editCategory")) {
+                    russian = cb.substring(12);
                     edit(update.getCallbackQuery().getMessage(), russian+"\nУкажите критерии", updateMarkup());
+                }
+				if (cb.contains("deleteCategory")) {
+                    russian = cb.substring(14);
+					DataBase.sql("delete from types where russian = '"+russian+"'");
+                    edit(update.getCallbackQuery().getMessage(), "Выберите действие", mainKeyboard(null));
+					answer.setShowAlert(false).setText("Удалено");
                 }
 
             if(cb.equals("Обновить категорию")) {
@@ -249,7 +255,7 @@ public class Adminbot extends TelegramLongPollingBot {
                         List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
                         row.add(new InlineKeyboardButton()
                                 .setText(EmojiParser.parseToUnicode(s))
-                                .setCallbackData("category"+s));
+                                .setCallbackData("editCategory"+s));
                         rows.add(row);
                     }
                     List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
@@ -259,6 +265,30 @@ public class Adminbot extends TelegramLongPollingBot {
                     rows.add(row);
                     markup.setKeyboard(rows);
                     edit(update.getCallbackQuery().getMessage(), "Обновить категорию", markup);
+                }
+            }
+			
+			if(cb.equals("Удалить категорию")) {
+                List<String> ll = DataBase.sqlQueryList("select russian from types", "russian");
+                if (ll.isEmpty()){
+                    answer.setShowAlert(false).setText("Категорий нет");
+                } else {
+                    InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
+                    List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
+                    for (String s:ll) {
+                        List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
+                        row.add(new InlineKeyboardButton()
+                                .setText(EmojiParser.parseToUnicode(s))
+                                .setCallbackData("deleteCategory"+s));
+                        rows.add(row);
+                    }
+                    List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
+                    row.add(new InlineKeyboardButton()
+                            .setText(EmojiParser.parseToUnicode("Назад"))
+                            .setCallbackData("Назад"));
+                    rows.add(row);
+                    markup.setKeyboard(rows);
+                    edit(update.getCallbackQuery().getMessage(), "Удалить категорию", markup);
                 }
             }
 
@@ -376,7 +406,6 @@ public class Adminbot extends TelegramLongPollingBot {
                         DataBase.sql("UPDATE table0 SET instock = true where russian = '"+t+"'");
                         edit(update.getCallbackQuery().getMessage(), update.getCallbackQuery().getMessage().getText(), DataBase.productsAvailability("Russian"), 3);
                     } else if (listener.equals("Delete")) {
-                        listener = "";
                         DataBase.sql("delete from cart where item = '"+prodId+"'");
 						DataBase.sql("delete from table0 where russian = '"+t+"'");
                         edit(update.getCallbackQuery().getMessage(), "Удалить продукт", DataBase.showAllProducts("Russian", false), 3);
@@ -482,6 +511,7 @@ public class Adminbot extends TelegramLongPollingBot {
             a.add("Заказы");
             a.add("Добавить категорию");
             a.add("Обновить категорию");
+		    a.add("Удалить категорию");
             if (lastbutton!=null) a.add(lastbutton);
         return a;
 	}
