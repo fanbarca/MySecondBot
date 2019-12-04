@@ -68,11 +68,9 @@ public class Adminbot extends TelegramLongPollingBot {
                     }
                 }
             }
-        } catch (SQLException e1) {
+        } catch (SQLException | TelegramApiRequestException e1) {
             e1.printStackTrace();
-        } catch (TelegramApiRequestException e) {
-			e.printStackTrace();
-		}
+        }
     }
 
     private void checkAdmin(Update update, String id) throws SQLException, TelegramApiRequestException {
@@ -292,14 +290,15 @@ public class Adminbot extends TelegramLongPollingBot {
                 }
             }
 			if(cb.equals("Опубликовать товар")) {
-				List<String> l = DataBase.sqlQueryList("select Russian from table0","Russian");
+				List<String> l = DataBase.sqlQueryList("select id from table0","id");
 				InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
                     List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
 				for (String s:l) {
-                        if (!s.equals("Лого")) {
+                    String name = DataBase.sqlQuery("select russian from table0 where id ="+s,"russian");
+                        if (!name.equals("Лого")) {
 							List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
                         	row.add(new InlineKeyboardButton()
-                                .setText(EmojiParser.parseToUnicode(s))
+                                .setText(EmojiParser.parseToUnicode(name))
                                 .setCallbackData("publish"+s));
 							rows.add(row);
 						}
@@ -315,8 +314,12 @@ public class Adminbot extends TelegramLongPollingBot {
                 else answer.setShowAlert(false).setText("Товаров нет");
 			}
 			if(cb.contains("publish")) {
-				russian = cb.substring(7);
-				answer.setShowAlert(false).setText("Опубликовать "+russian);
+				String prodId = cb.substring(7);
+
+				Bot ok= new Bot();
+				//ok.sendPic("111",,simpleMarkUp("Заказать"),cb);
+
+				answer.setShowAlert(false).setText("Опубликовать "+cb);
 			}
 			
 

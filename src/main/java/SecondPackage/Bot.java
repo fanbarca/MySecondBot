@@ -808,18 +808,6 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
                         DataBase.sqlQuery("select "+a.getLanguage()+" from table0 where id ="+id,a.getLanguage())));
             }
             images.put(a.getId(), sentArray);
-
-//            InputMediaPhoto imp = new InputMediaPhoto();
-//            imp.setMedia(file_id);
-//            String typename = Lan.listTypes(a.getLanguage()).get(Integer.parseInt(typeID));
-//            imp.setCaption(EmojiParser.parseToUnicode(Lan.mainMenu(a.getLanguage()).get(0)+"    "+typename)).setParseMode("HTML");
-//                EditMessageMedia em = new EditMessageMedia();
-//                em.setChatId(message.getChatId());
-//                em.setMessageId(message.getMessageId());
-//                em.setMedia(imp);
-//                InlineKeyboardMarkup markup = listMarkup(listID, message.getChatId());
-//                em.setReplyMarkup(markup);
-//                execute(em);
         } else {
             a.setAddress(Lan.emptyOrders(a.getLanguage()));
             a.setAlert(true);
@@ -1434,8 +1422,12 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
                     .setText(EmojiParser.parseToUnicode(Lan.delivery(a.getLanguage())))
                     .setCallbackData("selected"+productId));    
             rows.add(row0);
-            
-            markup.setKeyboard(rows);
+            List<InlineKeyboardButton> row1 = new ArrayList<InlineKeyboardButton>();
+            row1.add(new InlineKeyboardButton()
+                .setText(EmojiParser.parseToUnicode(Lan.share(a.getLanguage())))
+                .setSwitchInlineQuery(""));
+            rows.add(row1);
+        markup.setKeyboard(rows);
         return markup;
     }
 	
