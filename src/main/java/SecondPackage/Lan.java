@@ -446,9 +446,9 @@ class Lan {
 
     public static String share(String lan) {
         String r="";
-        if (lan.equals("Uzbek")) r = "Baham ko'rmoq";
-        else if (lan.equals("Russian")) r = "Поделиться";
-        else if (lan.equals("English")) r = "Share";
+        if (lan.equals("Uzbek")) r = "📤 Baham ko'rmoq";
+        else if (lan.equals("Russian")) r = "📤 Поделиться";
+        else if (lan.equals("English")) r = "📤 Share";
         return r;
     }
 }
