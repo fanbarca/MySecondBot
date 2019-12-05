@@ -10,6 +10,7 @@ import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageCa
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageMedia;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.inlinequery.inputmessagecontent.InputMessageContent;
 import org.telegram.telegrambots.meta.api.objects.inlinequery.inputmessagecontent.InputTextMessageContent;
 import org.telegram.telegrambots.meta.api.objects.inlinequery.result.InlineQueryResult;
 import org.telegram.telegrambots.meta.api.objects.inlinequery.result.InlineQueryResultArticle;
@@ -151,10 +152,12 @@ public class Bot extends TelegramLongPollingBot {
                 .setLatitude(latitude).setLongitude(longitude));
         } else if (inline.equals("address")) {
             String address = DataBase.sqlQuery("select address from users where id ="+a.getId(), "address");
+            InputTextMessageContent inputMessageContent = new InputTextMessageContent()
+                    .setMessageText(address);
             answerInlineQuery.setResults(new InlineQueryResultArticle()
                     .setId("22")
                     .setTitle(Lan.previousAddress(a.getLanguage()))
-                    .setDescription(address));
+                    .setInputMessageContent(inputMessageContent));
         }
         execute(answerInlineQuery);
     }
