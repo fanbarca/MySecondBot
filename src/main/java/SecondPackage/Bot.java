@@ -145,13 +145,17 @@ public class Bot extends TelegramLongPollingBot {
         else if (inline.equals("location")) {
             Float latitude = Float.parseFloat(DataBase.sqlQuery("select latitude from users where id ="+a.getId(), "latitude"));
             Float longitude = Float.parseFloat(DataBase.sqlQuery("select longitude from users where id ="+a.getId(), "longitude"));
-
             answerInlineQuery.setResults(new InlineQueryResultLocation()
                 .setId("22")
                 .setTitle(Lan.previousLocation(a.getLanguage()))
                 .setLatitude(latitude).setLongitude(longitude));
+        } else if (inline.equals("address")) {
+            String address = DataBase.sqlQuery("select address from users where id ="+a.getId(), "address");
+            answerInlineQuery.setResults(new InlineQueryResultArticle()
+                    .setId("22")
+                    .setTitle(Lan.previousAddress(a.getLanguage()))
+                    .setDescription(address));
         }
-
         execute(answerInlineQuery);
     }
 
@@ -439,30 +443,7 @@ public class Bot extends TelegramLongPollingBot {
                     DataBase.sql("insert into zakaz (userid, product) values ("
                     +a.getId()+", '"
                     +curretCart(a.getId())+"' )");
-                    String address = null;
-                    boolean hasLocation = DataBase.sqlQuery("select latitude from users where id ="+a.getId(), "latitude")!=null;
-                    boolean hasAddress = DataBase.sqlQuery("select address from users where id ="+a.getId(), "address")!=null;
-                    InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
-                    List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
-                    List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
-                        row.add(new InlineKeyboardButton()
-                                .setText(EmojiParser.parseToUnicode(Lan.YesNo(a.getLanguage()).get(0)))
-                                .setSwitchInlineQueryCurrentChat("location"));
-                        row.add(new InlineKeyboardButton()
-                                .setText(EmojiParser.parseToUnicode(Lan.YesNo(a.getLanguage()).get(1)))
-                                .setCallbackData("UseNewLocation"));
-                    rows.add(row);
-                    markup.setKeyboard(rows);
-                    if (hasLocation) {
-                        editCaption(Lan.useOldLocation(a.getLanguage()), update.getCallbackQuery().getMessage(), markup);
-                    } else if (hasAddress) {
-                        address = DataBase.sqlQuery("select address from users where id ="+a.getId(), "address");
-                        if (address!=null) {
-                        editCaption(Lan.useOldAddress(a.getLanguage())+"\n\n"+address, update.getCallbackQuery().getMessage(), markup);
-                        }
-                    } else {
-                        sendMeLocation(update.getCallbackQuery().getMessage());
-                    }
+                    sendMeLocation(update.getCallbackQuery().getMessage());
                 }
             } else {
                 a.setAddress(Lan.tooLate(a.getLanguage()));
@@ -497,14 +478,14 @@ public class Bot extends TelegramLongPollingBot {
                 sendMeNumber(a.getId());
             } else confirm(update, time);
         }
-        if (cb.contains("UseNewLocation")) {
-            sendMeLocation(update.getCallbackQuery().getMessage());
-        }
-        if (cb.contains("UseOldLocation")) {
-            editCaption(Lan.orderTime(a.getLanguage()) + Lan.tooLate(a.getLanguage()), a.getId(),
-                Integer.parseInt(DataBase.sqlQuery("SELECT image from users where id=" + a.getId(), "image")),
-                timeKeys());
-        }
+//        if (cb.contains("UseNewLocation")) {
+//            sendMeLocation(update.getCallbackQuery().getMessage());
+//        }
+//        if (cb.contains("UseOldLocation")) {
+//            editCaption(Lan.orderTime(a.getLanguage()) + Lan.tooLate(a.getLanguage()), a.getId(),
+//                Integer.parseInt(DataBase.sqlQuery("SELECT image from users where id=" + a.getId(), "image")),
+//                timeKeys());
+//        }
         if (cb.contains(Lan.removeSelectively(a.getLanguage()))) {
             editCaption(Lan.mainMenu(a.getLanguage()).get(3) + "\n" + curretCart(a.getId()), a.getId(),
                 Integer.parseInt(DataBase.sqlQuery("SELECT image from users where id=" + a.getId(), "image")),
@@ -840,12 +821,27 @@ public class Bot extends TelegramLongPollingBot {
 
 
 public void sendMeLocation(Message message) throws TelegramApiException, SQLException {
-        InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
+    boolean hasLocation = DataBase.sqlQuery("select latitude from users where id ="+a.getId(), "latitude")!=null;
+    boolean hasAddress = DataBase.sqlQuery("select address from users where id ="+a.getId(), "address")!=null;
+    InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
+        if (hasLocation) {
+            List<InlineKeyboardButton> row0 = new ArrayList<InlineKeyboardButton>();
+            row0.add(new InlineKeyboardButton()
+                    .setText(EmojiParser.parseToUnicode(Lan.previousLocation(a.getLanguage())))
+                    .setSwitchInlineQueryCurrentChat("location"));
+            rows.add(row0);
+        } else if (hasAddress) {
+            List<InlineKeyboardButton> row0 = new ArrayList<InlineKeyboardButton>();
+            row0.add(new InlineKeyboardButton()
+                    .setText(EmojiParser.parseToUnicode(Lan.previousAddress(a.getLanguage())))
+                    .setSwitchInlineQueryCurrentChat("address"));
+            rows.add(row0);
+        }
         List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
-                    row.add(new InlineKeyboardButton()
-                            .setText(EmojiParser.parseToUnicode(Lan.clearOrders(a.getLanguage())))
-                            .setCallbackData("Отмена"));
+        row.add(new InlineKeyboardButton()
+                        .setText(EmojiParser.parseToUnicode(Lan.clearOrders(a.getLanguage())))
+                        .setCallbackData("Отмена"));
         rows.add(row);
         markup.setKeyboard(rows);
         editCaption(Lan.sendMeLocation(a.getLanguage()), message, markup);
@@ -1228,7 +1224,7 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
         int minutes = LocalTime.now(z).getMinute();
         int hours = LocalTime.now(z).getHour();
 //        if (hours<8) {
-            for (int i = 0; i<endOfPeriod.getHour()*30+1; i+=30) {
+            for (int i = 0; i<(endOfPeriod.getHour()-startOfPeriod.getHour())*30+1; i+=30) {
                 menu.add(dtf.format(startOfPeriod.plusMinutes(i)));
             }
 //        } else if (hours<19) {

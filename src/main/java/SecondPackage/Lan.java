@@ -470,4 +470,11 @@ class Lan {
         else if (lan.equals("English")) r = "Previously sent location";
         return r;
     }
+    public static String previousAddress(String lan) {
+        String r="";
+        if (lan.equals("Uzbek")) r = "Oldin yuborilgan manzil";
+        else if (lan.equals("Russian")) r = "Ранее отправленный адрес";
+        else if (lan.equals("English")) r = "Previously sent address";
+        return r;
+    }
 }
