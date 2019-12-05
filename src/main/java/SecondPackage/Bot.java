@@ -182,7 +182,7 @@ public class Bot extends TelegramLongPollingBot {
     
     
     
-     private void showMainMenu(boolean edit, Update update) {
+     private void showMainMenu(boolean edit, Update update) throws SQLException, TelegramApiException {
          InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
             List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
                 List<InlineKeyboardButton> row1 = new ArrayList<InlineKeyboardButton>();
