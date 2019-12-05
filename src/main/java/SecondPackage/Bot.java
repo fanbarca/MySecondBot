@@ -133,20 +133,17 @@ public class Bot extends TelegramLongPollingBot {
 
     
 
-    private void handleInline(Update update) throws TelegramApiException {
-        List<InlineQueryResult> list = new ArrayList<>();
-        for (int i=0; i<4; i++) {
-            InputTextMessageContent ok = new InputTextMessageContent();
-            ok.setMessageText("test"+i);
-            InlineQueryResultArticle aa = new InlineQueryResultArticle()
-                    .setId(i+"")
-                    .setTitle("test"+i)
-                    .setInputMessageContent(ok);
-            list.add(aa);
-        }
+    private void handleInline(Update update) throws SQLException,  TelegramApiException {
+        
+            InlineQueryResultCachedPhoto aa = new InlineQueryResultCachedPhoto()
+                    .setType("photo")
+                    .setId("22")
+                    .setPhoto(DataBase.sqlQuery("select id from table0 where russian = 'Лого'"))
+                    .setCaption("test");
+        
         AnswerInlineQuery answerInlineQuery = new AnswerInlineQuery()
                 .setInlineQueryId(update.getInlineQuery().getId())
-                .setResults(list);
+                .setResults(aa);
         execute(answerInlineQuery);
     }
 

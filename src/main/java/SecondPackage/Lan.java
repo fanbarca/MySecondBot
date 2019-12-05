@@ -30,19 +30,19 @@ class Lan {
         List<String> menu = new ArrayList<String>();
             if (lan.equals("Uzbek")) {
                 menu.add(":notebook_with_decorative_cover: Katalog");
-                menu.add(":truck: Buyurtma");
+                menu.add("📦 Buyurtma");
                 menu.add(":uz: Til");
                 menu.add("🛒 Savatcha");
             }
             else if (lan.equals("Russian")) {
                 menu.add(":notebook_with_decorative_cover: Каталог");
-                menu.add(":truck: Мой заказ");
+                menu.add("📦 Мой заказ");
                 menu.add(":ru: Язык");
                 menu.add("🛒 Корзина");
             }
             else if (lan.equals("English")) {
                 menu.add(":notebook_with_decorative_cover: Catalog");
-                menu.add(":truck: My order");
+                menu.add("📦 My order");
                 menu.add(":gb: Language");
                 menu.add("🛒 Shopping cart");
             }
