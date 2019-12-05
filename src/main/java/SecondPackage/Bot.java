@@ -195,13 +195,13 @@ public class Bot extends TelegramLongPollingBot {
                                 .setText(EmojiParser.parseToUnicode(Lan.mainMenu(a.getLanguage()).get(1)))
                                 .setCallbackData(Lan.mainMenu(a.getLanguage()).get(1)));
                         row2.add(new InlineKeyboardButton()
-                                .setText(EmojiParser.parseToUnicode(Lan.mainMenu(a.getLanguage()).get(2)))
-                                .setCallbackData(Lan.mainMenu(a.getLanguage()).get(2)));
-                        row2.add(new InlineKeyboardButton()
                                 .setText(EmojiParser.parseToUnicode(Lan.mainMenu(a.getLanguage()).get(3)))
                                 .setCallbackData(Lan.mainMenu(a.getLanguage()).get(3)));
                 rows.add(row2);
                 List<InlineKeyboardButton> row3 = new ArrayList<InlineKeyboardButton>();
+                        row3.add(new InlineKeyboardButton()
+                                .setText(EmojiParser.parseToUnicode(Lan.mainMenu(a.getLanguage()).get(2)))
+                                .setCallbackData(Lan.mainMenu(a.getLanguage()).get(2)));
                         row3.add(new InlineKeyboardButton()
                                 .setText(EmojiParser.parseToUnicode(Lan.share(a.getLanguage())))
                                 .setSwitchInlineQuery(""));
