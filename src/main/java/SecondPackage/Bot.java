@@ -40,8 +40,8 @@ public class Bot extends TelegramLongPollingBot {
     private String botToken = "780864630:AAHpUc01UagThYH7wRi15zJQjwu06A6NaWM";
     Map<String, List<String>> images = new HashMap<>();
     Order a;
-    public static LocalTime startOfPeriod = LocalTime.parse("03:00");
-    public static LocalTime endOfPeriod = LocalTime.parse("18:20");
+    public static LocalTime startOfPeriod = LocalTime.parse("04:00");
+    public static LocalTime endOfPeriod = LocalTime.parse("22:30");
 
 
     @Override

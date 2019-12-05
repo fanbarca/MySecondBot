@@ -335,9 +335,10 @@ public class Adminbot extends TelegramLongPollingBot {
                 answer.setShowAlert(false).setText("Время начала: "+cb.substring(6));
             }
             if(cb.contains("Конец")) {
-                edit(update.getCallbackQuery().getMessage(), "Новое время работы: " +
-                        "\nС "+Bot.startOfPeriod.toString()+" по "+Bot.endOfPeriod.toString(), mainKeyboard(null), 1);
-                answer.setShowAlert(false).setText("Время начала: "+cb.substring(6));
+                edit(update.getCallbackQuery().getMessage(), "Новое время установлено", mainKeyboard(null), 1);
+                Bot.endOfPeriod = LocalTime.parse(cb.substring(5));
+                answer.setShowAlert(false).setText("Новое время работы: " +
+                        "\nС "+Bot.startOfPeriod.toString()+" по "+Bot.endOfPeriod.toString());
             }
             if(cb.equals(mainKeyboard(null).get(0))){
                 List<String> l = DataBase.productsAvailability("Russian");
