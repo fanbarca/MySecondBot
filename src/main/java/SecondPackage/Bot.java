@@ -137,7 +137,7 @@ public class Bot extends TelegramLongPollingBot {
         
             InlineQueryResultCachedPhoto aa = new InlineQueryResultCachedPhoto()
                     .setId("22")
-                    .setPhoto(DataBase.sqlQuery("select id from table0 where russian = 'Лого'", "id"))
+                    .setPhotoFileId(DataBase.sqlQuery("select imageid from table0 where russian = 'Лого'", "imageid"))
                     .setCaption("test");
         
         AnswerInlineQuery answerInlineQuery = new AnswerInlineQuery()
