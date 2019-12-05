@@ -26,6 +26,17 @@ class Lan {
                 emoji;
         return r;
     }
+    public static String welcome(String lan){
+        String r="";
+        String emoji = "\n:handbag:";
+        if (lan.equals("Uzbek")) r = "Xush kelibsiz!" +
+                emoji;
+        else if (lan.equals("Russian")) r = "Добро пожаловать!" +
+                emoji;
+        else if (lan.equals("English")) r = "Welcome!"+
+                emoji;
+        return r;
+    }
     public static List<String> mainMenu(String lan){
         List<String> menu = new ArrayList<String>();
             if (lan.equals("Uzbek")) {
@@ -449,6 +460,14 @@ class Lan {
         if (lan.equals("Uzbek")) r = "📤 Baham ko'rmoq";
         else if (lan.equals("Russian")) r = "📤 Поделиться";
         else if (lan.equals("English")) r = "📤 Share";
+        return r;
+    }
+
+    public static String previousLocation(String lan) {
+        String r="";
+        if (lan.equals("Uzbek")) r = "Oldin yuborilgan geolokatsiya";
+        else if (lan.equals("Russian")) r = "Ранее отправленная геолокация";
+        else if (lan.equals("English")) r = "Previously sent location";
         return r;
     }
 }

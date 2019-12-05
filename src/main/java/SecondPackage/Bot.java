@@ -13,6 +13,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.inlinequery.inputmessagecontent.InputTextMessageContent;
 import org.telegram.telegrambots.meta.api.objects.inlinequery.result.InlineQueryResult;
 import org.telegram.telegrambots.meta.api.objects.inlinequery.result.InlineQueryResultArticle;
+import org.telegram.telegrambots.meta.api.objects.inlinequery.result.InlineQueryResultLocation;
 import org.telegram.telegrambots.meta.api.objects.inlinequery.result.cached.InlineQueryResultCachedPhoto;
 import org.telegram.telegrambots.meta.api.objects.media.InputMediaPhoto;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
@@ -134,15 +135,23 @@ public class Bot extends TelegramLongPollingBot {
     
 
     private void handleInline(Update update) throws SQLException,  TelegramApiException {
-        
-            InlineQueryResultCachedPhoto aa = new InlineQueryResultCachedPhoto()
-                    .setId("22")
-                    .setPhotoFileId(DataBase.sqlQuery("select imageid from table0 where russian = 'Лого'", "imageid"))
-                    .setCaption("test");
-        
+        String inline = update.getInlineQuery().getQuery();
         AnswerInlineQuery answerInlineQuery = new AnswerInlineQuery()
-                .setInlineQueryId(update.getInlineQuery().getId())
-                .setResults(aa);
+                .setInlineQueryId(update.getInlineQuery().getId());
+        if (inline.equals("")) answerInlineQuery.setResults(new InlineQueryResultCachedPhoto()
+                .setId("22")
+                .setPhotoFileId(DataBase.sqlQuery("select imageid from table0 where russian = 'Лого'", "imageid"))
+                .setCaption("@"+botName));
+        else if (inline.equals("location")) {
+            Float latitude = Float.parseFloat(DataBase.sqlQuery("select latitude from users where id ="+a.getId(), "latitude"));
+            Float longitude = Float.parseFloat(DataBase.sqlQuery("select longitude from users where id ="+a.getId(), "longitude"));
+
+            answerInlineQuery.setResults(new InlineQueryResultLocation()
+                .setId("22")
+                .setTitle(Lan.previousLocation(a.getLanguage()))
+                .setLatitude(latitude).setLongitude(longitude));
+        }
+
         execute(answerInlineQuery);
     }
 
@@ -438,7 +447,7 @@ public class Bot extends TelegramLongPollingBot {
                     List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
                         row.add(new InlineKeyboardButton()
                                 .setText(EmojiParser.parseToUnicode(Lan.YesNo(a.getLanguage()).get(0)))
-                                .setCallbackData("UseOldLocation"));
+                                .setSwitchInlineQueryCurrentChat("location"));
                         row.add(new InlineKeyboardButton()
                                 .setText(EmojiParser.parseToUnicode(Lan.YesNo(a.getLanguage()).get(1)))
                                 .setCallbackData("UseNewLocation"));
