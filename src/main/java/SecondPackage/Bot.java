@@ -157,7 +157,8 @@ public class Bot extends TelegramLongPollingBot {
             answerInlineQuery.setResults(new InlineQueryResultArticle()
                     .setId("22")
                     .setTitle(Lan.previousAddress(a.getLanguage()))
-                    .setInputMessageContent(inputMessageContent));
+                    .setInputMessageContent(inputMessageContent)
+                    .setDescription(address));
         }
         execute(answerInlineQuery);
     }
@@ -1227,7 +1228,7 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
         int minutes = LocalTime.now(z).getMinute();
         int hours = LocalTime.now(z).getHour();
 //        if (hours<8) {
-            for (int i = 0; i<(endOfPeriod.getHour()-startOfPeriod.getHour())*30+1; i+=30) {
+            for (int i = 0; i<=(endOfPeriod.getHour()-startOfPeriod.getHour())*60; i+=30) {
                 menu.add(dtf.format(startOfPeriod.plusMinutes(i)));
             }
 //        } else if (hours<19) {

@@ -507,7 +507,7 @@ public class Adminbot extends TelegramLongPollingBot {
         List<String> menu = new ArrayList<String>();
         ZoneId z = ZoneId.of("Asia/Tashkent");
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm");
-        for (int i = 0; i<1400; i+=30) {
+        for (int i = 0; i<=1440; i+=30) {
             menu.add(dtf.format(LocalTime.parse("00:00").plusMinutes(i)));
         }
         InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
