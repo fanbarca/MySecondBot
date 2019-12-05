@@ -136,7 +136,6 @@ public class Bot extends TelegramLongPollingBot {
     private void handleInline(Update update) throws SQLException,  TelegramApiException {
         
             InlineQueryResultCachedPhoto aa = new InlineQueryResultCachedPhoto()
-                    .setType("photo")
                     .setId("22")
                     .setPhoto(DataBase.sqlQuery("select id from table0 where russian = 'Лого'", "id"))
                     .setCaption("test");
