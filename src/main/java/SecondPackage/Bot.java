@@ -40,8 +40,8 @@ public class Bot extends TelegramLongPollingBot {
     private String botToken = "780864630:AAHpUc01UagThYH7wRi15zJQjwu06A6NaWM";
     Map<String, List<String>> images = new HashMap<>();
     Order a;
-
-
+    public static LocalTime startOfPeriod = LocalTime.parse("03:00");
+    public static LocalTime endOfPeriod = LocalTime.parse("18:20");
 
 
     @Override
@@ -432,7 +432,7 @@ public class Bot extends TelegramLongPollingBot {
         }
         if (cb.contains(Lan.delivery(a.getLanguage()))) {
             ZoneId z = ZoneId.of("Asia/Tashkent");
-            if (LocalTime.now(z).getHour()>3&&LocalTime.now(z).isBefore(LocalTime.now(z).withHour(18).withMinute(20))) {
+            if (LocalTime.now(z).isAfter(startOfPeriod)&&LocalTime.now(z).isBefore(endOfPeriod)) {
                 if (DataBase.sqlQueryList("select product from zakaz where userid =" + a.getId()+" and conformed = true", "product").size() > 0) {
                     editPic(Lan.orderExists(a.getLanguage()), update.getCallbackQuery().getMessage(), Lan.YesNo(a.getLanguage()), "Лого", 2);
                 } else {

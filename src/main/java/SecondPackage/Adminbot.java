@@ -25,6 +25,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 
@@ -322,8 +326,19 @@ public class Adminbot extends TelegramLongPollingBot {
 				//ok.sendPic("111",,simpleMarkUp("Заказать"),cb);
 				answer.setShowAlert(false).setText("Опубликовать "+name);
 			}
-			
-
+            if(cb.contains("Указать время работы")) {
+                edit(update.getCallbackQuery().getMessage(), "Выберите время начала", timeKeys("Начало"));
+            }
+            if(cb.contains("Начало")) {
+                edit(update.getCallbackQuery().getMessage(), "Выберите время окончания", timeKeys("Конец"));
+                Bot.startOfPeriod = LocalTime.parse(cb.substring(6));
+                answer.setShowAlert(false).setText("Время начала: "+cb.substring(6));
+            }
+            if(cb.contains("Конец")) {
+                edit(update.getCallbackQuery().getMessage(), "Новое время работы: " +
+                        "\nС "+Bot.startOfPeriod.toString()+" по "+Bot.endOfPeriod.toString(), mainKeyboard(null), 1);
+                answer.setShowAlert(false).setText("Время начала: "+cb.substring(6));
+            }
             if(cb.equals(mainKeyboard(null).get(0))){
                 List<String> l = DataBase.productsAvailability("Russian");
                 if (!l.isEmpty()) edit(update.getCallbackQuery().getMessage(), "Указать наличие", l, 3);
@@ -485,6 +500,55 @@ public class Adminbot extends TelegramLongPollingBot {
         }
 	}
 
+
+
+    private InlineKeyboardMarkup timeKeys(String cb) {
+        List<String> menu = new ArrayList<String>();
+        ZoneId z = ZoneId.of("Asia/Tashkent");
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm");
+        for (int i = 0; i<1400; i+=30) {
+            menu.add(dtf.format(LocalTime.parse("00:00").plusMinutes(i)));
+        }
+        InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
+        List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
+        for (int i = 0; i<menu.size(); i+=3) {
+            List<InlineKeyboardButton> row1 = new ArrayList<InlineKeyboardButton>();
+            row1.add(new InlineKeyboardButton()
+                    .setText(EmojiParser.parseToUnicode(menu.get(i)))
+                    .setCallbackData(cb+menu.get(i)));
+            if((i+1)<menu.size()) row1.add(new InlineKeyboardButton()
+                    .setText(EmojiParser.parseToUnicode(menu.get(i+1)))
+                    .setCallbackData(cb+menu.get(i+1)));
+            if((i+2)<menu.size()) row1.add(new InlineKeyboardButton()
+                    .setText(EmojiParser.parseToUnicode(menu.get(i+2)))
+                    .setCallbackData(cb+menu.get(i+2)));
+            rows.add(row1);
+        }
+        List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
+        row.add(new InlineKeyboardButton()
+                .setText(EmojiParser.parseToUnicode("Назад"))
+                .setCallbackData("Назад"));
+        rows.add(row);
+        markup.setKeyboard(rows);
+        return markup;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	private InlineKeyboardMarkup updateMarkup() throws SQLException {
         InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
                                 List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
@@ -544,6 +608,7 @@ public class Adminbot extends TelegramLongPollingBot {
             a.add("Обновить категорию");
 		    a.add("Удалить категорию");
 			a.add("Опубликовать товар");
+            a.add("Указать время работы");
             if (lastbutton!=null) a.add(lastbutton);
         return a;
 	}
