@@ -182,7 +182,7 @@ public class Bot extends TelegramLongPollingBot {
     
     
     
-     private void showMainMenu(boolean edit) {
+     private void showMainMenu(boolean edit, Update update) {
          InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
             List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
                 List<InlineKeyboardButton> row1 = new ArrayList<InlineKeyboardButton>();
@@ -233,7 +233,7 @@ public class Bot extends TelegramLongPollingBot {
             } else {
                 deleteMessage(DataBase.sqlQuery("SELECT image from users where id=" + a.getId(), "image"), a.getId());
                 deleteMessage(update.getMessage());
-                showMainMenu(false);
+                showMainMenu(false, update);
             }
         } else if (update.getMessage().getText().startsWith("+998")) {
             if (a.getNumber() == null) {
@@ -281,10 +281,10 @@ public class Bot extends TelegramLongPollingBot {
                 DataBase.sql("UPDATE users SET language = 'English' WHERE id =" + a.getId());
                 a.setLanguage("English");
             }
-            showMainMenu(true);
+                showMainMenu(true, update);
         }
         if (cb.equals(Lan.backToMenu(a.getLanguage()))) {
-            showMainMenu(true);
+                showMainMenu(true, update);
             
         }
 
@@ -414,7 +414,7 @@ public class Bot extends TelegramLongPollingBot {
                     } else {
                         a.setAddress(Lan.cartCleared(a.getLanguage()));
                         a.setAlert(false);
-                        showMainMenu(true);
+                        showMainMenu(true, update);
                     }
                 } else if (cb.equals(prodId)) {
                     editPic(productText(prodId, userid), prodId, update.getCallbackQuery().getMessage(), markUp(productText(prodId, userid), prodId, (occurrences(prodId, userid)>0)?keybAddMore(name):keybAdd(name), 3));
@@ -425,7 +425,7 @@ public class Bot extends TelegramLongPollingBot {
             clearCart(update);
             a.setAddress(Lan.cartCleared(a.getLanguage()));
             a.setAlert(true);
-            showMainMenu(true);
+            showMainMenu(true, update);
             
         }
         if (cb.contains(Lan.delivery(a.getLanguage()))) {
@@ -482,7 +482,7 @@ public class Bot extends TelegramLongPollingBot {
         }
         if (cb.contains(Lan.clearOrders(a.getLanguage()))) {
             clearOrders(update);
-            showMainMenu(true);
+            showMainMenu(true, update);
         }
         if (cb.contains("Отмена")) {
             showCart(update, true);
@@ -1345,9 +1345,9 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
 
         DataBase.sql("update zakaz set conformed = true where userid = " + a.getId());
         if (update.hasMessage()) {
-            showMainMenu(false);
+            showMainMenu(false, update);
         }
-            showMainMenu(true);
+            showMainMenu(true, update);
         a.setAddress(Lan.orderPlaced(a.getLanguage()));
         a.setAlert(true);
     }
