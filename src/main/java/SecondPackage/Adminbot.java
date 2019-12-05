@@ -181,12 +181,14 @@ public class Adminbot extends TelegramLongPollingBot {
                             DataBase.sql("UPDATE table0 SET emoji = '"+Name+"' where russian = '"+russian+"'");
                             deleteMessage(update.getMessage());
                             edit(update.getMessage(), "Готово", mainKeyboard(null), 1);
-                        } else if (columnsListNames().contains(listener.substring(4))) {
+                        } else if (listener.length()>4) {
+                            if (columnsListNames().contains(listener.substring(4))) {
                             String Name = update.getMessage().getText();
                             DataBase.sql("UPDATE table0 SET "+listener.substring(8)+" = '"+Name+"' where id = "+listener.substring(0,4));
                             edit(update.getMessage(), "Готово", mainKeyboard(null), 1);
                             listener = "";
                             deleteMessage(update.getMessage());
+                            }
                         } else if (listener.equals("RussianCategory")) {
                             russian = update.getMessage().getText();
                             Random rand = new Random();
@@ -315,11 +317,10 @@ public class Adminbot extends TelegramLongPollingBot {
 			}
 			if(cb.contains("publish")) {
 				String prodId = cb.substring(7);
-
+                String name = DataBase.sqlQuery("select russian from table0 where id ="+prodId, "russian");
 				Bot ok= new Bot();
 				//ok.sendPic("111",,simpleMarkUp("Заказать"),cb);
-
-				answer.setShowAlert(false).setText("Опубликовать "+cb);
+				answer.setShowAlert(false).setText("Опубликовать "+name);
 			}
 			
 

@@ -131,13 +131,12 @@ public class Bot extends TelegramLongPollingBot {
 
 
 
+    
 
     private void handleInline(Update update) throws TelegramApiException {
         List<InlineQueryResult> list = new ArrayList<>();
-
         for (int i=0; i<4; i++) {
             InputTextMessageContent ok = new InputTextMessageContent();
-
             ok.setMessageText("test"+i);
             InlineQueryResultArticle aa = new InlineQueryResultArticle()
                     .setId(i+"")
@@ -145,14 +144,13 @@ public class Bot extends TelegramLongPollingBot {
                     .setInputMessageContent(ok);
             list.add(aa);
         }
-
-        AnswerInlineQuery answerInlineQuery = new AnswerInlineQuery();
-        answerInlineQuery
+        AnswerInlineQuery answerInlineQuery = new AnswerInlineQuery()
                 .setInlineQueryId(update.getInlineQuery().getId())
                 .setResults(list);
         execute(answerInlineQuery);
     }
 
+    
 
 
 
@@ -177,6 +175,43 @@ public class Bot extends TelegramLongPollingBot {
     }
 
 
+    
+    
+    
+    
+    
+    
+    
+     private void showMainMenu(boolean edit) {
+         InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
+            List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
+                List<InlineKeyboardButton> row1 = new ArrayList<InlineKeyboardButton>();
+                        row1.add(new InlineKeyboardButton()
+                                .setText(EmojiParser.parseToUnicode(Lan.mainMenu(a.getLanguage()).get(0)))
+                                .setCallbackData(Lan.mainMenu(a.getLanguage()).get(0)));
+                rows.add(row1);
+                List<InlineKeyboardButton> row2 = new ArrayList<InlineKeyboardButton>();
+                        row2.add(new InlineKeyboardButton()
+                                .setText(EmojiParser.parseToUnicode(Lan.mainMenu(a.getLanguage()).get(1)))
+                                .setCallbackData(Lan.mainMenu(a.getLanguage()).get(1)));
+                        row2.add(new InlineKeyboardButton()
+                                .setText(EmojiParser.parseToUnicode(Lan.mainMenu(a.getLanguage()).get(2)))
+                                .setCallbackData(Lan.mainMenu(a.getLanguage()).get(2)));
+                        row2.add(new InlineKeyboardButton()
+                                .setText(EmojiParser.parseToUnicode(Lan.mainMenu(a.getLanguage()).get(3)))
+                                .setCallbackData(Lan.mainMenu(a.getLanguage()).get(3)));
+                rows.add(row2);
+                List<InlineKeyboardButton> row3 = new ArrayList<InlineKeyboardButton>();
+                        row3.add(new InlineKeyboardButton()
+                                .setText(EmojiParser.parseToUnicode(Lan.share(a.getLanguage())))
+                                .setSwitchInlineQuery(""));
+                rows.add(row3);
+            markup.setKeyboard(rows);
+         // editPic(Lan.welcome(a.getLanguage(), a.getFirstName()), a.getId(),Integer.parseInt(DataBase.sqlQuery("SELECT image from users where id=" + a.getId(), "image")), Lan.mainMenu(a.getLanguage()), "Лого", 2);
+         if (edit) editPic(Lan.welcome(a.getLanguage(), a.getFirstName()), "Лого", update.getCallbackQuery().getMessage(), markup);
+         else sendPic(Lan.welcome(a.getLanguage(), a.getFirstName()), a.getId(), markup, "Лого");
+     }
+    
 
 
 
@@ -198,7 +233,7 @@ public class Bot extends TelegramLongPollingBot {
             } else {
                 deleteMessage(DataBase.sqlQuery("SELECT image from users where id=" + a.getId(), "image"), a.getId());
                 deleteMessage(update.getMessage());
-                sendPic(Lan.welcome(a.getLanguage(), a.getFirstName()), a.getId(), Lan.mainMenu(a.getLanguage()), "Лого", 2);
+                showMainMenu(false);
             }
         } else if (update.getMessage().getText().startsWith("+998")) {
             if (a.getNumber() == null) {
@@ -246,11 +281,11 @@ public class Bot extends TelegramLongPollingBot {
                 DataBase.sql("UPDATE users SET language = 'English' WHERE id =" + a.getId());
                 a.setLanguage("English");
             }
-            editPic(Lan.welcome(a.getLanguage(), a.getFirstName()), update.getCallbackQuery().getMessage(), Lan.mainMenu(a.getLanguage()), "Лого", 2);
+            showMainMenu(true);
         }
         if (cb.equals(Lan.backToMenu(a.getLanguage()))) {
-            editPic(Lan.welcome(a.getLanguage(), a.getFirstName()), update.getCallbackQuery().getMessage(),
-                    Lan.mainMenu(a.getLanguage()), "Лого", 2);
+            showMainMenu(true);
+            
         }
 
         if (cb.equals(Lan.mainMenu("Uzbek").get(0)) ||
@@ -379,8 +414,7 @@ public class Bot extends TelegramLongPollingBot {
                     } else {
                         a.setAddress(Lan.cartCleared(a.getLanguage()));
                         a.setAlert(false);
-                        editPic(Lan.welcome(a.getLanguage(), a.getFirstName()), update.getCallbackQuery().getMessage(), Lan.mainMenu(a.getLanguage()), "Лого", 2);
-
+                        showMainMenu(true);
                     }
                 } else if (cb.equals(prodId)) {
                     editPic(productText(prodId, userid), prodId, update.getCallbackQuery().getMessage(), markUp(productText(prodId, userid), prodId, (occurrences(prodId, userid)>0)?keybAddMore(name):keybAdd(name), 3));
@@ -391,7 +425,8 @@ public class Bot extends TelegramLongPollingBot {
             clearCart(update);
             a.setAddress(Lan.cartCleared(a.getLanguage()));
             a.setAlert(true);
-            editPic(Lan.welcome(a.getLanguage(), a.getFirstName()), update.getCallbackQuery().getMessage(), Lan.mainMenu(a.getLanguage()), "Лого", 2);
+            showMainMenu(true);
+            
         }
         if (cb.contains(Lan.delivery(a.getLanguage()))) {
             ZoneId z = ZoneId.of("Asia/Tashkent");
@@ -447,8 +482,7 @@ public class Bot extends TelegramLongPollingBot {
         }
         if (cb.contains(Lan.clearOrders(a.getLanguage()))) {
             clearOrders(update);
-            editPic(Lan.welcome(a.getLanguage(), a.getFirstName()), update.getCallbackQuery().getMessage(),
-                    Lan.mainMenu(a.getLanguage()), "Лого", 2);
+            showMainMenu(true);
         }
         if (cb.contains("Отмена")) {
             showCart(update, true);
@@ -1311,11 +1345,9 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
 
         DataBase.sql("update zakaz set conformed = true where userid = " + a.getId());
         if (update.hasMessage()) {
-            sendPic(Lan.welcome(a.getLanguage(), a.getFirstName()),a.getId(),Lan.mainMenu(a.getLanguage()), "Лого", 2);
+            showMainMenu(false);
         }
-        editPic(Lan.welcome(a.getLanguage(), a.getFirstName()), a.getId(),
-            Integer.parseInt(DataBase.sqlQuery("SELECT image from users where id=" + a.getId(), "image")),
-            Lan.mainMenu(a.getLanguage()), "Лого", 2);
+            showMainMenu(true);
         a.setAddress(Lan.orderPlaced(a.getLanguage()));
         a.setAlert(true);
     }
@@ -1452,11 +1484,11 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
                     .setText(EmojiParser.parseToUnicode(Lan.delivery(a.getLanguage())))
                     .setCallbackData("selected"+productId));    
             rows.add(row0);
-            List<InlineKeyboardButton> row1 = new ArrayList<InlineKeyboardButton>();
-            row1.add(new InlineKeyboardButton()
-                .setText(EmojiParser.parseToUnicode(Lan.share(a.getLanguage())))
-                .setSwitchInlineQuery(productId));
-            rows.add(row1);
+            // List<InlineKeyboardButton> row1 = new ArrayList<InlineKeyboardButton>();
+            // row1.add(new InlineKeyboardButton()
+            //     .setText(EmojiParser.parseToUnicode(Lan.share(a.getLanguage())))
+            //     .setSwitchInlineQuery(""));
+            // rows.add(row1);
         markup.setKeyboard(rows);
         return markup;
     }
