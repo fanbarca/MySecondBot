@@ -13,7 +13,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.inlinequery.inputmessagecontent.InputTextMessageContent;
 import org.telegram.telegrambots.meta.api.objects.inlinequery.result.InlineQueryResult;
 import org.telegram.telegrambots.meta.api.objects.inlinequery.result.InlineQueryResultArticle;
-import org.telegram.telegrambots.meta.api.objects.inlinequery.result.InlineQueryResultPhoto;
+import org.telegram.telegrambots.meta.api.objects.inlinequery.result.InlineQueryResultCachedPhoto;
 import org.telegram.telegrambots.meta.api.objects.media.InputMediaPhoto;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
@@ -138,7 +138,7 @@ public class Bot extends TelegramLongPollingBot {
             InlineQueryResultCachedPhoto aa = new InlineQueryResultCachedPhoto()
                     .setType("photo")
                     .setId("22")
-                    .setPhoto(DataBase.sqlQuery("select id from table0 where russian = 'Лого'"))
+                    .setPhoto(DataBase.sqlQuery("select id from table0 where russian = 'Лого'", "id"))
                     .setCaption("test");
         
         AnswerInlineQuery answerInlineQuery = new AnswerInlineQuery()
