@@ -1227,40 +1227,40 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm");
         int minutes = LocalTime.now(z).getMinute();
         int hours = LocalTime.now(z).getHour();
-        if (hours<8) {
-            for (int i = 0; i<601; i+=30) {
-                menu.add(dtf.format(LocalTime.now(z).withHour(9).withMinute(0).plusMinutes(i)));
+//        if (hours<8) {
+            for (int i = 0; i<endOfPeriod.getHour()*30+1; i+=30) {
+                menu.add(dtf.format(startOfPeriod.plusMinutes(i)));
             }
-        } else if (hours<19) {
-            int last=60;
-            if (hours<18) {
-                if (minutes<5) {
-                    menu.add(dtf.format(LocalTime.now(z).plusHours(1).truncatedTo(ChronoUnit.HOURS)));
-                    last = 90;
-                } else if (minutes<15) {
-                    menu.add(dtf.format(LocalTime.now(z).truncatedTo(ChronoUnit.HOURS).plusMinutes(75)));
-                    last = 90;
-                } else if (minutes<30) {
-                    menu.add(dtf.format(LocalTime.now(z).truncatedTo(ChronoUnit.HOURS).plusMinutes(90)));
-                    last = 120;
-                } else if (minutes<45) {
-                    menu.add(dtf.format(LocalTime.now(z).truncatedTo(ChronoUnit.HOURS).plusMinutes(105)));
-                    last = 120;
-                } else {
-                    menu.add(dtf.format(LocalTime.now(z).truncatedTo(ChronoUnit.HOURS).plusHours(2)));
-                    last = 150;
-                }
-                for (int i = last; i<(19-LocalTime.now(z).getHour())*60+1; i+=30) {
-                    menu.add(dtf.format(LocalTime.now(z).truncatedTo(ChronoUnit.HOURS).plusMinutes(i)));
-                }
-            } else {
-                if (minutes<20) {
-                    menu.add(dtf.format(LocalTime.now(z).withHour(19).withMinute(0)));
-                } else {
-                    menu.add(Lan.tooLate(a.getLanguage()));
-                }
-            }
-        }
+//        } else if (hours<19) {
+//            int last=60;
+//            if (hours<18) {
+//                if (minutes<5) {
+//                    menu.add(dtf.format(LocalTime.now(z).plusHours(1).truncatedTo(ChronoUnit.HOURS)));
+//                    last = 90;
+//                } else if (minutes<15) {
+//                    menu.add(dtf.format(LocalTime.now(z).truncatedTo(ChronoUnit.HOURS).plusMinutes(75)));
+//                    last = 90;
+//                } else if (minutes<30) {
+//                    menu.add(dtf.format(LocalTime.now(z).truncatedTo(ChronoUnit.HOURS).plusMinutes(90)));
+//                    last = 120;
+//                } else if (minutes<45) {
+//                    menu.add(dtf.format(LocalTime.now(z).truncatedTo(ChronoUnit.HOURS).plusMinutes(105)));
+//                    last = 120;
+//                } else {
+//                    menu.add(dtf.format(LocalTime.now(z).truncatedTo(ChronoUnit.HOURS).plusHours(2)));
+//                    last = 150;
+//                }
+//                for (int i = last; i<(19-LocalTime.now(z).getHour())*60+1; i+=30) {
+//                    menu.add(dtf.format(LocalTime.now(z).truncatedTo(ChronoUnit.HOURS).plusMinutes(i)));
+//                }
+//            } else {
+//                if (minutes<20) {
+//                    menu.add(dtf.format(LocalTime.now(z).withHour(19).withMinute(0)));
+//                } else {
+//                    menu.add(Lan.tooLate(a.getLanguage()));
+//                }
+//            }
+//        }
         InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
             List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
             for (int i = 0; i<menu.size(); i+=3) {
