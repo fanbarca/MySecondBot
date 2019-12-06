@@ -8,6 +8,7 @@
   <component name="ChangeListManager">
     <list default="true" id="7fdc6f42-80e3-436b-99c6-634d7f7f8939" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/src/main/java/SecondPackage/Adminbot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/SecondPackage/Adminbot.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/SecondPackage/Bot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/SecondPackage/Bot.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -88,13 +89,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1560590336061</updated>
-    </task>
-    <task id="LOCAL-00107" summary="new">
-      <created>1572766566284</created>
-      <option name="number" value="00107" />
-      <option name="presentableId" value="LOCAL-00107" />
-      <option name="project" value="LOCAL" />
-      <updated>1572766566285</updated>
     </task>
     <task id="LOCAL-00108" summary="new">
       <created>1572767071465</created>
@@ -432,7 +426,14 @@
       <option name="project" value="LOCAL" />
       <updated>1575662079859</updated>
     </task>
-    <option name="localTasksCounter" value="156" />
+    <task id="LOCAL-00156" summary="new">
+      <created>1575662555705</created>
+      <option name="number" value="00156" />
+      <option name="presentableId" value="LOCAL-00156" />
+      <option name="project" value="LOCAL" />
+      <updated>1575662555705</updated>
+    </task>
+    <option name="localTasksCounter" value="157" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">

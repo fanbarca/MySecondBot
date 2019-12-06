@@ -48,7 +48,7 @@ public class Adminbot extends TelegramLongPollingBot {
     static SimpleDateFormat time = new SimpleDateFormat("HH:mm");
     List<String> list = new ArrayList<String>();
     String russian = "";
-    private String channelId = "-1001404493971";
+    public static final String channelId = "-1001404493971";
 
     {
     date.setTimeZone(zone);
@@ -513,7 +513,6 @@ public class Adminbot extends TelegramLongPollingBot {
         String description = DataBase.sqlQuery("select russiandescription from table0 where id ="+prodId, "russiandescription")+"\n";
         String cost =  Lan.cost("russian")+DataBase.sqlQuery("SELECT cost from table0 where id = " + prodId, "cost")+Lan.currency("russian") +".\n";
         String file_id = "";
-
         file_id = DataBase.sqlQuery("SELECT imageid from table0 where id ="+prodId, "imageid");
         if (file_id == null) file_id = DataBase.sqlQuery("SELECT imageid from table0 where Russian = 'Лого'", "imageid");
 
@@ -540,7 +539,7 @@ public class Adminbot extends TelegramLongPollingBot {
          rows.add(row1);
         markup.setKeyboard(rows);
         Bot bot = new Bot();
-        bot.sendPic(name+description+cost, channelId,markup,name);
+        bot.toChannel(name+description+cost,markup,prodId);
     }
 
 

@@ -1095,6 +1095,28 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
 
 
 
+    public void toChannel(String text, InlineKeyboardMarkup inlineMarkup, String productId) throws SQLException, TelegramApiException {
+        String file_id = "";
+        if (productId.equals("Лого"))
+            file_id = DataBase.sqlQuery("SELECT imageid from table0 where Russian = 'Лого'", "imageid");
+        else {
+            file_id = DataBase.sqlQuery("SELECT imageid from table0 where id = " + productId , "imageid");
+            if (file_id == null) file_id = DataBase.sqlQuery("SELECT imageid from table0 where Russian = 'Лого'", "imageid");
+        }
+        SendPhoto aa = new SendPhoto();
+        aa.setChatId(Adminbot.channelId);
+        aa.setPhoto(file_id);
+        if (text.length()<1024) aa.setCaption(EmojiParser.parseToUnicode(text)).setParseMode("HTML");
+        else aa.setCaption(EmojiParser.parseToUnicode(text.substring(0, 1020)+"...")).setParseMode("HTML");
+        aa.setReplyMarkup(inlineMarkup);
+        execute(aa);
+    }
+
+
+
+
+
+
 
 
 
