@@ -72,12 +72,12 @@ public class Adminbot extends TelegramLongPollingBot {
                     }
                 }
             }
-        } catch (SQLException | TelegramApiRequestException e1) {
+        } catch (SQLException | TelegramApiException e1) {
             e1.printStackTrace();
         }
     }
 
-    private void checkAdmin(Update update, String id) throws SQLException, TelegramApiRequestException {
+    private void checkAdmin(Update update, String id) throws SQLException, TelegramApiException {
         List<String> admins = DataBase.sqlQueryList("select id from users where admin = true", "id");
         if (admins.contains(id)) {
             allow(update, id);
@@ -116,7 +116,7 @@ public class Adminbot extends TelegramLongPollingBot {
         return columns;
     }
 
-	private void allow(Update update, String id) throws SQLException {
+	private void allow(Update update, String id) throws SQLException, TelegramApiException {
         String adminmessage = DataBase.sqlQuery("select adminmessage from users where id="+id, "adminmessage");
         if (update.hasMessage()) {
                 if (update.getMessage().hasText()) {
@@ -322,8 +322,11 @@ public class Adminbot extends TelegramLongPollingBot {
 			if(cb.contains("publish")) {
 				String prodId = cb.substring(7);
                 String name = DataBase.sqlQuery("select russian from table0 where id ="+prodId, "russian");
+                String description = DataBase.sqlQuery("select russiandescription from table0 where id ="+prodId, "russiandescription");
 				Bot ok= new Bot();
-				//ok.sendPic("111",,simpleMarkUp("Заказать"),cb);
+				String text = "<b>" + name + "</b>\n"+
+                        "<i>"+description+"</i>\n\n";
+				ok.sendPic(text,"615351734",simpleMarkUp("Заказать"),name);
 				answer.setShowAlert(false).setText("Опубликовать "+name);
 			}
             if(cb.contains("Указать время работы")) {

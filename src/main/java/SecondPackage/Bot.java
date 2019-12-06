@@ -60,7 +60,7 @@ public class Bot extends TelegramLongPollingBot {
         try {
             if (update.hasMessage()) {
                 m = update.getMessage();
-                if (DataBase.sqlIdList().contains(m.getChatId().toString())) {
+                if (DataBase.sqlIdList().contains(m.getFrom().getId().toString())) {
                     a = new Order(
                             DataBase.sqlGetUserData(m.getChatId().toString()).get(0),
                             DataBase.sqlGetUserData(m.getChatId().toString()).get(1),
@@ -88,7 +88,7 @@ public class Bot extends TelegramLongPollingBot {
                             m.getFrom().getFirstName(),
                             null,
                             null,
-                            m.getChatId().toString()
+                            m.getFrom().getId().toString()
                     );
                     Adminbot ab = new Adminbot();
                     ab.sendMe(":boom: Новый пользователь!" +
@@ -98,7 +98,7 @@ public class Bot extends TelegramLongPollingBot {
                 }
             } else if (update.hasCallbackQuery()) {
                 String cb = update.getCallbackQuery().getData();
-                String chatId = update.getCallbackQuery().getMessage().getChatId().toString();
+                String chatId = update.getCallbackQuery().getFrom().getId().toString();
                 if (DataBase.sqlIdList().contains(chatId)) {
                     a = new Order(DataBase.sqlGetUserData(chatId).get(0),
                                 DataBase.sqlGetUserData(chatId).get(1),
@@ -1228,7 +1228,7 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
         int minutes = LocalTime.now(z).getMinute();
         int hours = LocalTime.now(z).getHour();
 //        if (hours<8) {
-            for (int i = 0; i<=(endOfPeriod.getHour()-startOfPeriod.getHour())*60; i+=30) {
+            for (int i = 0; i<=(endOfPeriod.getHour()-startOfPeriod.getHour())*60+30; i+=30) {
                 menu.add(dtf.format(startOfPeriod.plusMinutes(i)));
             }
 //        } else if (hours<19) {
