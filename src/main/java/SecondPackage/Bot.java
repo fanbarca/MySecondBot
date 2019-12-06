@@ -62,10 +62,10 @@ public class Bot extends TelegramLongPollingBot {
                 m = update.getMessage();
                 if (DataBase.sqlIdList().contains(m.getFrom().getId().toString())) {
                     a = new Order(
-                            DataBase.sqlGetUserData(m.getChatId().toString()).get(0),
-                            DataBase.sqlGetUserData(m.getChatId().toString()).get(1),
-                            DataBase.sqlGetUserData(m.getChatId().toString()).get(2),
-                            m.getChatId().toString()
+                            DataBase.sqlGetUserData(m.getFrom().getId().toString()).get(0),
+                            DataBase.sqlGetUserData(m.getFrom().getId().toString()).get(1),
+                            DataBase.sqlGetUserData(m.getFrom().getId().toString()).get(2),
+                            m.getFrom().getId().toString()
                     );
                     if (m.hasText()) handleIncomingText(update);
                     else if (m.hasAnimation()) handleAnimation(m);
@@ -1069,10 +1069,43 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
             DataBase.sql("update users set image =" + image + " where id =" + chatId);
             return image;
     }
-	
-	
-	
-	
+
+
+
+
+
+
+
+
+
+
+
+
+    public String sendPicbyId(String text, String chatId, InlineKeyboardMarkup inlineMarkup, String productId) throws SQLException, TelegramApiException {
+        String file_id = "";
+        if (productId.equals("Лого"))
+            file_id = DataBase.sqlQuery("SELECT imageid from table0 where Russian = 'Лого'", "imageid");
+        else {
+            file_id = DataBase.sqlQuery("SELECT imageid from table0 where Id = '" + productId + "'", "imageid");
+            if (file_id == null) file_id = DataBase.sqlQuery("SELECT imageid from table0 where Russian = 'Лого'", "imageid");
+        }
+        SendPhoto aa = new SendPhoto();
+        aa.setChatId(chatId);
+        aa.setPhoto(file_id);
+        if (text.length()<1024) aa.setCaption(EmojiParser.parseToUnicode(text)).setParseMode("HTML");
+        else aa.setCaption(EmojiParser.parseToUnicode(text.substring(0, 1020)+"...")).setParseMode("HTML");
+        aa.setReplyMarkup(inlineMarkup);
+        String image = execute(aa).getMessageId().toString();
+        DataBase.sql("update users set image =" + image + " where id =" + chatId);
+        return image;
+    }
+
+
+
+
+
+
+
 
 
 
