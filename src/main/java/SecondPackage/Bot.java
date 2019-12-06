@@ -92,7 +92,8 @@ public class Bot extends TelegramLongPollingBot {
                                 "\n@" + m.getFrom().getUserName());
                     }
                     else if (update.getMessage().isGroupMessage()||update.getMessage().isSuperGroupMessage())  {
-                        send(update.getMessage().getChatId().toString(),update.getMessage().getChatId(),null,null,1);
+                        Adminbot ab = new Adminbot();
+                        ab.sendMe(update.getMessage().getChatId().toString());
                     }
                     a = new Order(
                             m.getFrom().getFirstName(),
