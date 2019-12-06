@@ -539,12 +539,8 @@ public class Adminbot extends TelegramLongPollingBot {
              .setSwitchInlineQuery(prodId));
          rows.add(row1);
         markup.setKeyboard(rows);
-        SendPhoto aa = new SendPhoto();
-        aa.setChatId("-1001404493971");
-        aa.setPhoto(file_id);
-        aa.setCaption(EmojiParser.parseToUnicode(name+description+cost)).setParseMode("HTML");
-        aa.setReplyMarkup(markup);
-        execute(aa);
+        Bot bot = new Bot();
+        bot.sendPic(name+description+cost, channelId,markup,name);
     }
 
 
