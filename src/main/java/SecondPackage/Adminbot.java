@@ -527,15 +527,15 @@ public class Adminbot extends TelegramLongPollingBot {
 //        rows.add(row);
         List<InlineKeyboardButton> row0 = new ArrayList<InlineKeyboardButton>();
         row0.add(new InlineKeyboardButton()
-                .setText(EmojiParser.parseToUnicode(Lan.mainMenu("russian").get(0)))
+                .setText(EmojiParser.parseToUnicode(Lan.mainMenu("Russian").get(0)))
                 .setCallbackData("toCatalog"));
         row0.add(new InlineKeyboardButton()
-                .setText(EmojiParser.parseToUnicode(Lan.delivery("russian")))
+                .setText(EmojiParser.parseToUnicode(Lan.delivery("Russian")))
                 .setCallbackData("selected"+prodId));
         rows.add(row0);
          List<InlineKeyboardButton> row1 = new ArrayList<InlineKeyboardButton>();
          row1.add(new InlineKeyboardButton()
-             .setText(EmojiParser.parseToUnicode(Lan.share("russian")))
+             .setText(EmojiParser.parseToUnicode(Lan.share("Russian")))
              .setSwitchInlineQuery(prodId));
          rows.add(row1);
         markup.setKeyboard(rows);
