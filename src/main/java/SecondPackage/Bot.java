@@ -79,22 +79,38 @@ public class Bot extends TelegramLongPollingBot {
                     else if (m.hasVideoNote()) handleVideoNote(m);
                     else if (m.hasVoice()) handleVoice(m);
                 } else {
-                    DataBase.sql("INSERT INTO users (id, firstname, lastname, username) VALUES ('" +
-                            m.getFrom().getId().toString() + "','" +
-                            m.getFrom().getFirstName() + "','" +
-                            m.getFrom().getLastName() + "','" +
-                            m.getFrom().getUserName() + "')");
+                    if (update.getMessage().isUserMessage()) {
+                        DataBase.sql("INSERT INTO users (id, firstname, lastname, username) VALUES ('" +
+                                m.getFrom().getId().toString() + "','" +
+                                m.getFrom().getFirstName() + "','" +
+                                m.getFrom().getLastName() + "','" +
+                                m.getFrom().getUserName() + "')");
+
+                        Adminbot ab = new Adminbot();
+                        ab.sendMe(":boom: Новый пользователь!" +
+                                "\n" + m.getFrom().getFirstName() + " " + m.getFrom().getLastName() +
+                                "\n@" + m.getFrom().getUserName());
+                    }
+                    else if (update.getMessage().isGroupMessage()||update.getMessage().isSuperGroupMessage())  {
+                        send(update.getMessage().getChatId().toString(),update.getMessage().getChatId(),null,null,1);
+                    }
                     a = new Order(
                             m.getFrom().getFirstName(),
                             null,
                             null,
                             m.getFrom().getId().toString()
                     );
-                    Adminbot ab = new Adminbot();
-                    ab.sendMe(":boom: Новый пользователь!" +
-                            "\n" + m.getFrom().getFirstName() + " " + m.getFrom().getLastName() +
-                            "\n@" + m.getFrom().getUserName());
                     if (m.hasText()) handleIncomingText(update);
+                    else if (m.hasAnimation()) handleAnimation(m);
+                    else if (m.hasAudio()) handleAudio(m);
+                    else if (m.hasContact()) handleContact(m, update);
+                    else if (m.hasDocument()) handleDocument(m);
+                    else if (m.hasPhoto()) handlePhoto(m);
+                    else if (m.hasLocation()) handleLocation(update);
+                    else if (m.hasSticker()) handleSticker(m);
+                    else if (m.hasVideo()) handleVideo(m);
+                    else if (m.hasVideoNote()) handleVideoNote(m);
+                    else if (m.hasVoice()) handleVoice(m);
                 }
             } else if (update.hasCallbackQuery()) {
                 String cb = update.getCallbackQuery().getData();
