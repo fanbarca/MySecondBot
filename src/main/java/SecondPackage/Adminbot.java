@@ -48,7 +48,7 @@ public class Adminbot extends TelegramLongPollingBot {
     static SimpleDateFormat time = new SimpleDateFormat("HH:mm");
     List<String> list = new ArrayList<String>();
     String russian = "";
-    private String channel = "-1001404493971";
+    private String channelId = "-1001404493971";
 
     {
     date.setTimeZone(zone);
@@ -540,7 +540,7 @@ public class Adminbot extends TelegramLongPollingBot {
          rows.add(row1);
         markup.setKeyboard(rows);
         SendPhoto aa = new SendPhoto();
-        aa.setChatId(channel);
+        aa.setChatId("-1001404493971");
         aa.setPhoto(file_id);
         aa.setCaption(EmojiParser.parseToUnicode(name+description+cost)).setParseMode("HTML");
         aa.setReplyMarkup(markup);
