@@ -326,7 +326,7 @@ public class Adminbot extends TelegramLongPollingBot {
 				Bot ok= new Bot();
 				String text = "<b>" + name + "</b>\n"+
                         "<i>"+description+"</i>\n\n";
-				ok.sendPicbyId(text,"615351734",simpleMarkUp("Заказать"),prodId);
+				ok.sendPicbyId(text,"-1001404493971",simpleMarkUp("Заказать"),prodId);
 				answer.setShowAlert(false).setText("Опубликовать "+name);
 			}
             if(cb.contains("Указать время работы")) {
