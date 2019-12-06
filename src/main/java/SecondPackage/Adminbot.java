@@ -8,6 +8,7 @@ import org.telegram.telegrambots.meta.api.methods.ForwardMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendContact;
 import org.telegram.telegrambots.meta.api.methods.send.SendLocation;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.*;
@@ -47,6 +48,8 @@ public class Adminbot extends TelegramLongPollingBot {
     static SimpleDateFormat time = new SimpleDateFormat("HH:mm");
     List<String> list = new ArrayList<String>();
     String russian = "";
+    private String channel = "-1001404493971";
+
     {
     date.setTimeZone(zone);
     time.setTimeZone(zone);
@@ -321,13 +324,8 @@ public class Adminbot extends TelegramLongPollingBot {
 			}
 			if(cb.contains("publish")) {
 				String prodId = cb.substring(7);
-                String name = DataBase.sqlQuery("select russian from table0 where id ="+prodId, "russian");
-                String description = DataBase.sqlQuery("select russiandescription from table0 where id ="+prodId, "russiandescription");
-				Bot ok= new Bot();
-				String text = "<b>" + name + "</b>\n"+
-                        "<i>"+description+"</i>\n\n";
-				ok.sendPicbyId(text,"-1001404493971",simpleMarkUp("Заказать"),prodId);
-				answer.setShowAlert(false).setText("Опубликовать "+name);
+                publish(prodId);
+				answer.setShowAlert(true).setText("Опубликовано");
 			}
             if(cb.contains("Указать время работы")) {
                 edit(update.getCallbackQuery().getMessage(), "Выберите время начала", timeKeys("Начало"));
@@ -503,6 +501,56 @@ public class Adminbot extends TelegramLongPollingBot {
 			}
         }
 	}
+
+
+
+
+
+
+
+    private void publish(String prodId) throws SQLException, TelegramApiException {
+        String name = DataBase.sqlQuery("select russian from table0 where id ="+prodId, "russian")+"\n";
+        String description = DataBase.sqlQuery("select russiandescription from table0 where id ="+prodId, "russiandescription")+"\n";
+        String cost =  Lan.cost("russian")+DataBase.sqlQuery("SELECT cost from table0 where id = " + prodId, "cost")+Lan.currency("russian") +".\n";
+        String file_id = "";
+
+        file_id = DataBase.sqlQuery("SELECT imageid from table0 where id ="+prodId, "imageid");
+        if (file_id == null) file_id = DataBase.sqlQuery("SELECT imageid from table0 where Russian = 'Лого'", "imageid");
+
+        InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
+        List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
+//        List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
+//        row.add(new InlineKeyboardButton()
+//                .setText(EmojiParser.parseToUnicode("0"))
+//                .setCallbackData(""));
+//
+//        rows.add(row);
+        List<InlineKeyboardButton> row0 = new ArrayList<InlineKeyboardButton>();
+        row0.add(new InlineKeyboardButton()
+                .setText(EmojiParser.parseToUnicode(Lan.mainMenu("russian").get(0)))
+                .setCallbackData("toCatalog"));
+        row0.add(new InlineKeyboardButton()
+                .setText(EmojiParser.parseToUnicode(Lan.delivery("russian")))
+                .setCallbackData("selected"+prodId));
+        rows.add(row0);
+         List<InlineKeyboardButton> row1 = new ArrayList<InlineKeyboardButton>();
+         row1.add(new InlineKeyboardButton()
+             .setText(EmojiParser.parseToUnicode(Lan.share("russian")))
+             .setSwitchInlineQuery(prodId));
+         rows.add(row1);
+        markup.setKeyboard(rows);
+        SendPhoto aa = new SendPhoto();
+        aa.setChatId(channel);
+        aa.setPhoto(file_id);
+        aa.setCaption(EmojiParser.parseToUnicode(name+description+cost)).setParseMode("HTML");
+        aa.setReplyMarkup(markup);
+        execute(aa);
+    }
+
+
+
+
+
 
 
 
