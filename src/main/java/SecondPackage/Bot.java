@@ -287,14 +287,14 @@ public class Bot extends TelegramLongPollingBot {
                             a.getId(),
                             productsMarkup(prodId),
                             prodId);
-            }
+            } else {
                 if (a.getLanguage() == null) {
                     chooseLanguage(update.getMessage(), false);
                 } else {
                     deleteMessage(DataBase.sqlQuery("SELECT image from users where id=" + a.getId(), "image"), a.getId());
                     deleteMessage(update.getMessage());
                     showMainMenu(false, update);
-
+            }
         }
         } else if (update.getMessage().getText().startsWith("+998")) {
             if (a.getNumber() == null) {
