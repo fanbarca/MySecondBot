@@ -159,7 +159,8 @@ public class Bot extends TelegramLongPollingBot {
 
 
 
-    private void handleChannelCallback(Update update) {
+    private void handleChannelCallback(Update update) throws SQLException, TelegramApiException {
+        sendPic("nesss", update.getCallbackQuery().getFrom().getId().toString(),null,"Лого");
 
 
     }
