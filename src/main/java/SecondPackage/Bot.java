@@ -281,12 +281,16 @@ public class Bot extends TelegramLongPollingBot {
                     DataBase.sql("UPDATE users SET language = 'Russian' WHERE id =" + a.getId());
                     a.setLanguage("Russian");
                 }
-                    deleteMessage(DataBase.sqlQuery("SELECT image from users where id=" + a.getId(), "image"), a.getId());
-                    deleteMessage(update.getMessage());
-                    sendPicbyId(productText(prodId, a.getId()),
-                            a.getId(),
-                            productsMarkup(prodId),
-                            prodId);
+                    String image = DataBase.sqlQuery("SELECT image from users where id=" + a.getId(), "image");
+                    if (image!=null) {
+                        deleteMessage(image, a.getId());
+                    }
+                deleteMessage(update.getMessage());
+                sendPicbyId(productText(prodId, a.getId()),
+                        a.getId(),
+                        productsMarkup(prodId),
+                        prodId);
+
             } else {
                 if (a.getLanguage() == null) {
                     chooseLanguage(update.getMessage(), false);
