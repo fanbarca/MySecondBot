@@ -282,6 +282,18 @@ public class Bot extends TelegramLongPollingBot {
                 deleteMessage(update.getMessage());
                 showMainMenu(false, update);
             }
+        } else if (update.getMessage().getText().contains("/selected")) {
+            String prodId = update.getMessage().getText().substring(9);
+            if (a.getLanguage() == null) {
+                chooseLanguage(update.getMessage(), false);
+            } else {
+                deleteMessage(DataBase.sqlQuery("SELECT image from users where id=" + a.getId(), "image"), a.getId());
+                deleteMessage(update.getMessage());
+                sendPic(productText(prodId, a.getId()),
+                        a.getId(),
+                        productsMarkup(prodId),
+                        DataBase.sqlQuery("select "+a.getLanguage()+" from table0 where id ="+prodId,a.getLanguage()));
+            }
         } else if (update.getMessage().getText().startsWith("+998")) {
             if (a.getNumber() == null) {
                 handleContact(update.getMessage(), update);

@@ -509,6 +509,7 @@ public class Adminbot extends TelegramLongPollingBot {
 
 
     private void publish(String prodId) throws SQLException, TelegramApiException {
+        Bot bot = new Bot();
         String name = DataBase.sqlQuery("select russian from table0 where id ="+prodId, "russian")+"\n";
         String description = DataBase.sqlQuery("select russiandescription from table0 where id ="+prodId, "russiandescription")+"\n";
         String cost =  Lan.cost("russian")+DataBase.sqlQuery("SELECT cost from table0 where id = " + prodId, "cost")+Lan.currency("russian") +".\n";
@@ -527,10 +528,10 @@ public class Adminbot extends TelegramLongPollingBot {
         List<InlineKeyboardButton> row0 = new ArrayList<InlineKeyboardButton>();
         row0.add(new InlineKeyboardButton()
                 .setText(EmojiParser.parseToUnicode(Lan.mainMenu("Russian").get(0)))
-                .setUrl("https://t.me/"+getBotUsername()+"?start=/start"));
+                .setUrl("https://t.me/"+bot.getBotUsername()+"?start=/start"));
         row0.add(new InlineKeyboardButton()
                 .setText(EmojiParser.parseToUnicode(Lan.delivery("Russian")))
-                .setCallbackData("selected"+prodId));
+                .setUrl("https://t.me/"+bot.getBotUsername()+"?start=/selected"+prodId));
         rows.add(row0);
 //         List<InlineKeyboardButton> row1 = new ArrayList<InlineKeyboardButton>();
 //         row1.add(new InlineKeyboardButton()
@@ -538,7 +539,6 @@ public class Adminbot extends TelegramLongPollingBot {
 //             .setSwitchInlineQuery(prodId));
 //         rows.add(row1);
         markup.setKeyboard(rows);
-        Bot bot = new Bot();
         bot.toChannel(name+description+cost,markup,prodId);
     }
 
