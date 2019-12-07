@@ -468,9 +468,15 @@ public class Bot extends TelegramLongPollingBot {
                 }
 				if (cb.contains("+plus")||cb.contains("-minus")) {
 					if (cb.contains("+plus"+prodId)){
-                        chooseSize(update.getCallbackQuery().getMessage(), prodId);
-                        a.setAddress(Lan.added(a.getLanguage()));
-                        a.setAlert(false);
+					    if (type.equals("0")||type.equals("1")) {
+                            chooseSize(update.getCallbackQuery().getMessage(), prodId);
+                        } else {
+                            DataBase.sql("insert into cart (userid, item) values (" + userid
+                                    + ",'" + prodId + "')");
+                            a.setAddress(Lan.added(a.getLanguage()));
+                            a.setAlert(false);
+                            editCaption(productText(prodId, a.getId()), update.getCallbackQuery().getMessage(), productsMarkup(prodId));
+                        }
                     } else if (cb.contains("-minus"+prodId)){
                         DataBase.sql("delete from cart where userid =" + userid
                             + " and item = '" + prodId + "'");
@@ -2016,7 +2022,7 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
         for (String s : items) {
             Integer number = Collections.frequency(items, s);
             Integer cost = Integer.parseInt(DataBase.sqlQuery("select cost from table0 where id =" + s, "cost"));
-            List<String> size = DataBase.sqlQueryList("select size from cart where item ='"+s+"'", "size");
+            List<String> size = DataBase.sqlQueryList("select size from cart where item ='"+s+"' and userid ="+id, "size");
             List<Integer> aa = new ArrayList<>();
             aa.add(number);
             aa.add(cost);
@@ -2025,8 +2031,11 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
         }
         List<String> list = new ArrayList<>();
         for (Map.Entry<String, List<Integer>> entry : itemNames.entrySet()) {
+            String sizesArray = "";
+            if (sizes.get(entry.getKey()).contains(null)) sizesArray = "";
+            else sizesArray= sizes.get(entry.getKey()).toString();
             String name = DataBase.sqlQuery("select "+a.getLanguage()+" from table0 where id =" + entry.getKey(), a.getLanguage());
-            cart += name + "  -  " + entry.getValue().get(0) + " * " + entry.getValue().get(1) + " = " + entry.getValue().get(0) * entry.getValue().get(1) + Lan.currency(a.getLanguage()) + " "+sizes.get(entry.getKey())+"\n";
+            cart += name + "  -  " + entry.getValue().get(0) + " * " + entry.getValue().get(1) + " = " + entry.getValue().get(0) * entry.getValue().get(1) + Lan.currency(a.getLanguage()) + sizesArray+"\n";
             result += entry.getValue().get(0) * entry.getValue().get(1);
             list.add(":heavy_multiplication_x: "+entry.getKey());
         }
