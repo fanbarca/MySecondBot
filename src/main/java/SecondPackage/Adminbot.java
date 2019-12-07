@@ -528,7 +528,8 @@ public class Adminbot extends TelegramLongPollingBot {
         List<InlineKeyboardButton> row0 = new ArrayList<InlineKeyboardButton>();
         row0.add(new InlineKeyboardButton()
                 .setText(EmojiParser.parseToUnicode(Lan.mainMenu("Russian").get(0)))
-                .setUrl("https://t.me/"+bot.getBotUsername()+"?start=333"));
+                .setCallbackData(Lan.mainMenu("Russian").get(0))
+                .setUrl("https://t.me/"+bot.getBotUsername()));
         row0.add(new InlineKeyboardButton()
                 .setText(EmojiParser.parseToUnicode(Lan.delivery("Russian")))
                 .setCallbackData("fromChannel"+prodId)
