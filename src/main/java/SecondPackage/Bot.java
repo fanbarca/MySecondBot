@@ -114,30 +114,34 @@ public class Bot extends TelegramLongPollingBot {
                     else if (m.hasVoice()) handleVoice(m);
                 }
             } else if (update.hasCallbackQuery()) {
-                String cb = update.getCallbackQuery().getData();
-                String chatId = update.getCallbackQuery().getFrom().getId().toString();
-                if (DataBase.sqlIdList().contains(chatId)) {
-                    a = new Order(DataBase.sqlGetUserData(chatId).get(0),
+                if (update.getCallbackQuery().getMessage().isChannelMessage()){
+                    handleChannelCallback(update);
+                } else {
+                    String cb = update.getCallbackQuery().getData();
+                    String chatId = update.getCallbackQuery().getFrom().getId().toString();
+                    if (DataBase.sqlIdList().contains(chatId)) {
+                        a = new Order(DataBase.sqlGetUserData(chatId).get(0),
                                 DataBase.sqlGetUserData(chatId).get(1),
                                 DataBase.sqlGetUserData(chatId).get(2),
                                 chatId
-                    );
-                } else {
-                    DataBase.sql("INSERT INTO users (id, firstname, lastname, username) VALUES ('" +
-                            chatId + "','" +
-                            update.getCallbackQuery().getFrom().getFirstName() + "','" +
-                            update.getCallbackQuery().getFrom().getLastName() + "','" +
-                            update.getCallbackQuery().getFrom().getUserName() + "')");
-                    a = new Order(
-                            update.getCallbackQuery().getFrom().getFirstName(),
-                            null,
-                            null,
-                            chatId
-                    );
+                        );
+                    } else {
+                        DataBase.sql("INSERT INTO users (id, firstname, lastname, username) VALUES ('" +
+                                chatId + "','" +
+                                update.getCallbackQuery().getFrom().getFirstName() + "','" +
+                                update.getCallbackQuery().getFrom().getLastName() + "','" +
+                                update.getCallbackQuery().getFrom().getUserName() + "')");
+                        a = new Order(
+                                update.getCallbackQuery().getFrom().getFirstName(),
+                                null,
+                                null,
+                                chatId
+                        );
+                    }
+                    if (a.getLanguage() == null && !(cb.equals("O'zbek") || cb.equals("Русский") || cb.equals("English")))
+                        chooseLanguage(update.getCallbackQuery().getMessage(), true);
+                    else handleCallback(update);
                 }
-                if (a.getLanguage() == null && !(cb.equals("O'zbek") || cb.equals("Русский") || cb.equals("English")))
-                    chooseLanguage(update.getCallbackQuery().getMessage(), true);
-                else handleCallback(update);
             } else if (update.hasInlineQuery()) {
                 handleInline(update);
             }
@@ -150,7 +154,22 @@ public class Bot extends TelegramLongPollingBot {
 
 
 
-    
+
+
+
+
+
+    private void handleChannelCallback(Update update) {
+
+
+    }
+
+
+
+
+
+
+
 
     private void handleInline(Update update) throws SQLException,  TelegramApiException {
         String inline = update.getInlineQuery().getQuery();
@@ -289,6 +308,12 @@ public class Bot extends TelegramLongPollingBot {
         deleteMessage(update.getMessage());
         showCart(update, true);
     }
+
+
+
+
+
+
 
     private void handleCallback(Update update)
             throws TelegramApiException, SQLException, MalformedURLException, IOException {
