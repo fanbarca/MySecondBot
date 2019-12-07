@@ -419,9 +419,19 @@ public class Bot extends TelegramLongPollingBot {
             String subType = "";
             String prodId = DataBase.sqlQuery("select id from table0 where " + a.getLanguage() + " ='" + name + "'", "id");
             String type = DataBase.sqlQuery("select type from table0 where " + a.getLanguage() + " ='" + name + "'", "type");
+            String[] sizes = {"XS", "S", "M", "L", "XL", "XXL"};
+            for (String s:sizes) {
+                if (cb.contains(s+prodId)){
+                    DataBase.sql("insert into cart (userid, item, size) values (" + userid
+                            + ",'" + prodId + "', '"+s+"')");
+                    a.setAddress(Lan.added(a.getLanguage()));
+                    a.setAlert(false);
+                    editCaption(productText(prodId, a.getId()), update.getCallbackQuery().getMessage(), productsMarkup(prodId));
+                }
+            }
+
             if (cb.contains(prodId)||cb.contains(name)) {
 				if (cb.contains("selected")) {
-
                         if (occurrences(prodId, userid)==0) { DataBase.sql("insert into cart (userid, item) values (" + userid
                                     + ",'" + prodId + "')");
                         a.setAddress(Lan.added(a.getLanguage()));
@@ -454,14 +464,11 @@ public class Bot extends TelegramLongPollingBot {
                                         prodId,a.getId(),Integer.parseInt(image),
                                         productsMarkup(prodId));
                             }
-
                         }
                 }
 				if (cb.contains("+plus")||cb.contains("-minus")) {
-                        
 					if (cb.contains("+plus"+prodId)){
-                        DataBase.sql("insert into cart (userid, item) values (" + userid
-                                + ",'" + prodId + "')");
+                        chooseSize(update.getCallbackQuery().getMessage(), prodId);
                         a.setAddress(Lan.added(a.getLanguage()));
                         a.setAlert(false);
                     } else if (cb.contains("-minus"+prodId)){
@@ -469,8 +476,8 @@ public class Bot extends TelegramLongPollingBot {
                             + " and item = '" + prodId + "'");
                         a.setAddress(Lan.removed(a.getLanguage()));
                         a.setAlert(false);
+                        editCaption(productText(prodId, a.getId()), update.getCallbackQuery().getMessage(), productsMarkup(prodId));
                     }
-                    editCaption(productText(prodId, a.getId()), update.getCallbackQuery().getMessage(), productsMarkup(prodId));
                     }
                 if (cb.contains("+++")||cb.contains("---")) {
                     if (cb.contains("+++"+prodId)){
@@ -493,13 +500,10 @@ public class Bot extends TelegramLongPollingBot {
                                 + " and item = '" + prodId + "'");
                         a.setAddress(Lan.removed(a.getLanguage()));
                         a.setAlert(false);
+                        editCaption(productText(prodId, userid), update.getCallbackQuery().getMessage(), markUp(productText(prodId, userid), prodId, (occurrences(prodId, userid)>0)?keybAddMore(name):keybAdd(name), 3));
                     } else if (cb.contains(Lan.addToCart(a.getLanguage()))|| cb.contains(Lan.addMore(a.getLanguage()))) {
-                        DataBase.sql("insert into cart (userid, item) values (" + userid
-                                    + ",'" + prodId + "')");
-                        a.setAddress(Lan.added(a.getLanguage()));
-                        a.setAlert(false);
+                        chooseSize(update.getCallbackQuery().getMessage(), prodId);
                     }
-                    editCaption(productText(prodId, userid), update.getCallbackQuery().getMessage(), markUp(productText(prodId, userid), prodId, (occurrences(prodId, userid)>0)?keybAddMore(name):keybAdd(name), 3));
                 } else if (cb.contains("delete"+prodId)){
                     DataBase.sql("delete from cart where userid =" + a.getId()
                     + " and item = '" + prodId + "'");
@@ -611,6 +615,48 @@ public class Bot extends TelegramLongPollingBot {
     }
 
 
+
+
+
+
+    private void chooseSize(Message message, String prodId) throws SQLException, TelegramApiException {
+        InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
+        List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
+        List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
+        row.add(new InlineKeyboardButton()
+                .setText(EmojiParser.parseToUnicode("XS"))
+                .setCallbackData("XS"+prodId));
+        row.add(new InlineKeyboardButton()
+                .setText(EmojiParser.parseToUnicode("S"))
+                .setCallbackData("S"+prodId));
+        row.add(new InlineKeyboardButton()
+                .setText(EmojiParser.parseToUnicode("M"))
+                .setCallbackData("M"+prodId));
+        rows.add(row);
+        List<InlineKeyboardButton> row2 = new ArrayList<InlineKeyboardButton>();
+        row2.add(new InlineKeyboardButton()
+                .setText(EmojiParser.parseToUnicode("L"))
+                .setCallbackData("L"+prodId));
+        row2.add(new InlineKeyboardButton()
+                .setText(EmojiParser.parseToUnicode("XL"))
+                .setCallbackData("XL"+prodId));
+        row2.add(new InlineKeyboardButton()
+                .setText(EmojiParser.parseToUnicode("XXL"))
+                .setCallbackData("XXL"+prodId));
+        rows.add(row2);
+        List<InlineKeyboardButton> row3 = new ArrayList<InlineKeyboardButton>();
+        row3.add(new InlineKeyboardButton()
+                .setText(EmojiParser.parseToUnicode(Lan.back(a.getLanguage())))
+                .setCallbackData("selected"+prodId));
+        row3.add(new InlineKeyboardButton()
+                .setText(EmojiParser.parseToUnicode(Lan.backToMenu(a.getLanguage())))
+                .setCallbackData(Lan.backToMenu(a.getLanguage())));
+        rows.add(row3);
+        markup.setKeyboard(rows);
+        editPic(Lan.whatSize(a.getLanguage()), prodId, message, markup);
+        a.setAddress(Lan.whatSize(a.getLanguage()));
+        a.setAlert(true);
+    }
 
 
 

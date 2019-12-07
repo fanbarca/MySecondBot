@@ -119,6 +119,13 @@ class Lan {
         else if (lan.equals("English")) r = "Cart is empty";
         return r;
     }
+    public static String whatSize(String lan) {
+        String r="";
+        if (lan.equals("Uzbek")) r = "О'lchamni tanlang";
+        else if (lan.equals("Russian")) r = "Выберите размер";
+        else if (lan.equals("English")) r = "Choose a size";
+        return r;
+    }
     public static String noOrderYet(String lan) {
         String r="";
         if (lan.equals("Uzbek")) r = "Hali buyurtma qilinmagan";
@@ -195,6 +202,13 @@ class Lan {
         else if (lan.equals("English")) r = ":book: Back to catalog";
         return r;
         }
+    public static String back(String lan) {
+        String r="";
+        if (lan.equals("Uzbek")) r = ":back: Orqaga";
+        else if (lan.equals("Russian")) r = ":back: Назад";
+        else if (lan.equals("English")) r = ":back: Back";
+        return r;
+    }
         public static String backToMenu(String lan) {
         String r="";
         if (lan.equals("Uzbek")) r = ":iphone: Bosh sahifa";
