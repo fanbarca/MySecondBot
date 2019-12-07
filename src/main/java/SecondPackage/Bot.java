@@ -421,7 +421,7 @@ public class Bot extends TelegramLongPollingBot {
             String type = DataBase.sqlQuery("select type from table0 where " + a.getLanguage() + " ='" + name + "'", "type");
             String[] sizes = {"XS", "S", "M", "L", "XL", "XXL"};
             for (String s:sizes) {
-                if (cb.contains(s+prodId)){
+                if (cb.equals(s+prodId)){
                     DataBase.sql("insert into cart (userid, item, size) values (" + userid
                             + ",'" + prodId + "', '"+s+"')");
                     a.setAddress(Lan.added(a.getLanguage()));
