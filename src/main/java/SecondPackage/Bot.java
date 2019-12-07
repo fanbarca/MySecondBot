@@ -421,17 +421,22 @@ public class Bot extends TelegramLongPollingBot {
             String type = DataBase.sqlQuery("select type from table0 where " + a.getLanguage() + " ='" + name + "'", "type");
             if (cb.contains(prodId)||cb.contains(name)) {
 				if (cb.contains("selected")) {
+
                         if (occurrences(prodId, userid)==0) { DataBase.sql("insert into cart (userid, item) values (" + userid
                                     + ",'" + prodId + "')");
                         a.setAddress(Lan.added(a.getLanguage()));
                         a.setAlert(false);
 						}
-					for (String id: images.get(a.getId())) {
-							deleteMessage(id, a.getId());
-						}
-					images.remove(a.getId());
-					showCart(update, false);
+                    if (images.containsKey(a.getId())) {
+                        for (String id: images.get(a.getId())) {
+                            deleteMessage(id, a.getId());
+                        }
+                        images.remove(a.getId());
+                        showCart(update, false);
+                    } else {
+                        showCart(update, true);
                     }
+				}
                 if (cb.contains("fromChannel")) {
                     //deleteMessage(DataBase.sqlQuery("select image from users where id="+a.getId(), "image"), a.getId());
                         if (a.getLanguage() == null) {
