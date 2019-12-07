@@ -275,26 +275,14 @@ public class Bot extends TelegramLongPollingBot {
 
     private void handleIncomingText(Update update) throws SQLException, TelegramApiException {
         if (update.getMessage().getText().contains("/start")) {
-            if (update.getMessage().getText().contains("selected")) {
-            String prodId = update.getMessage().getText().substring(15);
-            if (a.getLanguage() == null) {
-                chooseLanguage(update.getMessage(), false);
-            } else {
-                deleteMessage(DataBase.sqlQuery("SELECT image from users where id=" + a.getId(), "image"), a.getId());
-                deleteMessage(update.getMessage());
-                sendPic(productText(prodId, a.getId()),
-                        a.getId(),
-                        productsMarkup(prodId),
-                        DataBase.sqlQuery("select "+a.getLanguage()+" from table0 where id ="+prodId,a.getLanguage()));
-            }
-        } else {
+
                 if (a.getLanguage() == null) {
                     chooseLanguage(update.getMessage(), false);
                 } else {
                     deleteMessage(DataBase.sqlQuery("SELECT image from users where id=" + a.getId(), "image"), a.getId());
                     deleteMessage(update.getMessage());
                     showMainMenu(false, update);
-                }
+
         }
         } else if (update.getMessage().getText().startsWith("+998")) {
             if (a.getNumber() == null) {
@@ -400,11 +388,15 @@ public class Bot extends TelegramLongPollingBot {
             }
         }
 		if (cb.equals("toCatalog")) {
-					for (String id: images.get(a.getId())) {
-							deleteMessage(id, a.getId());
-						}
-					images.remove(a.getId());
-					showCatalog(update, false);
+		    if (images.containsKey(a.getId())) {
+                for (String id: images.get(a.getId())) {
+                    deleteMessage(id, a.getId());
+                }
+                images.remove(a.getId());
+                showCatalog(update, false);
+            } else {
+                showCatalog(update, true);
+            }
         }
         for (String name : DataBase.showAllProducts(a.getLanguage(), false)) {
             String userid = a.getId();
@@ -424,6 +416,26 @@ public class Bot extends TelegramLongPollingBot {
 					images.remove(a.getId());
 					showCart(update, false);
                     }
+                if (cb.contains("fromChannel")) {
+                    //deleteMessage(DataBase.sqlQuery("select image from users where id="+a.getId(), "image"), a.getId());
+                        if (a.getLanguage() == null) {
+                            chooseLanguage(update.getMessage(), false);
+                        } else {
+                            String image = DataBase.sqlQuery("SELECT image from users where id=" + a.getId(), "image");
+                            boolean newMessage = image==null;
+                            if (newMessage) {
+                                sendPic(productText(prodId, a.getId()),
+                                        a.getId(),
+                                        productsMarkup(prodId),
+                                        name);
+                            } else {
+                                editPic(productText(prodId, a.getId()),
+                                        prodId,a.getId(),Integer.parseInt(image),
+                                        productsMarkup(prodId));
+                            }
+
+                        }
+                }
 				if (cb.contains("+plus")||cb.contains("-minus")) {
                         
 					if (cb.contains("+plus"+prodId)){
@@ -1029,6 +1041,31 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
         DataBase.sql("update users set image =" + message.getMessageId() + " where id =" + message.getChatId());
     }
 
+
+
+
+
+
+    public void editPic(String text, String productId, String chatid, int messageid, InlineKeyboardMarkup markup) throws TelegramApiException, SQLException {
+        String file_id;
+        if (productId.equals("Лого")||productId==null)
+            file_id = DataBase.sqlQuery("SELECT imageid from table0 where Russian = 'Лого'", "imageid");
+        else {
+            file_id = DataBase.sqlQuery("SELECT imageid from table0 where id = " + productId, "imageid");
+            if (file_id == null) file_id = DataBase.sqlQuery("SELECT imageid from table0 where Russian = 'Лого'", "imageid");
+        }
+        InputMediaPhoto imp = new InputMediaPhoto();
+        imp.setMedia(file_id);
+        if (text.length()<1024) imp.setCaption(EmojiParser.parseToUnicode(text)).setParseMode("HTML");
+        else imp.setCaption(EmojiParser.parseToUnicode(text.substring(0, 1020)+"...")).setParseMode("HTML");
+        EditMessageMedia em = new EditMessageMedia();
+        em.setChatId(chatid);
+        em.setMessageId(messageid);
+        em.setMedia(imp);
+        em.setReplyMarkup(markup);
+        execute(em);
+        DataBase.sql("update users set image =" + messageid + " where id =" + chatid);
+    }
 
 
 
