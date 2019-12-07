@@ -275,7 +275,19 @@ public class Bot extends TelegramLongPollingBot {
 
     private void handleIncomingText(Update update) throws SQLException, TelegramApiException {
         if (update.getMessage().getText().contains("/start")) {
-
+            if (update.getMessage().getText().contains("selected")) {
+                String prodId = update.getMessage().getText().substring(15);
+                if (a.getLanguage() == null) {
+                    DataBase.sql("UPDATE users SET language = 'Russian' WHERE id =" + a.getId());
+                    a.setLanguage("Russian");
+                }
+                    deleteMessage(DataBase.sqlQuery("SELECT image from users where id=" + a.getId(), "image"), a.getId());
+                    deleteMessage(update.getMessage());
+                    sendPicbyId(productText(prodId, a.getId()),
+                            a.getId(),
+                            productsMarkup(prodId),
+                            prodId);
+            }
                 if (a.getLanguage() == null) {
                     chooseLanguage(update.getMessage(), false);
                 } else {
