@@ -528,10 +528,10 @@ public class Adminbot extends TelegramLongPollingBot {
         List<InlineKeyboardButton> row0 = new ArrayList<InlineKeyboardButton>();
         row0.add(new InlineKeyboardButton()
                 .setText(EmojiParser.parseToUnicode(Lan.mainMenu("Russian").get(0)))
-                .setUrl("https://t.me/"+bot.getBotUsername()+"?start=/start"));
+                .setUrl("https://t.me/"+bot.getBotUsername()+"?start=333"));
         row0.add(new InlineKeyboardButton()
                 .setText(EmojiParser.parseToUnicode(Lan.delivery("Russian")))
-                .setUrl("https://t.me/"+bot.getBotUsername()+"?start=/selected"+prodId));
+                .setUrl("https://t.me/"+bot.getBotUsername()+"?start=selected"+prodId));
         rows.add(row0);
 //         List<InlineKeyboardButton> row1 = new ArrayList<InlineKeyboardButton>();
 //         row1.add(new InlineKeyboardButton()

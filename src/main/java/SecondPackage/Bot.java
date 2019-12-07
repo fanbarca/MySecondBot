@@ -275,8 +275,8 @@ public class Bot extends TelegramLongPollingBot {
 
     private void handleIncomingText(Update update) throws SQLException, TelegramApiException {
         if (update.getMessage().getText().contains("/start")) {
-            if (update.getMessage().getText().contains("/selected")) {
-            String prodId = update.getMessage().getText().substring(9);
+            if (update.getMessage().getText().contains("selected")) {
+            String prodId = update.getMessage().getText().substring(15);
             if (a.getLanguage() == null) {
                 chooseLanguage(update.getMessage(), false);
             } else {
