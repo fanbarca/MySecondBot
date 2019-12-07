@@ -274,15 +274,8 @@ public class Bot extends TelegramLongPollingBot {
 
 
     private void handleIncomingText(Update update) throws SQLException, TelegramApiException {
-        if (update.getMessage().getText().equals("/start")) {
-            if (a.getLanguage() == null) {
-                chooseLanguage(update.getMessage(), false);
-            } else {
-                deleteMessage(DataBase.sqlQuery("SELECT image from users where id=" + a.getId(), "image"), a.getId());
-                deleteMessage(update.getMessage());
-                showMainMenu(false, update);
-            }
-        } else if (update.getMessage().getText().contains("/selected")) {
+        if (update.getMessage().getText().contains("/start")) {
+            if (update.getMessage().getText().contains("/selected")) {
             String prodId = update.getMessage().getText().substring(9);
             if (a.getLanguage() == null) {
                 chooseLanguage(update.getMessage(), false);
@@ -294,6 +287,15 @@ public class Bot extends TelegramLongPollingBot {
                         productsMarkup(prodId),
                         DataBase.sqlQuery("select "+a.getLanguage()+" from table0 where id ="+prodId,a.getLanguage()));
             }
+        } else {
+                if (a.getLanguage() == null) {
+                    chooseLanguage(update.getMessage(), false);
+                } else {
+                    deleteMessage(DataBase.sqlQuery("SELECT image from users where id=" + a.getId(), "image"), a.getId());
+                    deleteMessage(update.getMessage());
+                    showMainMenu(false, update);
+                }
+        }
         } else if (update.getMessage().getText().startsWith("+998")) {
             if (a.getNumber() == null) {
                 handleContact(update.getMessage(), update);
