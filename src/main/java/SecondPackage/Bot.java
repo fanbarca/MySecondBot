@@ -647,7 +647,7 @@ public class Bot extends TelegramLongPollingBot {
         List<InlineKeyboardButton> row3 = new ArrayList<InlineKeyboardButton>();
         row3.add(new InlineKeyboardButton()
                 .setText(EmojiParser.parseToUnicode(Lan.back(a.getLanguage())))
-                .setCallbackData("selected"+prodId));
+                .setCallbackData(prodId));
         row3.add(new InlineKeyboardButton()
                 .setText(EmojiParser.parseToUnicode(Lan.backToMenu(a.getLanguage())))
                 .setCallbackData(Lan.backToMenu(a.getLanguage())));
@@ -2011,18 +2011,22 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
         String cart = "";
         int result = 0;
         Map<String, List<Integer>> itemNames = new HashMap<String, List<Integer>>();
+        Map<String, List<String>> sizes = new HashMap<String, List<String>>();
+
         for (String s : items) {
             Integer number = Collections.frequency(items, s);
             Integer cost = Integer.parseInt(DataBase.sqlQuery("select cost from table0 where id =" + s, "cost"));
+            List<String> size = DataBase.sqlQueryList("select size from cart where item ='"+s+"'", "size");
             List<Integer> aa = new ArrayList<>();
             aa.add(number);
             aa.add(cost);
-            itemNames.put(DataBase.sqlQuery("select "+a.getLanguage()+" from table0 where id =" + s, a.getLanguage()),
-                    aa);
+            itemNames.put(s, aa);
+            sizes.put(s, size);
         }
         List<String> list = new ArrayList<>();
         for (Map.Entry<String, List<Integer>> entry : itemNames.entrySet()) {
-            cart += entry.getKey() + "  -  " + entry.getValue().get(0) + " * " + entry.getValue().get(1) + " = " + entry.getValue().get(0) * entry.getValue().get(1) + Lan.currency(a.getLanguage()) + "\n";
+            String name = DataBase.sqlQuery("select "+a.getLanguage()+" from table0 where id =" + entry.getKey(), a.getLanguage());
+            cart += name + "  -  " + entry.getValue().get(0) + " * " + entry.getValue().get(1) + " = " + entry.getValue().get(0) * entry.getValue().get(1) + Lan.currency(a.getLanguage()) + " "+sizes.get(entry.getKey())+"\n";
             result += entry.getValue().get(0) * entry.getValue().get(1);
             list.add(":heavy_multiplication_x: "+entry.getKey());
         }
