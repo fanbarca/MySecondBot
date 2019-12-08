@@ -656,7 +656,7 @@ public class Bot extends TelegramLongPollingBot {
         markup.setKeyboard(rows);
         String messageId = DataBase.sqlQuery("select image from users where id ="+a.getId(), "image");
         if (edit) editPic(Lan.whatSize(a.getLanguage()), prodId, a.getId(), Integer.parseInt(messageId), markup);
-        else sendPic(Lan.whatSize(a.getLanguage()), a.getId(), markup, prodId);
+        else sendPicbyId(Lan.whatSize(a.getLanguage()), a.getId(), markup, prodId);
         a.setAddress(Lan.whatSize(a.getLanguage()));
         a.setAlert(true);
     }
