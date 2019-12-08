@@ -165,24 +165,18 @@ public class Bot extends TelegramLongPollingBot {
                         productsMarkup(prodId),
                         prodId);
             } else {
-                String image = DataBase.sqlQuery("SELECT image from users where id=" + a.getId(), "image");
-                boolean newMessage = image==null;
                 if (images.containsKey(a.getId())) {
                     for (String id: images.get(a.getId())) {
                         deleteMessage(id, a.getId());
                     }
                     images.remove(a.getId());
                 }
-                if (newMessage) {
+                String image = DataBase.sqlQuery("SELECT image from users where id=" + a.getId(), "image");
+                if (image!=null) deleteMessage(image, a.getId());
                     sendPicbyId(productText(prodId, a.getId()),
                             a.getId(),
                             productsMarkup(prodId),
                             prodId);
-                } else {
-                    editPic(productText(prodId, a.getId()),
-                            prodId,a.getId(),Integer.parseInt(image),
-                            productsMarkup(prodId));
-                }
             }
             a.setAddress(Lan.pressCatalog(a.getLanguage()));
             a.setAlert(true);
