@@ -1880,7 +1880,7 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
                     + curretCart(a.getId()) +"\n\n"
                     + comment
                     + Lan.deliveryCost(a.getLanguage())+"\n"
-                    +"<b>"+Lan.tooLate(a.getLanguage())+"</b>";
+                    +"<pre>"+Lan.tooLate(a.getLanguage())+"</pre>";
             if (items.size() == 0) {
                 a.setAddress(Lan.cartIsEmpty(a.getLanguage()));
                 a.setAlert(true);
@@ -2032,7 +2032,7 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
             list.add(":heavy_multiplication_x: "+entry.getKey());
         }
         if (list.size()>1) cart += "\n" + Lan.total(a.getLanguage()) + result + Lan.currency(a.getLanguage());
-        return cart;
+        return "<code>"+cart+"</code>";
     }
 
 
