@@ -376,22 +376,22 @@ public class Adminbot extends TelegramLongPollingBot {
             for (String userID: idList) {
                 String name = DataBase.sqlQuery("select firstname from users where id ="+userID,"firstname");
                 if (cb.contains(name+"  -  ")) {
-
+                    boolean location = DataBase.sqlQueryBoolean("select location from zakaz where userid ="+userID,"location");
                     String number = DataBase.sqlQuery("select phone from users where id ="+userID,"phone");
                     String time = DataBase.sqlQuery("select time from zakaz where userid = '" +userID+"' and conformed = true", "time");
                     String address = DataBase.sqlQuery("select address from users where id ="+userID,"address");
                     String product = DataBase.sqlQuery("select product from zakaz where userid = '" +userID+"' and conformed = true", "product");
                     String comment = DataBase.sqlQuery("select comment from zakaz where userid ="+userID, "comment");
-                    if (comment!=null) comment= "<b>Комментарий:</b> "+comment+"\n";
+                    if (comment!=null) comment= "\n<b>Комментарий:</b> "+comment+"\n";
                     else comment = "";
-                    if (address!=null) address= "<b>Адрес:</b> "+address+"\n";
-                    else address="<b>Локация получена</b>\n";
+                    if (!location) address= "\n<b>Адрес:</b> "+address;
+                    else address="\n<b>Локация получена</b>";
                     String text= "Имя: "+name+
                             "\nНомер: "+ number+
                             "\nВремя: "+time+
-                            address+comment+
+                            address+
+                            comment+
                             product;
-                    boolean location = DataBase.sqlQueryBoolean("select location from zakaz where userid ="+userID,"location");
                     InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
                     List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
                     List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
