@@ -377,18 +377,18 @@ public class Adminbot extends TelegramLongPollingBot {
                 String name = DataBase.sqlQuery("select firstname from users where id ="+userID,"firstname");
                 if (cb.contains(name+"  -  ")) {
                     boolean location = DataBase.sqlQueryBoolean("select location from zakaz where userid ="+userID,"location");
-                    String number = DataBase.sqlQuery("select phone from users where id ="+userID,"phone");
-                    String time = DataBase.sqlQuery("select time from zakaz where userid = '" +userID+"' and conformed = true", "time");
+                    String number = "\nНомер: "+ DataBase.sqlQuery("select phone from users where id ="+userID,"phone");
+                    String time = "\nВремя: "+DataBase.sqlQuery("select time from zakaz where userid = '" +userID+"' and conformed = true", "time");
                     String address = DataBase.sqlQuery("select address from users where id ="+userID,"address");
-                    String product = DataBase.sqlQuery("select product from zakaz where userid = '" +userID+"' and conformed = true", "product");
+                    String product = "\n"+DataBase.sqlQuery("select product from zakaz where userid = '" +userID+"' and conformed = true", "product");
                     String comment = DataBase.sqlQuery("select comment from zakaz where userid ="+userID, "comment");
                     if (comment!=null) comment= "\n<b>Комментарий:</b> "+comment+"\n";
                     else comment = "";
                     if (!location) address= "\n<b>Адрес:</b> "+address;
                     else address="\n<b>Локация получена</b>";
                     String text= "Имя: "+name+
-                            "\nНомер: "+ number+
-                            "\nВремя: "+time+
+                            number+
+                            time+
                             address+
                             comment+
                             product;
