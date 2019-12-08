@@ -397,7 +397,7 @@ public class Bot extends TelegramLongPollingBot {
         } else if (cb.equals(Lan.mainMenu("Uzbek").get(2)) ||
                 cb.equals(Lan.mainMenu("Russian").get(2)) ||
                 cb.equals(Lan.mainMenu("English").get(2))) {
-            chooseLanguage(update.getCallbackQuery().getMessage(), true);
+                chooseLanguage(update.getCallbackQuery().getMessage(), true);
         } else if (cb.equals(Lan.mainMenu("Uzbek").get(3)) ||
                 cb.equals(Lan.mainMenu("Russian").get(3)) ||
                 cb.equals(Lan.mainMenu("English").get(3))) {
@@ -918,7 +918,7 @@ public class Bot extends TelegramLongPollingBot {
         list.add("English");
         if (edit) editPic(":uz: Tilni tanlang\n" +
                 ":ru: Выберите язык\n" +
-                ":gb: Choose language", message, list, "Лого",3);
+                ":gb: Choose language", a.getId(), message.getMessageId(), list, "Лого",3);
         else {
             sendPic(":uz: Tilni tanlang\n" +
                     ":ru: Выберите язык\n" +
