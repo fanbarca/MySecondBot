@@ -391,14 +391,14 @@ public class Adminbot extends TelegramLongPollingBot {
                             "\nВремя: "+time+
                             address+comment+
                             product;
-                    String latitude = DataBase.sqlQuery("select latitude from users where id ="+userID,"latitude");
+                    boolean location = DataBase.sqlQueryBoolean("select location from zakaz where userid ="+userID,"location");
                     InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
                     List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
                     List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
                     row.add(new InlineKeyboardButton()
                             .setText(EmojiParser.parseToUnicode("Готов"))
                             .setCallbackData("Готов"+userID));
-                    if (latitude!=null) row.add(new InlineKeyboardButton()
+                    if (location) row.add(new InlineKeyboardButton()
                             .setText(EmojiParser.parseToUnicode("Локация"))
                             .setCallbackData("Локация"+userID));
                     row.add(new InlineKeyboardButton()

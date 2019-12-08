@@ -985,7 +985,8 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
                     .setText(EmojiParser.parseToUnicode(Lan.previousLocation(a.getLanguage())))
                     .setSwitchInlineQueryCurrentChat("location"));
             rows.add(row0);
-        } else if (hasAddress) {
+        }
+        if (hasAddress) {
             List<InlineKeyboardButton> row0 = new ArrayList<InlineKeyboardButton>();
             row0.add(new InlineKeyboardButton()
                     .setText(EmojiParser.parseToUnicode(Lan.previousAddress(a.getLanguage())))
@@ -1397,8 +1398,14 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
     private void handleLocation(Update update) throws SQLException, TelegramApiException {
         deleteMessage(DataBase.sqlQuery("SELECT image from users where id=" + a.getId(), "image"), a.getId());
         if (waitingForLocation()) {
-            if (update.getMessage().hasLocation()) DataBase.sql("update users set latitude = '"+update.getMessage().getLocation().getLatitude()+"', longitude = '"+update.getMessage().getLocation().getLongitude()+"' where id ="+ a.getId());
-            else DataBase.sql("update users set address = '"+update.getMessage().getText()+"' where id ="+ a.getId());
+            if (update.getMessage().hasLocation()) {
+                DataBase.sql("update zakaz set location = true");
+                DataBase.sql("update users set latitude = '"+update.getMessage().getLocation().getLatitude()+"', longitude = '"+update.getMessage().getLocation().getLongitude()+"' where id ="+ a.getId());
+            }
+            else {
+                DataBase.sql("update zakaz set location = false");
+                DataBase.sql("update users set address = '"+update.getMessage().getText()+"' where id ="+ a.getId());
+            }
             sendPic(Lan.orderTime(a.getLanguage()), a.getId(),
                 timeKeys(), "Лого");
             DataBase.sql("update users set rmid = 1 where id = " + a.getId());
