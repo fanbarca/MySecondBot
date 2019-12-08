@@ -1561,30 +1561,9 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
 
 
     private void confirm(Update update, String time) throws SQLException, TelegramApiException {
-        String address = DataBase.sqlQuery("select address from users where id ="+a.getId(), "address");
-        // String latitude = DataBase.sqlQuery("select latitude from users where id ="+a.getId(), "latitude");
-        if (address!=null) address= "<b>Адрес:</b> "+address+"\n";
-        else address="<b>Локация получена</b>\n";
-        String comment = DataBase.sqlQuery("select comment from users where id ="+a.getId(), "comment");
-        if (comment!=null) {
-            DataBase.sql("update zakaz set comment = '"+comment+"' where userid = " + a.getId());
-            comment= "<b>Комментарий:</b> "+comment+"\n";
-        }
-        else comment = "";
         Adminbot order = new Adminbot();
-        //String messageId =
-        order.sendMe("<b>Новый заказ</b>\n\n"
-                    +"<b>Имя клиента:</b> "+ a.getFirstName()+"\n"
-                    +"<b>Номер клиента:</b> "+ a.getNumber()+"\n"
-                    +"<b>Время доставки:</b> "+time+"\n"
-                    +address+comment
-                    +"<b>Заказ:</b> \n\n"+curretCart(a.getId()));
-        //String adminId = DataBase.sqlQuery("select id from users where admin = true", "id");
-        //DataBase.sql("update zakaz set messageId = "+messageId+" where admin = true");
-        //if (latitude!=null&&longitude!=null) order.sendLocation(adminId,Float.parseFloat(latitude), Float.parseFloat(longitude), null);
-        //order.sendContact(a.getFirstName(), a.getNumber());
+        order.sendMe(order.orderText(a.getId()));
         clearCart(update);
-
         DataBase.sql("update zakaz set conformed = true where userid = " + a.getId());
         if (update.hasMessage()) {
             showMainMenu(false, update);

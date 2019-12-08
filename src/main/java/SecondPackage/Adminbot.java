@@ -377,21 +377,7 @@ public class Adminbot extends TelegramLongPollingBot {
                 String name = DataBase.sqlQuery("select firstname from users where id ="+userID,"firstname");
                 if (cb.contains(name+"  -  ")) {
                     boolean location = DataBase.sqlQueryBoolean("select location from zakaz where userid ="+userID,"location");
-                    String number = "\nНомер: "+ DataBase.sqlQuery("select phone from users where id ="+userID,"phone");
-                    String time = "\nВремя: "+DataBase.sqlQuery("select time from zakaz where userid = '" +userID+"' and conformed = true", "time");
-                    String address = DataBase.sqlQuery("select address from users where id ="+userID,"address");
-                    String product = "\n"+DataBase.sqlQuery("select product from zakaz where userid = '" +userID+"' and conformed = true", "product");
-                    String comment = DataBase.sqlQuery("select comment from zakaz where userid ="+userID, "comment");
-                    if (comment!=null) comment= "\n<b>Комментарий:</b> "+comment+"\n";
-                    else comment = "";
-                    if (!location) address= "\n<b>Адрес:</b> "+address;
-                    else address="\n<b>Локация получена</b>";
-                    String text= "Имя: "+name+
-                            number+
-                            time+
-                            address+
-                            comment+
-                            product;
+                    String text = orderText(userID);
                     InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
                     List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
                     List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
@@ -502,10 +488,25 @@ public class Adminbot extends TelegramLongPollingBot {
         }
 	}
 
-
-
-
-
+    public String orderText(String userID) throws SQLException {
+        boolean location = DataBase.sqlQueryBoolean("select location from zakaz where userid ="+userID,"location");
+        String name = "Имя: "+ DataBase.sqlQuery("select firstname from users where id ="+userID,"firstname");
+        String number = "\nНомер: "+ DataBase.sqlQuery("select phone from users where id ="+userID,"phone");
+        String time = "\nВремя: "+DataBase.sqlQuery("select time from zakaz where userid = '" +userID+"' and conformed = true", "time");
+        String address = DataBase.sqlQuery("select address from users where id ="+userID,"address");
+        String product = "\n"+DataBase.sqlQuery("select product from zakaz where userid = '" +userID+"' and conformed = true", "product");
+        String comment = DataBase.sqlQuery("select comment from zakaz where userid ="+userID, "comment");
+        if (comment!=null) comment= "\n<b>Комментарий:</b> "+comment+"\n";
+        else comment = "";
+        if (!location) address= "\n<b>Адрес:</b> "+address;
+        else address="\n<b>Локация получена</b>";
+        return  name+
+                number+
+                time+
+                address+
+                comment+
+                product;
+    }
 
 
     private void publish(String prodId) throws SQLException, TelegramApiException {
