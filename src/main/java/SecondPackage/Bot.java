@@ -1913,10 +1913,10 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
         } else {
             String time = DataBase.sqlQuery("select time from zakaz where userid ="+a.getId(), "time");
             String address = DataBase.sqlQuery("select address from users where id ="+a.getId(), "address");
-            String latitude = DataBase.sqlQuery("select latitude from users where id ="+a.getId(), "latitude");
-            if (address!=null) address= Lan.address(a.getLanguage())+address+"\n";
-            else if (latitude!=null) {
-                address=Lan.locationReceived(a.getLanguage());
+            boolean location = DataBase.sqlQueryBoolean("select location from zakaz where id ="+a.getId(), "location");
+            if (!location) address= Lan.address(a.getLanguage())+address+"\n";
+            else {
+                address=Lan.locationReceived(a.getLanguage())+"\n";
             }
             String comment = DataBase.sqlQuery("select comment from zakaz where userid ="+a.getId(), "comment");
             if (comment!=null) comment= "<b>Комментарий:</b> "+comment+"\n";

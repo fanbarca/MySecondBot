@@ -386,9 +386,9 @@ class Lan {
     }
     public static String locationReceived(String lan) {
         String r="";
-        if (lan.equals("Uzbek")) r = "<b>Lokatsiya qabul qilingan</b> \n";
-        else if (lan.equals("Russian")) r = "<b>Геолокация получена</b> \n";
-        else if (lan.equals("English")) r = "<b>Location received</b> \n";
+        if (lan.equals("Uzbek")) r = "<b>Lokatsiya qabul qilingan</b>";
+        else if (lan.equals("Russian")) r = "<b>Геолокация получена</b>";
+        else if (lan.equals("English")) r = "<b>Location received</b>";
         return r;
     }
     public static String added(String lan) {
