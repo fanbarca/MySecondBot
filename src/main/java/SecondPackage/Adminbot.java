@@ -531,7 +531,7 @@ public class Adminbot extends TelegramLongPollingBot {
                 .setText(EmojiParser.parseToUnicode(Lan.mainMenu("Russian").get(0)))
                 .setUrl("https://t.me/"+bot.getBotUsername()));
         row0.add(new InlineKeyboardButton()
-                .setText(EmojiParser.parseToUnicode("Выбрать размер"))
+                .setText(EmojiParser.parseToUnicode(":triangular_ruler: Выбрать размер"))
                 .setCallbackData("fromChannel"+prodId));
                 //.setUrl("https://t.me/"+bot.getBotUsername()+"?start=selected"+prodId));
         rows.add(row0);

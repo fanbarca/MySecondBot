@@ -633,25 +633,20 @@ public class Bot extends TelegramLongPollingBot {
         row.add(new InlineKeyboardButton()
                 .setText(EmojiParser.parseToUnicode("M"))
                 .setCallbackData("M"+prodId));
-        rows.add(row);
-        List<InlineKeyboardButton> row2 = new ArrayList<InlineKeyboardButton>();
-        row2.add(new InlineKeyboardButton()
-                .setText(EmojiParser.parseToUnicode("L"))
-                .setCallbackData("L"+prodId));
-        row2.add(new InlineKeyboardButton()
-                .setText(EmojiParser.parseToUnicode("XL"))
-                .setCallbackData("XL"+prodId));
-        row2.add(new InlineKeyboardButton()
+        row.add(new InlineKeyboardButton()
+               .setText(EmojiParser.parseToUnicode("L"))
+               .setCallbackData("L"+prodId));
+        row.add(new InlineKeyboardButton()
+               .setText(EmojiParser.parseToUnicode("XL"))
+               .setCallbackData("XL"+prodId));
+        row.add(new InlineKeyboardButton()
                 .setText(EmojiParser.parseToUnicode("XXL"))
                 .setCallbackData("XXL"+prodId));
-        rows.add(row2);
+        rows.add(row);
         List<InlineKeyboardButton> row3 = new ArrayList<InlineKeyboardButton>();
         row3.add(new InlineKeyboardButton()
                 .setText(EmojiParser.parseToUnicode(Lan.back(a.getLanguage())))
-                .setCallbackData(prodId));
-        row3.add(new InlineKeyboardButton()
-                .setText(EmojiParser.parseToUnicode(Lan.backToMenu(a.getLanguage())))
-                .setCallbackData(Lan.backToMenu(a.getLanguage())));
+                .setCallbackData("selected"+prodId));
         rows.add(row3);
         markup.setKeyboard(rows);
         if (edit) editPic(Lan.whatSize(a.getLanguage()), prodId, a.getId(), messageId, markup);
