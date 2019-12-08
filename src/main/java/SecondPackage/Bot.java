@@ -588,7 +588,7 @@ public class Bot extends TelegramLongPollingBot {
             if (a.getNumber() == null) {
                 deleteMessage(update.getCallbackQuery().getMessage());
                 sendMeNumber(a.getId());
-            } else confirm(update, time);
+            } else confirm(update);
         }
 //        if (cb.contains("UseNewLocation")) {
 //            sendMeLocation(update.getCallbackQuery().getMessage());
@@ -1560,15 +1560,15 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
 
 
 
-    private void confirm(Update update, String time) throws SQLException, TelegramApiException {
+    private void confirm(Update update) throws SQLException, TelegramApiException {
         Adminbot order = new Adminbot();
-        order.sendMe(order.orderText(a.getId()));
         clearCart(update);
         DataBase.sql("update zakaz set conformed = true where userid = " + a.getId());
         if (update.hasMessage()) {
             showMainMenu(false, update);
         }
             showMainMenu(true, update);
+        order.sendMe(order.orderText(a.getId()));
         a.setAddress(Lan.orderPlaced(a.getLanguage()));
         a.setAlert(true);
     }
