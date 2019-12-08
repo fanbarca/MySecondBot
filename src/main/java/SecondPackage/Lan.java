@@ -491,4 +491,12 @@ class Lan {
         else if (lan.equals("English")) r = "Previously sent address";
         return r;
     }
+
+    public static String pressCatalog(String lan) {
+        String r="";
+        if (lan.equals("Uzbek")) r = "Endi Katalog tugmasini bosing";
+        else if (lan.equals("Russian")) r = "Теперь нажмите на кнопку Каталог";
+        else if (lan.equals("English")) r = "Now press the Catalog button";
+        return r;
+    }
 }

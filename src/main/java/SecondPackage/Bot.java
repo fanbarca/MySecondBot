@@ -450,10 +450,21 @@ public class Bot extends TelegramLongPollingBot {
                 if (cb.contains("fromChannel")) {
                     //deleteMessage(DataBase.sqlQuery("select image from users where id="+a.getId(), "image"), a.getId());
                         if (a.getLanguage() == null) {
-                            chooseLanguage(update.getMessage(), false);
+                            DataBase.sql("UPDATE users SET language = 'Russian' WHERE id =" + a.getId());
+                            a.setLanguage("Russian");
+                            sendPic(productText(prodId, a.getId()),
+                                    a.getId(),
+                                    productsMarkup(prodId),
+                                    name);
                         } else {
                             String image = DataBase.sqlQuery("SELECT image from users where id=" + a.getId(), "image");
                             boolean newMessage = image==null;
+                            if (images.containsKey(a.getId())) {
+                                for (String id: images.get(a.getId())) {
+                                    deleteMessage(id, a.getId());
+                                }
+                                images.remove(a.getId());
+                            }
                             if (newMessage) {
                                 sendPic(productText(prodId, a.getId()),
                                         a.getId(),
@@ -465,6 +476,8 @@ public class Bot extends TelegramLongPollingBot {
                                         productsMarkup(prodId));
                             }
                         }
+                    a.setAddress(Lan.pressCatalog(a.getLanguage()));
+                    a.setAlert(true);
                 }
 				if (cb.contains("+plus")||cb.contains("-minus")) {
 					if (cb.contains("+plus"+prodId)){
@@ -2035,7 +2048,7 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
             if (sizes.get(entry.getKey()).contains(null)) sizesArray = "";
             else sizesArray= sizes.get(entry.getKey()).toString();
             String name = DataBase.sqlQuery("select "+a.getLanguage()+" from table0 where id =" + entry.getKey(), a.getLanguage());
-            cart += name + "  -  " + entry.getValue().get(0) + " * " + entry.getValue().get(1) + " = " + entry.getValue().get(0) * entry.getValue().get(1) + Lan.currency(a.getLanguage()) + sizesArray+"\n";
+            cart += name + "  -  " + entry.getValue().get(0) + " * " + entry.getValue().get(1) + " = " + entry.getValue().get(0) * entry.getValue().get(1) + Lan.currency(a.getLanguage()) + " "+sizesArray+"\n";
             result += entry.getValue().get(0) * entry.getValue().get(1);
             list.add(":heavy_multiplication_x: "+entry.getKey());
         }
