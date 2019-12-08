@@ -239,9 +239,7 @@ public class Bot extends TelegramLongPollingBot {
         a.setNumber(DataBase.sqlGetUserData(message.getChatId().toString()).get(1));
         deleteMessage(DataBase.sqlQuery("SELECT smid from users where id=" + message.getChatId(), "smid"), message.getChatId().toString());
         deleteMessage(message);
-        String time = DataBase.sqlQuery("select time from zakaz where userid =" + a.getId(), "time");
-        if (a.getNumber() != null&&time!=null) confirm(update, time);
-        else sendPic(Lan.orderPlaced(a.getLanguage()), a.getId(), Lan.mainMenu(a.getLanguage()), "Лого", 2);
+        sendMeLocation(message);
     }
 
 
@@ -452,11 +450,12 @@ public class Bot extends TelegramLongPollingBot {
 
             if (cb.contains(prodId)||cb.contains(name)) {
 				if (cb.contains("selected")) {
-                        if (occurrences(prodId, userid)==0) { DataBase.sql("insert into cart (userid, item) values (" + userid
-                                    + ",'" + prodId + "')");
-                        a.setAddress(Lan.added(a.getLanguage()));
-                        a.setAlert(false);
-						}
+//                        if (occurrences(prodId, userid)==0) {
+//                            DataBase.sql("insert into cart (userid, item) values (" + userid
+//                                    + ",'" + prodId + "')");
+//                        a.setAddress(Lan.added(a.getLanguage()));
+//                        a.setAlert(false);
+//						}
                     if (images.containsKey(a.getId())) {
                         for (String id: images.get(a.getId())) {
                             deleteMessage(id, a.getId());
@@ -549,7 +548,8 @@ public class Bot extends TelegramLongPollingBot {
                     DataBase.sql("insert into zakaz (userid, product) values ("
                     +a.getId()+", '"
                     +curretCart(a.getId())+"' )");
-                    sendMeLocation(update.getCallbackQuery().getMessage());
+                    if (a.getNumber()!=null) sendMeLocation(update.getCallbackQuery().getMessage());
+                    else sendMeNumber(a.getId());
                 }
             } else {
                 a.setAddress(Lan.tooLate(a.getLanguage()));
@@ -583,6 +583,7 @@ public class Bot extends TelegramLongPollingBot {
                 deleteMessage(update.getCallbackQuery().getMessage());
                 sendMeNumber(a.getId());
             } else confirm(update, time);
+
         }
 //        if (cb.contains("UseNewLocation")) {
 //            sendMeLocation(update.getCallbackQuery().getMessage());
@@ -1387,8 +1388,8 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
 
     private void handleLocation(Update update) throws SQLException, TelegramApiException {
         if (waitingForLocation()) {
-            if (update.getMessage().hasLocation()) DataBase.sql("update users set latitude = '"+update.getMessage().getLocation().getLatitude()+"', longitude = '"+update.getMessage().getLocation().getLongitude()+"', address = null where id ="+ a.getId());
-            else DataBase.sql("update users set latitude = null, longitude = null, address = '"+update.getMessage().getText()+"' where id ="+ a.getId());
+            if (update.getMessage().hasLocation()) DataBase.sql("update users set latitude = '"+update.getMessage().getLocation().getLatitude()+"', longitude = '"+update.getMessage().getLocation().getLongitude()+"' where id ="+ a.getId());
+            else DataBase.sql("update users set address = '"+update.getMessage().getText()+"' where id ="+ a.getId());
             editCaption(Lan.orderTime(a.getLanguage()), a.getId(),
                 Integer.parseInt(DataBase.sqlQuery("SELECT image from users where id=" + a.getId(), "image")),
                 timeKeys());
@@ -1706,7 +1707,7 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
         	row0.add(new InlineKeyboardButton()
                     .setText(EmojiParser.parseToUnicode(Lan.goBack(a.getLanguage())))
                     .setCallbackData("toCatalog"));
-			row0.add(new InlineKeyboardButton()
+            if (occ!=0) row0.add(new InlineKeyboardButton()
                     .setText(EmojiParser.parseToUnicode(Lan.delivery(a.getLanguage())))
                     .setCallbackData("selected"+productId));    
             rows.add(row0);
