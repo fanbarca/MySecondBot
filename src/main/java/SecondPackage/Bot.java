@@ -60,84 +60,24 @@ public class Bot extends TelegramLongPollingBot {
         try {
             if (update.hasMessage()) {
                 m = update.getMessage();
-                if (DataBase.sqlIdList().contains(m.getFrom().getId().toString())) {
-                    a = new Order(
-                            DataBase.sqlGetUserData(m.getFrom().getId().toString()).get(0),
-                            DataBase.sqlGetUserData(m.getFrom().getId().toString()).get(1),
-                            DataBase.sqlGetUserData(m.getFrom().getId().toString()).get(2),
-                            m.getFrom().getId().toString()
-                    );
-                    if (m.hasText()) handleIncomingText(update);
-                    else if (m.hasAnimation()) handleAnimation(m);
-                    else if (m.hasAudio()) handleAudio(m);
-                    else if (m.hasContact()) handleContact(m, update);
-                    else if (m.hasDocument()) handleDocument(m);
-                    else if (m.hasPhoto()) handlePhoto(m);
-                    else if (m.hasLocation()) handleLocation(update);
-                    else if (m.hasSticker()) handleSticker(m);
-                    else if (m.hasVideo()) handleVideo(m);
-                    else if (m.hasVideoNote()) handleVideoNote(m);
-                    else if (m.hasVoice()) handleVoice(m);
-                } else {
-                    if (update.getMessage().isUserMessage()) {
-                        DataBase.sql("INSERT INTO users (id, firstname, lastname, username) VALUES ('" +
-                                m.getFrom().getId().toString() + "','" +
-                                m.getFrom().getFirstName() + "','" +
-                                m.getFrom().getLastName() + "','" +
-                                m.getFrom().getUserName() + "')");
-
-                        Adminbot ab = new Adminbot();
-                        ab.sendMe(":boom: Новый пользователь!" +
-                                "\n" + m.getFrom().getFirstName() + " " + m.getFrom().getLastName() +
-                                "\n@" + m.getFrom().getUserName());
-                    }
-//                    else if (update.getMessage().isGroupMessage()||update.getMessage().isSuperGroupMessage())  {
-//                        Adminbot ab = new Adminbot();
-//                        ab.sendMe(update.getMessage().getChatId().toString());
-//                    }
-                    a = new Order(
-                            m.getFrom().getFirstName(),
-                            null,
-                            null,
-                            m.getFrom().getId().toString()
-                    );
-                    if (m.hasText()) handleIncomingText(update);
-                    else if (m.hasAnimation()) handleAnimation(m);
-                    else if (m.hasAudio()) handleAudio(m);
-                    else if (m.hasContact()) handleContact(m, update);
-                    else if (m.hasDocument()) handleDocument(m);
-                    else if (m.hasPhoto()) handlePhoto(m);
-                    else if (m.hasLocation()) handleLocation(update);
-                    else if (m.hasSticker()) handleSticker(m);
-                    else if (m.hasVideo()) handleVideo(m);
-                    else if (m.hasVideoNote()) handleVideoNote(m);
-                    else if (m.hasVoice()) handleVoice(m);
-                }
+                checkNewUser(m);
+                if (m.hasText()) handleIncomingText(update);
+                else if (m.hasAnimation()) handleAnimation(m);
+                else if (m.hasAudio()) handleAudio(m);
+                else if (m.hasContact()) handleContact(m, update);
+                else if (m.hasDocument()) handleDocument(m);
+                else if (m.hasPhoto()) handlePhoto(m);
+                else if (m.hasLocation()) handleLocation(update);
+                else if (m.hasSticker()) handleSticker(m);
+                else if (m.hasVideo()) handleVideo(m);
+                else if (m.hasVideoNote()) handleVideoNote(m);
+                else if (m.hasVoice()) handleVoice(m);
             } else if (update.hasCallbackQuery()) {
+                checkNewUser(update.getCallbackQuery().getMessage());
                 if (update.getCallbackQuery().getMessage().isChannelMessage()){
                     handleChannelCallback(update);
                 } else {
                     String cb = update.getCallbackQuery().getData();
-                    String chatId = update.getCallbackQuery().getFrom().getId().toString();
-                    if (DataBase.sqlIdList().contains(chatId)) {
-                        a = new Order(DataBase.sqlGetUserData(chatId).get(0),
-                                DataBase.sqlGetUserData(chatId).get(1),
-                                DataBase.sqlGetUserData(chatId).get(2),
-                                chatId
-                        );
-                    } else {
-                        DataBase.sql("INSERT INTO users (id, firstname, lastname, username) VALUES ('" +
-                                chatId + "','" +
-                                update.getCallbackQuery().getFrom().getFirstName() + "','" +
-                                update.getCallbackQuery().getFrom().getLastName() + "','" +
-                                update.getCallbackQuery().getFrom().getUserName() + "')");
-                        a = new Order(
-                                update.getCallbackQuery().getFrom().getFirstName(),
-                                null,
-                                null,
-                                chatId
-                        );
-                    }
                     if (a.getLanguage() == null && !(cb.equals("O'zbek") || cb.equals("Русский") || cb.equals("English")))
                         chooseLanguage(update.getCallbackQuery().getMessage(), true);
                     else handleCallback(update);
@@ -150,6 +90,40 @@ public class Bot extends TelegramLongPollingBot {
         }
     }
 
+
+
+
+
+
+    private void checkNewUser(Message m) throws SQLException, TelegramApiException {
+        if (DataBase.sqlIdList().contains(m.getFrom().getId().toString())) {
+            a = new Order(
+                    DataBase.sqlGetUserData(m.getFrom().getId().toString()).get(0),
+                    DataBase.sqlGetUserData(m.getFrom().getId().toString()).get(1),
+                    DataBase.sqlGetUserData(m.getFrom().getId().toString()).get(2),
+                    m.getFrom().getId().toString()
+            );
+        } else {
+            if (m.isUserMessage()) {
+                DataBase.sql("INSERT INTO users (id, firstname, lastname, username) VALUES ('" +
+                        m.getFrom().getId().toString() + "','" +
+                        m.getFrom().getFirstName() + "','" +
+                        m.getFrom().getLastName() + "','" +
+                        m.getFrom().getUserName() + "')");
+
+                Adminbot ab = new Adminbot();
+                ab.sendMe(":boom: Новый пользователь!" +
+                        "\n" + m.getFrom().getFirstName() + " " + m.getFrom().getLastName() +
+                        "\n@" + m.getFrom().getUserName());
+            }
+            a = new Order(
+                    m.getFrom().getFirstName(),
+                    null,
+                    null,
+                    m.getFrom().getId().toString()
+            );
+        }
+    }
 
 
 
