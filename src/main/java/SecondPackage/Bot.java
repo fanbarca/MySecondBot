@@ -160,11 +160,7 @@ public class Bot extends TelegramLongPollingBot {
             if (a.getLanguage() == null) {
                 DataBase.sql("UPDATE users SET language = 'Russian' WHERE id =" + a.getId());
                 a.setLanguage("Russian");
-                sendPicbyId(productText(prodId, a.getId()),
-                        a.getId(),
-                        productsMarkup(prodId),
-                        prodId);
-            } else {
+            }
                 if (images.containsKey(a.getId())) {
                     for (String id: images.get(a.getId())) {
                         deleteMessage(id, a.getId());
@@ -173,11 +169,11 @@ public class Bot extends TelegramLongPollingBot {
                 }
                 String image = DataBase.sqlQuery("SELECT image from users where id=" + a.getId(), "image");
                 if (image!=null) deleteMessage(image, a.getId());
-                    sendPicbyId(productText(prodId, a.getId()),
-                            a.getId(),
-                            productsMarkup(prodId),
-                            prodId);
-            }
+//                    sendPicbyId(productText(prodId, a.getId()),
+//                            a.getId(),
+//                            productsMarkup(prodId),
+//                            prodId);
+            chooseSize(prodId, false);
             a.setAddress(Lan.pressCatalog(a.getLanguage()));
             a.setAlert(true);
         }
@@ -464,7 +460,7 @@ public class Bot extends TelegramLongPollingBot {
 				if (cb.contains("+plus")||cb.contains("-minus")) {
 					if (cb.contains("+plus"+prodId)){
 					    if (type.equals("0")||type.equals("1")) {
-                            chooseSize(update.getCallbackQuery().getMessage(), prodId);
+                            chooseSize(prodId, true);
                         } else {
                             DataBase.sql("insert into cart (userid, item) values (" + userid
                                     + ",'" + prodId + "')");
@@ -503,7 +499,7 @@ public class Bot extends TelegramLongPollingBot {
                         a.setAlert(false);
                         editCaption(productText(prodId, userid), update.getCallbackQuery().getMessage(), markUp(productText(prodId, userid), prodId, (occurrences(prodId, userid)>0)?keybAddMore(name):keybAdd(name), 3));
                     } else if (cb.contains(Lan.addToCart(a.getLanguage()))|| cb.contains(Lan.addMore(a.getLanguage()))) {
-                        chooseSize(update.getCallbackQuery().getMessage(), prodId);
+                        chooseSize(prodId, true);
                     }
                 } else if (cb.contains("delete"+prodId)){
                     DataBase.sql("delete from cart where userid =" + a.getId()
@@ -624,7 +620,7 @@ public class Bot extends TelegramLongPollingBot {
 
 
 
-    private void chooseSize(Message message, String prodId) throws SQLException, TelegramApiException {
+    private void chooseSize(String prodId, boolean edit) throws SQLException, TelegramApiException {
         InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
         List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
@@ -658,7 +654,9 @@ public class Bot extends TelegramLongPollingBot {
                 .setCallbackData(Lan.backToMenu(a.getLanguage())));
         rows.add(row3);
         markup.setKeyboard(rows);
-        editPic(Lan.whatSize(a.getLanguage()), prodId, message, markup);
+        String messageId = DataBase.sqlQuery("select image from users where id ="+a.getId(), "image");
+        if (edit) editPic(Lan.whatSize(a.getLanguage()), prodId, a.getId(), Integer.parseInt(messageId), markup);
+        else sendPic(Lan.whatSize(a.getLanguage()), a.getId(), markup, prodId);
         a.setAddress(Lan.whatSize(a.getLanguage()));
         a.setAlert(true);
     }
@@ -1528,7 +1526,10 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
 
 
     private boolean waitingForLocation() throws SQLException{
-        return DataBase.sqlQuery("SELECT rmid from users where id=" + a.getId(), "rmid").equals("0");
+        String listener = DataBase.sqlQuery("SELECT rmid from users where id=" + a.getId(), "rmid");
+        if (listener!=null)
+        return listener.equals("0");
+        else return false;
     }
 
 
@@ -1536,7 +1537,10 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
 
 
     private boolean waitingForComment() throws SQLException{
-        return DataBase.sqlQuery("SELECT comment from users where id=" + a.getId(), "comment").equals("*waiting*");
+        String listener = DataBase.sqlQuery("SELECT comment from users where id=" + a.getId(), "comment");
+        if (listener!=null)
+            return listener.equals("*waiting*");
+        else return false;
     }
 
 
