@@ -548,10 +548,11 @@ public class Bot extends TelegramLongPollingBot {
                     DataBase.sql("insert into zakaz (userid, product) values ("
                     +a.getId()+", '"
                     +curretCart(a.getId())+"' )");
-                    if (a.getNumber()!=null) {
-                        sendMeLocation(update.getCallbackQuery().getMessage(), true);
+                    if (a.getNumber()==null) {
+                        deleteMessage(update.getCallbackQuery().getMessage());
+                        sendMeNumber(a.getId());
                     }
-                    else sendMeNumber(a.getId());
+                    else sendMeLocation(update.getCallbackQuery().getMessage(), true);
                 }
             } else {
                 a.setAddress(Lan.tooLate(a.getLanguage()));
@@ -565,10 +566,11 @@ public class Bot extends TelegramLongPollingBot {
                         DataBase.sqlQuery("select product from zakaz where userid = "+ a.getId(), "product"));
                 DataBase.sql("update zakaz set conformed = false, time = null, product = '"
                     +curretCart(a.getId())+"' where userid =" + a.getId());
-                if (a.getNumber()!=null) {
-                    sendMeLocation(update.getCallbackQuery().getMessage(), true);
+                if (a.getNumber()==null) {
+                    deleteMessage(update.getCallbackQuery().getMessage());
+                    sendMeNumber(a.getId());
                 }
-                else sendMeNumber(a.getId());
+                else sendMeLocation(update.getCallbackQuery().getMessage(), true);
             } else if (cb.equals(Lan.YesNo(a.getLanguage()).get(1))) {
                 showOrders(update);
             }
