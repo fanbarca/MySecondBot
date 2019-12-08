@@ -173,7 +173,7 @@ public class Bot extends TelegramLongPollingBot {
 //                            a.getId(),
 //                            productsMarkup(prodId),
 //                            prodId);
-            chooseSize(prodId, false);
+            chooseSize(prodId, false, 0);
             a.setAddress(Lan.pressCatalog(a.getLanguage()));
             a.setAlert(true);
         }
@@ -460,7 +460,7 @@ public class Bot extends TelegramLongPollingBot {
 				if (cb.contains("+plus")||cb.contains("-minus")) {
 					if (cb.contains("+plus"+prodId)){
 					    if (type.equals("0")||type.equals("1")) {
-                            chooseSize(prodId, true);
+                            chooseSize(prodId, true, update.getCallbackQuery().getMessage().getMessageId());
                         } else {
                             DataBase.sql("insert into cart (userid, item) values (" + userid
                                     + ",'" + prodId + "')");
@@ -499,7 +499,7 @@ public class Bot extends TelegramLongPollingBot {
                         a.setAlert(false);
                         editCaption(productText(prodId, userid), update.getCallbackQuery().getMessage(), markUp(productText(prodId, userid), prodId, (occurrences(prodId, userid)>0)?keybAddMore(name):keybAdd(name), 3));
                     } else if (cb.contains(Lan.addToCart(a.getLanguage()))|| cb.contains(Lan.addMore(a.getLanguage()))) {
-                        chooseSize(prodId, true);
+                        chooseSize(prodId, true, update.getCallbackQuery().getMessage().getMessageId());
                     }
                 } else if (cb.contains("delete"+prodId)){
                     DataBase.sql("delete from cart where userid =" + a.getId()
@@ -620,7 +620,7 @@ public class Bot extends TelegramLongPollingBot {
 
 
 
-    private void chooseSize(String prodId, boolean edit) throws SQLException, TelegramApiException {
+    private void chooseSize(String prodId, boolean edit, int messageId) throws SQLException, TelegramApiException {
         InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
         List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
@@ -654,12 +654,13 @@ public class Bot extends TelegramLongPollingBot {
                 .setCallbackData(Lan.backToMenu(a.getLanguage())));
         rows.add(row3);
         markup.setKeyboard(rows);
-        String messageId = DataBase.sqlQuery("select image from users where id ="+a.getId(), "image");
-        if (edit) editPic(Lan.whatSize(a.getLanguage()), prodId, a.getId(), Integer.parseInt(messageId), markup);
+        if (edit) editPic(Lan.whatSize(a.getLanguage()), prodId, a.getId(), messageId, markup);
         else sendPicbyId(Lan.whatSize(a.getLanguage()), a.getId(), markup, prodId);
         a.setAddress(Lan.whatSize(a.getLanguage()));
         a.setAlert(true);
     }
+
+
 
 
 
@@ -690,6 +691,7 @@ public class Bot extends TelegramLongPollingBot {
         if (edit) editPic(Lan.chooseDish(a.getLanguage()),"Лого", update.getCallbackQuery().getMessage(), markup);
 		else sendPic(Lan.chooseDish(a.getLanguage()), a.getId(), markup, "Лого");
     }
+
 
 
 
@@ -733,9 +735,15 @@ public class Bot extends TelegramLongPollingBot {
 
 
 
+
+
+
     public static List<String> listSubTypes(int i) throws SQLException{
         return listSubTypes(i, "typeid");
     }
+
+
+
 
 
 
@@ -777,6 +785,12 @@ public class Bot extends TelegramLongPollingBot {
 
         return DataBase.sqlQueryList("select "+column+" from types where "+ condition, column);
     }
+
+
+
+
+
+
 
 
     private InlineKeyboardMarkup simpleMarkUp(String button) {
