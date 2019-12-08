@@ -548,7 +548,9 @@ public class Bot extends TelegramLongPollingBot {
                     DataBase.sql("insert into zakaz (userid, product) values ("
                     +a.getId()+", '"
                     +curretCart(a.getId())+"' )");
-                    if (a.getNumber()!=null) sendMeLocation(update.getCallbackQuery().getMessage());
+                    if (a.getNumber()!=null) {
+                        sendMeLocation(update.getCallbackQuery().getMessage());
+                    }
                     else sendMeNumber(a.getId());
                 }
             } else {
@@ -583,7 +585,6 @@ public class Bot extends TelegramLongPollingBot {
                 deleteMessage(update.getCallbackQuery().getMessage());
                 sendMeNumber(a.getId());
             } else confirm(update, time);
-
         }
 //        if (cb.contains("UseNewLocation")) {
 //            sendMeLocation(update.getCallbackQuery().getMessage());
@@ -1390,11 +1391,11 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
         if (waitingForLocation()) {
             if (update.getMessage().hasLocation()) DataBase.sql("update users set latitude = '"+update.getMessage().getLocation().getLatitude()+"', longitude = '"+update.getMessage().getLocation().getLongitude()+"' where id ="+ a.getId());
             else DataBase.sql("update users set address = '"+update.getMessage().getText()+"' where id ="+ a.getId());
-            editCaption(Lan.orderTime(a.getLanguage()), a.getId(),
-                Integer.parseInt(DataBase.sqlQuery("SELECT image from users where id=" + a.getId(), "image")),
-                timeKeys());
+            sendPic(Lan.orderTime(a.getLanguage()), a.getId(),
+                timeKeys(), "Лого");
             DataBase.sql("update users set rmid = 1 where id = " + a.getId());
         }
+        deleteMessage(DataBase.sqlQuery("SELECT image from users where id=" + a.getId(), "image"), a.getId());
         deleteMessage(update.getMessage());
     }
 
