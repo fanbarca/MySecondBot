@@ -73,6 +73,8 @@ public class Bot extends TelegramLongPollingBot {
                 else if (m.hasVideoNote()) handleVideoNote(m);
                 else if (m.hasVoice()) handleVoice(m);
             } else if (update.hasCallbackQuery()) {
+                AnswerCallbackQuery answer = new AnswerCallbackQuery()
+                        .setCallbackQueryId(update.getCallbackQuery().getId());
                 checkNewUser(update);
                 if (update.getCallbackQuery().getMessage().isChannelMessage()){
                     handleChannelCallback(update);
@@ -82,6 +84,8 @@ public class Bot extends TelegramLongPollingBot {
                         chooseLanguage(update.getCallbackQuery().getMessage(), true);
                     else handleCallback(update);
                 }
+                if (a.getAddress()!=null) answer.setShowAlert(a.getAlert()).setText(a.getAddress());
+                execute(answer);
             } else if (update.hasInlineQuery()) {
                 handleInline(update);
             }
@@ -354,10 +358,6 @@ public class Bot extends TelegramLongPollingBot {
 
     private void handleCallback(Update update)
             throws TelegramApiException, SQLException, MalformedURLException, IOException {
-
-        AnswerCallbackQuery answer = new AnswerCallbackQuery()
-                .setCallbackQueryId(update.getCallbackQuery().getId());
-
         String cb = update.getCallbackQuery().getData();
         if (cb.equals("O'zbek") || cb.equals("Русский") || cb.equals("English")) {
             if (cb.equals("O'zbek")) {
@@ -623,9 +623,6 @@ public class Bot extends TelegramLongPollingBot {
             a.setAlert(false);
             showCart(update, true);
         }
-		
-        if (a.getAddress()!=null) answer.setShowAlert(a.getAlert()).setText(a.getAddress());
-        execute(answer);
     }
 
 
@@ -1913,7 +1910,7 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
         } else {
             String time = DataBase.sqlQuery("select time from zakaz where userid ="+a.getId(), "time");
             String address = DataBase.sqlQuery("select address from users where id ="+a.getId(), "address");
-            boolean location = DataBase.sqlQueryBoolean("select location from zakaz where id ="+a.getId(), "location");
+            boolean location = DataBase.sqlQueryBoolean("select location from zakaz where userid ="+a.getId(), "location");
             if (!location) address= Lan.address(a.getLanguage())+address+"\n";
             else {
                 address=Lan.locationReceived(a.getLanguage())+"\n";
