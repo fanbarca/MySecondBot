@@ -239,7 +239,7 @@ public class Bot extends TelegramLongPollingBot {
         a.setNumber(DataBase.sqlGetUserData(message.getChatId().toString()).get(1));
         deleteMessage(DataBase.sqlQuery("SELECT smid from users where id=" + message.getChatId(), "smid"), message.getChatId().toString());
         deleteMessage(message);
-        sendMeLocation(message);
+        sendMeLocation(message, false);
     }
 
 
@@ -549,7 +549,7 @@ public class Bot extends TelegramLongPollingBot {
                     +a.getId()+", '"
                     +curretCart(a.getId())+"' )");
                     if (a.getNumber()!=null) {
-                        sendMeLocation(update.getCallbackQuery().getMessage());
+                        sendMeLocation(update.getCallbackQuery().getMessage(), true);
                     }
                     else sendMeNumber(a.getId());
                 }
@@ -565,8 +565,10 @@ public class Bot extends TelegramLongPollingBot {
                         DataBase.sqlQuery("select product from zakaz where userid = "+ a.getId(), "product"));
                 DataBase.sql("update zakaz set conformed = false, time = null, product = '"
                     +curretCart(a.getId())+"' where userid =" + a.getId());
-                sendMeLocation(update.getCallbackQuery().getMessage());
-
+                if (a.getNumber()!=null) {
+                    sendMeLocation(update.getCallbackQuery().getMessage(), true);
+                }
+                else sendMeNumber(a.getId());
             } else if (cb.equals(Lan.YesNo(a.getLanguage()).get(1))) {
                 showOrders(update);
             }
@@ -970,7 +972,7 @@ public class Bot extends TelegramLongPollingBot {
 
 
 
-public void sendMeLocation(Message message) throws TelegramApiException, SQLException {
+public void sendMeLocation(Message message, boolean edit) throws TelegramApiException, SQLException {
     boolean hasLocation = DataBase.sqlQuery("select latitude from users where id ="+a.getId(), "latitude")!=null;
     boolean hasAddress = DataBase.sqlQuery("select address from users where id ="+a.getId(), "address")!=null;
     InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
@@ -994,7 +996,10 @@ public void sendMeLocation(Message message) throws TelegramApiException, SQLExce
                         .setCallbackData("Отмена"));
         rows.add(row);
         markup.setKeyboard(rows);
-        editCaption(Lan.sendMeLocation(a.getLanguage()), message, markup);
+        if (edit) editCaption(Lan.sendMeLocation(a.getLanguage()), message, markup);
+        else {
+            sendPic(Lan.sendMeLocation(a.getLanguage()), a.getId(), markup, "Лого");
+        }
         DataBase.sql("update users set rmid = 0 where id = " + message.getChatId());
     }
 
