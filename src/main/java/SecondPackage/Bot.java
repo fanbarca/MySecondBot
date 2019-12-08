@@ -518,7 +518,7 @@ public class Bot extends TelegramLongPollingBot {
                         showMainMenu(true, update);
                     }
                 } else if (cb.equals(prodId)) {
-                    editPic(productText(prodId, userid), prodId, update.getCallbackQuery().getMessage(), markUp(productText(prodId, userid), prodId, (occurrences(prodId, userid)>0)?keybAddMore(name):keybAdd(name), 3));
+                    editPic(productText(prodId, userid), prodId, update.getCallbackQuery().getMessage(), productsMarkup(prodId));
                 }
             }
         }
@@ -1020,10 +1020,9 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
 			List<String> sentArray = new ArrayList<>();
             for (String id : listID){
                 	sentArray.add(
-                        sendPic(productText(id, a.getId()),
+                        sendPicbyId(productText(id, a.getId()),
                         a.getId(),
-                        productsMarkup(id),
-                        DataBase.sqlQuery("select "+a.getLanguage()+" from table0 where id ="+id,a.getLanguage())));
+                        productsMarkup(id), id));
             }
             images.put(a.getId(), sentArray);
         } else {
