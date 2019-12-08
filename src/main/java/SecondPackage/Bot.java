@@ -160,9 +160,40 @@ public class Bot extends TelegramLongPollingBot {
 
 
     private void handleChannelCallback(Update update) throws SQLException, TelegramApiException {
-        sendPic("nesss", update.getCallbackQuery().getFrom().getId().toString(),null,"Лого");
-
-
+        String cb = update.getCallbackQuery().getData();
+        String prodId = cb.substring(11);
+        if (cb.contains("fromChannel")) {
+            //deleteMessage(DataBase.sqlQuery("select image from users where id="+a.getId(), "image"), a.getId());
+            if (a.getLanguage() == null) {
+                DataBase.sql("UPDATE users SET language = 'Russian' WHERE id =" + a.getId());
+                a.setLanguage("Russian");
+                sendPicbyId(productText(prodId, a.getId()),
+                        a.getId(),
+                        productsMarkup(prodId),
+                        prodId);
+            } else {
+                String image = DataBase.sqlQuery("SELECT image from users where id=" + a.getId(), "image");
+                boolean newMessage = image==null;
+                if (images.containsKey(a.getId())) {
+                    for (String id: images.get(a.getId())) {
+                        deleteMessage(id, a.getId());
+                    }
+                    images.remove(a.getId());
+                }
+                if (newMessage) {
+                    sendPicbyId(productText(prodId, a.getId()),
+                            a.getId(),
+                            productsMarkup(prodId),
+                            prodId);
+                } else {
+                    editPic(productText(prodId, a.getId()),
+                            prodId,a.getId(),Integer.parseInt(image),
+                            productsMarkup(prodId));
+                }
+            }
+            a.setAddress(Lan.pressCatalog(a.getLanguage()));
+            a.setAlert(true);
+        }
     }
 
 
@@ -447,38 +478,7 @@ public class Bot extends TelegramLongPollingBot {
                         showCart(update, true);
                     }
 				}
-                if (cb.contains("fromChannel")) {
-                    //deleteMessage(DataBase.sqlQuery("select image from users where id="+a.getId(), "image"), a.getId());
-                        if (a.getLanguage() == null) {
-                            DataBase.sql("UPDATE users SET language = 'Russian' WHERE id =" + a.getId());
-                            a.setLanguage("Russian");
-                            sendPic(productText(prodId, a.getId()),
-                                    a.getId(),
-                                    productsMarkup(prodId),
-                                    name);
-                        } else {
-                            String image = DataBase.sqlQuery("SELECT image from users where id=" + a.getId(), "image");
-                            boolean newMessage = image==null;
-                            if (images.containsKey(a.getId())) {
-                                for (String id: images.get(a.getId())) {
-                                    deleteMessage(id, a.getId());
-                                }
-                                images.remove(a.getId());
-                            }
-                            if (newMessage) {
-                                sendPic(productText(prodId, a.getId()),
-                                        a.getId(),
-                                        productsMarkup(prodId),
-                                        name);
-                            } else {
-                                editPic(productText(prodId, a.getId()),
-                                        prodId,a.getId(),Integer.parseInt(image),
-                                        productsMarkup(prodId));
-                            }
-                        }
-                    a.setAddress(Lan.pressCatalog(a.getLanguage()));
-                    a.setAlert(true);
-                }
+
 				if (cb.contains("+plus")||cb.contains("-minus")) {
 					if (cb.contains("+plus"+prodId)){
 					    if (type.equals("0")||type.equals("1")) {
