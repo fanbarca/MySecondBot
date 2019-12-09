@@ -195,7 +195,7 @@ public class Bot extends TelegramLongPollingBot {
             answerInlineQuery.setResults(new InlineQueryResultCachedPhoto()
                 .setId("22")
                 .setPhotoFileId(DataBase.sqlQuery("select imageid from table0 where russian = 'Лого'", "imageid"))
-                .setCaption(EmojiParser.parseToUnicode("       Магазин одежды\n           <b>САРАФАН</b>\n\n\n<a href=\"t.me/"+botName+"\">🤖 БОТ</a>                         <a href=\"t.me/"+channelName+"\">📺 КАНАЛ</a>"))
+                .setCaption(EmojiParser.parseToUnicode("Магазин одежды <b>САРАФАН!</b>\n\n<a href=\"t.me/"+botName+"\">🤖 БОТ</a>                         <a href=\"t.me/"+channelName+"\">📺 КАНАЛ</a>"))
                 .setParseMode("HTML"));
         }
         else if (inline.equals("location")) {
