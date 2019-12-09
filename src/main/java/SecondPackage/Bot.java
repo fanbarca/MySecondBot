@@ -1749,8 +1749,8 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
             rows.add(row0);
                 List<InlineKeyboardButton> row1 = new ArrayList<InlineKeyboardButton>();
                 row1.add(new InlineKeyboardButton()
-                    .setText(EmojiParser.parseToUnicode(Lan.share("Russian")))
-                    .setSwitchInlineQuery(prodId));
+                    .setText(EmojiParser.parseToUnicode(Lan.share(a.getLanguage())))
+                    .setSwitchInlineQuery(productId));
                 rows.add(row1);
         markup.setKeyboard(rows);
         return markup;
