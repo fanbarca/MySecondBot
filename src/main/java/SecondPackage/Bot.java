@@ -26,7 +26,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.Keyboard
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.logging.BotLogger;
 
-import java.util.List
+import java.util.List;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.time.LocalTime;
