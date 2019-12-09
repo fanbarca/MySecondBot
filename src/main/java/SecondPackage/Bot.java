@@ -227,7 +227,7 @@ public class Bot extends TelegramLongPollingBot {
                     .setDescription("Каталог одежды"));
         } else if (inline.equals("products")) {
             List<InlineQueryResult> products = new ArrayList<InlineQueryResult>();
-            for (String id : DataBase.sqlQueryList("select id from table0 where instock = true and russian != 'Лого'", "id")) {
+            for (String id : DataBase.sqlQueryList("select id from table0 where instock = true and russian <> 'Лого'", "id")) {
                 products.add(new InlineQueryResultCachedPhoto()
                 .setId(id)
                 .setPhotoFileId(DataBase.sqlQuery("select imageid from table0 where id = "+id, "imageid"))
@@ -304,7 +304,7 @@ public class Bot extends TelegramLongPollingBot {
                                 .setCallbackData(Lan.mainMenu(a.getLanguage()).get(2)));
                         row3.add(new InlineKeyboardButton()
                                 .setText(EmojiParser.parseToUnicode(Lan.share(a.getLanguage())))
-                                .setSwitchInlineQuery(""));
+                                .setSwitchInlineQuery("poducts"));
                 rows.add(row3);
             markup.setKeyboard(rows);
          // editPic(Lan.welcome(a.getLanguage(), a.getFirstName()), a.getId(),Integer.parseInt(DataBase.sqlQuery("SELECT image from users where id=" + a.getId(), "image")), Lan.mainMenu(a.getLanguage()), "Лого", 2);
@@ -718,9 +718,9 @@ public class Bot extends TelegramLongPollingBot {
             row2.add(new InlineKeyboardButton()
                     .setText(EmojiParser.parseToUnicode(Lan.backToMenu(a.getLanguage())))
                     .setCallbackData(Lan.backToMenu(a.getLanguage())));                    
-            row2.add(new InlineKeyboardButton()
-                    .setText(EmojiParser.parseToUnicode(Lan.share(a.getLanguage())))
-                    .setSwitchInlineQuery("products"));
+            // row2.add(new InlineKeyboardButton()
+            //         .setText(EmojiParser.parseToUnicode(Lan.share(a.getLanguage())))
+            //         .setSwitchInlineQuery("products"));
             rows.add(row2);
         markup.setKeyboard(rows);
 
