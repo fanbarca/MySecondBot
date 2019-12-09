@@ -224,7 +224,7 @@ public class Bot extends TelegramLongPollingBot {
                     .setDescription("Каталог одежды"));
         }
         for (String id : DataBase.sqlQueryList("select id from table0", "id")){
-            if (inline.equals(id) {
+            if (inline.equals(id)) {
                 answerInlineQuery.setResults(new InlineQueryResultCachedPhoto()
                 .setId("22")
                 .setPhotoFileId(DataBase.sqlQuery("select imageid from table0 where id = "+id, "imageid"))
@@ -233,7 +233,7 @@ public class Bot extends TelegramLongPollingBot {
                 .setReplyMarkup(publicProductsMarkup(prodId)));
             }
         
-       
+        }
         
         execute(answerInlineQuery);
     }
