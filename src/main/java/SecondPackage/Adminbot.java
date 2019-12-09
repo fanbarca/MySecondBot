@@ -520,12 +520,6 @@ public class Adminbot extends TelegramLongPollingBot {
 
         InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
-//        List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
-//        row.add(new InlineKeyboardButton()
-//                .setText(EmojiParser.parseToUnicode("0"))
-//                .setCallbackData(""));
-//
-//        rows.add(row);
         List<InlineKeyboardButton> row0 = new ArrayList<InlineKeyboardButton>();
         row0.add(new InlineKeyboardButton()
                 .setText(EmojiParser.parseToUnicode(Lan.mainMenu("Russian").get(0)))
@@ -535,11 +529,11 @@ public class Adminbot extends TelegramLongPollingBot {
                 .setCallbackData("fromChannel"+prodId));
                 //.setUrl("https://t.me/"+bot.getBotUsername()+"?start=selected"+prodId));
         rows.add(row0);
-//         List<InlineKeyboardButton> row1 = new ArrayList<InlineKeyboardButton>();
-//         row1.add(new InlineKeyboardButton()
-//             .setText(EmojiParser.parseToUnicode(Lan.share("Russian")))
-//             .setSwitchInlineQuery(prodId));
-//         rows.add(row1);
+        List<InlineKeyboardButton> row1 = new ArrayList<InlineKeyboardButton>();
+        row1.add(new InlineKeyboardButton()
+            .setText(EmojiParser.parseToUnicode(Lan.share("Russian")))
+            .setSwitchInlineQuery(prodId));
+        rows.add(row1);
         markup.setKeyboard(rows);
         bot.toChannel(name+description+cost,markup,prodId);
     }
