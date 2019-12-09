@@ -1784,7 +1784,12 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
     private InlineKeyboardMarkup publicProductsMarkup(String productId) throws SQLException {
 		InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
             List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
-			
+		List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();	
+            row.add(new InlineKeyboardButton()
+                .setText(EmojiParser.parseToUnicode(":triangular_ruler: Выбрать размер"))
+                .setCallbackData(productId));
+                //.setUrl("https://t.me/"+bot.getBotUsername()+"?start=selected"+prodId));
+            rows.add(row);
             List<InlineKeyboardButton> row0 = new ArrayList<InlineKeyboardButton>();
         	row0.add(new InlineKeyboardButton()
                     .setText(EmojiParser.parseToUnicode("Каталог"))
