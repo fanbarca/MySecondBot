@@ -210,6 +210,14 @@ public class Bot extends TelegramLongPollingBot {
                     .setTitle(Lan.previousAddress(a.getLanguage()))
                     .setInputMessageContent(inputMessageContent)
                     .setDescription(address));
+        } else if (inline.equals("@regularshop")) {
+            InputTextMessageContent inputMessageContent = new InputTextMessageContent()
+                    .setMessageText("@regularshop");
+            answerInlineQuery.setResults(new InlineQueryResultArticle()
+                    .setId("22")
+                    .setTitle("Наш канал в Telegram")
+                    .setInputMessageContent(inputMessageContent)
+                    .setDescription("Каталог одежды"));
         }
         execute(answerInlineQuery);
     }
@@ -266,7 +274,7 @@ public class Bot extends TelegramLongPollingBot {
                                 .setCallbackData(Lan.mainMenu(a.getLanguage()).get(2)));
                         row3.add(new InlineKeyboardButton()
                                 .setText(EmojiParser.parseToUnicode(Lan.share(a.getLanguage())))
-                                .setSwitchInlineQuery(""));
+                                .setSwitchInlineQuery("@regularshop"));
                 rows.add(row3);
             markup.setKeyboard(rows);
          // editPic(Lan.welcome(a.getLanguage(), a.getFirstName()), a.getId(),Integer.parseInt(DataBase.sqlQuery("SELECT image from users where id=" + a.getId(), "image")), Lan.mainMenu(a.getLanguage()), "Лого", 2);
