@@ -26,6 +26,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.Keyboard
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.logging.BotLogger;
 
+import java.awt.List;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.time.LocalTime;
@@ -223,16 +224,16 @@ public class Bot extends TelegramLongPollingBot {
                     .setInputMessageContent(inputMessageContent)
                     .setDescription("Каталог одежды"));
         } else if (inline.equals("products")) {
+            List<InlineQueryResult> products = new ArrayList<InlineQueryResult>();
             for (String id : DataBase.sqlQueryList("select id from table0 where instock = true", "id")) {
-                answerInlineQuery.setResults(
-                    new InlineQueryResultCachedPhoto()
+                products.add(new InlineQueryResultCachedPhoto()
                 .setId(id)
                 .setPhotoFileId(DataBase.sqlQuery("select imageid from table0 where id = "+id, "imageid"))
                 .setCaption(EmojiParser.parseToUnicode(productText(id)))
                 .setParseMode("HTML")
-                .setReplyMarkup(publicProductsMarkup(id))
-                );
+                .setReplyMarkup(publicProductsMarkup(id)));
             }
+            answerInlineQuery.setResults(products);
         }
         for (String id : DataBase.sqlQueryList("select id from table0", "id")){
             if (inline.equals(id)) {
@@ -1792,7 +1793,7 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
             //         .setText(EmojiParser.parseToUnicode(Lan.delivery(a.getLanguage())))
             //         .setCallbackData("selected"+productId));                
             row0.add(new InlineKeyboardButton()
-                .setText(EmojiParser.parseToUnicode("Поделить"))
+                .setText(EmojiParser.parseToUnicode("Поделиться"))
                 .setSwitchInlineQuery(productId));
         rows.add(row0);
         markup.setKeyboard(rows);
