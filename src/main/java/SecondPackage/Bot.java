@@ -194,7 +194,7 @@ public class Bot extends TelegramLongPollingBot {
         String inline = update.getInlineQuery().getQuery();
         AnswerInlineQuery answerInlineQuery = new AnswerInlineQuery()
                 .setInlineQueryId(update.getInlineQuery().getId());
-        if (inline.equals("")) {
+        if (inline.equals("share")) {
             answerInlineQuery.setResults(new InlineQueryResultCachedPhoto()
                 .setId("22")
                 .setPhotoFileId(DataBase.sqlQuery("select imageid from table0 where russian = 'Лого'", "imageid"))
@@ -225,7 +225,7 @@ public class Bot extends TelegramLongPollingBot {
                     .setTitle("Наш канал в Telegram")
                     .setInputMessageContent(inputMessageContent)
                     .setDescription("Каталог одежды"));
-        } else if (inline.equals("products")) {
+        } else if (inline.equals("")) {
             List<InlineQueryResult> products = new ArrayList<InlineQueryResult>();
             for (String id : DataBase.sqlQueryList("select id from table0 where instock = true", "id")) {
                 if (!id.equals("8955")) products.add(new InlineQueryResultCachedPhoto()
@@ -304,7 +304,7 @@ public class Bot extends TelegramLongPollingBot {
                                 .setCallbackData(Lan.mainMenu(a.getLanguage()).get(2)));
                         row3.add(new InlineKeyboardButton()
                                 .setText(EmojiParser.parseToUnicode(Lan.share(a.getLanguage())))
-                                .setSwitchInlineQuery("poducts"));
+                                .setSwitchInlineQuery(""));
                 rows.add(row3);
             markup.setKeyboard(rows);
          // editPic(Lan.welcome(a.getLanguage(), a.getFirstName()), a.getId(),Integer.parseInt(DataBase.sqlQuery("SELECT image from users where id=" + a.getId(), "image")), Lan.mainMenu(a.getLanguage()), "Лого", 2);
