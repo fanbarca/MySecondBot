@@ -228,9 +228,9 @@ public class Bot extends TelegramLongPollingBot {
                 answerInlineQuery.setResults(new InlineQueryResultCachedPhoto()
                 .setId("22")
                 .setPhotoFileId(DataBase.sqlQuery("select imageid from table0 where id = "+id, "imageid"))
-                .setCaption(EmojiParser.parseToUnicode(productText(prodId)))
+                .setCaption(EmojiParser.parseToUnicode(productText(id)))
                 .setParseMode("HTML")
-                .setReplyMarkup(publicProductsMarkup(prodId)));
+                .setReplyMarkup(publicProductsMarkup(id)));
             }
         
         }
