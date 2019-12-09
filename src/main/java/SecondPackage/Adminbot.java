@@ -471,6 +471,11 @@ public class Adminbot extends TelegramLongPollingBot {
                                         .setCallbackData(prodId+l));
                                 rows.add(row);
                             }
+                            List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
+                            row.add(new InlineKeyboardButton()
+                                    .setText(EmojiParser.parseToUnicode("Назад"))
+                                    .setCallbackData("Назад"));
+                            rows.add(row);
                             markup.setKeyboard(rows);
                         } else if (cb.substring(8).equals("Subtype")) {
                             listener = "ChangeSubtype";
@@ -483,6 +488,11 @@ public class Adminbot extends TelegramLongPollingBot {
                                         .setCallbackData(prodId+Bot.listSubTypes(-1).get(l)));
                                 rows.add(row);
                             }
+                            List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
+                            row.add(new InlineKeyboardButton()
+                                    .setText(EmojiParser.parseToUnicode("Назад"))
+                                    .setCallbackData("Назад"));
+                            rows.add(row);
                             markup.setKeyboard(rows);
                         } else {
                             listener = prodId+columnsListNames().get(i);
