@@ -676,7 +676,7 @@ public class Bot extends TelegramLongPollingBot {
         if (edit) editPic(Lan.whatSize(a.getLanguage()), prodId, a.getId(), messageId, markup);
         else sendPicbyId(Lan.whatSize(a.getLanguage()), a.getId(), markup, prodId);
         a.setAddress(Lan.whatSize(a.getLanguage()));
-        a.setAlert(true);
+        a.setAlert(false);
     }
 
 

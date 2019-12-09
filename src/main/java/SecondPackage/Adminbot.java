@@ -233,6 +233,7 @@ public class Adminbot extends TelegramLongPollingBot {
             AnswerCallbackQuery answer = new AnswerCallbackQuery()
                 .setCallbackQueryId(update.getCallbackQuery().getId());
             String cb = update.getCallbackQuery().getData();
+                if (cb.length()>3){
                 for (String l : DataBase.sqlQueryList("select id from table0","id")) {
                     if (cb.substring(0,4).equals(l)&&listener.equals("ChangeType")){
                         DataBase.sql("UPDATE table0 SET type = '"+cb.substring(4,1)+"' where id = "+l);
@@ -244,6 +245,7 @@ public class Adminbot extends TelegramLongPollingBot {
                         mainMenu(update,true);
                         answer.setShowAlert(false).setText("Готово");
                     }
+                }
                 }
 
                 if (cb.contains("update")) {
