@@ -37,6 +37,7 @@ import java.sql.*;
 
 
 public class Bot extends TelegramLongPollingBot {
+    private String channelName = "regularshop";
     private String botName = "DeliverySuperBot";
     private String botToken = "780864630:AAHpUc01UagThYH7wRi15zJQjwu06A6NaWM";
     Map<String, List<String>> images = new HashMap<>();
@@ -194,7 +195,7 @@ public class Bot extends TelegramLongPollingBot {
             answerInlineQuery.setResults(new InlineQueryResultCachedPhoto()
                 .setId("22")
                 .setPhotoFileId(DataBase.sqlQuery("select imageid from table0 where russian = 'Лого'", "imageid"))
-                .setCaption("<a href=\"t.me/"+botName+"\">Наш бот</a>\n<a href=\"t.me/regularshop\">Наш канал</a>")
+                .setCaption(EmojiParser.parseToUnicode("<a href=\"t.me/"+botName+"\">🤖 БОТ</a>\n\n\n<a href=\"t.me/"+channelName+"\">📺 КАНАЛ</a>"))
                 .setParseMode("HTML"));
         }
         else if (inline.equals("location")) {
@@ -277,7 +278,7 @@ public class Bot extends TelegramLongPollingBot {
                                 .setCallbackData(Lan.mainMenu(a.getLanguage()).get(2)));
                         row3.add(new InlineKeyboardButton()
                                 .setText(EmojiParser.parseToUnicode(Lan.share(a.getLanguage())))
-                                .setSwitchInlineQuery("@regularshop"));
+                                .setSwitchInlineQuery(""));
                 rows.add(row3);
             markup.setKeyboard(rows);
          // editPic(Lan.welcome(a.getLanguage(), a.getFirstName()), a.getId(),Integer.parseInt(DataBase.sqlQuery("SELECT image from users where id=" + a.getId(), "image")), Lan.mainMenu(a.getLanguage()), "Лого", 2);
