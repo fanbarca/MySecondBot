@@ -190,10 +190,13 @@ public class Bot extends TelegramLongPollingBot {
         String inline = update.getInlineQuery().getQuery();
         AnswerInlineQuery answerInlineQuery = new AnswerInlineQuery()
                 .setInlineQueryId(update.getInlineQuery().getId());
-        if (inline.equals("")) answerInlineQuery.setResults(new InlineQueryResultCachedPhoto()
+        if (inline.equals("")) {
+            answerInlineQuery.setResults(new InlineQueryResultCachedPhoto()
                 .setId("22")
                 .setPhotoFileId(DataBase.sqlQuery("select imageid from table0 where russian = 'Лого'", "imageid"))
-                .setCaption("@"+botName));
+                .setCaption("<a href=\"t.me/"+botName+"\">Наш бот</a>\n<a href=\"t.me/regularshop\">Наш канал</a>")
+                .setParseMode("HTML"));
+        }
         else if (inline.equals("location")) {
             Float latitude = Float.parseFloat(DataBase.sqlQuery("select latitude from users where id ="+a.getId(), "latitude"));
             Float longitude = Float.parseFloat(DataBase.sqlQuery("select longitude from users where id ="+a.getId(), "longitude"));
