@@ -706,10 +706,13 @@ public class Bot extends TelegramLongPollingBot {
         List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
             for (int i = 0 ; i<Lan.listTypes(a.getLanguage()).size(); i+=2) {
                 List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
-                row.add(new InlineKeyboardButton()
+
+                if (!DataBase.sqlQueryList("select type from table0 where type ='"+i+"'", "type").isEmpty())
+                    row.add(new InlineKeyboardButton()
                         .setText(EmojiParser.parseToUnicode(Lan.listTypes(a.getLanguage()).get(i)))
                         .setCallbackData(Lan.listTypes(a.getLanguage()).get(i)));
-                if (i+1<Lan.listTypes(a.getLanguage()).size()) row.add(new InlineKeyboardButton()
+                if ((i+1<Lan.listTypes(a.getLanguage()).size())&&!DataBase.sqlQueryList("select type from table0 where type ='"+(i++)+"'", "type").isEmpty())
+                    row.add(new InlineKeyboardButton()
                         .setText(EmojiParser.parseToUnicode(Lan.listTypes(a.getLanguage()).get(i+1)))
                         .setCallbackData(Lan.listTypes(a.getLanguage()).get(i+1)));
                 rows.add(row);
@@ -718,9 +721,9 @@ public class Bot extends TelegramLongPollingBot {
             row2.add(new InlineKeyboardButton()
                     .setText(EmojiParser.parseToUnicode(Lan.backToMenu(a.getLanguage())))
                     .setCallbackData(Lan.backToMenu(a.getLanguage())));                    
-            // row2.add(new InlineKeyboardButton()
-            //         .setText(EmojiParser.parseToUnicode(Lan.share(a.getLanguage())))
-            //         .setSwitchInlineQuery("products"));
+//             row2.add(new InlineKeyboardButton()
+//                     .setText(EmojiParser.parseToUnicode(Lan.share(a.getLanguage())))
+//                     .setSwitchInlineQuery("products"));
             rows.add(row2);
         markup.setKeyboard(rows);
 

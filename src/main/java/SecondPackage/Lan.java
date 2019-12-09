@@ -447,9 +447,9 @@ class Lan {
 
     public static String deleteComment(String lan) {
         String r="";
-        if (lan.equals("Uzbek")) r = "Izohni o'chirish";
-        else if (lan.equals("Russian")) r = "Удалить комментарий";
-        else if (lan.equals("English")) r = "Delete comment";
+        if (lan.equals("Uzbek")) r = ":x: Izohni o'chirish";
+        else if (lan.equals("Russian")) r = ":x: Удалить комментарий";
+        else if (lan.equals("English")) r = ":x: Delete comment";
         return r;
     }
 
