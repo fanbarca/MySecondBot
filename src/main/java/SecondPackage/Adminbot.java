@@ -491,11 +491,12 @@ public class Adminbot extends TelegramLongPollingBot {
                             listener = "ChangeSubType";
                             markup = new InlineKeyboardMarkup();
                             List<List<InlineKeyboardButton>> rows = new ArrayList<>();
-                            for (int l = 0; l<Bot.listSubTypes(-1).size(); l++) {
+                            List<String> list = DataBase.sqlQueryList("select typeid from types", "typeid");
+                            for (String s : list) {
                                 List<InlineKeyboardButton> row = new ArrayList<>();
                                 row.add(new InlineKeyboardButton()
-                                        .setText(EmojiParser.parseToUnicode(Bot.listSubTypes(-1, "Russian").get(l)))
-                                        .setCallbackData(prodId+Bot.listSubTypes(-1).get(l)+"ChangeSubType"));
+                                        .setText(EmojiParser.parseToUnicode(DataBase.sqlQuery("select Russian from types where typeid = "+s, "Russian")))
+                                        .setCallbackData(prodId + s + "ChangeSubType"));
                                 rows.add(row);
                             }
                             List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
