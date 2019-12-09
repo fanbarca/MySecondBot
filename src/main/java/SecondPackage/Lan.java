@@ -502,9 +502,9 @@ class Lan {
 
     public static String seeAll(String lan) {
         String r="";
-        if (lan.equals("Uzbek")) r = "Hamma tovarlar";
-        else if (lan.equals("Russian")) r = "Все товары";
-        else if (lan.equals("English")) r = "All products";
+        if (lan.equals("Uzbek")) r = ":shirt: Hamma tovarlar";
+        else if (lan.equals("Russian")) r = ":shirt: Все товары";
+        else if (lan.equals("English")) r = ":shirt: All products";
         return r;
     }
 }

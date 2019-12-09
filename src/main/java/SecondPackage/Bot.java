@@ -806,7 +806,7 @@ public class Bot extends TelegramLongPollingBot {
                 break;
         }
 
-        return DataBase.sqlQueryList("select "+column+" from types where "+ condition+"order by typeid asc", column);
+        return DataBase.sqlQueryList("select "+column+" from types where "+ condition+" order by typeid asc", column);
     }
 
 

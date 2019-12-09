@@ -460,6 +460,7 @@ public class Adminbot extends TelegramLongPollingBot {
                 for(int i= 0; i<columnsList().size(); i++) {
                     if (cb.equals(prodId+columnsListNames().get(i))){
                         InlineKeyboardMarkup markup;
+                        String now="";
                         if (cb.substring(8).equals("Type")) {
                             listener = "ChangeType";
                             markup = new InlineKeyboardMarkup();
@@ -467,7 +468,7 @@ public class Adminbot extends TelegramLongPollingBot {
                             for (int l = 0; l<Lan.listTypes("Russian").size(); l++) {
                                 List<InlineKeyboardButton> row = new ArrayList<>();
                                 row.add(new InlineKeyboardButton()
-                                        .setText(Lan.listTypes("Russian").get(l))
+                                        .setText(EmojiParser.parseToUnicode(Lan.listTypes("Russian").get(l)))
                                         .setCallbackData(prodId+l));
                                 rows.add(row);
                             }
@@ -476,6 +477,8 @@ public class Adminbot extends TelegramLongPollingBot {
                                     .setText(EmojiParser.parseToUnicode("Назад"))
                                     .setCallbackData("Назад"));
                             rows.add(row);
+                            now = Lan.listTypes("Russian").get(Integer.parseInt(DataBase.sqlQuery("select type from table0 where id ="+prodId, "type")));
+                            answer.setShowAlert(false).setText("Выберите новое значение");
                             markup.setKeyboard(rows);
                         } else if (cb.substring(8).equals("Subtype")) {
                             listener = "ChangeSubtype";
@@ -484,7 +487,7 @@ public class Adminbot extends TelegramLongPollingBot {
                             for (int l = 0; l<Bot.listSubTypes(-1).size(); l++) {
                                 List<InlineKeyboardButton> row = new ArrayList<>();
                                 row.add(new InlineKeyboardButton()
-                                        .setText(Bot.listSubTypes(-1, "Russian").get(l))
+                                        .setText(EmojiParser.parseToUnicode(Bot.listSubTypes(-1, "Russian").get(l)))
                                         .setCallbackData(prodId+Bot.listSubTypes(-1).get(l)));
                                 rows.add(row);
                             }
@@ -493,16 +496,18 @@ public class Adminbot extends TelegramLongPollingBot {
                                     .setText(EmojiParser.parseToUnicode("Назад"))
                                     .setCallbackData("Назад"));
                             rows.add(row);
+                            answer.setShowAlert(false).setText("Выберите новое значение");
                             markup.setKeyboard(rows);
                         } else {
                             listener = prodId+columnsListNames().get(i);
                             markup = simpleMarkUp("Назад");
+                            now = DataBase.sqlQuery("select "+columnsListNames().get(i).substring(4)+" from table0 where id ="+prodId, columnsListNames().get(i).substring(4));
+                            answer.setShowAlert(false).setText("Введите новое значение");
                         }
-                        String now = DataBase.sqlQuery("select "+columnsListNames().get(i).substring(4)+" from table0 where id ="+prodId, columnsListNames().get(i).substring(4));
                         edit(update.getCallbackQuery().getMessage(), "<b>"+columnsList().get(i)+"</b>"+
                         "\n\nТекущее значение = "+now+
                         "\n\nВведите новое значение: ", markup );
-                        answer.setShowAlert(false).setText("Введите новое значение");
+
                     }
                 }
             }
