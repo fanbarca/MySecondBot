@@ -467,8 +467,8 @@ public class Adminbot extends TelegramLongPollingBot {
                             for (int l = 0; l<Lan.listTypes("Russian").size(); l++) {
                                 List<InlineKeyboardButton> row = new ArrayList<>();
                                 row.add(new InlineKeyboardButton()
-                                        .setText(Lan.listTypes("Russian").get(i))
-                                        .setCallbackData(prodId+i));
+                                        .setText(Lan.listTypes("Russian").get(l))
+                                        .setCallbackData(prodId+l));
                                 rows.add(row);
                             }
                             markup.setKeyboard(rows);
@@ -479,8 +479,8 @@ public class Adminbot extends TelegramLongPollingBot {
                             for (int l = 0; l<Bot.listSubTypes(-1).size(); l++) {
                                 List<InlineKeyboardButton> row = new ArrayList<>();
                                 row.add(new InlineKeyboardButton()
-                                        .setText(Bot.listSubTypes(-1, "Russian").get(i))
-                                        .setCallbackData(prodId+Bot.listSubTypes(-1).get(i)));
+                                        .setText(Bot.listSubTypes(-1, "Russian").get(l))
+                                        .setCallbackData(prodId+Bot.listSubTypes(-1).get(l)));
                                 rows.add(row);
                             }
                             markup.setKeyboard(rows);
