@@ -1747,11 +1747,11 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
                     .setText(EmojiParser.parseToUnicode(Lan.delivery(a.getLanguage())))
                     .setCallbackData("selected"+productId));    
             rows.add(row0);
-            // List<InlineKeyboardButton> row1 = new ArrayList<InlineKeyboardButton>();
-            // row1.add(new InlineKeyboardButton()
-            //     .setText(EmojiParser.parseToUnicode(Lan.share(a.getLanguage())))
-            //     .setSwitchInlineQuery(""));
-            // rows.add(row1);
+                List<InlineKeyboardButton> row1 = new ArrayList<InlineKeyboardButton>();
+                row1.add(new InlineKeyboardButton()
+                    .setText(EmojiParser.parseToUnicode(Lan.share("Russian")))
+                    .setSwitchInlineQuery(prodId));
+                rows.add(row1);
         markup.setKeyboard(rows);
         return markup;
     }
