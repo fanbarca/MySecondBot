@@ -692,7 +692,7 @@ public class Bot extends TelegramLongPollingBot {
         List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
             for (int i = 0 ; i<Lan.listTypes(a.getLanguage()).size(); i++) {
                 List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
-                if (!DataBase.sqlQueryList("select type from table0 where type ='"+i+"'", "type").isEmpty())
+                if (!DataBase.sqlQueryList("select type from table0 where type ='"+i+"' and instock = true", "type").isEmpty())
                     row.add(new InlineKeyboardButton()
                         .setText(EmojiParser.parseToUnicode(Lan.listTypes(a.getLanguage()).get(i)))
                         .setCallbackData(Lan.listTypes(a.getLanguage()).get(i)));
