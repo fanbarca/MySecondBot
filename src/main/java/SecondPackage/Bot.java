@@ -223,16 +223,16 @@ public class Bot extends TelegramLongPollingBot {
                     .setInputMessageContent(inputMessageContent)
                     .setDescription("Каталог одежды"));
         } else if (inline.equals("products")) {
+            for (String id : DataBase.sqlQueryList("select id from table0 where instock = true", "id")) {
                 answerInlineQuery.setResults(
-                    for (String id : DataBase.sqlQueryList("select id from table0", "id")) {
                     new InlineQueryResultCachedPhoto()
                 .setId(id)
                 .setPhotoFileId(DataBase.sqlQuery("select imageid from table0 where id = "+id, "imageid"))
                 .setCaption(EmojiParser.parseToUnicode(productText(id)))
                 .setParseMode("HTML")
                 .setReplyMarkup(publicProductsMarkup(id));
-                    }
                 );
+            }
         }
         for (String id : DataBase.sqlQueryList("select id from table0", "id")){
             if (inline.equals(id)) {
