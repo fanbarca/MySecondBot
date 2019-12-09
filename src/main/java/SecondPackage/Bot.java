@@ -222,6 +222,15 @@ public class Bot extends TelegramLongPollingBot {
                     .setTitle("Наш канал в Telegram")
                     .setInputMessageContent(inputMessageContent)
                     .setDescription("Каталог одежды"));
+        } else if (inline.equals("products")) {
+            for (String id : DataBase.sqlQueryList("select id from table0", "id")) {
+                answerInlineQuery.setResults(new InlineQueryResultCachedPhoto()
+                .setId(id)
+                .setPhotoFileId(DataBase.sqlQuery("select imageid from table0 where id = "+id, "imageid"))
+                .setCaption(EmojiParser.parseToUnicode(productText(id)))
+                .setParseMode("HTML")
+                .setReplyMarkup(publicProductsMarkup(id)));
+            }
         }
         for (String id : DataBase.sqlQueryList("select id from table0", "id")){
             if (inline.equals(id)) {
@@ -703,8 +712,11 @@ public class Bot extends TelegramLongPollingBot {
             List<InlineKeyboardButton> row2 = new ArrayList<InlineKeyboardButton>();
             row2.add(new InlineKeyboardButton()
                     .setText(EmojiParser.parseToUnicode(Lan.backToMenu(a.getLanguage())))
-                    .setCallbackData(Lan.backToMenu(a.getLanguage())));
-                    rows.add(row2);
+                    .setCallbackData(Lan.backToMenu(a.getLanguage())));                    
+            row2.add(new InlineKeyboardButton()
+                    .setText(EmojiParser.parseToUnicode(Lan.share(a.getLanguage())))
+                    .setSwitchInlineQuery("products"));
+            rows.add(row2);
         markup.setKeyboard(rows);
 
         if (edit) editPic(Lan.chooseDish(a.getLanguage()),"Лого", update.getCallbackQuery().getMessage(), markup);
@@ -1779,7 +1791,7 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
             //         .setCallbackData("selected"+productId));                
             row0.add(new InlineKeyboardButton()
                 .setText(EmojiParser.parseToUnicode(Lan.share(a.getLanguage())))
-                .setSwitchInlineQuery(""));
+                .setSwitchInlineQuery(productId));
         rows.add(row0);
         markup.setKeyboard(rows);
         return markup;
