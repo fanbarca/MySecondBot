@@ -499,4 +499,12 @@ class Lan {
         else if (lan.equals("English")) r = "Now press the Catalog button";
         return r;
     }
+
+    public static String seeAll(String lan) {
+        String r="";
+        if (lan.equals("Uzbek")) r = "Hamma tovarlar";
+        else if (lan.equals("Russian")) r = "Все товары";
+        else if (lan.equals("English")) r = "All products";
+        return r;
+    }
 }

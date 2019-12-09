@@ -127,13 +127,13 @@ public class Bot extends TelegramLongPollingBot {
                     DataBase.sqlGetUserData(id).get(2),
                     id
             );
+            a.setImage(DataBase.sqlQuery("select image from users where id="+a.getId(), "image"));
         } else {
                 DataBase.sql("INSERT INTO users (id, firstname, lastname, username) VALUES ('" +
                         id + "','" +
                         firstName + "','" +
                         lastName + "','" +
                         userName + "')");
-
                 Adminbot ab = new Adminbot();
                 ab.sendMe(":boom: Новый пользователь!" +
                         "\n" + firstName + " " + lastName +
@@ -171,8 +171,8 @@ public class Bot extends TelegramLongPollingBot {
                     }
                     images.remove(a.getId());
                 }
-                String image = DataBase.sqlQuery("SELECT image from users where id=" + a.getId(), "image");
-                if (image!=null) deleteMessage(image, a.getId());
+//                String image = DataBase.sqlQuery("SELECT image from users where id=" + a.getId(), "image");
+                if (a.getImage()!=null) deleteMessage(a.getImage(), a.getId());
 //                    sendPicbyId(productText(prodId, a.getId()),
 //                            a.getId(),
 //                            productsMarkup(prodId),
@@ -331,9 +331,9 @@ public class Bot extends TelegramLongPollingBot {
                     DataBase.sql("UPDATE users SET language = 'Russian' WHERE id =" + a.getId());
                     a.setLanguage("Russian");
                 }
-                    String image = DataBase.sqlQuery("SELECT image from users where id=" + a.getId(), "image");
-                    if (image!=null) {
-                        deleteMessage(image, a.getId());
+//                    String image = DataBase.sqlQuery("SELECT image from users where id=" + a.getId(), "image");
+                    if (a.getImage()!=null) {
+                        deleteMessage(a.getImage(), a.getId());
                     }
                 deleteMessage(update.getMessage());
                 sendPicbyId(productText(prodId, a.getId()),
@@ -345,7 +345,8 @@ public class Bot extends TelegramLongPollingBot {
                 if (a.getLanguage() == null) {
                     chooseLanguage(update.getMessage(), false);
                 } else {
-                    deleteMessage(DataBase.sqlQuery("SELECT image from users where id=" + a.getId(), "image"), a.getId());
+                    //DataBase.sqlQuery("SELECT image from users where id=" + a.getId(), "image")
+                    if (a.getImage()!=null) deleteMessage(a.getImage(), a.getId());
                     deleteMessage(update.getMessage());
                     showMainMenu(false, update);
             }
@@ -546,10 +547,11 @@ public class Bot extends TelegramLongPollingBot {
                     if (items.size()>0) {
                         editCaption(Lan.mainMenu(a.getLanguage()).get(3) + "\n"
                             + curretCart(a.getId()), update.getCallbackQuery().getMessage().getChatId().toString(),
-                        Integer.parseInt(DataBase.sqlQuery("SELECT image from users where id=" + a.getId(), "image")),
+                                Integer.parseInt(a.getImage()),
                         deleteItemsKey(a.getId()));
                         a.setAddress(Lan.removed(a.getLanguage()));
                         a.setAlert(false);
+                        //Integer.parseInt(DataBase.sqlQuery("SELECT image from users where id=" + a.getId(), "image"))
                     } else {
                         a.setAddress(Lan.cartCleared(a.getLanguage()));
                         a.setAlert(false);
@@ -628,12 +630,12 @@ public class Bot extends TelegramLongPollingBot {
 //        }
         if (cb.contains(Lan.removeSelectively(a.getLanguage()))) {
             editCaption(Lan.mainMenu(a.getLanguage()).get(3) + "\n" + curretCart(a.getId()), a.getId(),
-                Integer.parseInt(DataBase.sqlQuery("SELECT image from users where id=" + a.getId(), "image")),
+                Integer.parseInt(a.getImage()),
                 deleteItemsKey(a.getId()));
         }
         if (cb.contains(Lan.addComment(a.getLanguage()))) {
             editCaption(Lan.enterComment(a.getLanguage()), a.getId(),
-                Integer.parseInt(DataBase.sqlQuery("SELECT image from users where id=" + a.getId(), "image")),
+                Integer.parseInt(a.getImage()),
                 simpleMarkUp(Lan.cancelComment(a.getLanguage())));
                 a.setAddress(Lan.enterComment(a.getLanguage()));
                 a.setAlert(true);
@@ -704,26 +706,21 @@ public class Bot extends TelegramLongPollingBot {
     private void showCatalog(Update update, boolean edit) throws TelegramApiException, SQLException {
         InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
-            for (int i = 0 ; i<Lan.listTypes(a.getLanguage()).size(); i+=2) {
+            for (int i = 0 ; i<Lan.listTypes(a.getLanguage()).size(); i++) {
                 List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
-
                 if (!DataBase.sqlQueryList("select type from table0 where type ='"+i+"'", "type").isEmpty())
                     row.add(new InlineKeyboardButton()
                         .setText(EmojiParser.parseToUnicode(Lan.listTypes(a.getLanguage()).get(i)))
                         .setCallbackData(Lan.listTypes(a.getLanguage()).get(i)));
-                if ((i+1<Lan.listTypes(a.getLanguage()).size())&&!DataBase.sqlQueryList("select type from table0 where type ='"+(i++)+"'", "type").isEmpty())
-                    row.add(new InlineKeyboardButton()
-                        .setText(EmojiParser.parseToUnicode(Lan.listTypes(a.getLanguage()).get(i+1)))
-                        .setCallbackData(Lan.listTypes(a.getLanguage()).get(i+1)));
                 rows.add(row);
             }
             List<InlineKeyboardButton> row2 = new ArrayList<InlineKeyboardButton>();
             row2.add(new InlineKeyboardButton()
                     .setText(EmojiParser.parseToUnicode(Lan.backToMenu(a.getLanguage())))
                     .setCallbackData(Lan.backToMenu(a.getLanguage())));                    
-//             row2.add(new InlineKeyboardButton()
-//                     .setText(EmojiParser.parseToUnicode(Lan.share(a.getLanguage())))
-//                     .setSwitchInlineQuery("products"));
+             row2.add(new InlineKeyboardButton()
+                     .setText(EmojiParser.parseToUnicode(Lan.seeAll(a.getLanguage())))
+                     .setSwitchInlineQueryCurrentChat(""));
             rows.add(row2);
         markup.setKeyboard(rows);
 
@@ -1118,6 +1115,7 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
         em.setReplyMarkup(markup);
         execute(em);
         DataBase.sql("update users set image =" + messageid + " where id =" + chatid);
+        a.setImage(messageid+"");
     }
 
 
@@ -1131,7 +1129,7 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
 
 
     public void editPic(String text, Message message, List<String> list, String productId, int flag) throws TelegramApiException, SQLException {
-        Integer messageId= Integer.parseInt(DataBase.sqlQuery("select image from users where id="+message.getChatId(), "image"));
+        Integer messageId= Integer.parseInt(a.getImage());
         String file_id;
         if (productId.equals("Лого"))
             file_id = DataBase.sqlQuery("SELECT imageid from table0 where Russian = 'Лого'", "imageid");
@@ -1151,6 +1149,7 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
         em.setReplyMarkup(markup);
         execute(em);
         DataBase.sql("update users set image =" + message.getMessageId() + " where id =" + message.getChatId());
+        a.setImage(message.getMessageId()+"");
     }
 
 
@@ -1180,6 +1179,7 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
         em.setReplyMarkup(markup);
         execute(em);
         DataBase.sql("update users set image =" + message.getMessageId() + " where id =" + message.getChatId());
+        a.setImage(message.getMessageId()+"");
     }
 
 
@@ -1206,6 +1206,7 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
         em.setReplyMarkup(markup);
         execute(em);
         DataBase.sql("update users set image =" + messageid + " where id =" + chatid);
+        a.setImage(messageid+"");
     }
 
 
@@ -1275,7 +1276,8 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
 
             String image = execute(aa).getMessageId().toString();
             DataBase.sql("update users set image =" + image + " where id =" + chatId);
-            return image;
+        a.setImage(image);
+        return image;
     }
 
 
@@ -1302,7 +1304,8 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
 
             String image = execute(aa).getMessageId().toString();
             DataBase.sql("update users set image =" + image + " where id =" + chatId);
-            return image;
+        a.setImage(image);
+        return image;
     }
 
 
@@ -1354,6 +1357,7 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
         aa.setReplyMarkup(inlineMarkup);
         String image = execute(aa).getMessageId().toString();
         DataBase.sql("update users set image =" + image + " where id =" + chatId);
+        a.setImage(image);
         return image;
     }
 
@@ -1390,6 +1394,7 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
 
 
     public void deleteMessage(String Messageid, String Chatid) {
+
         DeleteMessage dm = new DeleteMessage()
                 .setMessageId(Integer.parseInt(Messageid))
                 .setChatId(Chatid);
@@ -1452,7 +1457,7 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
 
 
     private void handleLocation(Update update) throws SQLException, TelegramApiException {
-        deleteMessage(DataBase.sqlQuery("SELECT image from users where id=" + a.getId(), "image"), a.getId());
+        deleteMessage(a.getImage(), a.getId());
         if (waitingForLocation()) {
             if (update.getMessage().hasLocation()) {
                 DataBase.sql("update zakaz set location = true");
@@ -1684,12 +1689,18 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
 
 
 
-    private void handlePhoto(Message message) throws SQLException {
+    private void handlePhoto(Message message) throws SQLException, TelegramApiException {
         String photoId = message.getPhoto().get(message.getPhoto().size() - 1).getFileId();
-        String caption = message.getCaption();
-        DataBase.sql("UPDATE table0 SET imageid = '" + photoId + "' where russian = '" + caption + "'");
-        DataBase.sql("UPDATE users SET image = '" + message.getMessageId() + "' where id = '" + message.getChatId() + "'");
-        a.setImage(DataBase.sqlGetUserData(message.getChatId().toString()).get(5));
+        String prodId = DataBase.sqlQuery("select id from table0 where imageid = '"+photoId+"'", "id");
+        //String imageMessageId = DataBase.sqlQuery("select image from users where id = " + a.getId(), "image");
+
+        if (prodId!=null&&!prodId.equals("")) {
+            sendPicbyId(productText(prodId, a.getId()), a.getId(),productsMarkup(prodId), prodId);
+            deleteMessage(a.getImage(), a.getId());
+        }
+
+        DataBase.sql("UPDATE table0 SET imageid = '" + photoId + "' where russian = '" + message.getCaption() + "'");
+        //a.setImage(DataBase.sqlGetUserData(message.getChatId().toString()).get(5));
         deleteMessage(message);
     }
 
@@ -1990,7 +2001,7 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
                 a.setAddress(Lan.cartIsEmpty(a.getLanguage()));
                 a.setAlert(true);
             } else {
-                Integer messageId= Integer.parseInt(DataBase.sqlQuery("select image from users where id="+a.getId(), "image"));
+                int messageId= Integer.parseInt(a.getImage());
                 if (edit) editPic(text, a.getId(), messageId, null, "Лого", 2);
                 else sendPic(text, a.getId(), null, "Лого", 2);
             }
