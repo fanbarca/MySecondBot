@@ -230,7 +230,7 @@ public class Bot extends TelegramLongPollingBot {
                 .setPhotoFileId(DataBase.sqlQuery("select imageid from table0 where id = "+id, "imageid"))
                 .setCaption(EmojiParser.parseToUnicode(productText(id)))
                 .setParseMode("HTML")
-                .setReplyMarkup(publicProductsMarkup(id))
+                .setReplyMarkup(publicProductsMarkup(id));
                     }
                 );
         }
