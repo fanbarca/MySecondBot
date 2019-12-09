@@ -223,6 +223,18 @@ public class Bot extends TelegramLongPollingBot {
                     .setInputMessageContent(inputMessageContent)
                     .setDescription("Каталог одежды"));
         }
+        for (String id : DataBase.sqlQueryList("select id from table0", "id")){
+            if (inline.equals(id) {
+                answerInlineQuery.setResults(new InlineQueryResultCachedPhoto()
+                .setId("22")
+                .setPhotoFileId(DataBase.sqlQuery("select imageid from table0 where id = "+id, "imageid"))
+                .setCaption(EmojiParser.parseToUnicode(productText(prodId)))
+                .setParseMode("HTML")
+                .setReplyMarkup(publicProductsMarkup(prodId)));
+            }
+        
+       
+        
         execute(answerInlineQuery);
     }
 
@@ -837,6 +849,21 @@ public class Bot extends TelegramLongPollingBot {
         }
 
 
+                
+                
+                
+                
+                
+    private String productText(String prodId) throws SQLException {
+        String emoji = DataBase.sqlQuery("select emoji from table0 where id = "+prodId, "emoji");
+        return "<b>" + DataBase.sqlQuery("select russian from table0 where id=" + prodId + "", "russian") + "</b>\n"+
+                            "<i>"+DataBase.sqlQuery("select russiandescription from table0 where id =" +prodId, "russiandescription")+"</i>\n\n"
+                            +Lan.cost("russian")+DataBase.sqlQuery("SELECT cost from table0 where id = " + prodId, "cost")+Lan.currency("russian") +".\n";
+        }
+                
+                
+                
+                
 
 
 
@@ -1731,6 +1758,39 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
 	
 	
 	
+                
+                
+                
+                
+                
+                
+                
+                
+    private InlineKeyboardMarkup publicProductsMarkup(String productId) throws SQLException {
+		InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
+            List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
+			
+            List<InlineKeyboardButton> row0 = new ArrayList<InlineKeyboardButton>();
+        	row0.add(new InlineKeyboardButton()
+                    .setText(EmojiParser.parseToUnicode(Lan.mainMenu("Russian").get(0)))
+                    .setUrl("https://t.me/"+bot.getBotUsername()));
+            // row0.add(new InlineKeyboardButton()
+            //         .setText(EmojiParser.parseToUnicode(Lan.delivery(a.getLanguage())))
+            //         .setCallbackData("selected"+productId));                
+            row0.add(new InlineKeyboardButton()
+                .setText(EmojiParser.parseToUnicode(Lan.share(a.getLanguage())))
+                .setSwitchInlineQuery(""));
+        rows.add(row0);
+        markup.setKeyboard(rows);
+        return markup;
+    }  
+                
+                
+                
+                
+                
+                
+                
 	
 	
 	
