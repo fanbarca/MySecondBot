@@ -127,9 +127,9 @@ public class Adminbot extends TelegramLongPollingBot {
                         deleteMessage(update.getMessage());
                         if (adminmessage!=null) {
                             deleteMessage(adminmessage, id);
-                            send("Выберите действие", id, mainKeyboard(null), true,  1);
+                            mainMenu(update, false);
                         } else {
-                            send("Выберите действие", id, mainKeyboard(null), true,  1);
+                            mainMenu(update, false);
                         }
                     }  else if (update.getMessage().getText().contains("/sql")) {
                         if (update.getMessage().getText().length()>5) {
@@ -187,12 +187,12 @@ public class Adminbot extends TelegramLongPollingBot {
                             listener = "";
                             DataBase.sql("UPDATE table0 SET emoji = '"+Name+"' where russian = '"+russian+"'");
                             deleteMessage(update.getMessage());
-                            edit(update.getMessage(), "Готово", mainKeyboard(null), 1);
+                            mainMenu(update, true);
                         } else if (listener.length()>4) {
                             if (columnsListNames().contains(listener.substring(4))) {
                             String Name = update.getMessage().getText();
                             DataBase.sql("UPDATE table0 SET "+listener.substring(8)+" = '"+Name+"' where id = "+listener.substring(0,4));
-                            edit(update.getMessage(), "Готово", mainKeyboard(null), 1);
+                            mainMenu(update, true);
                             listener = "";
                             deleteMessage(update.getMessage());
                             }
@@ -233,7 +233,14 @@ public class Adminbot extends TelegramLongPollingBot {
             AnswerCallbackQuery answer = new AnswerCallbackQuery()
                 .setCallbackQueryId(update.getCallbackQuery().getId());
             String cb = update.getCallbackQuery().getData();
+                for (String l : DataBase.sqlQueryList("select id from table0","id")) {
+                    if (cb.contains(l)&&listener.equals("ChangeType")){
+                        DataBase.sql("UPDATE table0 SET type = '"+cb.substring(4)+"' where id = "+l);
 
+                    } else if (cb.contains(l)&&listener.equals("ChangeSubType")){
+                        DataBase.sql("UPDATE table0 SET subtype = '"+cb.substring(4)+"' where id = "+l);
+                    }
+                }
 
                 if (cb.contains("update")) {
                         String column = cb.substring(6);
@@ -247,8 +254,8 @@ public class Adminbot extends TelegramLongPollingBot {
 				if (cb.contains("delCat")) {
                     russian = cb.substring(6);
 					DataBase.sql("delete from types where russian = '"+russian+"'");
-                    edit(update.getCallbackQuery().getMessage(), "Выберите действие", mainKeyboard(null), 1);
-					answer.setShowAlert(false).setText("Удалено");
+                    mainMenu(update, true);
+                    answer.setShowAlert(false).setText("Удалено");
                 }
 
             if(cb.equals("Обновить категорию")) {
@@ -336,7 +343,7 @@ public class Adminbot extends TelegramLongPollingBot {
                 answer.setShowAlert(false).setText("Время начала: "+cb.substring(6));
             }
             if(cb.contains("Конец")) {
-                edit(update.getCallbackQuery().getMessage(), "Новое время установлено", mainKeyboard(null), 1);
+                mainMenu(update, true);
                 Bot.endOfPeriod = LocalTime.parse(cb.substring(5));
                 answer.setShowAlert(false).setText("Новое время работы: " +
                         "\nС "+Bot.startOfPeriod.toString()+" по "+Bot.endOfPeriod.toString());
@@ -351,9 +358,10 @@ public class Adminbot extends TelegramLongPollingBot {
                     listener = "Delete";
                     edit(update.getCallbackQuery().getMessage(), "Удалить продукт", l, 3);
                 } else answer.setShowAlert(false).setText("Продуктов нет");
-            } else if(cb.equals(mainKeyboard(null).get(2))){
+            } else if(cb.equals("Добавить продукт")){
+                listener = "Add";
                 edit(update.getCallbackQuery().getMessage(), "В какой раздел?", Lan.listTypes("Russian"), 2);
-            } else if(cb.equals(mainKeyboard(null).get(3))){
+            } else if(cb.equals("Изменить продукт")){
                 listener = "Change";
                 edit(update.getCallbackQuery().getMessage(), "Изменить продукт", DataBase.showAllProducts("Russian", false), 3);
             } else if(cb.equals(mainKeyboard(null).get(4))){
@@ -408,11 +416,11 @@ public class Adminbot extends TelegramLongPollingBot {
                 }
             }
             for (String t:Lan.listTypes("Russian")) {
-                if (cb.equals(t)) {
+                if (cb.equals(t)&&listener.equals("Add")) {
                     category = Lan.listTypes("Russian").indexOf(t)+"";
 //                    listener = "subcategory";
                     edit(update.getCallbackQuery().getMessage(), "Выбрана категория "+t+
-                    "\nВыберите тип",  Bot.listSubTypes(Lan.listTypes("Russian").indexOf(t), "Russian"), 1);
+                    "\nВыберите тип",  Bot.listSubTypes(Lan.listTypes("Russian").indexOf(t), "Russian"), 2);
                 }
             }
             for (String tt:DataBase.sqlQueryList("select russian from types","russian")) {
@@ -451,11 +459,39 @@ public class Adminbot extends TelegramLongPollingBot {
                 }
                 for(int i= 0; i<columnsList().size(); i++) {
                     if (cb.equals(prodId+columnsListNames().get(i))){
-                        listener = prodId+columnsListNames().get(i);
+                        InlineKeyboardMarkup markup;
+                        if (cb.substring(8).equals("Type")) {
+                            listener = "ChangeType";
+                            markup = new InlineKeyboardMarkup();
+                            List<List<InlineKeyboardButton>> rows = new ArrayList<>();
+                            for (int l = 0; l<Lan.listTypes("Russian").size(); l++) {
+                                List<InlineKeyboardButton> row = new ArrayList<>();
+                                row.add(new InlineKeyboardButton()
+                                        .setText(Lan.listTypes("Russian").get(i))
+                                        .setCallbackData(prodId+i));
+                                rows.add(row);
+                            }
+                            markup.setKeyboard(rows);
+                        } else if (cb.substring(8).equals("Subtype")) {
+                            listener = "ChangeSubtype";
+                            markup = new InlineKeyboardMarkup();
+                            List<List<InlineKeyboardButton>> rows = new ArrayList<>();
+                            for (int l = 0; l<Bot.listSubTypes(-1).size(); l++) {
+                                List<InlineKeyboardButton> row = new ArrayList<>();
+                                row.add(new InlineKeyboardButton()
+                                        .setText(Bot.listSubTypes(-1, "Russian").get(i))
+                                        .setCallbackData(prodId+Bot.listSubTypes(-1).get(i)));
+                                rows.add(row);
+                            }
+                            markup.setKeyboard(rows);
+                        } else {
+                            listener = prodId+columnsListNames().get(i);
+                            markup = simpleMarkUp("Назад");
+                        }
                         String now = DataBase.sqlQuery("select "+columnsListNames().get(i).substring(4)+" from table0 where id ="+prodId, columnsListNames().get(i).substring(4));
                         edit(update.getCallbackQuery().getMessage(), "<b>"+columnsList().get(i)+"</b>"+
                         "\n\nТекущее значение = "+now+
-                        "\n\nВведите новое значение: ", simpleMarkUp("Назад"));
+                        "\n\nВведите новое значение: ", markup );
                         answer.setShowAlert(false).setText("Введите новое значение");
                     }
                 }
@@ -463,7 +499,7 @@ public class Adminbot extends TelegramLongPollingBot {
                 if (cb.contains("Готов")) {
                     String userid = cb.substring(5);
                     DataBase.sql("delete from zakaz where userid = "+userid);
-                    edit(update.getCallbackQuery().getMessage(), "Заказ завершён", mainKeyboard(null), 1);
+                    mainMenu(update, true);
                 }
                 if (cb.equals("Отмена")||cb.equals("Ok")) {
                     deleteMessage(update.getCallbackQuery().getMessage());
@@ -471,14 +507,14 @@ public class Adminbot extends TelegramLongPollingBot {
                     if (update.getCallbackQuery().getMessage().hasLocation()) {
                         listener = "";
                         deleteMessage(update.getCallbackQuery().getMessage());
-                        send("Выберите действие", id, mainKeyboard(null), true, 1);
+                        mainMenu(update, false);
                     } else {
-                        edit(update.getCallbackQuery().getMessage(), "Выберите действие", mainKeyboard(null), 1);
+                        mainMenu(update, true);
                     }
                 }
                 if (cb.equals("Пропустить")) {
                         listener = "";
-                        edit(update.getMessage(), "Готово", mainKeyboard(null), 1);
+                        mainMenu(update, true);
                 }
             try {
 				execute(answer);
@@ -487,6 +523,14 @@ public class Adminbot extends TelegramLongPollingBot {
 			}
         }
 	}
+
+    private void mainMenu(Update update, boolean edit) throws SQLException {
+        String id = "";
+        if (update.hasCallbackQuery()) id = update.getCallbackQuery().getMessage().getChatId().toString();
+        else if (update.hasMessage()) id = update.getMessage().getChatId().toString();
+        if (edit) edit(update.getCallbackQuery().getMessage(), "Выберите действие", mainKeyboard(null), 2);
+        else send("Выберите действие", id, mainKeyboard(null), true, 2);
+    }
 
     public String orderText(String userID) throws SQLException {
         boolean location = DataBase.sqlQueryBoolean("select location from zakaz where userid ="+userID,"location");
@@ -620,6 +664,8 @@ public class Adminbot extends TelegramLongPollingBot {
             a.add("Описание на английском");
             a.add("Цена");
             a.add("Emoji");
+            a.add("Категория");
+            a.add("Вид");
 		return a;
     }
     private List<String> columnsListNames() {
@@ -632,6 +678,8 @@ public class Adminbot extends TelegramLongPollingBot {
             a.add("EditEnglishdescription");
             a.add("EditCost");
             a.add("EditEmoji");
+            a.add("EditType");
+            a.add("EditSubtype");
 		return a;
 	}
 

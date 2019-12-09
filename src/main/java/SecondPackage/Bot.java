@@ -801,9 +801,12 @@ public class Bot extends TelegramLongPollingBot {
             case 9:
                 condition = "kids = true and male = true";
                 break;
+            case -1:
+                condition = "typeid <> null";
+                break;
         }
 
-        return DataBase.sqlQueryList("select "+column+" from types where "+ condition, column);
+        return DataBase.sqlQueryList("select "+column+" from types where "+ condition+"order by typeid asc", column);
     }
 
 
