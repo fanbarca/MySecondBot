@@ -80,7 +80,7 @@ public class Bot extends TelegramLongPollingBot {
                 checkNewUser(update);
                 if (update.getCallbackQuery().getMessage().isChannelMessage()){
                     handleChannelCallback(update);
-                    answer.setUrl("https://t.me/"+botName);
+                    //answer.setUrl("https://t.me/"+botName");
                 } else {
                     String cb = update.getCallbackQuery().getData();
                     if (a.getLanguage() == null && !(cb.equals("O'zbek") || cb.equals("Русский") || cb.equals("English")))
@@ -178,8 +178,8 @@ public class Bot extends TelegramLongPollingBot {
 //                            productsMarkup(prodId),
 //                            prodId);
             chooseSize(prodId, false, 0);
-            // a.setAddress(Lan.pressCatalog(a.getLanguage()));
-            // a.setAlert(true);
+            a.setAddress(Lan.pressCatalog(a.getLanguage()));
+            a.setAlert(true);
         }
     }
 
