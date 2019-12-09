@@ -165,18 +165,8 @@ public class Bot extends TelegramLongPollingBot {
                 DataBase.sql("UPDATE users SET language = 'Russian' WHERE id =" + a.getId());
                 a.setLanguage("Russian");
             }
-                if (images.containsKey(a.getId())) {
-                    for (String id: images.get(a.getId())) {
-                        deleteMessage(id, a.getId());
-                    }
-                    images.remove(a.getId());
-                }
-//                String image = DataBase.sqlQuery("SELECT image from users where id=" + a.getId(), "image");
-                if (a.getImage()!=null) deleteMessage(a.getImage(), a.getId());
-//                    sendPicbyId(productText(prodId, a.getId()),
-//                            a.getId(),
-//                            productsMarkup(prodId),
-//                            prodId);
+                deleteLastMessages();
+
             chooseSize(prodId, false, 0);
             a.setAddress(Lan.pressCatalog(a.getLanguage()));
             a.setAlert(true);
@@ -349,8 +339,8 @@ public class Bot extends TelegramLongPollingBot {
                     if (a.getImage()!=null) deleteMessage(a.getImage(), a.getId());
                     deleteMessage(update.getMessage());
                     showMainMenu(false, update);
+                }
             }
-        }
         } else if (update.getMessage().getText().startsWith("+998")) {
             if (a.getNumber() == null) {
                 handleContact(update.getMessage(), update);
@@ -452,10 +442,7 @@ public class Bot extends TelegramLongPollingBot {
         }
 		if (cb.equals("toCatalog")) {
 		    if (images.containsKey(a.getId())) {
-                for (String id: images.get(a.getId())) {
-                    deleteMessage(id, a.getId());
-                }
-                images.remove(a.getId());
+                deleteLastMessages();
                 showCatalog(update, false);
             } else {
                 showCatalog(update, true);
@@ -486,10 +473,7 @@ public class Bot extends TelegramLongPollingBot {
 //                        a.setAlert(false);
 //						}
                     if (images.containsKey(a.getId())) {
-                        for (String id: images.get(a.getId())) {
-                            deleteMessage(id, a.getId());
-                        }
-                        images.remove(a.getId());
+                        deleteLastMessages();
                         showCart(update, false);
                     } else {
                         showCart(update, true);
@@ -1691,25 +1675,26 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
 
     private void handlePhoto(Message message) throws SQLException, TelegramApiException {
         String photoId = message.getPhoto().get(message.getPhoto().size() - 1).getFileId();
+        DataBase.sql("UPDATE table0 SET imageid = '" + photoId + "' where russian = '" + message.getCaption() + "'");
         String prodId = DataBase.sqlQuery("select id from table0 where imageid = '"+photoId+"'", "id");
         //String imageMessageId = DataBase.sqlQuery("select image from users where id = " + a.getId(), "image");
-
         if (prodId!=null&&!prodId.equals("")) {
+            deleteLastMessages();
             sendPicbyId(productText(prodId, a.getId()), a.getId(),productsMarkup(prodId), prodId);
-            deleteMessage(a.getImage(), a.getId());
         }
 
-        DataBase.sql("UPDATE table0 SET imageid = '" + photoId + "' where russian = '" + message.getCaption() + "'");
         //a.setImage(DataBase.sqlGetUserData(message.getChatId().toString()).get(5));
         deleteMessage(message);
     }
 
-
-
-
-
-
-
+    private void deleteLastMessages() {
+        if (images.containsKey(a.getId())) {
+            for (String id: images.get(a.getId())) {
+                deleteMessage(id, a.getId());
+            }
+            images.remove(a.getId());
+        } else deleteMessage(a.getImage(), a.getId());
+    }
 
 
     private InlineKeyboardMarkup listMarkup (List<String> list, long id) throws SQLException {
