@@ -1786,13 +1786,13 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
 			
             List<InlineKeyboardButton> row0 = new ArrayList<InlineKeyboardButton>();
         	row0.add(new InlineKeyboardButton()
-                    .setText(EmojiParser.parseToUnicode(Lan.mainMenu("Russian").get(0)))
-                    .setUrl("https://t.me/"+getBotUsername()));
+                    .setText(EmojiParser.parseToUnicode("Каталог"))
+                    .setUrl("https://t.me/"+botName));
             // row0.add(new InlineKeyboardButton()
             //         .setText(EmojiParser.parseToUnicode(Lan.delivery(a.getLanguage())))
             //         .setCallbackData("selected"+productId));                
             row0.add(new InlineKeyboardButton()
-                .setText(EmojiParser.parseToUnicode(Lan.share(a.getLanguage())))
+                .setText(EmojiParser.parseToUnicode("Поделить"))
                 .setSwitchInlineQuery(productId));
         rows.add(row0);
         markup.setKeyboard(rows);
