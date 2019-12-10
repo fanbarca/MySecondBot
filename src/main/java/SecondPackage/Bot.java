@@ -24,6 +24,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 import org.telegram.telegrambots.meta.logging.BotLogger;
 
 import java.util.List;
@@ -85,7 +86,7 @@ public class Bot extends TelegramLongPollingBot {
                     }
                     else {
                         try {
-                          handleChannelCallback(update);
+                            handleChannelCallback(update);
                         }
                         catch(TelegramApiRequestException e) {
                             a.setAddress(Lan.needCatalog("Russian"));
