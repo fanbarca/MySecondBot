@@ -686,6 +686,7 @@ public class Bot extends TelegramLongPollingBot {
 
 
 
+    
 
     private void showCatalog(Update update, boolean edit) throws TelegramApiException, SQLException {
         InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
