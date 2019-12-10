@@ -494,12 +494,19 @@ class Lan {
 
     public static String pressCatalog(String lan) {
         String r="";
+        if (lan.equals("Uzbek")) r = "Birinchi, Katalogda ro'yxatdan o'tishingiz kerak";
+        else if (lan.equals("Russian")) r = "Сначала, вам надо зарегистрироваться в Каталоге";
+        else if (lan.equals("English")) r = "First, you need to sign up in the Catalog";
+        return r;
+    }
+
+    public static String needCatalog(String lan) {
+        String r="";
         if (lan.equals("Uzbek")) r = "Endi Katalog tugmasini bosing";
         else if (lan.equals("Russian")) r = "Теперь нажмите на кнопку Каталог";
         else if (lan.equals("English")) r = "Now press the Catalog button";
         return r;
     }
-
     public static String seeAll(String lan) {
         String r="";
         if (lan.equals("Uzbek")) r = ":shirt: Hamma tovarlar";

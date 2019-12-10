@@ -77,9 +77,13 @@ public class Bot extends TelegramLongPollingBot {
             } else if (update.hasCallbackQuery()) {
                 AnswerCallbackQuery answer = new AnswerCallbackQuery()
                         .setCallbackQueryId(update.getCallbackQuery().getId());
-                checkNewUser(update);
+                boolean newUser = checkNewUser(update);
                 if (update.getCallbackQuery().getMessage().isChannelMessage()){
-                    handleChannelCallback(update);
+                    if (newUser) {
+                        a.setAddress(Lan.needCatalog(a.getLanguage()));
+                        a.setAlert(true);
+                    }
+                    else handleChannelCallback(update);
                     //answer.setUrl("https://t.me/"+botName");
                 } else {
                     String cb = update.getCallbackQuery().getData();
@@ -103,11 +107,12 @@ public class Bot extends TelegramLongPollingBot {
 
 
 
-    private void checkNewUser(Update update) throws SQLException, TelegramApiException {
+    private boolean checkNewUser(Update update) throws SQLException, TelegramApiException {
         String id = "";
         String firstName = "";
         String lastName = "";
         String userName = "";
+        boolean res = false;
         if (update.hasMessage()) {
             id = update.getMessage().getChatId().toString();
             firstName = update.getMessage().getFrom().getFirstName();
@@ -145,7 +150,9 @@ public class Bot extends TelegramLongPollingBot {
                     null,
                     id
             );
+            res = true;
         }
+        return res;
     }
 
 
@@ -1014,6 +1021,9 @@ public class Bot extends TelegramLongPollingBot {
 
 
 
+    
+    
+    
 
 
 

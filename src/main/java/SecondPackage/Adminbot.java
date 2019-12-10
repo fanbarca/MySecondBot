@@ -587,7 +587,7 @@ public class Adminbot extends TelegramLongPollingBot {
         String cost =  "\n<code>"+Lan.cost("Russian")+DataBase.sqlQuery("SELECT cost from table0 where id = " + prodId, "cost")+Lan.currency("Russian") +"</code>\n";
         String file_id = "";
         String repeat = "_";
-        for (int i = 0; i<(cost.length()-17);i++) repeat +="_";
+        for (int i = 0; i<(cost.length()-16);i++) repeat +="_";
         file_id = DataBase.sqlQuery("SELECT imageid from table0 where id ="+prodId, "imageid");
         if (file_id == null) file_id = DataBase.sqlQuery("SELECT imageid from table0 where Russian = 'Лого'", "imageid");
         
