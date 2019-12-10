@@ -602,7 +602,7 @@ public class Adminbot extends TelegramLongPollingBot {
                 //.setUrl("https://t.me/"+bot.getBotUsername()+"?start=selected"+prodId));
         rows.add(row0);
         markup.setKeyboard(rows);
-        bot.toChannel(name+description+repeat+cost,markup,prodId);
+        bot.toChannel(name+description+"<code>"+repeat+"</code>"+cost,markup,prodId);
     }
 
 
