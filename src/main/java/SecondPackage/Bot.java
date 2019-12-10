@@ -232,10 +232,11 @@ public class Bot extends TelegramLongPollingBot {
                     .setDescription("Каталог одежды"));
         } else if (inline.equals("")) {
             List<InlineQueryResult> products = new ArrayList<InlineQueryResult>();
-            for (String id : DataBase.sqlQueryList("select id from table0 where instock = true order by postdate asc", "id")) {
-                if (!id.equals("8955")) products.add(new InlineQueryResultCachedPhoto()
+            for (String id : DataBase.sqlQueryList("select id from table0 where instock = true order by postdate desc", "id")) {
+                String image = DataBase.sqlQuery("select imageid from table0 where id = "+id, "imageid");
+                if (!id.equals("8955")&&image!=null) products.add(new InlineQueryResultCachedPhoto()
                 .setId(id)
-                .setPhotoFileId(DataBase.sqlQuery("select imageid from table0 where id = "+id, "imageid"))
+                .setPhotoFileId()
                 .setCaption(EmojiParser.parseToUnicode(productText(id)))
                 .setParseMode("HTML")
                 .setReplyMarkup(publicProductsMarkup(id)));
