@@ -158,7 +158,7 @@ public class Bot extends TelegramLongPollingBot {
 
     private void handleChannelCallback(Update update) throws SQLException, TelegramApiException {
         String cb = update.getCallbackQuery().getData();
-        String prodId = cb.substring(11);
+        String prodId = cb.substring(10);
         if (cb.contains("chooseSize")) {
             //deleteMessage(DataBase.sqlQuery("select image from users where id="+a.getId(), "image"), a.getId());
             if (a.getLanguage() == null) {
