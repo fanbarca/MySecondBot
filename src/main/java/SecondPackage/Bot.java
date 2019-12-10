@@ -236,7 +236,7 @@ public class Bot extends TelegramLongPollingBot {
                 String image = DataBase.sqlQuery("select imageid from table0 where id = "+id, "imageid");
                 if (!id.equals("8955")&&image!=null) products.add(new InlineQueryResultCachedPhoto()
                 .setId(id)
-                .setPhotoFileId()
+                .setPhotoFileId(image)
                 .setCaption(EmojiParser.parseToUnicode(productText(id)))
                 .setParseMode("HTML")
                 .setReplyMarkup(publicProductsMarkup(id)));
