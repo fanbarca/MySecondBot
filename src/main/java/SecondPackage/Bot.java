@@ -83,8 +83,15 @@ public class Bot extends TelegramLongPollingBot {
                         a.setAddress(Lan.needCatalog("Russian"));
                         a.setAlert(true);
                     }
-                    else handleChannelCallback(update);
-                    //answer.setUrl("https://t.me/"+botName");
+                    else {
+                        try {
+                          handleChannelCallback(update);
+                        }
+                        catch(TelegramApiRequestException e) {
+                            a.setAddress(Lan.needCatalog("Russian"));
+                            a.setAlert(true);
+                        }
+                    }
                 } else {
                     String cb = update.getCallbackQuery().getData();
                     if (a.getLanguage() == null && !(cb.equals("O'zbek") || cb.equals("Русский") || cb.equals("English")))
