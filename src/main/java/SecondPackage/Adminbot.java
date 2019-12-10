@@ -582,9 +582,9 @@ public class Adminbot extends TelegramLongPollingBot {
 
     private void publish(String prodId) throws SQLException, TelegramApiException {
         Bot bot = new Bot();
-        String name = DataBase.sqlQuery("select russian from table0 where id ="+prodId, "russian")+"\n";
-        String description = DataBase.sqlQuery("select russiandescription from table0 where id ="+prodId, "russiandescription")+"\n";
-        String cost =  Lan.cost("russian")+DataBase.sqlQuery("SELECT cost from table0 where id = " + prodId, "cost")+Lan.currency("russian") +".\n";
+        String name = "<b>"+DataBase.sqlQuery("select russian from table0 where id ="+prodId, "russian")+"</b>\n________________\n";
+        String description = "<i>"+DataBase.sqlQuery("select russiandescription from table0 where id ="+prodId, "russiandescription")+"</i>\n";
+        String cost =  "<code>"+Lan.cost("Russian")+DataBase.sqlQuery("SELECT cost from table0 where id = " + prodId, "cost")+Lan.currency("Russian") +".</code>\n";
         String file_id = "";
         file_id = DataBase.sqlQuery("SELECT imageid from table0 where id ="+prodId, "imageid");
         if (file_id == null) file_id = DataBase.sqlQuery("SELECT imageid from table0 where Russian = 'Лого'", "imageid");
@@ -597,7 +597,7 @@ public class Adminbot extends TelegramLongPollingBot {
                 .setUrl("https://t.me/"+bot.getBotUsername()));
         row0.add(new InlineKeyboardButton()
                 .setText(EmojiParser.parseToUnicode(":triangular_ruler: Выбрать размер"))
-                .setCallbackData("fromChannel"+prodId));
+                .setCallbackData("chooseSize"+prodId));
                 //.setUrl("https://t.me/"+bot.getBotUsername()+"?start=selected"+prodId));
         rows.add(row0);
         markup.setKeyboard(rows);

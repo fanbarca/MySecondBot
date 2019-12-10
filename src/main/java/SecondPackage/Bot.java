@@ -159,13 +159,13 @@ public class Bot extends TelegramLongPollingBot {
     private void handleChannelCallback(Update update) throws SQLException, TelegramApiException {
         String cb = update.getCallbackQuery().getData();
         String prodId = cb.substring(11);
-        if (cb.contains("fromChannel")) {
+        if (cb.contains("chooseSize")) {
             //deleteMessage(DataBase.sqlQuery("select image from users where id="+a.getId(), "image"), a.getId());
             if (a.getLanguage() == null) {
                 DataBase.sql("UPDATE users SET language = 'Russian' WHERE id =" + a.getId());
                 a.setLanguage("Russian");
             }
-                deleteLastMessages();
+            if (a.getImage()!=null) deleteLastMessages();
 
             chooseSize(prodId, false, 0);
             a.setAddress(Lan.pressCatalog(a.getLanguage()));
@@ -847,9 +847,8 @@ public class Bot extends TelegramLongPollingBot {
             balls += emoji==null?":large_blue_circle:":emoji;
         }
         return "<b>" + DataBase.sqlQuery("select "+ a.getLanguage() + " from table0 where id=" + prodId + "", a.getLanguage()) + "</b>\n"+
-                            "<i>"+DataBase.sqlQuery("select "+a.getLanguage()+"description from table0 where id =" +prodId, a.getLanguage()+"description")+"</i>\n\n"
-                            +Lan.cost(a.getLanguage())+DataBase.sqlQuery("SELECT cost from table0 where id = " + prodId, "cost")+Lan.currency(a.getLanguage()) +".\n"
-                            +Lan.inCart(a.getLanguage(), occurrences) + balls;
+                "<i>"+DataBase.sqlQuery("select "+a.getLanguage()+"description from table0 where id =" +prodId, a.getLanguage()+"description")+"</i>\n\n"+
+                "<code>"+Lan.cost(a.getLanguage())+DataBase.sqlQuery("SELECT cost from table0 where id = " + prodId, "cost")+Lan.currency(a.getLanguage()) +".</code>\n"                 +Lan.inCart(a.getLanguage(), occurrences)+ balls;
         }
 
 
@@ -859,10 +858,10 @@ public class Bot extends TelegramLongPollingBot {
                 
                 
     private String productText(String prodId) throws SQLException {
-        String emoji = DataBase.sqlQuery("select emoji from table0 where id = "+prodId, "emoji");
+        //String emoji = DataBase.sqlQuery("select emoji from table0 where id = "+prodId, "emoji");
         return "<b>" + DataBase.sqlQuery("select russian from table0 where id=" + prodId + "", "russian") + "</b>\n"+
-                            "<i>"+DataBase.sqlQuery("select russiandescription from table0 where id =" +prodId, "russiandescription")+"</i>\n\n"
-                            +Lan.cost("russian")+DataBase.sqlQuery("SELECT cost from table0 where id = " + prodId, "cost")+Lan.currency("russian") +".\n";
+                "<i>"+DataBase.sqlQuery("select russiandescription from table0 where id =" +prodId, "russiandescription")+"</i>\n\n"+
+                "<code>"+Lan.cost("Russian")+DataBase.sqlQuery("SELECT cost from table0 where id = " + prodId, "cost")+Lan.currency("Russian") +".</code>\n";
         }
                 
                 
