@@ -988,6 +988,7 @@ public class Bot extends TelegramLongPollingBot {
                 .setChatId(ChatId)
                 .setText(EmojiParser.parseToUnicode(Lan.sendMeContact(a.getLanguage())))
                 .setParseMode("HTML");
+        
         ReplyKeyboardMarkup replyMarkup = new ReplyKeyboardMarkup();
         KeyboardRow row2 = new KeyboardRow();
         KeyboardButton keyboardButton =
@@ -999,6 +1000,7 @@ public class Bot extends TelegramLongPollingBot {
         rows2.add(row2);
         replyMarkup.setKeyboard(rows2).setResizeKeyboard(true).setOneTimeKeyboard(true);
         sendMessage.setReplyMarkup(replyMarkup);
+        
         try {
             int smid = execute(sendMessage).getMessageId();
             DataBase.sql("update users set smid =" + smid + " where id = " + ChatId);
