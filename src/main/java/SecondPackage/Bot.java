@@ -80,7 +80,7 @@ public class Bot extends TelegramLongPollingBot {
                 boolean newUser = checkNewUser(update);
                 if (update.getCallbackQuery().getMessage().isChannelMessage()){
                     if (newUser) {
-                        a.setAddress(Lan.needCatalog(a.getLanguage()));
+                        a.setAddress(Lan.needCatalog("Russian"));
                         a.setAlert(true);
                     }
                     else handleChannelCallback(update);
