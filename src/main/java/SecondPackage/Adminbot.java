@@ -574,7 +574,7 @@ public class Adminbot extends TelegramLongPollingBot {
         else address="\n<b>Локация получена</b>";
         return  name+
                 number+
-                date
+                date+
                 time+
                 address+
                 comment+
