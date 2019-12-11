@@ -707,7 +707,7 @@ public class Bot extends TelegramLongPollingBot {
     
     
     
-    private void chooseDate(prodId, boolean edit) throws SQLException, TelegramApiException {
+    private void chooseDate(StringprodId, boolean edit) throws SQLException, TelegramApiException {
         List<String> menu = new ArrayList<String>();
         ZoneId z = ZoneId.of("Asia/Tashkent");
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
