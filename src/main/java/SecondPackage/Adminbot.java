@@ -564,6 +564,7 @@ public class Adminbot extends TelegramLongPollingBot {
         String name = "Имя: "+ DataBase.sqlQuery("select firstname from users where id ="+userID,"firstname");
         String number = "\nНомер: "+ DataBase.sqlQuery("select phone from users where id ="+userID,"phone");
         String time = "\nВремя: "+DataBase.sqlQuery("select time from zakaz where userid = '" +userID+"' and conformed = true", "time");
+        String date = "\nДата: "+DataBase.sqlQuery("select appdate from zakaz where userid = '" +userID+"' and conformed = true", "appdate");
         String address = DataBase.sqlQuery("select address from users where id ="+userID,"address");
         String product = "\n"+DataBase.sqlQuery("select product from zakaz where userid = '" +userID+"' and conformed = true", "product");
         String comment = DataBase.sqlQuery("select comment from zakaz where userid ="+userID, "comment");
@@ -573,6 +574,7 @@ public class Adminbot extends TelegramLongPollingBot {
         else address="\n<b>Локация получена</b>";
         return  name+
                 number+
+                date
                 time+
                 address+
                 comment+

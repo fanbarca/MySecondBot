@@ -365,9 +365,9 @@ class Lan {
     }
     public static String sendMeLocation(String lan) {
         String r="";
-        if (lan.equals("Uzbek")) r = "Buyurtmani qayerga yetkazish kerak?\nJoyni lokatsiyasini yuboring, yoki manzilni yozing";
-        else if (lan.equals("Russian")) r = "Куда надо доставить заказ?\nОтправьте локацию, или напишите адрес";
-        else if (lan.equals("English")) r = "Where would you like your order to be delivered?\nSend your location or type the address";
+        if (lan.equals("Uzbek")) r = "O'lchamlarni olish uchun, qayerga borish kerak?\nLokatsiyani yuboring, yoki manzilni yozing";
+        else if (lan.equals("Russian")) r = "Куда подъехать, что-бы снять с Вас мерки?\nОтправьте локацию, или напишите адрес";
+        else if (lan.equals("English")) r = "We need to take measurements from you.\nSend your location or type the address";
         return r;
     }
     public static String myLocation(String lan) {

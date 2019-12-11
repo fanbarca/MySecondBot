@@ -2094,6 +2094,7 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
                 a.setAlert(true);
         } else {
             String time = DataBase.sqlQuery("select time from zakaz where userid ="+a.getId(), "time");
+            String date = DataBase.sqlQuery("select appdate from zakaz where userid ="+a.getId(), "appdate");
             String address = DataBase.sqlQuery("select address from users where id ="+a.getId(), "address");
             boolean location = DataBase.sqlQueryBoolean("select location from zakaz where userid ="+a.getId(), "location");
             if (!location) address= Lan.address(a.getLanguage())+address+"\n";
@@ -2104,7 +2105,7 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
             if (comment!=null) comment= "<b>Комментарий:</b> "+comment+"\n";
             else comment = "";
                 editPic(Lan.mainMenu(a.getLanguage()).get(1)+"\n"
-                    +Lan.deliveryTime(a.getLanguage())+time+"\n"
+                    +Lan.deliveryTime(a.getLanguage())+date+", "+time+"\n"
                     +address+comment
                     +items.get(0)+"\n", update.getCallbackQuery().getMessage(), null, "Лого", 2);
         }
