@@ -133,6 +133,13 @@ class Lan {
         else if (lan.equals("English")) r = "Choose a size";
         return r;
     }
+    public static String chooseDate(String lan) {
+        String r="";
+        if (lan.equals("Uzbek")) r = "Kunni tanlang";
+        else if (lan.equals("Russian")) r = "Выберите день";
+        else if (lan.equals("English")) r = "Choose a day";
+        return r;
+    }
     public static String noOrderYet(String lan) {
         String r="";
         if (lan.equals("Uzbek")) r = "Hali buyurtma qilinmagan";

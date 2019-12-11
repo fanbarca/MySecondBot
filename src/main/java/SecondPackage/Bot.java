@@ -570,14 +570,22 @@ public class Bot extends TelegramLongPollingBot {
             
         }
         if (cb.contains(Lan.delivery(a.getLanguage()))) {
+
+        }
+        if (cb.contains("bookApp")){
+            chooseDate(true);
+        }
+        if (cb.startsWith("date")){
+            String date = cb.substring(4);
+            
             ZoneId z = ZoneId.of("Asia/Tashkent");
             if (LocalTime.now(z).isAfter(startOfPeriod)&&LocalTime.now(z).isBefore(endOfPeriod)) {
                 if (DataBase.sqlQueryList("select product from zakaz where userid =" + a.getId()+" and conformed = true", "product").size() > 0) {
                     editPic(Lan.orderExists(a.getLanguage()), update.getCallbackQuery().getMessage(), Lan.YesNo(a.getLanguage()), "Лого", 2);
                 } else {
-                    DataBase.sql("insert into zakaz (userid, product) values ("
+                    DataBase.sql("insert into zakaz (userid, product, appdate) values ("
                     +a.getId()+", '"
-                    +curretCart(a.getId())+"' )");
+                    +curretCart(a.getId())+"','"+date+"')");
                     if (a.getNumber()==null) {
                         deleteMessage(update.getCallbackQuery().getMessage());
                         sendMeNumber(a.getId());
@@ -588,10 +596,6 @@ public class Bot extends TelegramLongPollingBot {
                 a.setAddress(Lan.tooLate(a.getLanguage()));
                 a.setAlert(true);
             }
-        }
-        if (cb.contains("bookAppointment")){
-            String prodId = cb.substring(15);
-            chooseDate(prodId, true);
         }
         if (cb.equals(Lan.YesNo(a.getLanguage()).get(0))||(cb.equals(Lan.YesNo(a.getLanguage()).get(1)))) {
             if (cb.equals(Lan.YesNo(a.getLanguage()).get(0))) {
@@ -707,7 +711,7 @@ public class Bot extends TelegramLongPollingBot {
     
     
     
-    private void chooseDate(String prodId, boolean edit) throws SQLException, TelegramApiException {
+    private void chooseDate(boolean edit) throws SQLException, TelegramApiException {
         //List<String> menu = new ArrayList<String>();
         ZoneId z = ZoneId.of("Asia/Tashkent");
         //DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -725,26 +729,22 @@ public class Bot extends TelegramLongPollingBot {
             String day1= DateTimeFormatter.ofPattern("EEEE, dd MMMM")
                   .withLocale(new Locale(a.getLanguage().substring(0,2)))
                   .format(LocalDate.now(z).plusDays(i));
-            //String day2= DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL, FormatStyle.SHORT).withLocale(new Locale("ru")).format(LocalDate.now(z).plusDays(i+1));
 
         List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();            
             row.add(new InlineKeyboardButton()
                 .setText(EmojiParser.parseToUnicode(day1))
                 .setCallbackData("date"+day1));
-            // row.add(new InlineKeyboardButton()
-            //     .setText(EmojiParser.parseToUnicode(day2))
-            //     .setCallbackData("date"+day2));
             rows.add(row);         
         }
         List<InlineKeyboardButton> row3 = new ArrayList<InlineKeyboardButton>();
         row3.add(new InlineKeyboardButton()
                 .setText(EmojiParser.parseToUnicode(Lan.back(a.getLanguage())))
-                .setCallbackData(prodId));
+                .setCallbackData(Lan.mainMenu(a.getLanguage()).get(3)));
         rows.add(row3);
         markup.setKeyboard(rows);
         
-        if (edit) editPic(Lan.whatSize(a.getLanguage()), prodId, a.getId(), Integer.parseInt(a.getImage()), markup);
-        else sendPicbyId(Lan.whatSize(a.getLanguage()), a.getId(), markup, prodId);
+        if (edit) editPic(Lan.chooseDate(a.getLanguage()), prodId, a.getId(), Integer.parseInt(a.getImage()), markup);
+        else sendPicbyId(Lan.chooseDate(a.getLanguage()), a.getId(), markup, prodId);
         // a.setAddress(Lan.whatSize(a.getLanguage()));
         // a.setAlert(false);
     }
@@ -2008,7 +2008,7 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
                             List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
                             row.add(new InlineKeyboardButton()
                                     .setText(EmojiParser.parseToUnicode(Lan.bookAppointment(a.getLanguage())))
-                                    .setCallbackData("bookAppointment"+productId));
+                                    .setCallbackData("bookApp"));
                             rows.add(row);
                         }
                     }
