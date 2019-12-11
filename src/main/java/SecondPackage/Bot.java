@@ -42,8 +42,8 @@ import java.sql.*;
 
 public class Bot extends TelegramLongPollingBot {
     private String channelName = "regularshop";
-    private String botName = "DeliverySuperBot";
-    private String botToken = "780864630:AAHpUc01UagThYH7wRi15zJQjwu06A6NaWM";
+    private String botName = "PardaZakazBot";
+    private String botToken = "1046773572:AAHRqTsLuhCPVPYkBTaNPew3UfdZk5zekjY";
     Map<String, List<String>> images = new HashMap<>();
     Order a;
     public static LocalTime startOfPeriod = LocalTime.parse("04:00");
