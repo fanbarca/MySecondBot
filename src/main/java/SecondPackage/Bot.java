@@ -720,7 +720,7 @@ public class Bot extends TelegramLongPollingBot {
         List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
         for (int i = 0; i<7; i++) {
             
-            String day1= DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL, FormatStyle.SHORT)
+            String day1= DateTimeFormatter.ofLocalizedDateTime(FormatStyle.FULL, FormatStyle.SHORT)
                   .withLocale(new Locale("ru"))
                   .format(LocalDate.now(z).plusDays(i));
             //String day2= DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL, FormatStyle.SHORT).withLocale(new Locale("ru")).format(LocalDate.now(z).plusDays(i+1));
