@@ -31,6 +31,7 @@ import java.util.List;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.time.LocalTime;
+import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
@@ -2050,9 +2051,9 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
         else comment = "";
         String text = Lan.mainMenu(a.getLanguage()).get(3) + "\n"
                     + curretCart(a.getId()) +"\n\n"
-                    + comment
-                    + Lan.deliveryCost(a.getLanguage())+"\n"
-                    +"<pre>"+Lan.tooLate(a.getLanguage())+"</pre>";
+                    + comment;
+                    // + Lan.deliveryCost(a.getLanguage())+"\n"
+                    // +"<pre>"+Lan.tooLate(a.getLanguage())+"</pre>";
             if (items.size() == 0) {
                 a.setAddress(Lan.cartIsEmpty(a.getLanguage()));
                 a.setAlert(true);
