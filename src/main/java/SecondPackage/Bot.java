@@ -715,29 +715,23 @@ public class Bot extends TelegramLongPollingBot {
         //           .withLocale(new Locale("ru"))
         //           .format(LocalDate.now(z)));
 
-        
-              
         //LocalDate.now(z).toString();
-        
-        
         InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
-        for (int i = 0; i<10; i+=2) {
+        for (int i = 0; i<7; i++) {
             
-            String day1= DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL)
+            String day1= DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL, FormatStyle.SHORT)
                   .withLocale(new Locale("ru"))
                   .format(LocalDate.now(z).plusDays(i));
-            String day2= DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL)
-                  .withLocale(new Locale("ru"))
-                  .format(LocalDate.now(z).plusDays(i+1));
+            //String day2= DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL, FormatStyle.SHORT).withLocale(new Locale("ru")).format(LocalDate.now(z).plusDays(i+1));
 
         List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();            
             row.add(new InlineKeyboardButton()
                 .setText(EmojiParser.parseToUnicode(day1))
                 .setCallbackData("date"+day1));
-            row.add(new InlineKeyboardButton()
-                .setText(EmojiParser.parseToUnicode(day2))
-                .setCallbackData("date"+day2));
+            // row.add(new InlineKeyboardButton()
+            //     .setText(EmojiParser.parseToUnicode(day2))
+            //     .setCallbackData("date"+day2));
             rows.add(row);         
         }
         List<InlineKeyboardButton> row3 = new ArrayList<InlineKeyboardButton>();
