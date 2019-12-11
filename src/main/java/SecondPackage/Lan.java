@@ -76,9 +76,9 @@ class Lan {
     }
     public static String tooLate(String lan){
         String r="";
-        if (lan.equals("Uzbek")) r = "Yetkazish xizmati "+Bot.startOfPeriod+" dan "+Bot.endOfPeriod+" gacha ishlaydi";
-        else if (lan.equals("Russian")) r = "Доставка работает с "+Bot.startOfPeriod+" до "+Bot.endOfPeriod;
-        else if (lan.equals("English")) r = "Delivery service hours are from "+Bot.startOfPeriod+" to "+Bot.endOfPeriod;
+        if (lan.equals("Uzbek")) r = "Ishlash vaqti "+Bot.startOfPeriod+" dan "+Bot.endOfPeriod+" gacha";
+        else if (lan.equals("Russian")) r = "Мы работаем с "+Bot.startOfPeriod+" до "+Bot.endOfPeriod;
+        else if (lan.equals("English")) r = "Service hours are from "+Bot.startOfPeriod+" to "+Bot.endOfPeriod;
         return r;
     }
     public static String sendMeContact(String lan){
@@ -386,16 +386,16 @@ class Lan {
     }
     public static String orderTime(String lan) {
         String r="";
-        if (lan.equals("Uzbek")) r = "Buyurtmani yetkazish vaqtini tanlang";
-        else if (lan.equals("Russian")) r = "Выберите время доставки";
-        else if (lan.equals("English")) r = "Choose delivery time";
+        if (lan.equals("Uzbek")) r = "Vaqtni tanlang";
+        else if (lan.equals("Russian")) r = "Выберите время";
+        else if (lan.equals("English")) r = "Choose time";
         return r;
     }
     public static String deliveryTime(String lan) {
         String r="";
-        if (lan.equals("Uzbek")) r = "Buyurtmani yetkazish vaqti: ";
-        else if (lan.equals("Russian")) r = "Время доставки: ";
-        else if (lan.equals("English")) r = "Delivery time: ";
+        if (lan.equals("Uzbek")) r = "O'lchovlarni olish vaqti va sanasi: ";
+        else if (lan.equals("Russian")) r = "Дата и время снятия мерок: ";
+        else if (lan.equals("English")) r = "Time & Date of taking measurements: ";
         return r;
     }
     public static String locationReceived(String lan) {
