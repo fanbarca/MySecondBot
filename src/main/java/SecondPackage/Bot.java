@@ -712,16 +712,35 @@ public class Bot extends TelegramLongPollingBot {
         //List<String> menu = new ArrayList<String>();
         ZoneId z = ZoneId.of("Asia/Tashkent");
         //DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        //menu.add(dtf.format(LocalTime.now(z)));
+        // menu.add(DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL)
+        //           .withLocale(new Locale("ru"))
+        //           .format(LocalDate.now(z)));
+
+        
+              
+        //LocalDate.now(z).toString();
         
         
         InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
-        List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
-        row.add(new InlineKeyboardButton()
-                .setText(EmojiParser.parseToUnicode(LocalDate.now(z).toString()))
-                .setCallbackData("date"));
-        rows.add(row);
+        for (int i = 0; i<10; i+=2) {
+            
+            String day1= DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL)
+                  .withLocale(new Locale("ru"))
+                  .format(LocalDate.now(z).plusDays(i));
+            String day2= DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL)
+                  .withLocale(new Locale("ru"))
+                  .format(LocalDate.now(z).plusDays(i+1));
+
+        List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();            
+            row.add(new InlineKeyboardButton()
+                .setText(EmojiParser.parseToUnicode(day1))
+                .setCallbackData("date"+day2));
+            row.add(new InlineKeyboardButton()
+                .setText(EmojiParser.parseToUnicode(day1))
+                .setCallbackData("date"+day2));
+            rows.add(row);         
+        }
         List<InlineKeyboardButton> row3 = new ArrayList<InlineKeyboardButton>();
         row3.add(new InlineKeyboardButton()
                 .setText(EmojiParser.parseToUnicode(Lan.back(a.getLanguage())))
