@@ -590,7 +590,7 @@ public class Bot extends TelegramLongPollingBot {
             }
         }
         if (cb.contains("bookAppointment")){
-            prodId = cb.substring(15);
+            String prodId = cb.substring(15);
             chooseDate(prodId, true);
         }
         if (cb.equals(Lan.YesNo(a.getLanguage()).get(0))||(cb.equals(Lan.YesNo(a.getLanguage()).get(1)))) {
@@ -728,7 +728,7 @@ public class Bot extends TelegramLongPollingBot {
         rows.add(row3);
         markup.setKeyboard(rows);
         
-        if (edit) editPic(Lan.whatSize(a.getLanguage()), prodId, a.getId(), a.getImage(), markup);
+        if (edit) editPic(Lan.whatSize(a.getLanguage()), prodId, a.getId(), Integer.parseInt(a.getImage()), markup);
         else sendPicbyId(Lan.whatSize(a.getLanguage()), a.getId(), markup, prodId);
         // a.setAddress(Lan.whatSize(a.getLanguage()));
         // a.setAlert(false);
