@@ -254,9 +254,7 @@ public class Bot extends TelegramLongPollingBot {
                 .setParseMode("HTML")
                 .setReplyMarkup(publicProductsMarkup(id)));
             }
-        
         }
-        
         execute(answerInlineQuery);
     }
 
@@ -736,9 +734,9 @@ public class Bot extends TelegramLongPollingBot {
         List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();            
             row.add(new InlineKeyboardButton()
                 .setText(EmojiParser.parseToUnicode(day1))
-                .setCallbackData("date"+day2));
+                .setCallbackData("date"+day1));
             row.add(new InlineKeyboardButton()
-                .setText(EmojiParser.parseToUnicode(day1))
+                .setText(EmojiParser.parseToUnicode(day2))
                 .setCallbackData("date"+day2));
             rows.add(row);         
         }
