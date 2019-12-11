@@ -112,6 +112,13 @@ class Lan {
         else if (lan.equals("English")) r = "There's nothing yet";
         return r;
     }
+    public static String bookAppointment(String lan) {
+        String r="";
+        if (lan.equals("Uzbek")) r = "📖 O'lchovlarni olish uchun yozilmoq";
+        else if (lan.equals("Russian")) r = "📖 Записаться на снятие мерок";
+        else if (lan.equals("English")) r = "📖 Make an appointment for measurements";
+        return r;
+    }
     public static String cartIsEmpty(String lan) {
         String r="";
         if (lan.equals("Uzbek")) r = "Savatcha bo'sh";

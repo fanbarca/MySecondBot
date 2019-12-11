@@ -589,6 +589,10 @@ public class Bot extends TelegramLongPollingBot {
                 a.setAlert(true);
             }
         }
+        if (cb.contains("bookAppointment")){
+            prodId = cb.substring(15);
+            chooseDate(prodId, true);
+        }
         if (cb.equals(Lan.YesNo(a.getLanguage()).get(0))||(cb.equals(Lan.YesNo(a.getLanguage()).get(1)))) {
             if (cb.equals(Lan.YesNo(a.getLanguage()).get(0))) {
                 Adminbot order = new Adminbot();
@@ -697,6 +701,49 @@ public class Bot extends TelegramLongPollingBot {
 
 
 
+    
+    
+    
+    
+    
+    
+    private void chooseDate(prodId, boolean edit) throws SQLException, TelegramApiException {
+        List<String> menu = new ArrayList<String>();
+        ZoneId z = ZoneId.of("Asia/Tashkent");
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        menu.add(dtf.format(LocalTime.now(z)));
+        
+        
+        InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
+        List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
+        List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
+        row.add(new InlineKeyboardButton()
+                .setText(EmojiParser.parseToUnicode(dtf.format(LocalTime.now(z))))
+                .setCallbackData("XS"));
+        rows.add(row);
+        List<InlineKeyboardButton> row3 = new ArrayList<InlineKeyboardButton>();
+        row3.add(new InlineKeyboardButton()
+                .setText(EmojiParser.parseToUnicode(Lan.back(a.getLanguage())))
+                .setCallbackData(prodId));
+        rows.add(row3);
+        markup.setKeyboard(rows);
+        
+        if (edit) editPic(Lan.whatSize(a.getLanguage()), prodId, a.getId(), a.getImage(), markup);
+        else sendPicbyId(Lan.whatSize(a.getLanguage()), a.getId(), markup, prodId);
+        // a.setAddress(Lan.whatSize(a.getLanguage()));
+        // a.setAlert(false);
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
 
 
@@ -1945,8 +1992,8 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
                             rows.add(lastRow);
                             List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
                             row.add(new InlineKeyboardButton()
-                                    .setText(EmojiParser.parseToUnicode(Lan.delivery(a.getLanguage())))
-                                    .setCallbackData(Lan.delivery(a.getLanguage())));
+                                    .setText(EmojiParser.parseToUnicode(Lan.bookAppointment(a.getLanguage())))
+                                    .setCallbackData("bookAppointment"+productId));
                             rows.add(row);
                         }
                     }
