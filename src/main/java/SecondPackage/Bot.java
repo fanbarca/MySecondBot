@@ -708,18 +708,18 @@ public class Bot extends TelegramLongPollingBot {
     
     
     private void chooseDate(String prodId, boolean edit) throws SQLException, TelegramApiException {
-        List<String> menu = new ArrayList<String>();
+        //List<String> menu = new ArrayList<String>();
         ZoneId z = ZoneId.of("Asia/Tashkent");
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        menu.add(dtf.format(LocalTime.now(z)));
+        //DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        //menu.add(dtf.format(LocalTime.now(z)));
         
         
         InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
         List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
         row.add(new InlineKeyboardButton()
-                .setText(EmojiParser.parseToUnicode(dtf.format(LocalTime.now(z))))
-                .setCallbackData("XS"));
+                .setText(EmojiParser.parseToUnicode(LocalDate.now(z).toString()))
+                .setCallbackData("date"));
         rows.add(row);
         List<InlineKeyboardButton> row3 = new ArrayList<InlineKeyboardButton>();
         row3.add(new InlineKeyboardButton()
