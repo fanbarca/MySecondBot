@@ -718,10 +718,12 @@ public class Bot extends TelegramLongPollingBot {
         //LocalDate.now(z).toString();
         InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
-        for (int i = 0; i<7; i++) {
+        
+        
+        for (int i = 1; i<8; i++) {
             
             String day1= DateTimeFormatter.ofPattern("EEEE, dd MMMM")
-                  .withLocale(new Locale("ru"))
+                  .withLocale(new Locale(a.getLanguage().substring(0,2)))
                   .format(LocalDate.now(z).plusDays(i));
             //String day2= DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL, FormatStyle.SHORT).withLocale(new Locale("ru")).format(LocalDate.now(z).plusDays(i+1));
 
