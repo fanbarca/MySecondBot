@@ -498,7 +498,7 @@ public class Bot extends TelegramLongPollingBot {
 
 				if (cb.contains("+plus")||cb.contains("-minus")) {
 					if (cb.contains("+plus"+prodId)){
-					    if (type.equals("0")||type.equals("1")) {
+					    if (type.equals("999")) {
                             chooseSize(prodId, true, update.getCallbackQuery().getMessage().getMessageId());
                         } else {
                             DataBase.sql("insert into cart (userid, item) values (" + userid
