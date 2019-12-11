@@ -743,8 +743,8 @@ public class Bot extends TelegramLongPollingBot {
         rows.add(row3);
         markup.setKeyboard(rows);
         
-        if (edit) editPic(Lan.chooseDate(a.getLanguage()), prodId, a.getId(), Integer.parseInt(a.getImage()), markup);
-        else sendPicbyId(Lan.chooseDate(a.getLanguage()), a.getId(), markup, prodId);
+        if (edit) editPic(Lan.chooseDate(a.getLanguage()), "Лого", a.getId(), Integer.parseInt(a.getImage()), markup);
+        else sendPic(Lan.chooseDate(a.getLanguage()), a.getId(), markup, "Лого");
         // a.setAddress(Lan.whatSize(a.getLanguage()));
         // a.setAlert(false);
     }
