@@ -44,6 +44,7 @@ public class Bot extends TelegramLongPollingBot {
     private String channelName = "regularshop";
     private String botName = "PardaZakazBot";
     private String botToken = "1046773572:AAHRqTsLuhCPVPYkBTaNPew3UfdZk5zekjY";
+    private String links = "<a href=\"t.me/"+botName+"\">🤖 БОТ</a>                         <a href=\"t.me/"+channelName+"\">📺 КАНАЛ</a>";
     Map<String, List<String>> images = new HashMap<>();
     Order a;
     public static LocalTime startOfPeriod = LocalTime.parse("04:00");
@@ -205,7 +206,7 @@ public class Bot extends TelegramLongPollingBot {
             answerInlineQuery.setResults(new InlineQueryResultCachedPhoto()
                 .setId("22")
                 .setPhotoFileId(DataBase.sqlQuery("select imageid from table0 where russian = 'Лого'", "imageid"))
-                .setCaption(EmojiParser.parseToUnicode("Магазин одежды <b>САРАФАН!</b>\n\n<a href=\"t.me/"+botName+"\">🤖 БОТ</a>                         <a href=\"t.me/"+channelName+"\">📺 КАНАЛ</a>"))
+                .setCaption(EmojiParser.parseToUnicode("Магазин одежды <b>САРАФАН!</b>\n\n"+links))
                 .setParseMode("HTML"));
         }
         else if (inline.equals("location")) {
@@ -937,7 +938,7 @@ public class Bot extends TelegramLongPollingBot {
         }
         return "<b>" + DataBase.sqlQuery("select "+ a.getLanguage() + " from table0 where id=" + prodId + "", a.getLanguage()) + "</b>\n"+
                 "<i>"+DataBase.sqlQuery("select "+a.getLanguage()+"description from table0 where id =" +prodId, a.getLanguage()+"description")+"</i>\n\n"+
-                "<code>"+Lan.cost(a.getLanguage())+DataBase.sqlQuery("SELECT cost from table0 where id = " + prodId, "cost")+Lan.currency(a.getLanguage()) +".</code>\n"                 +Lan.inCart(a.getLanguage(), occurrences)+ balls;
+                "<code>"+Lan.cost(a.getLanguage())+DataBase.sqlQuery("SELECT cost from table0 where id = " + prodId, "cost")+Lan.currency(a.getLanguage()) +".</code>\n"                 +Lan.inCart(a.getLanguage(), occurrences)+ balls+"\n"+links;
         }
 
 
@@ -950,7 +951,7 @@ public class Bot extends TelegramLongPollingBot {
         //String emoji = DataBase.sqlQuery("select emoji from table0 where id = "+prodId, "emoji");
         return "<b>" + DataBase.sqlQuery("select russian from table0 where id=" + prodId + "", "russian") + "</b>\n"+
                 "<i>"+DataBase.sqlQuery("select russiandescription from table0 where id =" +prodId, "russiandescription")+"</i>\n\n"+
-                "<code>"+Lan.cost("Russian")+DataBase.sqlQuery("SELECT cost from table0 where id = " + prodId, "cost")+Lan.currency("Russian") +".</code>\n";
+                "<code>"+Lan.cost("Russian")+DataBase.sqlQuery("SELECT cost from table0 where id = " + prodId, "cost")+Lan.currency("Russian") +".</code>\n"+links;
         }
                 
                 
