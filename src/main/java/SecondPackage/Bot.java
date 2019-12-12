@@ -631,14 +631,21 @@ public class Bot extends TelegramLongPollingBot {
                 sendMeNumber(a.getId());
             } else confirm(update);
         }
-//        if (cb.contains("UseNewLocation")) {
-//            sendMeLocation(update.getCallbackQuery().getMessage());
-//        }
-//        if (cb.contains("UseOldLocation")) {
-//            editCaption(Lan.orderTime(a.getLanguage()) + Lan.tooLate(a.getLanguage()), a.getId(),
-//                Integer.parseInt(DataBase.sqlQuery("SELECT image from users where id=" + a.getId(), "image")),
-//                timeKeys());
-//        }
+       // if (cb.contains("UseNewLocation")) {
+       //     sendMeLocation(update.getCallbackQuery().getMessage());
+       // }
+       if (cb.contains("UseOldLocation")) {
+           DataBase.sql("update zakaz set location = true where userid = "+a.getId());
+           editCaption(Lan.orderTime(a.getLanguage()), a.getId(),
+               Integer.parseInt(DataBase.sqlQuery("SELECT image from users where id=" + a.getId(), "image")),
+               timeKeys());
+       }
+        if (cb.contains("UseOldAddress")) {
+            DataBase.sql("update zakaz set location = false where userid = "+a.getId());
+            editCaption(Lan.orderTime(a.getLanguage()), a.getId(),
+               Integer.parseInt(DataBase.sqlQuery("SELECT image from users where id=" + a.getId(), "image")),
+               timeKeys());
+       }
         if (cb.contains(Lan.removeSelectively(a.getLanguage()))) {
             editCaption(Lan.mainMenu(a.getLanguage()).get(3) + "\n" + curretCart(a.getId()), a.getId(),
                 Integer.parseInt(a.getImage()),
@@ -1110,14 +1117,14 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
             List<InlineKeyboardButton> row0 = new ArrayList<InlineKeyboardButton>();
             row0.add(new InlineKeyboardButton()
                     .setText(EmojiParser.parseToUnicode(Lan.previousLocation(a.getLanguage())))
-                    .setSwitchInlineQueryCurrentChat("location"));
+                    .setCallbackData("UseOldLocation"));
             rows.add(row0);
         }
         if (hasAddress) {
             List<InlineKeyboardButton> row0 = new ArrayList<InlineKeyboardButton>();
             row0.add(new InlineKeyboardButton()
                     .setText(EmojiParser.parseToUnicode(Lan.previousAddress(a.getLanguage())))
-                    .setSwitchInlineQueryCurrentChat("address"));
+                    .setCallbackData("UseOldAddress"));
             rows.add(row0);
         }
         List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
