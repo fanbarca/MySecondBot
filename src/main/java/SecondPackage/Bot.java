@@ -932,7 +932,7 @@ public class Bot extends TelegramLongPollingBot {
         for (int i = 0; i<occurrences; i++){
             balls += emoji==null?":large_blue_circle:":emoji;
         }
-        return "<b>" + DataBase.sqlQuery("select "+ a.getLanguage() + " from table0 where id=" + prodId + "", a.getLanguage()) + "</b> "+Lan.links(a.getLanguage(), botName, channelName)+"\n"+
+        return "<b>" + DataBase.sqlQuery("select "+ a.getLanguage() + " from table0 where id=" + prodId + "", a.getLanguage()) + "</b> \n"+
                 "<i>"+DataBase.sqlQuery("select "+a.getLanguage()+"description from table0 where id =" +prodId, a.getLanguage()+"description")+"</i>\n\n"+
                 "<code>"+Lan.cost(a.getLanguage())+DataBase.sqlQuery("SELECT cost from table0 where id = " + prodId, "cost")+Lan.currency(a.getLanguage()) +".</code>\n"                 +Lan.inCart(a.getLanguage(), occurrences)+ balls+"\n";
         }
@@ -951,7 +951,7 @@ public class Bot extends TelegramLongPollingBot {
                 
     private String productText(String prodId) throws SQLException {
         //String emoji = DataBase.sqlQuery("select emoji from table0 where id = "+prodId, "emoji");
-        return "<b>" + DataBase.sqlQuery("select russian from table0 where id=" + prodId + "", "russian") + "</b> "+Lan.links(a.getLanguage(), botName, channelName)+"\n"+
+        return "<b>" + DataBase.sqlQuery("select russian from table0 where id=" + prodId + "", "russian") + "</b>\n"+
                 "<i>"+DataBase.sqlQuery("select russiandescription from table0 where id =" +prodId, "russiandescription")+"</i>\n\n"+
                 "<code>"+Lan.cost("Russian")+DataBase.sqlQuery("SELECT cost from table0 where id = " + prodId, "cost")+Lan.currency("Russian") +".</code>\n";
         }
