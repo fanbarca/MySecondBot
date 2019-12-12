@@ -44,8 +44,7 @@ public class Bot extends TelegramLongPollingBot {
     private String channelName = "regularshop";
     private String botName = "PardaZakazBot";
     private String botToken = "1046773572:AAHRqTsLuhCPVPYkBTaNPew3UfdZk5zekjY";
-    private String botLink = "<a href=\"t.me/"+botName+"\">🤖 Наш Бот</a>";
-    private String channelLink = "<a href=\"t.me/"+channelName+"\">📺 Наш Канал</a>";
+    
     Map<String, List<String>> images = new HashMap<>();
     Order a;
     public static LocalTime startOfPeriod = LocalTime.parse("04:00");
@@ -56,7 +55,9 @@ public class Bot extends TelegramLongPollingBot {
     public String getBotUsername() {
         return botName;
     }
-
+    public String getChannelName() {
+        return channelName;
+    }
     @Override
     public String getBotToken() {
         return botToken;
@@ -203,14 +204,7 @@ public class Bot extends TelegramLongPollingBot {
         String inline = update.getInlineQuery().getQuery();
         AnswerInlineQuery answerInlineQuery = new AnswerInlineQuery()
                 .setInlineQueryId(update.getInlineQuery().getId());
-        // if (inline.equals("share")) {
-        //     answerInlineQuery.setResults(new InlineQueryResultCachedPhoto()
-        //         .setId("22")
-        //         .setPhotoFileId(DataBase.sqlQuery("select imageid from table0 where russian = 'Лого'", "imageid"))
-        //         .setCaption(EmojiParser.parseToUnicode("Ателье <b>САРАФАН!</b>\n\n"+botLink+"\n"+channelLink))
-        //         .setParseMode("HTML"));
-        // }
-        // else 
+
         if (inline.equals("location")) {
             Float latitude = Float.parseFloat(DataBase.sqlQuery("select latitude from users where id ="+a.getId(), "latitude"));
             Float longitude = Float.parseFloat(DataBase.sqlQuery("select longitude from users where id ="+a.getId(), "longitude"));
@@ -938,12 +932,13 @@ public class Bot extends TelegramLongPollingBot {
         for (int i = 0; i<occurrences; i++){
             balls += emoji==null?":large_blue_circle:":emoji;
         }
-        return "<b>" + DataBase.sqlQuery("select "+ a.getLanguage() + " from table0 where id=" + prodId + "", a.getLanguage()) + "</b> "+botLink+" "+channelLink+"\n"+
+        return "<b>" + DataBase.sqlQuery("select "+ a.getLanguage() + " from table0 where id=" + prodId + "", a.getLanguage()) + " "+Lan.links(a.getLanguage())+"\n"+
                 "<i>"+DataBase.sqlQuery("select "+a.getLanguage()+"description from table0 where id =" +prodId, a.getLanguage()+"description")+"</i>\n\n"+
                 "<code>"+Lan.cost(a.getLanguage())+DataBase.sqlQuery("SELECT cost from table0 where id = " + prodId, "cost")+Lan.currency(a.getLanguage()) +".</code>\n"                 +Lan.inCart(a.getLanguage(), occurrences)+ balls+"\n";
         }
 
 
+    
                 
                 
                 
@@ -956,7 +951,7 @@ public class Bot extends TelegramLongPollingBot {
                 
     private String productText(String prodId) throws SQLException {
         //String emoji = DataBase.sqlQuery("select emoji from table0 where id = "+prodId, "emoji");
-        return "<b>" + DataBase.sqlQuery("select russian from table0 where id=" + prodId + "", "russian") + "</b> "+botLink+" "+channelLink+"\n"+
+        return "<b>" + DataBase.sqlQuery("select russian from table0 where id=" + prodId + "", "russian") + " "+Lan.links(a.getLanguage())+"\n"+
                 "<i>"+DataBase.sqlQuery("select russiandescription from table0 where id =" +prodId, "russiandescription")+"</i>\n\n"+
                 "<code>"+Lan.cost("Russian")+DataBase.sqlQuery("SELECT cost from table0 where id = " + prodId, "cost")+Lan.currency("Russian") +".</code>\n";
         }
