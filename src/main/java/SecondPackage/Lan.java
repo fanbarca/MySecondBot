@@ -135,9 +135,9 @@ class Lan {
     }
     public static String chooseDate(String lan) {
         String r="";
-        if (lan.equals("Uzbek")) r = "Kunni tanlang";
-        else if (lan.equals("Russian")) r = "Выберите день";
-        else if (lan.equals("English")) r = "Choose a day";
+        if (lan.equals("Uzbek")) r = ":date: Kunni tanlang";
+        else if (lan.equals("Russian")) r = ":date: Выберите день";
+        else if (lan.equals("English")) r = ":date: Choose a day";
         return r;
     }
     public static String noOrderYet(String lan) {
@@ -166,6 +166,8 @@ class Lan {
                 emogisList.add(":baby_bottle:");
                 emogisList.add(":ribbon:");
                 emogisList.add(":tshirt:");
+                emogisList.add(":eight_pointed_black_star:");
+
         List<String> list = new ArrayList<>();
         if (lan.equals("Uzbek")) {
             list.add(emogisList.get(0)+"Ayollar kiyimi");
@@ -178,6 +180,7 @@ class Lan {
             list.add(emogisList.get(7)+"Go'daklar uchun");
             list.add(emogisList.get(8)+"Qizlar uchun");
             list.add(emogisList.get(9)+"O'g'illar uchun");
+            list.add(emogisList.get(10)+"Pardalar");
         }
         else if (lan.equals("Russian")) {
             list.add(emogisList.get(0)+"Женская одежда");
@@ -190,6 +193,7 @@ class Lan {
             list.add(emogisList.get(7)+"Для малышей");
             list.add(emogisList.get(8)+"Для девочек");
             list.add(emogisList.get(9)+"Для мальчиков");
+            list.add(emogisList.get(10)+"Шторы");
         }
         else if (lan.equals("English")) {
             list.add(emogisList.get(0)+"Women's clothes");
@@ -202,6 +206,7 @@ class Lan {
             list.add(emogisList.get(7)+"For toddlers");
             list.add(emogisList.get(8)+"For girls");
             list.add(emogisList.get(9)+"For boys");
+            list.add(emogisList.get(10)+"Curtains");
         }
         return list;
     }
@@ -366,8 +371,8 @@ class Lan {
     public static String sendMeLocation(String lan) {
         String r="";
         if (lan.equals("Uzbek")) r = "O'lchamlarni olish uchun, qayerga borish kerak?\nLokatsiyani yuboring, yoki manzilni yozing";
-        else if (lan.equals("Russian")) r = "Куда подъехать, что-бы снять с Вас мерки?\nОтправьте локацию, или напишите адрес";
-        else if (lan.equals("English")) r = "We need to take measurements from you.\nSend your location or type the address";
+        else if (lan.equals("Russian")) r = "Куда подъехать, что-бы снять мерки?\nОтправьте локацию, или напишите адрес";
+        else if (lan.equals("English")) r = "We need to take measurements.\nSend your location or type the address";
         return r;
     }
     public static String myLocation(String lan) {
@@ -393,9 +398,9 @@ class Lan {
     }
     public static String deliveryTime(String lan) {
         String r="";
-        if (lan.equals("Uzbek")) r = "O'lchovlarni olish vaqti va sanasi: ";
-        else if (lan.equals("Russian")) r = "Дата и время снятия мерок: ";
-        else if (lan.equals("English")) r = "Time & Date of taking measurements: ";
+        if (lan.equals("Uzbek")) r = ":date: O'lchovlarni olish vaqti va sanasi: ";
+        else if (lan.equals("Russian")) r = ":date: Дата и время снятия мерок: ";
+        else if (lan.equals("English")) r = ":date: Time & Date of taking measurements: ";
         return r;
     }
     public static String locationReceived(String lan) {
@@ -522,10 +527,11 @@ class Lan {
         return r;
     }
     public static String seeAll(String lan) {
-        String r="";
-        if (lan.equals("Uzbek")) r = "Barcha parda modellari";
-        else if (lan.equals("Russian")) r = "Все модели штор";
-        else if (lan.equals("English")) r = "All curtain models";
+        String r=":eight_pointed_black_star: ";
+        if (lan.equals("Uzbek")) r += "Barcha parda modellari";
+        else if (lan.equals("Russian")) r += "Все модели штор";
+        else if (lan.equals("English")) r += "All curtain models";
         return r;
     }
+
 }

@@ -203,14 +203,15 @@ public class Bot extends TelegramLongPollingBot {
         String inline = update.getInlineQuery().getQuery();
         AnswerInlineQuery answerInlineQuery = new AnswerInlineQuery()
                 .setInlineQueryId(update.getInlineQuery().getId());
-        if (inline.equals("share")) {
-            answerInlineQuery.setResults(new InlineQueryResultCachedPhoto()
-                .setId("22")
-                .setPhotoFileId(DataBase.sqlQuery("select imageid from table0 where russian = 'Лого'", "imageid"))
-                .setCaption(EmojiParser.parseToUnicode("Магазин одежды <b>САРАФАН!</b>\n\n"+links))
-                .setParseMode("HTML"));
-        }
-        else if (inline.equals("location")) {
+        // if (inline.equals("share")) {
+        //     answerInlineQuery.setResults(new InlineQueryResultCachedPhoto()
+        //         .setId("22")
+        //         .setPhotoFileId(DataBase.sqlQuery("select imageid from table0 where russian = 'Лого'", "imageid"))
+        //         .setCaption(EmojiParser.parseToUnicode("Ателье <b>САРАФАН!</b>\n\n"+botLink+"\n"+channelLink))
+        //         .setParseMode("HTML"));
+        // }
+        // else 
+        if (inline.equals("location")) {
             Float latitude = Float.parseFloat(DataBase.sqlQuery("select latitude from users where id ="+a.getId(), "latitude"));
             Float longitude = Float.parseFloat(DataBase.sqlQuery("select longitude from users where id ="+a.getId(), "longitude"));
             answerInlineQuery.setResults(new InlineQueryResultLocation()
@@ -233,7 +234,7 @@ public class Bot extends TelegramLongPollingBot {
                     .setId("22")
                     .setTitle("Наш канал в Telegram")
                     .setInputMessageContent(inputMessageContent)
-                    .setDescription("Каталог одежды"));
+                    .setDescription("Каталог"));
         } else if (inline.equals("")) {
             List<InlineQueryResult> products = new ArrayList<InlineQueryResult>();
             for (String id : DataBase.sqlQueryList("select id from table0 where instock = true order by postdate desc", "id")) {
@@ -955,7 +956,7 @@ public class Bot extends TelegramLongPollingBot {
         //String emoji = DataBase.sqlQuery("select emoji from table0 where id = "+prodId, "emoji");
         return "<b>" + DataBase.sqlQuery("select russian from table0 where id=" + prodId + "", "russian") + "</b>              "+botLink+"\n"+
                 "<i>"+DataBase.sqlQuery("select russiandescription from table0 where id =" +prodId, "russiandescription")+"</i>\n\n"+
-                "<code>"+Lan.cost("Russian")+DataBase.sqlQuery("SELECT cost from table0 where id = " + prodId, "cost")+Lan.currency("Russian") +".</code>\n"+links;
+                "<code>"+Lan.cost("Russian")+DataBase.sqlQuery("SELECT cost from table0 where id = " + prodId, "cost")+Lan.currency("Russian") +".</code>\n";
         }
     
     
