@@ -533,11 +533,11 @@ class Lan {
         else if (lan.equals("English")) r += "All curtain models";
         return r;
     }
-    public static String links(String lan) {
+    public static String links(String lan, String, botName, String channelName) {
         String r="";
-        if (lan.equals("Uzbek")) r = "<a href=\"t.me/"+Bot.getBotUsername()+"\">🤖 Bizning Bot</a> <a href=\"t.me/"+Bot.getChannelName()+"\">📺 Bizning Kanal</a>";
-        else if (lan.equals("Russian")) r = "<a href=\"t.me/"+Bot.getBotUsername()+"\">🤖 Наш Бот</a> <a href=\"t.me/"+Bot.getChannelName()+"\">📺 Наш Канал</a>";
-        else if (lan.equals("English")) r = "<a href=\"t.me/"+Bot.getBotUsername()+"\">🤖 Our Bot</a> <a href=\"t.me/"+Bot.getChannelName()+"\">📺 Our Channe</a>";
+        if (lan.equals("Uzbek")) r = "<a href=\"t.me/"+botName+"\">🤖 Bizning Bot</a> <a href=\"t.me/"+channelName+"\">📺 Bizning Kanal</a>";
+        else if (lan.equals("Russian")) r = "<a href=\"t.me/"+botName+"\">🤖 Наш Бот</a> <a href=\"t.me/"+channelName+"\">📺 Наш Канал</a>";
+        else if (lan.equals("English")) r = "<a href=\"t.me/"+botName+"\">🤖 Our Bot</a> <a href=\"t.me/"+channelName+"\">📺 Our Channel</a>";
         return r;
     }
 
