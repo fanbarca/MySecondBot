@@ -204,32 +204,33 @@ public class Bot extends TelegramLongPollingBot {
         String inline = update.getInlineQuery().getQuery();
         AnswerInlineQuery answerInlineQuery = new AnswerInlineQuery()
                 .setInlineQueryId(update.getInlineQuery().getId());
-
-        if (inline.equals("location")) {
-            Float latitude = Float.parseFloat(DataBase.sqlQuery("select latitude from users where id ="+a.getId(), "latitude"));
-            Float longitude = Float.parseFloat(DataBase.sqlQuery("select longitude from users where id ="+a.getId(), "longitude"));
-            answerInlineQuery.setResults(new InlineQueryResultLocation()
-                .setId("22")
-                .setTitle(Lan.previousLocation(a.getLanguage()))
-                .setLatitude(latitude).setLongitude(longitude));
-        } else if (inline.equals("address")) {
-            String address = DataBase.sqlQuery("select address from users where id ="+a.getId(), "address");
-            InputTextMessageContent inputMessageContent = new InputTextMessageContent()
-                    .setMessageText(address);
-            answerInlineQuery.setResults(new InlineQueryResultArticle()
-                    .setId("22")
-                    .setTitle(Lan.previousAddress(a.getLanguage()))
-                    .setInputMessageContent(inputMessageContent)
-                    .setDescription(address));
-        } else if (inline.equals("@regularshop")) {
-            InputTextMessageContent inputMessageContent = new InputTextMessageContent()
-                    .setMessageText("@regularshop");
-            answerInlineQuery.setResults(new InlineQueryResultArticle()
-                    .setId("22")
-                    .setTitle("Наш канал в Telegram")
-                    .setInputMessageContent(inputMessageContent)
-                    .setDescription("Каталог"));
-        } else if (inline.equals("")) {
+        // if (inline.equals("location")) {
+        //     Float latitude = Float.parseFloat(DataBase.sqlQuery("select latitude from users where id ="+a.getId(), "latitude"));
+        //     Float longitude = Float.parseFloat(DataBase.sqlQuery("select longitude from users where id ="+a.getId(), "longitude"));
+        //     answerInlineQuery.setResults(new InlineQueryResultLocation()
+        //         .setId("22")
+        //         .setTitle(Lan.previousLocation(a.getLanguage()))
+        //         .setLatitude(latitude).setLongitude(longitude));
+        // } else if (inline.equals("address")) {
+        //     String address = DataBase.sqlQuery("select address from users where id ="+a.getId(), "address");
+        //     InputTextMessageContent inputMessageContent = new InputTextMessageContent()
+        //             .setMessageText(address);
+        //     answerInlineQuery.setResults(new InlineQueryResultArticle()
+        //             .setId("22")
+        //             .setTitle(Lan.previousAddress(a.getLanguage()))
+        //             .setInputMessageContent(inputMessageContent)
+        //             .setDescription(address));
+        // } else 
+        // if (inline.equals("@regularshop")) {
+        //     InputTextMessageContent inputMessageContent = new InputTextMessageContent()
+        //             .setMessageText("@regularshop");
+        //     answerInlineQuery.setResults(new InlineQueryResultArticle()
+        //             .setId("22")
+        //             .setTitle("Наш канал в Telegram")
+        //             .setInputMessageContent(inputMessageContent)
+        //             .setDescription("Каталог"));
+        // } else 
+        if (inline.equals("")) {
             List<InlineQueryResult> products = new ArrayList<InlineQueryResult>();
             for (String id : DataBase.sqlQueryList("select id from table0 where instock = true order by postdate desc", "id")) {
                 String image = DataBase.sqlQuery("select imageid from table0 where id = "+id, "imageid");
