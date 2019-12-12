@@ -296,8 +296,8 @@ public class Bot extends TelegramLongPollingBot {
                         //         .setText(EmojiParser.parseToUnicode(Lan.mainMenu(a.getLanguage()).get(0)))
                         //         .setCallbackData(Lan.mainMenu(a.getLanguage()).get(0)));
                         row1.add(new InlineKeyboardButton()
-                                .setText(EmojiParser.parseToUnicode(Lan.seeAll((a.getLanguage())))
-                                .setSwitchInlineQueryCurrentChat("")));
+                                .setText(EmojiParser.parseToUnicode(Lan.seeAll(a.getLanguage())))
+                                .setSwitchInlineQueryCurrentChat(""));
                 rows.add(row1);
                 List<InlineKeyboardButton> row2 = new ArrayList<InlineKeyboardButton>();
                         row2.add(new InlineKeyboardButton()
