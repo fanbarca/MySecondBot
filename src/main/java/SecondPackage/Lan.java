@@ -523,9 +523,9 @@ class Lan {
     }
     public static String seeAll(String lan) {
         String r="";
-        if (lan.equals("Uzbek")) r = ":shirt: Hamma tovarlar";
-        else if (lan.equals("Russian")) r = ":shirt: Все товары";
-        else if (lan.equals("English")) r = ":shirt: All products";
+        if (lan.equals("Uzbek")) r = "🎦 Hamma pardalar";
+        else if (lan.equals("Russian")) r = "🎦 Все шторы";
+        else if (lan.equals("English")) r = "🎦 All curtains";
         return r;
     }
 }
