@@ -887,6 +887,9 @@ public class Bot extends TelegramLongPollingBot {
             case 9:
                 condition = "kids = true and male = true";
                 break;
+            case 10:
+                condition = "euro = true or national = true or turkish = true";
+                break;
             case -1:
                 condition = "typeid <> null";
                 break;
@@ -932,7 +935,7 @@ public class Bot extends TelegramLongPollingBot {
         for (int i = 0; i<occurrences; i++){
             balls += emoji==null?":large_blue_circle:":emoji;
         }
-        return "<b>" + DataBase.sqlQuery("select "+ a.getLanguage() + " from table0 where id=" + prodId + "", a.getLanguage()) + "</b> \n"+
+        return "<b>" + DataBase.sqlQuery("select "+ a.getLanguage() + " from table0 where id=" + prodId + "", a.getLanguage()) + "</b>\n"+
                 "<i>"+DataBase.sqlQuery("select "+a.getLanguage()+"description from table0 where id =" +prodId, a.getLanguage()+"description")+"</i>\n\n"+
                 "<code>"+Lan.cost(a.getLanguage())+DataBase.sqlQuery("SELECT cost from table0 where id = " + prodId, "cost")+Lan.currency(a.getLanguage()) +".</code>\n"                 +Lan.inCart(a.getLanguage(), occurrences)+ balls+"\n";
         }
