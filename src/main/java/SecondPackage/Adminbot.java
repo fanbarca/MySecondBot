@@ -213,7 +213,7 @@ public class Adminbot extends TelegramLongPollingBot {
                             deleteMessage(update.getMessage());
                             edit(update.getMessage(), russian+"\nУкажите критерии", updateMarkup());
                         } else if (listener.startsWith("edit")) {
-                            String prodID = listener.substring(4,8)
+                            String prodID = listener.substring(4,8);
                             String Name = update.getMessage().getText();
                             DataBase.sql("UPDATE table0 SET "+listener.substring(8)+" = '"+Name+"' where id = "+prodID);
                             mainMenu(update, true);
