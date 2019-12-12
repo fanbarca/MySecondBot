@@ -14,15 +14,12 @@ class Lan {
 
     public static String welcome(String lan, String name){
         String r="";
-        String emoji = "\n:handbag:";
-        if (lan.equals("Uzbek")) r = toLatinTrans.transliterate(name)+", \n" +
-                "Xush kelibsiz!" +
+        String emoji = "";
+        if (lan.equals("Uzbek")) r = "Xush kelibsiz, "+toLatinTrans.transliterate(name)+"!\n"
                 emoji;
-        else if (lan.equals("Russian")) r = toCyrilTrans.transliterate(name)+", \n" +
-                "Добро пожаловать!" +
+        else if (lan.equals("Russian")) r = "Добро пожаловать, " + toCyrilTrans.transliterate(name)+"!\n" +
                 emoji;
-        else if (lan.equals("English")) r = toLatinTrans.transliterate(name)+", \n" +
-                "Welcome!"+
+        else if (lan.equals("English")) r = "Welcome, "+toLatinTrans.transliterate(name)+"!\n" +
                 emoji;
         return r;
     }
