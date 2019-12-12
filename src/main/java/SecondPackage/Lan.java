@@ -533,7 +533,7 @@ class Lan {
         else if (lan.equals("English")) r += "All curtain models";
         return r;
     }
-    public static String links(String lan, String, botName, String channelName) {
+    public static String links(String lan, String botName, String channelName) {
         String r="";
         if (lan.equals("Uzbek")) r = "<a href=\"t.me/"+botName+"\">🤖 Bizning Bot</a> <a href=\"t.me/"+channelName+"\">📺 Bizning Kanal</a>";
         else if (lan.equals("Russian")) r = "<a href=\"t.me/"+botName+"\">🤖 Наш Бот</a> <a href=\"t.me/"+channelName+"\">📺 Наш Канал</a>";
