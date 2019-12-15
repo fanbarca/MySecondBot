@@ -1481,7 +1481,7 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
 
 
 
-    public void deleteMessage(String Messageid, String Chatid) {
+    public static void deleteMessage(String Messageid, String Chatid) {
 
         DeleteMessage dm = new DeleteMessage()
                 .setMessageId(Integer.parseInt(Messageid))
