@@ -6,10 +6,7 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7fdc6f42-80e3-436b-99c6-634d7f7f8939" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/src/main/java/SecondPackage/Bot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/SecondPackage/Bot.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/SecondPackage/YourTask.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/SecondPackage/YourTask.java" afterDir="false" />
-    </list>
+    <list default="true" id="7fdc6f42-80e3-436b-99c6-634d7f7f8939" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -92,13 +89,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1560590336061</updated>
-    </task>
-    <task id="LOCAL-00168" summary="new">
-      <created>1575716892358</created>
-      <option name="number" value="00168" />
-      <option name="presentableId" value="LOCAL-00168" />
-      <option name="project" value="LOCAL" />
-      <updated>1575716892358</updated>
     </task>
     <task id="LOCAL-00169" summary="new">
       <created>1575717278774</created>
@@ -436,7 +426,14 @@
       <option name="project" value="LOCAL" />
       <updated>1576420620943</updated>
     </task>
-    <option name="localTasksCounter" value="217" />
+    <task id="LOCAL-00217" summary="new">
+      <created>1576421210347</created>
+      <option name="number" value="00217" />
+      <option name="presentableId" value="LOCAL-00217" />
+      <option name="project" value="LOCAL" />
+      <updated>1576421210347</updated>
+    </task>
+    <option name="localTasksCounter" value="218" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
