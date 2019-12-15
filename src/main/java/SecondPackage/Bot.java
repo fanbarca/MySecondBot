@@ -178,18 +178,21 @@ public class Bot extends TelegramLongPollingBot {
 
     private void handleChannelCallback(Update update) throws SQLException, TelegramApiException {
         String cb = update.getCallbackQuery().getData();
-        String prodId = cb.substring(10);
+        if (a.getLanguage() == null) {
+            DataBase.sql("UPDATE users SET language = 'Russian' WHERE id =" + a.getId());
+            a.setLanguage("Russian");
+        }
         if (cb.contains("chooseSize")) {
+            String prodId = cb.substring(10);
             //deleteMessage(DataBase.sqlQuery("select image from users where id="+a.getId(), "image"), a.getId());
-            if (a.getLanguage() == null) {
-                DataBase.sql("UPDATE users SET language = 'Russian' WHERE id =" + a.getId());
-                a.setLanguage("Russian");
-            }
             if (a.getImage()!=null) deleteLastMessages();
-
             chooseSize(prodId, false, 0);
             a.setAddress(Lan.pressCatalog(a.getLanguage()));
             a.setAlert(true);
+        } else {
+            String prodId = cb;
+            if (a.getImage()!=null) deleteLastMessages();
+            showProduct(false, prodId);
         }
     }
 
@@ -345,10 +348,7 @@ public class Bot extends TelegramLongPollingBot {
                         deleteMessage(a.getImage(), a.getId());
                     }
                 deleteMessage(update.getMessage());
-                sendPicbyId(productText(prodId, a.getId()),
-                        a.getId(),
-                        productsMarkup(prodId),
-                        prodId);
+                showProduct(false, prodId);
 
             } else {
                 if (a.getLanguage() == null) {
@@ -479,7 +479,7 @@ public class Bot extends TelegramLongPollingBot {
                             + ",'" + prodId + "', '"+s+"')");
                     a.setAddress(Lan.added(a.getLanguage()));
                     a.setAlert(false);
-                    editCaption(productText(prodId, a.getId()), update.getCallbackQuery().getMessage(), productsMarkup(prodId));
+                    showProduct(true, prodId);
                 }
             }
 
@@ -508,14 +508,14 @@ public class Bot extends TelegramLongPollingBot {
                                     + ",'" + prodId + "')");
                             a.setAddress(Lan.added(a.getLanguage()));
                             a.setAlert(false);
-                            editCaption(productText(prodId, a.getId()), update.getCallbackQuery().getMessage(), productsMarkup(prodId));
+                            showProduct(true, prodId);
                         }
                     } else if (cb.contains("-minus"+prodId)){
                         DataBase.sql("delete from cart where userid =" + userid
                             + " and item = '" + prodId + "'");
                         a.setAddress(Lan.removed(a.getLanguage()));
                         a.setAlert(false);
-                        editCaption(productText(prodId, a.getId()), update.getCallbackQuery().getMessage(), productsMarkup(prodId));
+                        showProduct(true, prodId);
                     }
                     }
                 if (cb.contains("+++")||cb.contains("---")) {
@@ -539,7 +539,7 @@ public class Bot extends TelegramLongPollingBot {
                                 + " and item = '" + prodId + "'");
                         a.setAddress(Lan.removed(a.getLanguage()));
                         a.setAlert(false);
-                        editCaption(productText(prodId, userid), update.getCallbackQuery().getMessage(), markUp(productText(prodId, userid), prodId, (occurrences(prodId, userid)>0)?keybAddMore(name):keybAdd(name), 3));
+                        showProduct(true, prodId);
                     } else if (cb.contains(Lan.addToCart(a.getLanguage()))|| cb.contains(Lan.addMore(a.getLanguage()))) {
                         chooseSize(prodId, true, update.getCallbackQuery().getMessage().getMessageId());
                     }
@@ -561,7 +561,7 @@ public class Bot extends TelegramLongPollingBot {
                         showMainMenu(true, update);
                     }
                 } else if (cb.equals(prodId)) {
-                    editPic(productText(prodId, userid), prodId, update.getCallbackQuery().getMessage(), productsMarkup(prodId));
+                    showProduct(true, prodId);
                 }
             }
         }
@@ -669,6 +669,20 @@ public class Bot extends TelegramLongPollingBot {
             showCart(update, true);
         }
     }
+
+
+
+
+
+
+
+    private void showProduct(boolean edit, String prodId) throws SQLException, TelegramApiException {
+        if (edit) editPic(productText(prodId, a.getId()), prodId, a.getId(), Integer.parseInt(a.getImage()), productsMarkup(prodId));
+        else sendPicbyId(productText(prodId, a.getId()), a.getId(), productsMarkup(prodId), prodId);
+    }
+
+
+
 
 
 
@@ -1784,14 +1798,14 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
         //String imageMessageId = DataBase.sqlQuery("select image from users where id = " + a.getId(), "image");
         if (prodId!=null&&!prodId.equals("")) {
             deleteLastMessages();
-            if (a.getImage()!=null) editPic(productText(prodId,prodId),a.getId(),a.getId(), Integer.parseInt(a.getImage()),productsMarkup(prodId));
-            else sendPicbyId(productText(prodId, a.getId()), a.getId(),productsMarkup(prodId), prodId);
+            if (a.getImage()!=null) showProduct(true, prodId);
+            else showProduct(false, prodId);
         }
         //a.setImage(DataBase.sqlGetUserData(message.getChatId().toString()).get(5));
         deleteMessage(message);
     }
 
-    private void deleteLastMessages() {
+    public void deleteLastMessages() {
         if (images.containsKey(a.getId())) {
             for (String id: images.get(a.getId())) {
                 deleteMessage(id, a.getId());
