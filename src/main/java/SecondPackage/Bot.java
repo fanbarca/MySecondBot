@@ -201,6 +201,7 @@ public class Bot extends TelegramLongPollingBot {
 
 
     private void handleInline(Update update) throws SQLException,  TelegramApiException {
+
         String inline = update.getInlineQuery().getQuery();
         AnswerInlineQuery answerInlineQuery = new AnswerInlineQuery()
                 .setInlineQueryId(update.getInlineQuery().getId());
@@ -285,7 +286,8 @@ public class Bot extends TelegramLongPollingBot {
     
     
     
-    
+
+
      private void showMainMenu(boolean edit, Update update) throws SQLException, TelegramApiException {
          InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
             List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
@@ -580,23 +582,20 @@ public class Bot extends TelegramLongPollingBot {
             String date = cb.substring(4);
             
             ZoneId z = ZoneId.of("Asia/Tashkent");
-            if (LocalTime.now(z).isAfter(startOfPeriod)&&LocalTime.now(z).isBefore(endOfPeriod)) {
-                if (DataBase.sqlQueryList("select product from zakaz where userid =" + a.getId()+" and conformed = true", "product").size() > 0) {
-                    editPic(Lan.orderExists(a.getLanguage()), update.getCallbackQuery().getMessage(), Lan.YesNo(a.getLanguage()), "Лого", 2);
-                } else {
-                    DataBase.sql("insert into zakaz (userid, product, appdate) values ("
-                    +a.getId()+", '"
-                    +curretCart(a.getId())+"','"+date+"')");
-                    if (a.getNumber()==null) {
-                        deleteMessage(update.getCallbackQuery().getMessage());
-                        sendMeNumber(a.getId());
-                    }
-                    else sendMeLocation(update.getCallbackQuery().getMessage(), true);
-                }
+
+            if (DataBase.sqlQueryList("select product from zakaz where userid =" + a.getId()+" and conformed = true", "product").size() > 0) {
+                editPic(Lan.orderExists(a.getLanguage()), update.getCallbackQuery().getMessage(), Lan.YesNo(a.getLanguage()), "Лого", 2);
             } else {
-                a.setAddress(Lan.tooLate(a.getLanguage()));
-                a.setAlert(true);
+                DataBase.sql("insert into zakaz (userid, product, appdate) values ("
+                +a.getId()+", '"
+                +curretCart(a.getId())+"','"+date+"')");
+                if (a.getNumber()==null) {
+                    deleteMessage(update.getCallbackQuery().getMessage());
+                    sendMeNumber(a.getId());
+                }
+                else sendMeLocation(update.getCallbackQuery().getMessage(), true);
             }
+
         }
         if (cb.equals(Lan.YesNo(a.getLanguage()).get(0))||(cb.equals(Lan.YesNo(a.getLanguage()).get(1)))) {
             if (cb.equals(Lan.YesNo(a.getLanguage()).get(0))) {
@@ -1785,9 +1784,9 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
         //String imageMessageId = DataBase.sqlQuery("select image from users where id = " + a.getId(), "image");
         if (prodId!=null&&!prodId.equals("")) {
             deleteLastMessages();
-            sendPicbyId(productText(prodId, a.getId()), a.getId(),productsMarkup(prodId), prodId);
+            if (a.getImage()!=null) editPic(productText(prodId,prodId),a.getId(),a.getId(), Integer.parseInt(a.getImage()),productsMarkup(prodId));
+            else sendPicbyId(productText(prodId, a.getId()), a.getId(),productsMarkup(prodId), prodId);
         }
-
         //a.setImage(DataBase.sqlGetUserData(message.getChatId().toString()).get(5));
         deleteMessage(message);
     }
