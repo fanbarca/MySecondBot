@@ -1797,8 +1797,7 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
         //String imageMessageId = DataBase.sqlQuery("select image from users where id = " + a.getId(), "image");
         if (prodId!=null&&!prodId.equals("")) {
             try {
-                if (a.getImage()!=null) showProduct(true, prodId);
-                else showProduct(false, prodId);
+                showProduct(false, prodId);
                 deleteLastMessages();
             }
             catch(TelegramApiRequestException e) {
