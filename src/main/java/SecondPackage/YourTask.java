@@ -10,7 +10,8 @@ public class YourTask extends TimerTask {
         try {
             Bot bot = new Bot();
             for (String id : DataBase.sqlIdList()) {
-                bot.deleteMessage(DataBase.sqlselect(id, "image"), id);
+                String image = DataBase.sqlselect(id, "image");
+                if (image!=null) bot.deleteMessage(image, id);
             }
             DataBase.sql("update users set image = null");
         } catch (SQLException e) {
