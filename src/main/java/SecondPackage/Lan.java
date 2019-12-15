@@ -535,4 +535,11 @@ class Lan {
         return r;
     }
 
+    public static String error(String lan) {
+        String r="";
+        if (lan.equals("Uzbek")) r += "Xatolik yuz berdi";
+        else if (lan.equals("Russian")) r += "Что-то пошло не так";
+        else if (lan.equals("English")) r += "Something went wrong";
+        return r;
+    }
 }

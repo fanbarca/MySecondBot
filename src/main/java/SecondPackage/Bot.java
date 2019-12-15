@@ -184,16 +184,15 @@ public class Bot extends TelegramLongPollingBot {
         }
         if (cb.contains("chooseSize")) {
             String prodId = cb.substring(10);
-            //deleteMessage(DataBase.sqlQuery("select image from users where id="+a.getId(), "image"), a.getId());
             if (a.getImage()!=null) deleteLastMessages();
             chooseSize(prodId, false, 0);
-            a.setAddress(Lan.pressCatalog(a.getLanguage()));
-            a.setAlert(true);
         } else {
             String prodId = cb;
             if (a.getImage()!=null) deleteLastMessages();
             showProduct(false, prodId);
         }
+        a.setAddress(Lan.pressCatalog(a.getLanguage()));
+        a.setAlert(true);
     }
 
 
@@ -1797,13 +1796,27 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
         String prodId = DataBase.sqlQuery("select id from table0 where imageid = '"+photoId+"'", "id");
         //String imageMessageId = DataBase.sqlQuery("select image from users where id = " + a.getId(), "image");
         if (prodId!=null&&!prodId.equals("")) {
-            deleteLastMessages();
-            if (a.getImage()!=null) showProduct(true, prodId);
-            else showProduct(false, prodId);
+            try {
+                if (a.getImage()!=null) showProduct(true, prodId);
+                else showProduct(false, prodId);
+                deleteLastMessages();
+            }
+            catch(TelegramApiRequestException e) {
+                a.setAddress(Lan.error("Russian"));
+                a.setAlert(false);
+            }
+            finally {
+                deleteMessage(message);
+            }
+
         }
-        //a.setImage(DataBase.sqlGetUserData(message.getChatId().toString()).get(5));
-        deleteMessage(message);
     }
+
+
+
+
+
+
 
     public void deleteLastMessages() {
         if (images.containsKey(a.getId())) {
