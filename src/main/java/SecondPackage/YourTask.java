@@ -8,8 +8,9 @@ public class YourTask extends TimerTask {
     @Override
     public void run() {
         try {
+            Bot bot = new Bot();
             for (String id : DataBase.sqlIdList()) {
-                Bot.deleteMessage(DataBase.sqlselect(id, "image"), id);
+                bot.deleteMessage(DataBase.sqlselect(id, "image"), id);
             }
         } catch (SQLException e) {
             e.printStackTrace();
