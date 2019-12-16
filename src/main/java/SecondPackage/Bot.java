@@ -38,6 +38,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.sql.*;
+import java.util.concurrent.TimeUnit;
 
 
 public class Bot extends TelegramLongPollingBot {
@@ -1209,7 +1210,7 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
         DataBase.sql("update users set image =" + messageid + " where id =" + chatid);
         a.setImage(messageid+"");
         TimeUnit.MINUTES.sleep(1);
-        deleteMessage(messageid, chatid);
+        deleteMessage(messageid+"", chatid);
     }
 
 
@@ -1827,6 +1828,9 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
 
 
 
+    
+    
+    
 
 
     public void deleteLastMessages() {
@@ -1839,6 +1843,8 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
     }
 
 
+    
+    
     
     
     
