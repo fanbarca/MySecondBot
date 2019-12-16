@@ -116,6 +116,19 @@ public class Bot extends TelegramLongPollingBot {
         } catch (Exception e) {
             BotLogger.error(Main.LOGTAG, e);
         }
+        Thread messageKiller = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(1000*60);
+                        deleteMessage(a.getImage(),a.getId());
+
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        messageKiller.start();
     }
 
 
@@ -1505,6 +1518,7 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
+        DataBase.sql("update users set image = null where id = "+Chatid);
     }
 
 

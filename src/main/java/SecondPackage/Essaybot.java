@@ -58,4 +58,57 @@ public class Essaybot extends TelegramLongPollingBot {
     }
 
 
+
+    private boolean checkNewUser(Update update) throws SQLException, TelegramApiException {
+        String id = "";
+        String firstName = "";
+        String lastName = "";
+        String userName = "";
+        boolean res = false;
+        if (update.hasMessage()) {
+            id = update.getMessage().getChatId().toString();
+            firstName = update.getMessage().getFrom().getFirstName();
+            lastName= update.getMessage().getFrom().getLastName();
+            userName = update.getMessage().getFrom().getUserName();
+        }
+        else if (update.hasCallbackQuery()) {
+            id = update.getCallbackQuery().getFrom().getId().toString();
+            firstName = update.getCallbackQuery().getFrom().getFirstName();
+            lastName= update.getCallbackQuery().getFrom().getLastName();
+            userName = update.getCallbackQuery().getFrom().getUserName();
+        }
+        if (DataBase.sqlIdList().contains(id)) {
+
+        } else {
+            DataBase.sql("INSERT INTO users (id, firstname, lastname, username) VALUES ('" +
+                    id + "','" +
+                    firstName + "','" +
+                    lastName + "','" +
+                    userName + "')");
+            Adminbot ab = new Adminbot();
+            ab.sendMe(":boom: Новый пользователь!" +
+                    "\n" + firstName + " " + lastName +
+                    "\n@" + userName);
+
+
+            res = true;
+        }
+        return res;
+    }
+
+
+
+
+    public synchronized void answerCallbackQuery(String callbackId, String message) {
+        AnswerCallbackQuery answer = new AnswerCallbackQuery();
+        answer.setCallbackQueryId(callbackId);
+        answer.setText(message);
+        answer.setShowAlert(true);
+        try {
+            execute(answer);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

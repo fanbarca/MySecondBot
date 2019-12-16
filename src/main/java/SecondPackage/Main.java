@@ -31,17 +31,17 @@ public class Main {
         // today.set(Calendar.SECOND, 0);
         // Timer timer = new Timer();
         // timer.schedule(new YourTask(), today.getTime(), TimeUnit.MILLISECONDS.convert(1, TimeUnit.DAYS));
-        Timer timer = new Timer();
-            timer.schedule( new TimerTask() {
-                public void run() {
-                    Bot bot = new Bot();
-                    // deleteMessage(a.getImage(), a.getId());
-                    for (String id : DataBase.sqlIdList()) {
-                        String image = DataBase.sqlselect(id, "image");
-                        if (image!=null) bot.deleteMessage(image, id);
-                    }
-                    DataBase.sql("update users set image = null");
-                }
-             }, 5*60*1000, 5*60*1000);
+//        Timer timer = new Timer();
+//            timer.schedule( new TimerTask() {
+//                public void run() {
+//                    Bot bot = new Bot();
+//                    // deleteMessage(a.getImage(), a.getId());
+//                    for (String id : DataBase.sqlIdList()) {
+//                        String image = DataBase.sqlselect(id, "image");
+//                        if (image!=null) bot.deleteMessage(image, id);
+//                    }
+//                    DataBase.sql("update users set image = null");
+                //}
+             //}, 5*60*1000, 5*60*1000);
     }
 }
