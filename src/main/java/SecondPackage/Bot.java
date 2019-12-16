@@ -116,14 +116,6 @@ public class Bot extends TelegramLongPollingBot {
         } catch (Exception e) {
             BotLogger.error(Main.LOGTAG, e);
         }
-        
-        Timer timer = new Timer();
-            timer.schedule( new TimerTask() {
-                public void run() {
-                    deleteMessage(a.getImage(), a.getId());
-                }
-             }, 60*1000);
-        //timer.cancel();
     }
 
 
