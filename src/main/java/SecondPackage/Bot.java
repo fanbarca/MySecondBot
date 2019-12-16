@@ -38,6 +38,8 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.sql.*;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.CountDownLatch;
 
@@ -115,12 +117,13 @@ public class Bot extends TelegramLongPollingBot {
             BotLogger.error(Main.LOGTAG, e);
         }
         try {
-        Thread.sleep(1000*60);
-        deleteMessage(a.getImage(), a.getId());
-        } catch (InterruptedException e) {
-            BotLogger.error(Main.LOGTAG, e);
-            Thread.currentThread().interrupt();
-        }
+        Timer timer = new Timer();
+            timer.schedule( new TimerTask() {
+                public void run() {
+                    deleteMessage(a.getImage(), a.getId());
+                }
+             }, 0, 60*1000);
+        timer.cancel();
     }
 
 
