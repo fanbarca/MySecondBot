@@ -1246,7 +1246,7 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
         DataBase.sql("update users set image =" + message.getMessageId() + " where id =" + message.getChatId());
         a.setImage(message.getMessageId()+"");
         TimeUnit.MINUTES.sleep(1);
-        deleteMessage(messageId+"", chatid);
+        deleteMessage(message);
     }
 
 
