@@ -1104,7 +1104,7 @@ public class Bot extends TelegramLongPollingBot {
             int smid = execute(sendMessage).getMessageId();
             DataBase.sql("update users set smid =" + smid + " where id = " + ChatId);
             TimeUnit.MINUTES.sleep(1);
-            deleteMessage(smid+"", chatid);
+            deleteMessage(smid+"", ChatId);
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
@@ -1328,7 +1328,7 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
         if (markup!=null) ec.setReplyMarkup(markup);
         execute(ec);
         TimeUnit.MINUTES.sleep(1);
-        deleteMessage(messageid+"", chatid);
+        deleteMessage(messageid+"", chatId);
     }
 
 
@@ -1384,7 +1384,7 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
         a.setImage(image);
         return image;
         TimeUnit.MINUTES.sleep(1);
-        deleteMessage(image, chatid);
+        deleteMessage(image, chatId);
     }
 
 
@@ -1414,7 +1414,7 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
         a.setImage(image);
         return image;
         TimeUnit.MINUTES.sleep(1);
-        deleteMessage(image, chatid);
+        deleteMessage(image, chatId);
     }
 
 
@@ -1469,7 +1469,7 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
         a.setImage(image);
         return image;
         TimeUnit.MINUTES.sleep(1);
-        deleteMessage(image, chatid);
+        deleteMessage(image, chatId);
     }
 
 
@@ -2258,7 +2258,7 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
             int smid = execute(sendMessage).getMessageId();
             DataBase.sql("update users set smid ="+smid+" where id = "+chatId);
             TimeUnit.MINUTES.sleep(1);
-            deleteMessage(smid+"", chatid);
+            deleteMessage(smid+"", chatId+|);
         }
         catch (TelegramApiException e) {e.printStackTrace();
         }
