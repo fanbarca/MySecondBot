@@ -114,8 +114,12 @@ public class Bot extends TelegramLongPollingBot {
         } catch (Exception e) {
             BotLogger.error(Main.LOGTAG, e);
         }
+        try {
         Thread.sleep(1000*60);
         deleteMessage(a.getImage(), a.getId());
+        } catch (InterruptedException e) {
+            BotLogger.error(Main.LOGTAG, e);
+        }
     }
 
 
