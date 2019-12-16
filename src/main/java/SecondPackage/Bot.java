@@ -1803,7 +1803,7 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
 
 
 
-    private void handlePhoto(Message message) throws SQLException, TelegramApiException {
+    private void handlePhoto(Message message) throws SQLException, TelegramApiException, InterruptedException {
         String photoId = message.getPhoto().get(message.getPhoto().size() - 1).getFileId();
         DataBase.sql("UPDATE table0 SET imageid = '" + photoId + "' where russian = '" + message.getCaption() + "'");
         String prodId = DataBase.sqlQuery("select id from table0 where imageid = '"+photoId+"'", "id");
