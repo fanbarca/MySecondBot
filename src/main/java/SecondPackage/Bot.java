@@ -179,7 +179,7 @@ public class Bot extends TelegramLongPollingBot {
     
 
 
-    private void handleChannelCallback(Update update) throws SQLException, TelegramApiException {
+    private void handleChannelCallback(Update update) throws SQLException, TelegramApiException, InterruptedException {
         String cb = update.getCallbackQuery().getData();
         if (a.getLanguage() == null) {
             DataBase.sql("UPDATE users SET language = 'Russian' WHERE id =" + a.getId());
@@ -208,7 +208,7 @@ public class Bot extends TelegramLongPollingBot {
 
 
 
-    private void handleInline(Update update) throws SQLException,  TelegramApiException {
+    private void handleInline(Update update) throws SQLException,  TelegramApiException, InterruptedException {
 
         String inline = update.getInlineQuery().getQuery();
         AnswerInlineQuery answerInlineQuery = new AnswerInlineQuery()
@@ -250,7 +250,7 @@ public class Bot extends TelegramLongPollingBot {
     
     
     
-    private void handleContact(Message message, Update update) throws SQLException, TelegramApiException {
+    private void handleContact(Message message, Update update) throws SQLException, TelegramApiException, InterruptedException {
         if (message.hasText() && !message.hasContact() && message.getText().startsWith("+998")) {
             DataBase.sql("UPDATE users SET phone = " +
                     message.getText() + " WHERE id =" + a.getId());
@@ -1567,7 +1567,7 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
 
 
 
-    private void handleLocation(Update update) throws SQLException, TelegramApiException {
+    private void handleLocation(Update update) throws SQLException, TelegramApiException, InterruptedException {
         deleteMessage(a.getImage(), a.getId());
         if (waitingForLocation()) {
             if (update.getMessage().hasLocation()) {
@@ -1741,7 +1741,7 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
 
 
 
-    private void confirm(Update update) throws SQLException, TelegramApiException {
+    private void confirm(Update update) throws SQLException, TelegramApiException, InterruptedException {
         Adminbot order = new Adminbot();
         clearCart(update);
         DataBase.sql("update zakaz set conformed = true where userid = " + a.getId());
@@ -2135,7 +2135,7 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
 
 
 
-    private void showCart(Update update, boolean edit) throws TelegramApiException, SQLException {
+    private void showCart(Update update, boolean edit) throws TelegramApiException, SQLException, InterruptedException {
         List<String> items = DataBase.sqlQueryList("select item from cart where userid =" + a.getId(), "item");
         String comment = DataBase.sqlQuery("select comment from users where id ="+a.getId(), "comment");
         if (comment!=null) comment= "<b>Комментарий:</b> "+comment+"\n";
@@ -2166,7 +2166,7 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
 
 
 
-    private void showOrders(Update update) throws TelegramApiException, SQLException {
+    private void showOrders(Update update) throws TelegramApiException, SQLException, InterruptedException {
         List<String> items = DataBase.sqlQueryList("select product from zakaz where userid =" + a.getId()+" and conformed = true", "product");
         if (items.size() == 0) {
                 a.setAddress(Lan.noOrderYet(a.getLanguage()));
