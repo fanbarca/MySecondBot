@@ -47,7 +47,20 @@ public class Bot extends TelegramLongPollingBot {
     private String channelName = "regularshop";
     private String botName = "PardaZakazBot";
     private String botToken = "1046773572:AAHRqTsLuhCPVPYkBTaNPew3UfdZk5zekjY";
-    
+    Thread messageKiller = new Thread(new Runnable() {
+        @Override
+        public void run() {
+            try {
+                String messageId = a.getImage();
+                String chatId = a.getId();
+                Thread.sleep(1000*60);
+                deleteMessage(messageId,chatId);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    });
+
     Map<String, List<String>> images = new HashMap<>();
     Order a;
     public static LocalTime startOfPeriod = LocalTime.parse("09:00");
@@ -67,6 +80,7 @@ public class Bot extends TelegramLongPollingBot {
     }
     @Override
     public void onUpdateReceived(Update update) {
+        messageKiller.interrupt();
         Message m;
         try {
             if (update.hasMessage()) {
@@ -116,19 +130,7 @@ public class Bot extends TelegramLongPollingBot {
         } catch (Exception e) {
             BotLogger.error(Main.LOGTAG, e);
         }
-        Thread messageKiller = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    String messageId = a.getImage();
-                    String chatId = a.getId();
-                    Thread.sleep(1000*60);
-                        deleteMessage(messageId,chatId);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+
         messageKiller.start();
     }
 
