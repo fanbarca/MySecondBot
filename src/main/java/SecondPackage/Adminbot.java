@@ -56,7 +56,7 @@ public class Adminbot extends TelegramLongPollingBot {
     }
 
     @Override
-    public void onUpdateReceived(Update update) {
+    public void onUpdateReceived(Update update) throws InterruptedException {
         try {
             String id = null;
             if (update.hasCallbackQuery()) {
