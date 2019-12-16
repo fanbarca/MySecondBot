@@ -1082,7 +1082,7 @@ public class Bot extends TelegramLongPollingBot {
 
 
 
-    public void sendMeNumber(String ChatId) {
+    public void sendMeNumber(String ChatId) throws InterruptedException {
         SendMessage sendMessage = new SendMessage()
                 .setChatId(ChatId)
                 .setText(EmojiParser.parseToUnicode(Lan.sendMeContact(a.getLanguage())))
@@ -1190,7 +1190,7 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
 
 
 
-    public void editPic(String text, String chatid, int messageid, List<String> list, String productId, int flag) throws TelegramApiException, SQLException {
+    public void editPic(String text, String chatid, int messageid, List<String> list, String productId, int flag) throws TelegramApiException, SQLException, InterruptedException {
         String file_id;
         if (productId.equals("Лого"))
             file_id = DataBase.sqlQuery("SELECT imageid from table0 where Russian = 'Лого'", "imageid");
@@ -1223,7 +1223,7 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
 
 
 
-    public void editPic(String text, Message message, List<String> list, String productId, int flag) throws TelegramApiException, SQLException {
+    public void editPic(String text, Message message, List<String> list, String productId, int flag) throws TelegramApiException, SQLException, InterruptedException {
         Integer messageId= Integer.parseInt(a.getImage());
         String file_id;
         if (productId.equals("Лого"))
@@ -1257,7 +1257,7 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
 
 
 
-    public void editPic(String text, String productId, Message message, InlineKeyboardMarkup markup) throws TelegramApiException, SQLException {
+    public void editPic(String text, String productId, Message message, InlineKeyboardMarkup markup) throws TelegramApiException, SQLException, InterruptedException {
         String file_id;
         if (productId.equals("Лого")||productId==null)
             file_id = DataBase.sqlQuery("SELECT imageid from table0 where Russian = 'Лого'", "imageid");
@@ -1286,7 +1286,7 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
 
 
 
-    public void editPic(String text, String productId, String chatid, int messageid, InlineKeyboardMarkup markup) throws TelegramApiException, SQLException {
+    public void editPic(String text, String productId, String chatid, int messageid, InlineKeyboardMarkup markup) throws TelegramApiException, SQLException, InterruptedException {
         String file_id;
         if (productId.equals("Лого")||productId==null)
             file_id = DataBase.sqlQuery("SELECT imageid from table0 where Russian = 'Лого'", "imageid");
@@ -1317,7 +1317,7 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
 
 
 
-    public void editCaption(String text, String chatId, int messageid, InlineKeyboardMarkup markup) throws TelegramApiException, SQLException {
+    public void editCaption(String text, String chatId, int messageid, InlineKeyboardMarkup markup) throws TelegramApiException, SQLException, InterruptedException {
         //Integer messageId= Integer.parseInt(DataBase.sqlQuery("select image from users where id="+message.getChatId(), "image"));
 
         EditMessageCaption ec = new EditMessageCaption();
@@ -1342,7 +1342,7 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
 
 
 
-    public void editCaption(String text, Message message, InlineKeyboardMarkup markup) throws TelegramApiException, SQLException {
+    public void editCaption(String text, Message message, InlineKeyboardMarkup markup) throws TelegramApiException, SQLException, InterruptedException {
         //Integer messageId= Integer.parseInt(DataBase.sqlQuery("select image from users where id="+message.getChatId(), "image"));
         EditMessageCaption ec = new EditMessageCaption();
         ec.setChatId(message.getChatId().toString());
@@ -1363,7 +1363,7 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
 
 
 
-    public String sendPic(String text, String chatId, List<String> inline, String productName, int flag) throws SQLException, TelegramApiException {
+    public String sendPic(String text, String chatId, List<String> inline, String productName, int flag) throws SQLException, TelegramApiException, InterruptedException {
         String file_id = "";
         if (productName.equals("Лого"))
             file_id = DataBase.sqlQuery("SELECT imageid from table0 where Russian = 'Лого'", "imageid");
@@ -1382,9 +1382,9 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
             String image = execute(aa).getMessageId().toString();
             DataBase.sql("update users set image =" + image + " where id =" + chatId);
         a.setImage(image);
-        return image;
         TimeUnit.MINUTES.sleep(1);
         deleteMessage(image, chatId);
+        return image;
     }
 
 
@@ -1394,7 +1394,7 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
 	
 	
 	
-	public String sendPic(String text, String chatId, InlineKeyboardMarkup inlineMarkup, String productName) throws SQLException, TelegramApiException {
+	public String sendPic(String text, String chatId, InlineKeyboardMarkup inlineMarkup, String productName) throws SQLException, TelegramApiException, InterruptedException {
         String file_id = "";
         if (productName.equals("Лого"))
             file_id = DataBase.sqlQuery("SELECT imageid from table0 where Russian = 'Лого'", "imageid");
@@ -1412,9 +1412,9 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
             String image = execute(aa).getMessageId().toString();
             DataBase.sql("update users set image =" + image + " where id =" + chatId);
         a.setImage(image);
-        return image;
         TimeUnit.MINUTES.sleep(1);
         deleteMessage(image, chatId);
+        return image;
     }
 
 
@@ -1450,7 +1450,7 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
 
 
 
-    public String sendPicbyId(String text, String chatId, InlineKeyboardMarkup inlineMarkup, String productId) throws SQLException, TelegramApiException {
+    public String sendPicbyId(String text, String chatId, InlineKeyboardMarkup inlineMarkup, String productId) throws SQLException, TelegramApiException, InterruptedException {
         String file_id = "";
         if (productId.equals("Лого"))
             file_id = DataBase.sqlQuery("SELECT imageid from table0 where Russian = 'Лого'", "imageid");
@@ -1467,9 +1467,9 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
         String image = execute(aa).getMessageId().toString();
         DataBase.sql("update users set image =" + image + " where id =" + chatId);
         a.setImage(image);
-        return image;
         TimeUnit.MINUTES.sleep(1);
         deleteMessage(image, chatId);
+        return image;
     }
 
 
