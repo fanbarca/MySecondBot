@@ -56,7 +56,7 @@ public class Adminbot extends TelegramLongPollingBot {
     }
 
     @Override
-    public void onUpdateReceived(Update update) throws InterruptedException {
+    public void onUpdateReceived(Update update) {
         try {
             String id = null;
             if (update.hasCallbackQuery()) {
@@ -75,12 +75,12 @@ public class Adminbot extends TelegramLongPollingBot {
                     }
                 }
             }
-        } catch (SQLException | TelegramApiException e1) {
+        } catch (SQLException | TelegramApiException | InterruptedException e1) {
             e1.printStackTrace();
         }
     }
 
-    private void checkAdmin(Update update, String id) throws SQLException, TelegramApiException {
+    private void checkAdmin(Update update, String id) throws SQLException, TelegramApiException, InterruptedException {
         List<String> admins = DataBase.sqlQueryList("select id from users where admin = true", "id");
         if (admins.contains(id)) {
             allow(update, id);
