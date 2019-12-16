@@ -277,7 +277,7 @@ public class Bot extends TelegramLongPollingBot {
     
 
 
-     private void showMainMenu(boolean edit, Update update) throws SQLException, TelegramApiException {
+     private void showMainMenu(boolean edit, Update update) throws SQLException, TelegramApiException, InterruptedException {
          InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
             List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
                 List<InlineKeyboardButton> row1 = new ArrayList<InlineKeyboardButton>();
@@ -321,7 +321,7 @@ public class Bot extends TelegramLongPollingBot {
 
 
 
-    private void handleIncomingText(Update update) throws SQLException, TelegramApiException {
+    private void handleIncomingText(Update update) throws SQLException, TelegramApiException, InterruptedException {
         if (update.getMessage().getText().contains("/start")) {
             if (update.getMessage().getText().contains("selected")) {
                 String prodId = update.getMessage().getText().substring(15);
@@ -368,7 +368,7 @@ public class Bot extends TelegramLongPollingBot {
 
 
 
-    private void handleComment(Update update) throws TelegramApiException, SQLException {
+    private void handleComment(Update update) throws TelegramApiException, SQLException, InterruptedException {
         DataBase.sql("update users set comment = '"+update.getMessage().getText()+"' where id ="+a.getId());
         deleteMessage(update.getMessage());
         showCart(update, true);
@@ -381,7 +381,7 @@ public class Bot extends TelegramLongPollingBot {
 
 
     private void handleCallback(Update update)
-            throws TelegramApiException, SQLException, MalformedURLException, IOException {
+            throws TelegramApiException, SQLException, MalformedURLException, IOException, InterruptedException {
         String cb = update.getCallbackQuery().getData();
         if (cb.equals("O'zbek") || cb.equals("Русский") || cb.equals("English")) {
             if (cb.equals("O'zbek")) {
@@ -662,7 +662,7 @@ public class Bot extends TelegramLongPollingBot {
 
 
 
-    private void showProduct(boolean edit, String prodId) throws SQLException, TelegramApiException {
+    private void showProduct(boolean edit, String prodId) throws SQLException, TelegramApiException, InterruptedException {
         if (edit) editPic(productText(prodId, a.getId()), prodId, a.getId(), Integer.parseInt(a.getImage()), productsMarkup(prodId));
         else sendPicbyId(productText(prodId, a.getId()), a.getId(), productsMarkup(prodId), prodId);
     }
@@ -675,7 +675,7 @@ public class Bot extends TelegramLongPollingBot {
 
 
 
-    private void chooseSize(String prodId, boolean edit, int messageId) throws SQLException, TelegramApiException {
+    private void chooseSize(String prodId, boolean edit, int messageId) throws SQLException, TelegramApiException, InterruptedException {
         InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
         List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
@@ -718,7 +718,7 @@ public class Bot extends TelegramLongPollingBot {
     
     
     
-    private void chooseDate(boolean edit) throws SQLException, TelegramApiException {
+    private void chooseDate(boolean edit) throws SQLException, TelegramApiException, InterruptedException {
         //List<String> menu = new ArrayList<String>();
         ZoneId z = ZoneId.of("Asia/Tashkent");
         //DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -773,7 +773,7 @@ public class Bot extends TelegramLongPollingBot {
 
     
 
-    private void showCatalog(Update update, boolean edit) throws TelegramApiException, SQLException {
+    private void showCatalog(Update update, boolean edit) throws TelegramApiException, SQLException, InterruptedException {
         InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
             for (int i = 0 ; i<Lan.listTypes(a.getLanguage()).size(); i++) {
@@ -809,7 +809,7 @@ public class Bot extends TelegramLongPollingBot {
 
 
 
-    private void showSubCat(Update update, int i) throws TelegramApiException, SQLException {
+    private void showSubCat(Update update, int i) throws TelegramApiException, SQLException, InterruptedException {
             InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
         	List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
             for (String sub:listSubTypes(i)) {
@@ -847,7 +847,7 @@ public class Bot extends TelegramLongPollingBot {
 
 
 
-    public static List<String> listSubTypes(int i) throws SQLException{
+    public static List<String> listSubTypes(int i) throws SQLException, InterruptedException{
         return listSubTypes(i, "typeid");
     }
 
@@ -857,7 +857,7 @@ public class Bot extends TelegramLongPollingBot {
 
 
 
-    public static List<String> listSubTypes(int i, String column) throws SQLException {
+    public static List<String> listSubTypes(int i, String column) throws SQLException, InterruptedException {
         String condition = "";
         switch (i) {
             case 0:
@@ -1055,7 +1055,7 @@ public class Bot extends TelegramLongPollingBot {
 
 
 
-    private void chooseLanguage(Message message, boolean edit) throws SQLException, TelegramApiException {
+    private void chooseLanguage(Message message, boolean edit) throws SQLException, TelegramApiException, InterruptedException {
         List<String> list = new ArrayList<String>();
         list.add("O'zbek");
         list.add("Русский");
@@ -1121,7 +1121,7 @@ public class Bot extends TelegramLongPollingBot {
 
 
 
-public void sendMeLocation(Message message, boolean edit) throws TelegramApiException, SQLException {
+public void sendMeLocation(Message message, boolean edit) throws TelegramApiException, SQLException, InterruptedException {
     boolean hasLocation = DataBase.sqlQuery("select latitude from users where id ="+a.getId(), "latitude")!=null;
     boolean hasAddress = DataBase.sqlQuery("select address from users where id ="+a.getId(), "address")!=null;
     InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
@@ -1162,7 +1162,7 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
 
 
 
-    public void editPicItems(String typeID, String subTypeID, Message message) throws TelegramApiException, SQLException {
+    public void editPicItems(String typeID, String subTypeID, Message message) throws TelegramApiException, SQLException, InterruptedException {
         List<String> listID = DataBase.sqlQueryList("select id from table0 where instock = true and type = '"+typeID +"' and subtype = '"+subTypeID +"'", "id");
         if (listID.size() != 0) {
             deleteMessage(message);
