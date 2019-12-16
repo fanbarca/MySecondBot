@@ -2257,8 +2257,8 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
         try {
             int smid = execute(sendMessage).getMessageId();
             DataBase.sql("update users set smid ="+smid+" where id = "+chatId);
-            TimeUnit.MINUTES.sleep(1);
-            deleteMessage(smid+"", chatId+|);
+            // TimeUnit.MINUTES.sleep(1);
+            // deleteMessage(smid+"", chatId+"");
         }
         catch (TelegramApiException e) {e.printStackTrace();
         }
