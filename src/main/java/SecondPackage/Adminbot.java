@@ -123,7 +123,7 @@ public class Adminbot extends TelegramLongPollingBot {
         return columns;
     }
 
-	private void allow(Update update, String id) throws SQLException, TelegramApiException {
+	private void allow(Update update, String id) throws SQLException, TelegramApiException, InterruptedException {
         String adminmessage = DataBase.sqlQuery("select adminmessage from users where id="+id, "adminmessage");
         if (update.hasMessage()) {
                 if (update.getMessage().hasText()) {
