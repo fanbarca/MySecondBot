@@ -120,9 +120,10 @@ public class Bot extends TelegramLongPollingBot {
             @Override
             public void run() {
                 try {
+                    String messageId = a.getImage();
+                    String chatId = a.getId();
                     Thread.sleep(1000*60);
-                        deleteMessage(a.getImage(),a.getId());
-
+                        deleteMessage(messageId,chatId);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
