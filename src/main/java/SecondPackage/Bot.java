@@ -122,7 +122,7 @@ public class Bot extends TelegramLongPollingBot {
                 public void run() {
                     deleteMessage(a.getImage(), a.getId());
                 }
-             }, 0, 60*1000);
+             }, 60*1000);
         //timer.cancel();
     }
 
