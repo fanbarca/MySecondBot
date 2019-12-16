@@ -24,11 +24,11 @@ public class Main {
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
-        Calendar today = Calendar.getInstance();
-        today.set(Calendar.HOUR_OF_DAY, 2);
-        today.set(Calendar.MINUTE, 0);
-        today.set(Calendar.SECOND, 0);
-        Timer timer = new Timer();
-        timer.schedule(new YourTask(), today.getTime(), TimeUnit.MILLISECONDS.convert(1, TimeUnit.DAYS));
+        // Calendar today = Calendar.getInstance();
+        // today.set(Calendar.HOUR_OF_DAY, 2);
+        // today.set(Calendar.MINUTE, 0);
+        // today.set(Calendar.SECOND, 0);
+        // Timer timer = new Timer();
+        // timer.schedule(new YourTask(), today.getTime(), TimeUnit.MILLISECONDS.convert(1, TimeUnit.DAYS));
     }
 }
