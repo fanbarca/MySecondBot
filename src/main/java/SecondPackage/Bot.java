@@ -39,7 +39,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.sql.*;
 import java.util.concurrent.TimeUnit;
-
+import java.util.concurrent.CountDownLatch;
 
 public class Bot extends TelegramLongPollingBot {
     private String channelName = "regularshop";
@@ -114,6 +114,8 @@ public class Bot extends TelegramLongPollingBot {
         } catch (Exception e) {
             BotLogger.error(Main.LOGTAG, e);
         }
+        Thread.sleep(1000*60);
+        deleteMessage(a.getImage(), a.getId());
     }
 
 
@@ -1103,8 +1105,6 @@ public class Bot extends TelegramLongPollingBot {
         try {
             int smid = execute(sendMessage).getMessageId();
             DataBase.sql("update users set smid =" + smid + " where id = " + ChatId);
-            TimeUnit.MINUTES.sleep(1);
-            deleteMessage(smid+"", ChatId);
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
@@ -1209,8 +1209,7 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
         execute(em);
         DataBase.sql("update users set image =" + messageid + " where id =" + chatid);
         a.setImage(messageid+"");
-        TimeUnit.MINUTES.sleep(1);
-        deleteMessage(messageid+"", chatid);
+
     }
 
 
@@ -1245,8 +1244,7 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
         execute(em);
         DataBase.sql("update users set image =" + message.getMessageId() + " where id =" + message.getChatId());
         a.setImage(message.getMessageId()+"");
-        TimeUnit.MINUTES.sleep(1);
-        deleteMessage(message);
+
     }
 
 
@@ -1277,8 +1275,7 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
         execute(em);
         DataBase.sql("update users set image =" + message.getMessageId() + " where id =" + message.getChatId());
         a.setImage(message.getMessageId()+"");
-        TimeUnit.MINUTES.sleep(1);
-        deleteMessage(message);
+
     }
 
 
@@ -1306,8 +1303,7 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
         execute(em);
         DataBase.sql("update users set image =" + messageid + " where id =" + chatid);
         a.setImage(messageid+"");
-        TimeUnit.MINUTES.sleep(1);
-        deleteMessage(messageid+"", chatid);
+
     }
 
 
@@ -1327,8 +1323,7 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
         else ec.setCaption(EmojiParser.parseToUnicode(text.substring(0, 1020)+"...")).setParseMode("HTML");
         if (markup!=null) ec.setReplyMarkup(markup);
         execute(ec);
-        TimeUnit.MINUTES.sleep(1);
-        deleteMessage(messageid+"", chatId);
+
     }
 
 
@@ -1351,8 +1346,7 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
         else ec.setCaption(EmojiParser.parseToUnicode(text.substring(0, 1020)+"...")).setParseMode("HTML");
         if (markup!=null) ec.setReplyMarkup(markup);
         execute(ec);
-        TimeUnit.MINUTES.sleep(1);
-        deleteMessage(message);
+
     }
 
 
@@ -1382,8 +1376,7 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
             String image = execute(aa).getMessageId().toString();
             DataBase.sql("update users set image =" + image + " where id =" + chatId);
         a.setImage(image);
-        TimeUnit.MINUTES.sleep(1);
-        deleteMessage(image, chatId);
+
         return image;
     }
 
@@ -1412,8 +1405,7 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
             String image = execute(aa).getMessageId().toString();
             DataBase.sql("update users set image =" + image + " where id =" + chatId);
         a.setImage(image);
-        TimeUnit.MINUTES.sleep(1);
-        deleteMessage(image, chatId);
+
         return image;
     }
 
@@ -1467,8 +1459,7 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
         String image = execute(aa).getMessageId().toString();
         DataBase.sql("update users set image =" + image + " where id =" + chatId);
         a.setImage(image);
-        TimeUnit.MINUTES.sleep(1);
-        deleteMessage(image, chatId);
+
         return image;
     }
 
@@ -2257,8 +2248,7 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
         try {
             int smid = execute(sendMessage).getMessageId();
             DataBase.sql("update users set smid ="+smid+" where id = "+chatId);
-            // TimeUnit.MINUTES.sleep(1);
-            // deleteMessage(smid+"", chatId+"");
+
         }
         catch (TelegramApiException e) {e.printStackTrace();
         }
