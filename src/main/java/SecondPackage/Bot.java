@@ -2089,6 +2089,42 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
     
     
     
+    
+    
+    
+    
+    
+    private InlineKeyboardMarkup ordersMarkup() throws SQLException {
+        InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
+            List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
+                            
+                            List<InlineKeyboardButton> row2 = new ArrayList<InlineKeyboardButton>();
+                            row2.add(new InlineKeyboardButton()
+                                    .setText(EmojiParser.parseToUnicode(Lan.clearOrders(a.getLanguage())))
+                                    .setCallbackData(Lan.clearOrders(a.getLanguage())));
+                            
+                            
+                            List<InlineKeyboardButton> row4 = new ArrayList<InlineKeyboardButton>();
+                            row4.add(new InlineKeyboardButton()
+                                    .setText(EmojiParser.parseToUnicode(Lan.backToMenu(a.getLanguage())))
+                                    .setCallbackData(Lan.backToMenu(a.getLanguage())));
+                    
+                            rows.add(row2);
+                            rows.add(row4);
+                            markup.setKeyboard(rows);
+        return markup;
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
 
 
@@ -2227,7 +2263,7 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
                 editPic(Lan.mainMenu(a.getLanguage()).get(1)+"\n"
                     +Lan.deliveryTime(a.getLanguage())+date+", "+time+"\n"
                     +address+comment
-                    +items.get(0)+"\n", update.getCallbackQuery().getMessage(), null, "Лого", 2);
+                    +items.get(0)+"\n", update.getCallbackQuery().getMessage(), ordersMarkup(), "Лого", 2);
         }
     }
 
