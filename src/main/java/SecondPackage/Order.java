@@ -40,7 +40,7 @@ public class Order  {
 	}
 
     public void newThread() {
-		messageKiller.interrupt();
+		if (messageKiller!=null) messageKiller.interrupt();
         messageKiller = new Thread(new Runnable() {
         @Override
         public void run() {
