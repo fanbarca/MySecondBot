@@ -1931,14 +1931,17 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
             rows.add(row);
 		
             List<InlineKeyboardButton> row0 = new ArrayList<InlineKeyboardButton>();
-        	row0.add(new InlineKeyboardButton()
-                    .setText(EmojiParser.parseToUnicode(Lan.backToMenu(a.getLanguage())))
-                    .setCallbackData(Lan.backToMenu(a.getLanguage())));
+            row0.add(new InlineKeyboardButton()
+                    .setText(EmojiParser.parseToUnicode(Lan.otherModels(a.getLanguage())))
+                    .setSwitchInlineQueryCurrentChat(""));
             if (occ!=0) row0.add(new InlineKeyboardButton()
                     .setText(EmojiParser.parseToUnicode(Lan.delivery(a.getLanguage())))
-                    .setCallbackData("selected"+productId));    
+                    .setCallbackData("selected"+productId));
             rows.add(row0);
                 List<InlineKeyboardButton> row1 = new ArrayList<InlineKeyboardButton>();
+                row1.add(new InlineKeyboardButton()
+                    .setText(EmojiParser.parseToUnicode(Lan.backToMenu(a.getLanguage())))
+                    .setCallbackData(Lan.backToMenu(a.getLanguage())));
                 row1.add(new InlineKeyboardButton()
                     .setText(EmojiParser.parseToUnicode(Lan.share(a.getLanguage())))
                     .setSwitchInlineQuery(productId));

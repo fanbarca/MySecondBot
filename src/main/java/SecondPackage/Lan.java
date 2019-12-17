@@ -569,4 +569,12 @@ class Lan {
         else if (lan.equals("English")) r += "This amount does not include the cost of cloth";
         return r;
     }
+
+    public static String otherModels(String lan) {
+        String r="";
+        if (lan.equals("Uzbek")) r = "🔍 Boshqa modellar";
+        else if (lan.equals("Russian")) r = "🔍 Другие модели";
+        else if (lan.equals("English")) r = "🔍 Other models";
+        return r;
+    }
 }
