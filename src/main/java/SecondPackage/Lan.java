@@ -521,10 +521,10 @@ class Lan {
         return r;
     }
     public static String seeAll(String lan) {
-        String r="🔍 ";
-        if (lan.equals("Uzbek")) r += "Barcha modellar";
-        else if (lan.equals("Russian")) r += "Все модели";
-        else if (lan.equals("English")) r += "Brows";
+        String r="";
+        if (lan.equals("Uzbek")) r = "🔍 Barcha modellar";
+        else if (lan.equals("Russian")) r = "🔍 Все модели";
+        else if (lan.equals("English")) r = "🔍 Browse";
         return r;
     }
     public static String links(String lan, String botName, String channelName) {
@@ -543,9 +543,9 @@ class Lan {
     }
     public static String ourChannel(String lan) {
         String r="";
-        if (lan.equals("Uzbek")) r += "📺 Bizning Kanal";
-        else if (lan.equals("Russian")) r += "📺 Наш Канал";
-        else if (lan.equals("English")) r += "📺 Our Channel";
+        if (lan.equals("Uzbek")) r += "📺 Bizning kanal";
+        else if (lan.equals("Russian")) r += "📺 Наш канал";
+        else if (lan.equals("English")) r += "📺 Our channel";
         return r;
     }
 }
