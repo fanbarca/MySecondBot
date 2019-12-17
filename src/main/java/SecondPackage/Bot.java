@@ -2263,7 +2263,7 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
                 editPic(Lan.mainMenu(a.getLanguage()).get(1)+"\n"
                     +Lan.deliveryTime(a.getLanguage())+date+", "+time+"\n"
                     +address+comment
-                    +items.get(0)+"\n", update.getCallbackQuery().getMessage(), ordersMarkup(), "Лого", 2);
+                    +items.get(0)+"\n", "Лого", update.getCallbackQuery().getMessage(), ordersMarkup());
         }
     }
 
