@@ -50,8 +50,6 @@ public class Order  {
                 bot.deleteMessage(image, id);
             } catch (InterruptedException e) {
                 e.printStackTrace();
-            } catch (TelegramApiException e) {
-                e.printStackTrace();
             }
         }
         });
