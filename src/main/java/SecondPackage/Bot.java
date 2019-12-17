@@ -1826,7 +1826,7 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
                     showProduct(false, prodId);
                     deleteLastMessages();
                 } else {
-                    showProduct(tru, prodId);
+                    showProduct(true, prodId);
                 }
             }
             catch(TelegramApiRequestException e) {
