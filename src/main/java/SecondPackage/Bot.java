@@ -384,6 +384,7 @@ public class Bot extends TelegramLongPollingBot {
 
     private void handleComment(Update update) throws TelegramApiException, SQLException, InterruptedException {
         DataBase.sql("update users set comment = '"+update.getMessage().getText()+"' where id ="+a.getId());
+        DataBase.sql("update users set waiting = null where id ="+a.getId());
         deleteMessage(update.getMessage());
         showCart(update, true);
     }
@@ -654,7 +655,7 @@ public class Bot extends TelegramLongPollingBot {
                 simpleMarkUp(Lan.cancelComment(a.getLanguage())));
                 a.setAddress(Lan.enterComment(a.getLanguage()));
                 a.setAlert(true);
-                DataBase.sql("update users set comment ='*waiting*' where id = "+a.getId());
+                DataBase.sql("update users set waiting ='comment' where id = "+a.getId());
         }
         if (cb.contains(Lan.cancelComment(a.getLanguage()))) {
             DataBase.sql("update users set comment = null where id = "+a.getId());
@@ -1162,7 +1163,7 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
         else {
             sendPic(Lan.sendMeLocation(a.getLanguage()), a.getId(), markup, "Лого");
         }
-        DataBase.sql("update users set rmid = 0 where id = " + message.getChatId());
+        DataBase.sql("update users set waiting = 'location' where id = " + message.getChatId());
     }
 
 
@@ -1584,7 +1585,7 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
             }
             sendPic(Lan.orderTime(a.getLanguage()), a.getId(),
                 timeKeys(), "Лого");
-            DataBase.sql("update users set rmid = 1 where id = " + a.getId());
+            DataBase.sql("update users set waiting = null where id = " + a.getId());
         }
         deleteMessage(update.getMessage());
     }
@@ -1716,20 +1717,25 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
 
 
     private boolean waitingForLocation() throws SQLException{
-        String listener = DataBase.sqlQuery("SELECT rmid from users where id=" + a.getId(), "rmid");
+        String listener = DataBase.sqlQuery("SELECT waiting from users where id=" + a.getId(), "waiting");
         if (listener!=null)
-        return listener.equals("0");
+        return listener.equals("location");
         else return false;
     }
 
 
+    
+    
+    
+    
+    
 
 
 
     private boolean waitingForComment() throws SQLException{
-        String listener = DataBase.sqlQuery("SELECT comment from users where id=" + a.getId(), "comment");
+        String listener = DataBase.sqlQuery("SELECT waiting from users where id=" + a.getId(), "waiting");
         if (listener!=null)
-            return listener.equals("*waiting*");
+            return listener.equals("comment");
         else return false;
     }
 
@@ -2032,8 +2038,7 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
             
                             List<InlineKeyboardButton> row1 = new ArrayList<InlineKeyboardButton>();
                             if (comment!=null) {
-                                if(!comment.equals("*waiting*"))
-                            row1.add(new InlineKeyboardButton()
+                                row1.add(new InlineKeyboardButton()
                                     .setText(EmojiParser.parseToUnicode(Lan.deleteComment(a.getLanguage())))
                                     .setCallbackData(Lan.deleteComment(a.getLanguage())));
                             } else {
