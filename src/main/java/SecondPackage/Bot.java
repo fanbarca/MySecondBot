@@ -354,11 +354,7 @@ public class Bot extends TelegramLongPollingBot {
                 if (a.getLanguage() == null) {
                     chooseLanguage(update.getMessage(), false);
                 } else {
-                    try {
-                        deleteMessage(a.getImage(), a.getId());
-                    } catch (TelegramApiRequestException e) {
-                        
-                    }
+                    if (a.getImage()!=null) deleteMessage(a.getImage(), a.getId());
                     deleteMessage(update.getMessage());
                     showMainMenu(false, update);
                 }
@@ -1518,8 +1514,6 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
         try {
             execute(dm);
         } catch (TelegramApiException e) {
-            e.printStackTrace();
-        } catch (TelegramApiRequestException e) {
             e.printStackTrace();
         } 
         DataBase.sql("update users set image = null where id = "+Chatid);
