@@ -953,11 +953,15 @@ public class Bot extends TelegramLongPollingBot {
         String balls = "";
         String emoji = DataBase.sqlQuery("select emoji from table0 where id = "+prodId, "emoji");
         for (int i = 0; i<occurrences; i++){
-            balls += emoji==null?":large_blue_circle:":emoji;
+            balls += emoji==null?":wavy_dash:":emoji;
         }
+        String costOfProduct = DataBase.sqlQuery("SELECT cost from table0 where id = " + prodId, "cost");
+        String cost = "";
+        if (a.getLanguage().equals("Uzbek")) cost = Lan.cost(a.getLanguage())+Lan.unit(a.getLanguage())+costOfProduct+Lan.currency(a.getLanguage());
+        else cost = Lan.cost(a.getLanguage())+costOfProduct+Lan.unit(a.getLanguage());
         return "<b>" + DataBase.sqlQuery("select "+ a.getLanguage() + " from table0 where id=" + prodId + "", a.getLanguage()) + "</b>\n"+
                 "<i>"+DataBase.sqlQuery("select "+a.getLanguage()+"description from table0 where id =" +prodId, a.getLanguage()+"description")+"</i>\n\n"+
-                "<code>"+Lan.cost(a.getLanguage())+DataBase.sqlQuery("SELECT cost from table0 where id = " + prodId, "cost")+Lan.currency(a.getLanguage()) +"/"+Lan.unit(a.getLanguage())+".</code>\n"                 +Lan.inCart(a.getLanguage(), occurrences)+ balls+"\n";
+                "<code>"+cost+".</code>\n"                 +Lan.inCart(a.getLanguage(), occurrences)+ balls+"\n";
         }
 
 

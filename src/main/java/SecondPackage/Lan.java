@@ -253,9 +253,9 @@ class Lan {
     }
     public static String unit(String lan) {
         String r="";
-        if (lan.equals("Uzbek")) r = "metr";
-        else if (lan.equals("Russian")) r = "метр";
-        else if (lan.equals("English")) r = "metre";
+        if (lan.equals("Uzbek")) r = "Metriga ";
+        else if (lan.equals("Russian")) r = " сум за метр";
+        else if (lan.equals("English")) r = " sum per metre";
         return r;
     }
     public static List<String> keyBoard(String lan){
@@ -350,9 +350,9 @@ class Lan {
     }
     public static String inCart(String lan, int items) {
         String r="";
-        if (lan.equals("Uzbek")) r = "Savatchada : " + items + "ta";
-        else if (lan.equals("Russian")) r = "В корзине: "+ items + "шт." ;
-        else if (lan.equals("English")) r = "In your cart: "+items;
+        if (lan.equals("Uzbek")) r = "Savatchada : " + items + " m.";
+        else if (lan.equals("Russian")) r = "В корзине: "+ items + " м." ;
+        else if (lan.equals("English")) r = "In your cart: "+items +" m.";
         return r;
     }
     public static String useOldLocation(String lan) {
