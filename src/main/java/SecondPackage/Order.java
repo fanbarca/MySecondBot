@@ -49,7 +49,7 @@ public class Order  {
                 Bot bot = new Bot();
                 bot.deleteMessage(image, id);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                //e.printStackTrace();
             }
         }
         });

@@ -356,7 +356,11 @@ public class Bot extends TelegramLongPollingBot {
                 } else {
                     //DataBase.sqlQuery("SELECT image from users where id=" + a.getId(), "image")
                     if (a.getImage()!=null) deleteMessage(a.getImage(), a.getId());
-                    deleteMessage(update.getMessage());
+                    try {
+                        deleteMessage(update.getMessage());
+                    } catch (TelegramApiRequestException e) {
+                        
+                    }
                     showMainMenu(false, update);
                 }
             }
