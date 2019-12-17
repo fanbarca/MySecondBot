@@ -354,13 +354,12 @@ public class Bot extends TelegramLongPollingBot {
                 if (a.getLanguage() == null) {
                     chooseLanguage(update.getMessage(), false);
                 } else {
-                    //DataBase.sqlQuery("SELECT image from users where id=" + a.getId(), "image")
-                    if (a.getImage()!=null) deleteMessage(a.getImage(), a.getId());
                     try {
-                        deleteMessage(update.getMessage());
+                        deleteMessage(a.getImage(), a.getId());
                     } catch (TelegramApiRequestException e) {
                         
                     }
+                    deleteMessage(update.getMessage());
                     showMainMenu(false, update);
                 }
             }
