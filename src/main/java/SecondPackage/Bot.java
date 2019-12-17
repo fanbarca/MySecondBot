@@ -1519,7 +1519,9 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
             execute(dm);
         } catch (TelegramApiException e) {
             e.printStackTrace();
-        }
+        } catch (TelegramApiRequestException e) {
+            e.printStackTrace();
+        } 
         DataBase.sql("update users set image = null where id = "+Chatid);
     }
 
