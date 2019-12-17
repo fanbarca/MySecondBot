@@ -351,6 +351,11 @@ public class Bot extends TelegramLongPollingBot {
                 deleteMessage(update.getMessage());
                 showProduct(false, prodId);
 
+            } else if (update.getMessage().getText().contains("main")) {
+                if (a.getImage()!=null) deleteMessage(a.getImage(), a.getId());
+                deleteMessage(update.getMessage());
+                showMainMenu(false, update);
+
             } else if (update.getMessage().getText().equals("/start")) {
                 if (a.getLanguage() == null) {
                     chooseLanguage(update.getMessage(), false);
