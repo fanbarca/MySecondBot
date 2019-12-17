@@ -2025,7 +2025,7 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
     
     
     
-    private InlineKeyboardMarkup cartMarkup() {
+    private InlineKeyboardMarkup cartMarkup() throws SQLException {
         String comment = DataBase.sqlQuery("select comment from users where id ="+a.getId(), "comment");
         InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
             List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
@@ -2063,7 +2063,6 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
                             rows.add(row2);
                             rows.add(row3);
                             rows.add(row4);
-        
                             markup.setKeyboard(rows);
         return markup;
     }
@@ -2149,8 +2148,8 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
             }
             markup.setKeyboard(rows);
         }
+        }
         return markup;
-    }
     }
 
 
