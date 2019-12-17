@@ -251,6 +251,13 @@ class Lan {
         else if (lan.equals("English")) r = " sum";
         return r;
     }
+    public static String unit(String lan) {
+        String r="";
+        if (lan.equals("Uzbek")) r = "metr";
+        else if (lan.equals("Russian")) r = "метр";
+        else if (lan.equals("English")) r = "metre";
+        return r;
+    }
     public static List<String> keyBoard(String lan){
         List<String> list = new ArrayList<>();
             list.add(goBack(lan));
@@ -315,16 +322,16 @@ class Lan {
 
     public static String addToCart(String lan) {
         String r="";
-        if (lan.equals("Uzbek")) r = ":heavy_plus_sign: Savatchaga qo'shish";
-        else if (lan.equals("Russian")) r = ":heavy_plus_sign: Добавить в корзину";
-        else if (lan.equals("English")) r = ":heavy_plus_sign: Add to cart";
+        if (lan.equals("Uzbek")) r = ":heavy_plus_sign: Savatchaga 1 metr qo'shish";
+        else if (lan.equals("Russian")) r = ":heavy_plus_sign: Добавить 1 метр в корзину";
+        else if (lan.equals("English")) r = ":heavy_plus_sign: Add 1 metre to cart";
         return r;
     }
         public static String addMore(String lan) {
         String r="";
-        if (lan.equals("Uzbek")) r = ":heavy_plus_sign: Yana qo'shish";
-        else if (lan.equals("Russian")) r = ":heavy_plus_sign: Добавить ещё";
-        else if (lan.equals("English")) r = ":heavy_plus_sign: Add more";
+        if (lan.equals("Uzbek")) r = ":heavy_plus_sign: +1 metr";
+        else if (lan.equals("Russian")) r = ":heavy_plus_sign: +1 метр";
+        else if (lan.equals("English")) r = ":heavy_plus_sign: +1 metre";
         return r;
     }
     public static String removeFromCart(String lan) {

@@ -351,12 +351,7 @@ public class Bot extends TelegramLongPollingBot {
                 deleteMessage(update.getMessage());
                 showProduct(false, prodId);
 
-            } else if (update.getMessage().getText().contains("main")) {
-                if (a.getImage()!=null) deleteMessage(a.getImage(), a.getId());
-                deleteMessage(update.getMessage());
-                showMainMenu(false, update);
-
-            } else if (update.getMessage().getText().equals("/start")) {
+            } else if (update.getMessage().getText().equals("/start")||update.getMessage().getText().contains("main")) {
                 if (a.getLanguage() == null) {
                     chooseLanguage(update.getMessage(), false);
                 } else {
@@ -962,7 +957,7 @@ public class Bot extends TelegramLongPollingBot {
         }
         return "<b>" + DataBase.sqlQuery("select "+ a.getLanguage() + " from table0 where id=" + prodId + "", a.getLanguage()) + "</b>\n"+
                 "<i>"+DataBase.sqlQuery("select "+a.getLanguage()+"description from table0 where id =" +prodId, a.getLanguage()+"description")+"</i>\n\n"+
-                "<code>"+Lan.cost(a.getLanguage())+DataBase.sqlQuery("SELECT cost from table0 where id = " + prodId, "cost")+Lan.currency(a.getLanguage()) +".</code>\n"                 +Lan.inCart(a.getLanguage(), occurrences)+ balls+"\n";
+                "<code>"+Lan.cost(a.getLanguage())+DataBase.sqlQuery("SELECT cost from table0 where id = " + prodId, "cost")+Lan.currency(a.getLanguage()) +"/"+Lan.unit(a.getLanguage())+".</code>\n"                 +Lan.inCart(a.getLanguage(), occurrences)+ balls+"\n";
         }
 
 
@@ -1972,10 +1967,10 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
             List<InlineKeyboardButton> row0 = new ArrayList<InlineKeyboardButton>();
         	row0.add(new InlineKeyboardButton()
                     .setText(EmojiParser.parseToUnicode("🔍 Каталог"))
-                    .setUrl("https://t.me/"+botName));
-            row0.add(new InlineKeyboardButton()
-                    .setText(EmojiParser.parseToUnicode("📺 Канал"))
-                    .setUrl("https://t.me/"+channelName));
+                    .setUrl("https://t.me/"+botName+"?start=main"));
+//            row0.add(new InlineKeyboardButton()
+//                    .setText(EmojiParser.parseToUnicode("📺 Канал"))
+//                    .setUrl("https://t.me/"+channelName));
             
         List<InlineKeyboardButton> row1 = new ArrayList<InlineKeyboardButton>();
             row1.add(new InlineKeyboardButton()
