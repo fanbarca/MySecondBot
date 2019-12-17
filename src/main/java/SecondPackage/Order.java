@@ -40,7 +40,20 @@ public class Order  {
 
     public void newThread() {
 		messageKiller.interrupt();
-        
+        messageKiller = new Thread(new Runnable() {
+        @Override
+        public void run() {
+            try {
+                String messageId = a.getImage();
+                String chatId = a.getId();
+                Thread.sleep(1000*60);
+                deleteMessage(messageId,chatId);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        });
+        messageKiller.start();
 	}
 
     
@@ -49,25 +62,27 @@ public class Order  {
 				 String number,
 				 String language,
 				 String id) {
-        Order(firstName,
-				 number,
-				 language,
-				 id,
-                 null,
-				 null,
-				 null);
+		images = new ArrayList<>();
+		this.firstName = firstName;
+		this.number = number;
+		this.language = language;
+        this.id = id;
+		this.receivedMes = null;
+		this.sentMessage = null;
+    	this.image = null;
 	}
     
     
     
 	public Order() {
-		Order(null,
-				 null,
-				 null,
-				 null,
-				 null,
-                 null,
-				 null);
+		images = new ArrayList<>();
+		this.firstName = null;
+		this.number = null;
+		this.language = null;
+        this.id = null;
+		this.receivedMes = null;
+		this.sentMessage = null;
+    	this.image = null;
 	}
 
     
