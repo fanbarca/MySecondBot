@@ -236,7 +236,7 @@ public class Bot extends TelegramLongPollingBot {
                 if (!id.equals("8955")&&image!=null) products.add(new InlineQueryResultCachedPhoto()
                 .setId(id)
                 .setPhotoFileId(image)
-                .setCaption(EmojiParser.parseToUnicode(AdminBot.publicText(id)))
+                .setCaption(EmojiParser.parseToUnicode(Adminbot.publicText(id)))
                 .setParseMode("HTML")
                 .setReplyMarkup(publicProductsMarkup(id)));
             }
@@ -247,7 +247,7 @@ public class Bot extends TelegramLongPollingBot {
                 answerInlineQuery.setResults(new InlineQueryResultCachedPhoto()
                 .setId("22")
                 .setPhotoFileId(DataBase.sqlQuery("select imageid from table0 where id = "+id, "imageid"))
-                .setCaption(EmojiParser.parseToUnicode(AdminBot.publicText(id)))
+                .setCaption(EmojiParser.parseToUnicode(Adminbot.publicText(id)))
                 .setParseMode("HTML")
                 .setReplyMarkup(publicProductsMarkup(id)));
             }
@@ -1969,7 +1969,7 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
             //         .setCallbackData("selected"+productId)); 
             row0.add(new InlineKeyboardButton()
                 .setText(EmojiParser.parseToUnicode(":triangular_ruler: Заказать"))
-                .setUrl("https://t.me/"+bot.getBotUsername()+"?start=selected"+prodId));
+                .setUrl("https://t.me/"+getBotUsername()+"?start=selected"+productId));
         List<InlineKeyboardButton> row1 = new ArrayList<InlineKeyboardButton>();
             row1.add(new InlineKeyboardButton()
                 .setText(EmojiParser.parseToUnicode("Поделиться"))
