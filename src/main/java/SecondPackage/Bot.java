@@ -112,6 +112,8 @@ public class Bot extends TelegramLongPollingBot {
                 if (a.getAddress()!=null) answer.setShowAlert(a.getAlert()).setText(a.getAddress());
                 
                 execute(answer);
+                a.setAddress(null);
+                a.setAlert(false);
             } else if (update.hasInlineQuery()) {
                 handleInline(update);
             }

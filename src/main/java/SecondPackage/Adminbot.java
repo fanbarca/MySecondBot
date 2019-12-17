@@ -232,6 +232,7 @@ public class Adminbot extends TelegramLongPollingBot {
         } else if (update.hasCallbackQuery()) {
             AnswerCallbackQuery answer = new AnswerCallbackQuery()
                 .setCallbackQueryId(update.getCallbackQuery().getId());
+            
             String cb = update.getCallbackQuery().getData();
                 if (cb.startsWith("ChangeType")||cb.startsWith("ChangeSubType")){
                 for (String prodID : DataBase.sqlQueryList("select id from table0","id")) {
@@ -553,6 +554,22 @@ public class Adminbot extends TelegramLongPollingBot {
         }
 	}
 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     private void mainMenu(Update update, boolean edit) throws SQLException {
         String id = "";
         if (update.hasCallbackQuery()) id = update.getCallbackQuery().getMessage().getChatId().toString();
@@ -561,6 +578,20 @@ public class Adminbot extends TelegramLongPollingBot {
         else send("Выберите действие", id, mainKeyboard(null), true, 2);
     }
 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     public String orderText(String userID) throws SQLException {
         boolean location = DataBase.sqlQueryBoolean("select location from zakaz where userid ="+userID,"location");
         String name = "Имя: "+ DataBase.sqlQuery("select firstname from users where id ="+userID,"firstname");
@@ -583,6 +614,19 @@ public class Adminbot extends TelegramLongPollingBot {
                 product;
     }
 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
     private void publish(String prodId) throws SQLException, TelegramApiException {
         Bot bot = new Bot();
@@ -610,6 +654,10 @@ public class Adminbot extends TelegramLongPollingBot {
         bot.toChannel(name+description+"<code>"+repeat+"</code>"+cost,markup,prodId);
     }
 
+    
+    
+    
+    
 
 
 
