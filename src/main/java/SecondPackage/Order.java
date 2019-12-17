@@ -45,19 +45,12 @@ public class Order  {
         @Override
         public void run() {
             try {
-                String messageId = image;
-                String chatId = id;
                 Thread.sleep(1000*60);
-                DeleteMessage dm = new DeleteMessage()
-                .setMessageId(Integer.parseInt(messageId))
-                .setChatId(chatId);
-                    try {
-                        execute(dm);
-                    } catch (TelegramApiException e) {
-                        e.printStackTrace();
-                    }
-                    DataBase.sql("update users set image = null where id = "+chatId);
+                Bot bot = new Bot();
+                bot.deleteMessage(image, id);
             } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (TelegramApiException e) {
                 e.printStackTrace();
             }
         }
