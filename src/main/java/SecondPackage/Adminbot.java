@@ -603,7 +603,7 @@ public class Adminbot extends TelegramLongPollingBot {
                 .setUrl("https://t.me/"+bot.getBotUsername()));
         row0.add(new InlineKeyboardButton()
                 .setText(EmojiParser.parseToUnicode(":triangular_ruler: Заказать"))
-                .setUrl("https://t.me/"+bot.getBotUsername())+"?start=selected"+prodId);
+                .setUrl("https://t.me/"+bot.getBotUsername()+"?start=selected"+prodId));
                 //.setUrl("https://t.me/"+bot.getBotUsername()+"?start=selected"+prodId));
         rows.add(row0);
         markup.setKeyboard(rows);
