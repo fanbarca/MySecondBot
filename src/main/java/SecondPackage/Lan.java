@@ -521,10 +521,10 @@ class Lan {
         return r;
     }
     public static String seeAll(String lan) {
-        String r=":eight_pointed_black_star: ";
-        if (lan.equals("Uzbek")) r += "Barcha parda modellari";
-        else if (lan.equals("Russian")) r += "Все модели штор";
-        else if (lan.equals("English")) r += "All curtain models";
+        String r="🔍 ";
+        if (lan.equals("Uzbek")) r += "Barcha modellar";
+        else if (lan.equals("Russian")) r += "Все модели";
+        else if (lan.equals("English")) r += "Brows";
         return r;
     }
     public static String links(String lan, String botName, String channelName) {
@@ -534,12 +534,18 @@ class Lan {
         else if (lan.equals("English")) r = "<a href=\"t.me/"+botName+"\">🤖 Our Bot</a> <a href=\"t.me/"+channelName+"\">📺 Our Channel</a>";
         return r;
     }
-
     public static String error(String lan) {
         String r="";
         if (lan.equals("Uzbek")) r += "Xatolik yuz berdi";
         else if (lan.equals("Russian")) r += "Что-то пошло не так";
         else if (lan.equals("English")) r += "Something went wrong";
+        return r;
+    }
+    public static String ourChannel(String lan) {
+        String r="";
+        if (lan.equals("Uzbek")) r += "📺 Bizning Kanal";
+        else if (lan.equals("Russian")) r += "📺 Наш Канал";
+        else if (lan.equals("English")) r += "📺 Our Channel";
         return r;
     }
 }
