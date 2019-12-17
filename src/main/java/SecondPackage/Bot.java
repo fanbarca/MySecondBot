@@ -1974,7 +1974,8 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
             row1.add(new InlineKeyboardButton()
                 .setText(EmojiParser.parseToUnicode("Поделиться"))
                 .setSwitchInlineQuery(productId));
-        rows.add(row0);
+        rows.add(row0);        
+        rows.add(row1);
         markup.setKeyboard(rows);
         return markup;
     }  
