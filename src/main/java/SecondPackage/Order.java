@@ -48,6 +48,7 @@ public class Order  {
                 Thread.sleep(1000*60);
                 Bot bot = new Bot();
                 bot.deleteMessage(image, id);
+                image = null;
             } catch (InterruptedException e) {
                 //e.printStackTrace();
             }
