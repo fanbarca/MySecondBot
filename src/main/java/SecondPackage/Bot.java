@@ -47,20 +47,9 @@ public class Bot extends TelegramLongPollingBot {
     private String channelName = "regularshop";
     private String botName = "PardaZakazBot";
     private String botToken = "1046773572:AAHRqTsLuhCPVPYkBTaNPew3UfdZk5zekjY";
-    Thread messageKiller = new Thread(new Runnable() {
-        @Override
-        public void run() {
-            try {
-                String messageId = a.getImage();
-                String chatId = a.getId();
-                Thread.sleep(1000*60);
-                deleteMessage(messageId,chatId);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-    });
+    Map<String, Order> userList = new HashMap<>();
 
+    
     Map<String, List<String>> images = new HashMap<>();
     Order a;
     public static LocalTime startOfPeriod = LocalTime.parse("09:00");
@@ -80,7 +69,6 @@ public class Bot extends TelegramLongPollingBot {
     }
     @Override
     public void onUpdateReceived(Update update) {
-        messageKiller.interrupt();
         Message m;
         try {
             if (update.hasMessage()) {
@@ -131,7 +119,6 @@ public class Bot extends TelegramLongPollingBot {
             BotLogger.error(Main.LOGTAG, e);
         }
 
-        messageKiller.start();
     }
 
 
@@ -158,13 +145,20 @@ public class Bot extends TelegramLongPollingBot {
             userName = update.getCallbackQuery().getFrom().getUserName();
         }
         if (DataBase.sqlIdList().contains(id)) {
-            a = new Order(
+            if (userList.containsKey(id)) {
+                a = userList.get(id);
+                a.newThread();
+            } else {
+                a = new Order(
                     firstName,
                     DataBase.sqlGetUserData(id).get(1),
                     DataBase.sqlGetUserData(id).get(2),
                     id
-            );
-            a.setImage(DataBase.sqlQuery("select image from users where id="+a.getId(), "image"));
+                );
+                a.newThread();
+                a.setImage(DataBase.sqlQuery("select image from users where id="+a.getId(), "image"));
+                userList.put(id, a);
+            }
         } else {
                 DataBase.sql("INSERT INTO users (id, firstname, lastname, username) VALUES ('" +
                         id + "','" +
@@ -182,6 +176,8 @@ public class Bot extends TelegramLongPollingBot {
                     null,
                     id
             );
+            a.newThread();
+            userList.put(id, a);
             res = true;
         }
         return res;

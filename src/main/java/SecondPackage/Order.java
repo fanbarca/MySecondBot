@@ -15,8 +15,64 @@ public class Order  {
     private String firstName;
     private String address;
     private boolean alert;
+    private Thread messageKiller;
+    
+    
+    
 
-	public List<String> getImages() {
+
+    public Order(String firstName,
+				 String number,
+				 String language,
+				 String id,
+				 String receivedMes,
+				 String sentMessage,
+				 String image) {
+		images = new ArrayList<>();
+		this.firstName = firstName;
+		this.number = number;
+		this.language = language;
+        this.id = id;
+		this.receivedMes = receivedMes;
+		this.sentMessage = sentMessage;
+    	this.image = image;
+	}
+
+    public void newThread() {
+		messageKiller.interrupt();
+        
+	}
+
+    
+    
+	public Order(String firstName,
+				 String number,
+				 String language,
+				 String id) {
+        Order(firstName,
+				 number,
+				 language,
+				 id,
+                 null,
+				 null,
+				 null);
+	}
+    
+    
+    
+	public Order() {
+		Order(null,
+				 null,
+				 null,
+				 null,
+				 null,
+                 null,
+				 null);
+	}
+
+    
+    
+    public List<String> getImages() {
 		return images;
 	}
 
@@ -26,52 +82,6 @@ public class Order  {
 
 	private List<String> images;
 	private String listener;
-
-
-    public Order(String firstName,
-				 String number,
-				 String language,
-				 String receivedMes,
-				 String sentMessage,
-				 String image) {
-		images = new ArrayList<>();
-
-		this.firstName = firstName;
-		this.number = number;
-		this.language = language;
-		this.image = image;
-		this.receivedMes = receivedMes;
-		this.sentMessage = sentMessage;
-	}
-	public String getId() {
-		return id;
-	}
-	public void setId(String id) {
-		this.id = id;
-	}
-	public Order(String firstName,
-				 String number,
-				 String language,
-				 String id) {
-		images = new ArrayList<>();
-
-		this.firstName = firstName;
-		this.number = number;
-		this.language = language;
-		this.id = id;
-		this.sentMessage = null;
-		this.image = null;
-	}
-	public Order() {
-		images = new ArrayList<>();
-
-		this.firstName = null;
-		this.number = null;
-		this.language = null;
-		this.receivedMes = null;
-		this.sentMessage = null;
-		this.image = null;
-	}
 
 	public String getNumber() {
 		return number;
@@ -153,5 +163,11 @@ public class Order  {
 
 	public void setListener(String listener) {
 		this.listener = listener;
+	}
+    public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
 	}
 }
