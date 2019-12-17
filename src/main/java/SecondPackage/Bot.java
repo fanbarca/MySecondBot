@@ -2221,7 +2221,7 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
         String text = Lan.mainMenu(a.getLanguage()).get(3) + "\n"
                     + curretCart(a.getId()) +"\n"+
                     // + Lan.deliveryCost(a.getLanguage())+"\n"
-                    +"<pre>"+Lan.clothCost(a.getLanguage())+"</pre>\n\n"
+                    "<pre>"+Lan.clothCost(a.getLanguage())+"</pre>\n\n"
                     + comment;
             if (items.size() == 0) {
                 a.setAddress(Lan.cartIsEmpty(a.getLanguage()));
