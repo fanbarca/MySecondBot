@@ -1824,7 +1824,7 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
             try {
                 if (a.getImage()==null) {
                     showProduct(false, prodId);
-                    deleteLastMessages();
+                    //deleteLastMessages();
                 } else {
                     showProduct(true, prodId);
                 }
