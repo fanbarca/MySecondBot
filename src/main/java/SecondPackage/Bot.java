@@ -1962,18 +1962,19 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
 		// rows.add(row);
             List<InlineKeyboardButton> row0 = new ArrayList<InlineKeyboardButton>();
         	row0.add(new InlineKeyboardButton()
-                    .setText(EmojiParser.parseToUnicode("Каталог"))
+                    .setText(EmojiParser.parseToUnicode("🔍 Каталог"))
                     .setUrl("https://t.me/"+botName));
-            // row0.add(new InlineKeyboardButton()
-            //         .setText(EmojiParser.parseToUnicode(Lan.delivery(a.getLanguage())))
-            //         .setCallbackData("selected"+productId)); 
             row0.add(new InlineKeyboardButton()
-                .setText(EmojiParser.parseToUnicode(":triangular_ruler: Заказать"))
-                .setUrl("https://t.me/"+getBotUsername()+"?start=selected"+productId));
+                    .setText(EmojiParser.parseToUnicode("📺 Канал"))
+                    .setUrl("https://t.me/"+channelName));
+            
         List<InlineKeyboardButton> row1 = new ArrayList<InlineKeyboardButton>();
             row1.add(new InlineKeyboardButton()
-                .setText(EmojiParser.parseToUnicode("Поделиться"))
+                .setText(EmojiParser.parseToUnicode("✉ Поделиться"))
                 .setSwitchInlineQuery(productId));
+            row1.add(new InlineKeyboardButton()
+                .setText(EmojiParser.parseToUnicode(":triangular_ruler: Заказать"))
+                .setUrl("https://t.me/"+getBotUsername()+"?start=selected"+productId));
         rows.add(row0);        
         rows.add(row1);
         markup.setKeyboard(rows);

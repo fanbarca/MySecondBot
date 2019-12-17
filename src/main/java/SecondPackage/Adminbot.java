@@ -634,7 +634,7 @@ public class Adminbot extends TelegramLongPollingBot {
         List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
         List<InlineKeyboardButton> row0 = new ArrayList<InlineKeyboardButton>();
         row0.add(new InlineKeyboardButton()
-                .setText(EmojiParser.parseToUnicode(Lan.mainMenu("Russian").get(0)))
+                .setText(EmojiParser.parseToUnicode("🔍 Каталог"))
                 .setUrl("https://t.me/"+bot.getBotUsername()));
         row0.add(new InlineKeyboardButton()
                 .setText(EmojiParser.parseToUnicode(":triangular_ruler: Заказать"))
@@ -644,6 +644,9 @@ public class Adminbot extends TelegramLongPollingBot {
         bot.toChannel(publicText(prodId),markup,prodId);
     }
 
+    
+    
+    
     
     
     
