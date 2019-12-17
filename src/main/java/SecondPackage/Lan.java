@@ -298,6 +298,13 @@ class Lan {
         else if (lan.equals("English")) r = ":x: Cancel commenting";
         return r;
     }
+    public static String comment(String lan) {
+        String r="";
+        if (lan.equals("Uzbek")) r = "<b>Izoh: </b>";
+        else if (lan.equals("Russian")) r = "<b>Комментарий: </b>";
+        else if (lan.equals("English")) r = "<b>Comment: </b>";
+        return r;
+    }
     public static String total(String lan) {
         String r="";
         if (lan.equals("Uzbek")) r = "Umumiy: ";
@@ -546,6 +553,13 @@ class Lan {
         if (lan.equals("Uzbek")) r += "📺 Bizning kanal";
         else if (lan.equals("Russian")) r += "📺 Наш канал";
         else if (lan.equals("English")) r += "📺 Our channel";
+        return r;
+    }
+    public static String clothCost(String lan) {
+        String r="";
+        if (lan.equals("Uzbek")) r += "Ushbu miqdor matoning narxini o'z ichiga olmaydi";
+        else if (lan.equals("Russian")) r += "Эта сумма не включает стоимость ткани";
+        else if (lan.equals("English")) r += "This amount does not include the cost of cloth";
         return r;
     }
 }

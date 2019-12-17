@@ -2216,13 +2216,13 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
     private void showCart(Update update, boolean edit) throws TelegramApiException, SQLException, InterruptedException {
         List<String> items = DataBase.sqlQueryList("select item from cart where userid =" + a.getId(), "item");
         String comment = DataBase.sqlQuery("select comment from users where id ="+a.getId(), "comment");
-        if (comment!=null) comment= "<b>Комментарий:</b> "+comment+"\n";
+        if (comment!=null) comment= Lan.comment(a.getLanguage())+comment+"\n";
         else comment = "";
         String text = Lan.mainMenu(a.getLanguage()).get(3) + "\n"
-                    + curretCart(a.getId()) +"\n\n"
-                    + comment;
+                    + curretCart(a.getId()) +"\n"+
                     // + Lan.deliveryCost(a.getLanguage())+"\n"
-                    // +"<pre>"+Lan.tooLate(a.getLanguage())+"</pre>";
+                    +"<pre>"+Lan.clothCost(a.getLanguage())+"</pre>\n\n"
+                    + comment;
             if (items.size() == 0) {
                 a.setAddress(Lan.cartIsEmpty(a.getLanguage()));
                 a.setAlert(true);
