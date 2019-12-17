@@ -44,7 +44,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.CountDownLatch;
 
 public class Bot extends TelegramLongPollingBot {
-    private String channelName = "regularshop";
+    private String channelName = "PardaToshkent";
     private String botName = "PardaZakazBot";
     private String botToken = "1046773572:AAHRqTsLuhCPVPYkBTaNPew3UfdZk5zekjY";
     Map<String, Order> userList = new HashMap<>();

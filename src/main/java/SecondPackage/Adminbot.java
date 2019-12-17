@@ -49,8 +49,10 @@ public class Adminbot extends TelegramLongPollingBot {
     List<String> list = new ArrayList<String>();
     String russian = "";
     public static final String channelId = "-1001404493971";
+    Bot bot;
 
     {
+    bot = new Bot();
     date.setTimeZone(zone);
     time.setTimeZone(zone);
     }
@@ -629,7 +631,6 @@ public class Adminbot extends TelegramLongPollingBot {
     
 
     public void publish(String prodId) throws SQLException, TelegramApiException {
-        Bot bot = new Bot();
         InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
         List<InlineKeyboardButton> row0 = new ArrayList<InlineKeyboardButton>();
@@ -651,6 +652,7 @@ public class Adminbot extends TelegramLongPollingBot {
     
     
     public static String publicText(String prodId) throws SQLException {
+        String links = "<a href=\"t.me/"+bot.getBotUsername()+"\">🤖 Наш Бот</a> <a href=\"t.me/"+bot.getChannelName()+"\">📺 Наш Канал</a>\n";
         String name = "<b>"+DataBase.sqlQuery("select russian from table0 where id ="+prodId, "russian")+"</b>\n";
         String description = "<i>"+DataBase.sqlQuery("select russiandescription from table0 where id ="+prodId, "russiandescription")+"</i>\n";
         String cost =  "\n<code>"+Lan.cost("Russian")+DataBase.sqlQuery("SELECT cost from table0 where id = " + prodId, "cost")+Lan.currency("Russian") +"</code>\n";
@@ -659,7 +661,7 @@ public class Adminbot extends TelegramLongPollingBot {
         for (int i = 0; i<(cost.length()-16);i++) repeat +="_";
         file_id = DataBase.sqlQuery("SELECT imageid from table0 where id ="+prodId, "imageid");
         if (file_id == null) file_id = DataBase.sqlQuery("SELECT imageid from table0 where Russian = 'Лого'", "imageid");
-        return name+description+"<code>"+repeat+"</code>"+cost;
+        return links+name+description+"<code>"+repeat+"</code>"+cost;
     }
     
     
