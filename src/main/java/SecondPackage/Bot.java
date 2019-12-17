@@ -2025,6 +2025,59 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
     
     
     
+    private InlineKeyboardMarkup cartMarkup() {
+        String comment = DataBase.sqlQuery("select comment from users where id ="+a.getId(), "comment");
+        InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
+            List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
+            
+                            List<InlineKeyboardButton> row1 = new ArrayList<InlineKeyboardButton>();
+                            if (comment!=null) {
+                                if(!comment.equals("*waiting*"))
+                            row1.add(new InlineKeyboardButton()
+                                    .setText(EmojiParser.parseToUnicode(Lan.deleteComment(a.getLanguage())))
+                                    .setCallbackData(Lan.deleteComment(a.getLanguage())));
+                            } else {
+                                row1.add(new InlineKeyboardButton()
+                                    .setText(EmojiParser.parseToUnicode(Lan.addComment(a.getLanguage())))
+                                    .setCallbackData(Lan.addComment(a.getLanguage())));
+                            }
+                            List<InlineKeyboardButton> row2 = new ArrayList<InlineKeyboardButton>();
+                            row2.add(new InlineKeyboardButton()
+                                    .setText(EmojiParser.parseToUnicode(Lan.clearCart(a.getLanguage())))
+                                    .setCallbackData(Lan.clearCart(a.getLanguage())));
+                            if (DataBase.sqlQueryList("select distinct item from cart where userid ="+a.getId(), "item").size()!=1) {
+                                row2.add(new InlineKeyboardButton()
+                                        .setText(EmojiParser.parseToUnicode(Lan.removeSelectively(a.getLanguage())))
+                                        .setCallbackData(Lan.removeSelectively(a.getLanguage())));
+                            }
+                            List<InlineKeyboardButton> row3 = new ArrayList<InlineKeyboardButton>();
+                            row3.add(new InlineKeyboardButton()
+                                    .setText(EmojiParser.parseToUnicode(Lan.bookAppointment(a.getLanguage())))
+                                    .setCallbackData("bookApp"));
+                            List<InlineKeyboardButton> row4 = new ArrayList<InlineKeyboardButton>();
+                            row4.add(new InlineKeyboardButton()
+                                    .setText(EmojiParser.parseToUnicode(Lan.backToMenu(a.getLanguage())))
+                                    .setCallbackData(Lan.backToMenu(a.getLanguage())));
+                    
+                            rows.add(row1);
+                            rows.add(row2);
+                            rows.add(row3);
+                            rows.add(row4);
+        
+                            markup.setKeyboard(rows);
+        return markup;
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
 
 
@@ -2060,35 +2113,7 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
                         text.contains(Lan.mainMenu(a.getLanguage()).get(3))) {
                     if (text.contains(Lan.mainMenu(a.getLanguage()).get(3))) {
                         if (text.contains(Lan.currency(a.getLanguage()))) {
-                            String comment = DataBase.sqlQuery("select comment from users where id ="+a.getId(), "comment");
-                            List<InlineKeyboardButton> rowOne = new ArrayList<InlineKeyboardButton>();
-                            if (comment!=null) {
-                                if(!comment.equals("*waiting*"))
-                            rowOne.add(new InlineKeyboardButton()
-                                    .setText(EmojiParser.parseToUnicode(Lan.deleteComment(a.getLanguage())))
-                                    .setCallbackData(Lan.deleteComment(a.getLanguage())));
-                            } else {
-                                rowOne.add(new InlineKeyboardButton()
-                                    .setText(EmojiParser.parseToUnicode(Lan.addComment(a.getLanguage())))
-                                    .setCallbackData(Lan.addComment(a.getLanguage())));
-                            }
-                            List<InlineKeyboardButton> lastRow = new ArrayList<InlineKeyboardButton>();
-                            lastRow.add(new InlineKeyboardButton()
-                                    .setText(EmojiParser.parseToUnicode(Lan.clearCart(a.getLanguage())))
-                                    .setCallbackData(Lan.clearCart(a.getLanguage())));
-                            if (DataBase.sqlQueryList("select distinct item from cart where userid ="+a.getId(), "item").size()!=1) {
-                                lastRow.add(new InlineKeyboardButton()
-                                        .setText(EmojiParser.parseToUnicode(Lan.removeSelectively(a.getLanguage())))
-                                        .setCallbackData(Lan.removeSelectively(a.getLanguage())));
-                            }
-                            rows.add(rowOne);
-                            rows.add(lastRow);
-                            List<InlineKeyboardButton> row = new ArrayList<InlineKeyboardButton>();
-                            row.add(new InlineKeyboardButton()
-                                    .setText(EmojiParser.parseToUnicode(Lan.bookAppointment(a.getLanguage())))
-                                    .setCallbackData("bookApp"));
-                            rows.add(row);
-                        }
+                            
                     }
                     if (text.contains(Lan.mainMenu(a.getLanguage()).get(1))){
                         if (!text.contains(Lan.emptyOrders(a.getLanguage()))) {
@@ -2100,9 +2125,9 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
                         }
                     }
                     List<InlineKeyboardButton> lastRow = new ArrayList<InlineKeyboardButton>();
-                    if (!text.contains(Lan.mainMenu(a.getLanguage()).get(1))) lastRow.add(new InlineKeyboardButton()
-                            .setText(EmojiParser.parseToUnicode(Lan.goBack(a.getLanguage())))
-                            .setCallbackData(Lan.goBack(a.getLanguage())));
+                    // if (!text.contains(Lan.mainMenu(a.getLanguage()).get(1))) lastRow.add(new InlineKeyboardButton()
+                    //         .setText(EmojiParser.parseToUnicode(Lan.goBack(a.getLanguage())))
+                    //         .setCallbackData(Lan.goBack(a.getLanguage())));
                     if (!text.contains(Lan.mainMenu(a.getLanguage()).get(3))) lastRow.add(new InlineKeyboardButton()
                             .setText(EmojiParser.parseToUnicode(Lan.mainMenu(a.getLanguage()).get(3)))
                             .setCallbackData(Lan.mainMenu(a.getLanguage()).get(3)));
@@ -2154,8 +2179,8 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
                 a.setAlert(true);
             } else {
                 int messageId= Integer.parseInt(a.getImage());
-                if (edit) editPic(text, a.getId(), messageId, null, "Лого", 2);
-                else sendPic(text, a.getId(), null, "Лого", 2);
+                if (edit) editPic(text, "Лого", a.getId(), messageId, cartMarkup());
+                else sendPic(text, a.getId(), cartMarkup(), "Лого");
             }
     }
 
