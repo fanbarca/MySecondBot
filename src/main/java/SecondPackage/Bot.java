@@ -236,7 +236,7 @@ public class Bot extends TelegramLongPollingBot {
                 if (!id.equals("8955")&&image!=null) products.add(new InlineQueryResultCachedPhoto()
                 .setId(id)
                 .setPhotoFileId(image)
-                .setCaption(EmojiParser.parseToUnicode(productText(id)))
+                .setCaption(EmojiParser.parseToUnicode(AdminBot.publicText(id)))
                 .setParseMode("HTML")
                 .setReplyMarkup(publicProductsMarkup(id)));
             }
@@ -247,7 +247,7 @@ public class Bot extends TelegramLongPollingBot {
                 answerInlineQuery.setResults(new InlineQueryResultCachedPhoto()
                 .setId("22")
                 .setPhotoFileId(DataBase.sqlQuery("select imageid from table0 where id = "+id, "imageid"))
-                .setCaption(EmojiParser.parseToUnicode(productText(id)))
+                .setCaption(EmojiParser.parseToUnicode(AdminBot.publicText(id)))
                 .setParseMode("HTML")
                 .setReplyMarkup(publicProductsMarkup(id)));
             }
@@ -637,12 +637,14 @@ public class Bot extends TelegramLongPollingBot {
            editCaption(Lan.orderTime(a.getLanguage()), a.getId(),
                Integer.parseInt(DataBase.sqlQuery("SELECT image from users where id=" + a.getId(), "image")),
                timeKeys());
+            DataBase.sql("update users set waiting = null where id ="+a.getId());
        }
         if (cb.contains("UseOldAddress")) {
             DataBase.sql("update zakaz set location = false where userid = "+a.getId());
             editCaption(Lan.orderTime(a.getLanguage()), a.getId(),
                Integer.parseInt(DataBase.sqlQuery("SELECT image from users where id=" + a.getId(), "image")),
                timeKeys());
+            DataBase.sql("update users set waiting = null where id ="+a.getId());
        }
         if (cb.contains(Lan.removeSelectively(a.getLanguage()))) {
             editCaption(Lan.mainMenu(a.getLanguage()).get(3) + "\n" + curretCart(a.getId()), a.getId(),
@@ -1964,8 +1966,12 @@ public void sendMeLocation(Message message, boolean edit) throws TelegramApiExce
                     .setUrl("https://t.me/"+botName));
             // row0.add(new InlineKeyboardButton()
             //         .setText(EmojiParser.parseToUnicode(Lan.delivery(a.getLanguage())))
-            //         .setCallbackData("selected"+productId));                
+            //         .setCallbackData("selected"+productId)); 
             row0.add(new InlineKeyboardButton()
+                .setText(EmojiParser.parseToUnicode(":triangular_ruler: Заказать"))
+                .setUrl("https://t.me/"+bot.getBotUsername()+"?start=selected"+prodId));
+        List<InlineKeyboardButton> row1 = new ArrayList<InlineKeyboardButton>();
+            row1.add(new InlineKeyboardButton()
                 .setText(EmojiParser.parseToUnicode("Поделиться"))
                 .setSwitchInlineQuery(productId));
         rows.add(row0);
