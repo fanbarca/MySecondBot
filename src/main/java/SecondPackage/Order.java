@@ -44,10 +44,18 @@ public class Order  {
         @Override
         public void run() {
             try {
-                String messageId = a.getImage();
-                String chatId = a.getId();
+                String messageId = image;
+                String chatId = id;
                 Thread.sleep(1000*60);
-                deleteMessage(messageId,chatId);
+                DeleteMessage dm = new DeleteMessage()
+                .setMessageId(Integer.parseInt(messageId))
+                .setChatId(chatId);
+                    try {
+                        execute(dm);
+                    } catch (TelegramApiException e) {
+                        e.printStackTrace();
+                    }
+                    DataBase.sql("update users set image = null where id = "+chatId);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

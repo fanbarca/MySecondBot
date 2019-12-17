@@ -155,8 +155,8 @@ public class Bot extends TelegramLongPollingBot {
                     DataBase.sqlGetUserData(id).get(2),
                     id
                 );
-                a.newThread();
                 a.setImage(DataBase.sqlQuery("select image from users where id="+a.getId(), "image"));
+                a.newThread();
                 userList.put(id, a);
             }
         } else {
