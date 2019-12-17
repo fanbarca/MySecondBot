@@ -49,7 +49,7 @@ public class Adminbot extends TelegramLongPollingBot {
     List<String> list = new ArrayList<String>();
     String russian = "";
     public static final String channelId = "-1001404493971";
-    Bot bot;
+    public static Bot bot;
 
     {
     bot = new Bot();
