@@ -25,7 +25,7 @@
                     <assembleDirectory>target</assembleDirectory>
                     <programs>
                         <program>
-                            <mainClass>CurtainBotPackage.Main</mainClass>
+                            <mainClass>CommonPackage.Main</mainClass>
                             <name>secondBot</name>
                         </program>
                     </programs>

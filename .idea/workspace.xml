@@ -7,26 +7,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7fdc6f42-80e3-436b-99c6-634d7f7f8939" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/CommonPackage/Main.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/TutorBotPackage/Lesson.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/TutorBotPackage/Person.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/TutorBotPackage/Request.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/TutorBotPackage/Schedule.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/TutorBotPackage/Student.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/TutorBotPackage/Time.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/TutorBotPackage/TimeInterval.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/TutorBotPackage/Tutor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/SecondPackage/Adminbot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/CurtainBotPackage/Adminbot.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/SecondPackage/Bot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/CurtainBotPackage/Bot.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/SecondPackage/DataBase.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/CommonPackage/DataBase.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/SecondPackage/Lan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/CurtainBotPackage/Lan.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/SecondPackage/Main.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/SecondPackage/Order.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/CurtainBotPackage/Order.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/SecondPackage/TutorBot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/TutorBotPackage/TutorBot.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/SecondPackage/YourTask.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/META-INF/MANIFEST.MF" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/META-INF/MANIFEST.MF" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -114,13 +95,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1560590336061</updated>
-    </task>
-    <task id="LOCAL-00184" summary="new">
-      <created>1575793278495</created>
-      <option name="number" value="00184" />
-      <option name="presentableId" value="LOCAL-00184" />
-      <option name="project" value="LOCAL" />
-      <updated>1575793278495</updated>
     </task>
     <task id="LOCAL-00185" summary="new">
       <created>1575793856842</created>
@@ -458,7 +432,14 @@
       <option name="project" value="LOCAL" />
       <updated>1577212914293</updated>
     </task>
-    <option name="localTasksCounter" value="233" />
+    <task id="LOCAL-00233" summary="Big update">
+      <created>1577215300911</created>
+      <option name="number" value="00233" />
+      <option name="presentableId" value="LOCAL-00233" />
+      <option name="project" value="LOCAL" />
+      <updated>1577215300911</updated>
+    </task>
+    <option name="localTasksCounter" value="234" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
@@ -487,6 +468,7 @@
   <component name="VcsManagerConfiguration">
     <option name="LIMIT_HISTORY" value="false" />
     <MESSAGE value="new" />
-    <option name="LAST_COMMIT_MESSAGE" value="new" />
+    <MESSAGE value="Big update" />
+    <option name="LAST_COMMIT_MESSAGE" value="Big update" />
   </component>
 </project>
