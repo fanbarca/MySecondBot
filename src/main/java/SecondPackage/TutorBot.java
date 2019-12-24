@@ -30,7 +30,7 @@ import java.util.Random;
 import java.util.TimeZone;
 
 
-public class Essaybot extends TelegramLongPollingBot {
+public class TutorBot extends TelegramLongPollingBot {
     private String botName = "";
     private String botToken = "";
 
