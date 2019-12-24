@@ -25,7 +25,7 @@
                     <assembleDirectory>target</assembleDirectory>
                     <programs>
                         <program>
-                            <mainClass>SecondPackage.Main</mainClass>
+                            <mainClass>CurtainBotPackage.Main</mainClass>
                             <name>secondBot</name>
                         </program>
                     </programs>
@@ -62,7 +62,7 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <mainClass>SecondPackage.Main</mainClass>
+                            <mainClass>CurtainBotPackage.Main</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>

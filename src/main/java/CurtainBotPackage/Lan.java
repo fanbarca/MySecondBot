@@ -1,11 +1,11 @@
-package SecondPackage;
+package CurtainBotPackage;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.ibm.icu.text.Transliterator;
 
-class Lan {
+public class Lan {
     static final String CYRILLIC_TO_LATIN = "Cyrillic-Latin";
     static final String LATIN_TO_CYRILLIC = "Latin-Cyrillic";
     public static Transliterator toLatinTrans = Transliterator.getInstance(CYRILLIC_TO_LATIN);
